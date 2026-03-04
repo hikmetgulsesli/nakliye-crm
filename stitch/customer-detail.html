@@ -1,264 +1,222 @@
 <!DOCTYPE html>
 
-<html class="light" lang="tr"><head>
+<html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Müşteri Detay - Nakliye CRM</title>
-<!-- Fonts & Icons -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<title>Customer Detail Logistics CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Theme Configuration -->
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#1e40af", // Adjusted to industrial blue from prompt context
-                        "background-light": "#f8f9fb",
-                        "background-dark": "#0f172a", // slate-900 for better dark mode contrast
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style>
-        body { font-family: 'Manrope', sans-serif; }
-    </style>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#0b50da",
+          "background-light": "#f5f6f8",
+          "background-dark": "#101622",
+        },
+        fontFamily: {
+          "display": ["Manrope"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display selection:bg-primary/20">
-<!-- Top Navigation -->
-<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 w-full">
-<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-<div class="flex items-center gap-4">
-<div class="text-primary flex items-center justify-center">
-<span class="material-symbols-outlined !text-3xl">local_shipping</span>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="flex h-screen flex-col justify-between w-64 bg-background-light dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 shrink-0">
+<div class="flex flex-col gap-6">
+<div class="flex gap-3 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Logistics CRM Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAzyCa_IL6b_QJfTOiDPG7v9uUB2lrSU5uH0wE7UpKnO2cKT-dYhvJSNsl6pxm9BHl9EfPUcz6PRORdfFe240-mLENPusmfbmCkMxQ9czLddVmEYmsqMKKTHpj_IJ8kPsTlBjf9GMGANDQueJHvrD1ZaE3OWQ703ByHp-DBaak7evkJkPRERvWJqAg3se15aPE6E6G6Re7JkZJp5lDW1xNCgPOpLTj-tct-rxsOUhNOM4ifaquDoLXtbZgxEuKw6c0ZzGfqvfBMjHIs");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">Logistics CRM</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Yönetim Portalı</p>
 </div>
-<h2 class="text-lg font-bold tracking-tight">Nakliye CRM</h2>
 </div>
-<nav class="hidden md:flex flex-1 justify-center gap-8">
-<a class="text-primary text-sm font-semibold border-b-2 border-primary h-16 flex items-center" href="#">Müşteriler</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-medium h-16 flex items-center" href="#">Teklifler</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-medium h-16 flex items-center" href="#">Araçlar</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-medium h-16 flex items-center" href="#">Raporlar</a>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">dashboard</span>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal">Kontrol Paneli</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined text-primary">group</span>
+<p class="text-primary text-sm font-bold leading-normal">Müşteriler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">description</span>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal">Teklifler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">local_shipping</span>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal">Gönderiler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">bar_chart</span>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal">Raporlar</p>
+</a>
 </nav>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 mt-auto">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC1yHgwloDeduZCmJfKTmyoAi5QZDITB4QCXXM7dzTvNsVFFk638W7aFlTMNQSGMekPQUfBbgsBzHG9DSrs6-NpwuESz1glNvpSggCFEGufqGhtnpOTy9q2257r1GfYvuYiOg5vDdk2ipGrqwKy-dLbbuAqdneQsGwlh718i7zA8gemVTgsOs1h1CVezVmyeez5ZXbP5IwnFQrPsgkuGQfWizbTmHPmB1KlboczO9Y5f5NTRDAigMMokIIcUPmaQMwrWp6H8H93TmQ8");'></div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal">Ahmet Yılmaz</p>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto">
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-10">
 <div class="flex items-center gap-4">
-<button class="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<div class="h-9 w-9 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border border-slate-200 dark:border-slate-700 cursor-pointer" data-alt="User Avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDv9MHsh2Q-BPqVEAq4ClkTYhw6bHUmiih1N0N52xVLiGJnBcTXVj_1THyapNa4SHWUqC3Dpp4XQ4ZE6aoG3lGAdocj04mz9YhmgORgOlbvQPfMlKirBucTkmYQc3jZ-9Pk5-mqA0j9J7JKbD0lUncGl-I6WBhotVlrkw3xa3gFdo_Ug3oqfrXCJZ--ed9wBJuejs0TDHDBFIraRkA_qMu30WGKmsGpKe7qAa4rnS9H9Tw09T15ZkvLASP4r1bHPAI5oQZ35yidWPc')">
-</div>
-</div>
-</div>
-</header>
-<!-- Main Content Area -->
-<main class="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
-<!-- Breadcrumbs & Header Actions -->
-<div class="flex flex-col gap-4">
-<!-- Breadcrumbs -->
-<nav class="flex items-center text-sm font-medium text-slate-500 dark:text-slate-400 gap-2">
-<a class="hover:text-primary transition-colors" href="#">Müşteriler</a>
-<span class="material-symbols-outlined !text-sm">chevron_right</span>
-<span class="text-slate-900 dark:text-slate-200">Firma Detay</span>
-</nav>
-<!-- Title & Actions -->
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-<div class="flex items-center gap-3">
-<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<button class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
 <span class="material-symbols-outlined">arrow_back</span>
 </button>
-<div>
-<h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-                            Büyük Lojistik A.Ş.
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                Aktif Müşteri
-                            </span>
-</h1>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">ID: #CST-10492 • Eklendi: 12 Eki 2023</p>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Müşteri Detayı</h2>
 </div>
-</div>
-<div class="flex items-center gap-3">
-<button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-medium text-sm transition-colors">
-<span class="material-symbols-outlined !text-lg">delete</span>
-<span class="hidden sm:inline">Sil</span>
-</button>
-<button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 font-medium text-sm shadow-sm transition-colors">
-<span class="material-symbols-outlined !text-lg">edit</span>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors gap-2">
+<span class="material-symbols-outlined text-sm">edit</span>
 <span>Düzenle</span>
 </button>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors gap-2">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+<span>Aktivite Ekle</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors gap-2">
+<span class="material-symbols-outlined text-sm">post_add</span>
+<span>Yeni Teklif</span>
+</button>
 </div>
-</div>
-</div>
-<!-- Layout Grid: Main Content + Sidebar -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-<!-- Left Area: Main Details -->
-<div class="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
-<!-- Tabs Container -->
-<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-<!-- Tab Navigation -->
-<div class="border-b border-slate-200 dark:border-slate-800 px-2 sm:px-6 flex overflow-x-auto hide-scrollbar">
-<a class="flex items-center gap-2 border-b-2 border-primary text-primary px-4 py-4 text-sm font-semibold whitespace-nowrap" href="#">
-<span class="material-symbols-outlined !text-[20px]">info</span>
-                            Bilgiler
-                        </a>
-<a class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 transition-colors px-4 py-4 text-sm font-medium whitespace-nowrap" href="#">
-<span class="material-symbols-outlined !text-[20px]">request_quote</span>
-                            Teklifler
-                            <span class="ml-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-0.5 px-2 rounded-full text-xs">12</span>
-</a>
-<a class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 transition-colors px-4 py-4 text-sm font-medium whitespace-nowrap" href="#">
-<span class="material-symbols-outlined !text-[20px]">list_alt</span>
-                            Aktiviteler
-                        </a>
-<a class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 transition-colors px-4 py-4 text-sm font-medium whitespace-nowrap" href="#">
-<span class="material-symbols-outlined !text-[20px]">history</span>
-                            Geçmiş
-                        </a>
-</div>
-<!-- Tab Content: Bilgiler (Active) -->
-<div class="p-6">
-<h3 class="text-base font-semibold text-slate-900 dark:text-white mb-6">Genel Firma Bilgileri</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">business</span> Firma Adı
-                                </span>
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Büyük Lojistik A.Ş.</span>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">account_balance</span> Vergi Dairesi
-                                </span>
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Marmara Kurumlar VD.</span>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">numbers</span> Vergi Numarası
-                                </span>
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100 font-mono">123 456 7890</span>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">location_on</span> Adres
-                                </span>
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">OSB 3. Cadde No:5 Gebze/Kocaeli, Türkiye</span>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60 md:border-b-0">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">person</span> İletişim Kişisi
-                                </span>
-<div class="flex items-center gap-2">
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Ahmet Yılmaz</span>
-<span class="text-xs text-slate-500 dark:text-slate-400">(Satınalma Müdürü)</span>
-</div>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 pb-4 border-b border-slate-100 dark:border-slate-800/60 md:border-b-0">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">call</span> Telefon
-                                </span>
-<a class="text-sm font-semibold text-primary hover:underline" href="tel:+905551234567">+90 555 123 45 67</a>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 md:mt-2">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">mail</span> E-posta
-                                </span>
-<a class="text-sm font-semibold text-primary hover:underline break-all" href="mailto:ahmet@buyuklojistik.com.tr">ahmet@buyuklojistik.com.tr</a>
-</div>
-<!-- Detail Item -->
-<div class="flex flex-col gap-1.5 md:mt-2">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-<span class="material-symbols-outlined !text-[16px]">language</span> Web Sitesi
-                                </span>
-<a class="text-sm font-semibold text-primary hover:underline" href="#" target="_blank">www.buyuklojistik.com.tr</a>
-</div>
-</div>
-</div>
-</div>
-<!-- Secondary Block Example (Map/Notes) could go here if needed, but keeping it clean per instructions -->
-</div>
-<!-- Right Area: Sidebar Metadata -->
-<div class="lg:col-span-4 xl:col-span-3 flex flex-col gap-6">
-<!-- Status Card -->
-<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 flex flex-col gap-5">
-<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Durum &amp; Potansiyel</h3>
-<div class="flex items-center justify-between">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Müşteri Durumu</span>
-<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
-                            Aktif
-                        </span>
-</div>
-<div class="flex items-center justify-between">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Potansiyel</span>
-<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50">
-<span class="material-symbols-outlined !text-[14px] mr-1">trending_up</span> Yüksek
-                        </span>
-</div>
-<div class="flex items-center justify-between">
-<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Sektör</span>
-<span class="text-sm font-medium text-slate-900 dark:text-slate-200">Üretim &amp; Sanayi</span>
-</div>
-</div>
-<!-- Rep Card -->
-<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 flex flex-col gap-5">
-<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Temsilci &amp; Etkileşim</h3>
+</header>
+<div class="p-8 flex flex-col gap-8 max-w-[1200px] mx-auto w-full">
+<!-- Customer Header Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+<div class="flex gap-6 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-24 border border-slate-200 dark:border-slate-800" data-alt="Company Logo ABC Lojistik" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDJ1FZREumnuiU6rt9tJtbpKxNvryCEeK4ZHCQNGQZ72SRV5xFhs3fTGQ45Tv_X5O95p3QOP1ZCaeVu6yOwSncg8_HP_CA8oMQi70ftaxiMRm5V0hoPGnElWxCVZLHR7UkQdxNWXN735vICS3LoYpIf6LUW-iyICObThTu3YdJbtR0txsFKX2Qq9m6er4tZe9BuXPRynINb9Cki4k_7wfBpn9tHsr33OsIHa6UyAfPzLdIkEg0AtJuyPae1HImN04eHNWoQLogVEn4d");'></div>
 <div class="flex flex-col gap-2">
-<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Atanan Temsilci</span>
 <div class="flex items-center gap-3">
-<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border border-slate-200 dark:border-slate-700" data-alt="Sales Rep Avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYltBqNKffz96sc3jHA2TGQpZSTdUAPths0_ddI3HJKIp44vKdYL94cRVDh-poHZKIN7PIUKjxvj4WEhzQo2wnoj7LeMQwMLjdKQI_hJQmmQbsZqwInSiTY2AEEG9konaCXQuAJGfDjgxdsepxhpDq-TAisL4HfhCkVR5wId4uueJGg_w7l4QKPyUhtEzrbExxpH7PlhO36Ylizj5nhMXtopNMxdiyZjb3NkDZMM2yLm2B8KuyvngI-Dg0xgqNIy1e8DgWYsDSrzI')">
+<h3 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">ABC Lojistik Ltd.</h3>
+<span class="px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wider">Aktif</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">B2B Taşımacılık ve Depolama Hizmetleri</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm text-slate-400">person</span>
+<p class="text-slate-600 dark:text-slate-300 text-sm">Atanan Temsilci: <span class="font-bold">Ahmet Y.</span></p>
+</div>
+</div>
+</div>
+<div class="flex flex-row gap-4 flex-wrap">
+<div class="flex flex-col items-center gap-1">
+<div class="rounded-full bg-slate-100 dark:bg-slate-800 p-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">phone</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">+90 212 555 1234</p>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="rounded-full bg-slate-100 dark:bg-slate-800 p-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">info@abclojistik.com.tr</p>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="rounded-full bg-slate-100 dark:bg-slate-800 p-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">language</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">www.abclojistik.com.tr</p>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-slate-200 dark:border-slate-800 gap-8">
+<a class="flex items-center justify-center border-b-[3px] border-b-primary text-primary pb-3 font-bold text-sm" href="#">
+Bilgiler
+</a>
+<a class="flex items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 font-medium text-sm transition-colors" href="#">
+Aktiviteler (12)
+</a>
+<a class="flex items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 font-medium text-sm transition-colors" href="#">
+Teklifler (5)
+</a>
+<a class="flex items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 font-medium text-sm transition-colors" href="#">
+Geçmiş (8)
+</a>
+</div>
+<!-- Tab Content: Bilgiler -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Temel Bilgiler Section -->
+<section class="flex flex-col gap-4">
+<h4 class="text-slate-900 dark:text-slate-100 text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2">Temel Bilgiler</h4>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-4">
+<div class="grid grid-cols-3 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+<div class="col-span-1 text-slate-500 dark:text-slate-400 text-sm font-medium">Firma Unvanı</div>
+<div class="col-span-2 text-slate-900 dark:text-slate-100 text-sm font-semibold">ABC Taşımacılık ve Lojistik Hizmetleri Ltd. Şti.</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+<div class="col-span-1 text-slate-500 dark:text-slate-400 text-sm font-medium">Vergi Dairesi / No</div>
+<div class="col-span-2 text-slate-900 dark:text-slate-100 text-sm font-semibold">Marmara Kurumlar / 1234567890</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+<div class="col-span-1 text-slate-500 dark:text-slate-400 text-sm font-medium">Sektör</div>
+<div class="col-span-2 text-slate-900 dark:text-slate-100 text-sm font-semibold">Uluslararası Taşımacılık</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+<div class="col-span-1 text-slate-500 dark:text-slate-400 text-sm font-medium">Müşteri Tipi</div>
+<div class="col-span-2 text-slate-900 dark:text-slate-100 text-sm font-semibold">Kurumsal (B2B)</div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="col-span-1 text-slate-500 dark:text-slate-400 text-sm font-medium">Adres</div>
+<div class="col-span-2 text-slate-900 dark:text-slate-100 text-sm font-semibold">Organize Sanayi Bölgesi, 3. Cadde No:45, Başakşehir, İstanbul</div>
+</div>
+</div>
+</section>
+<!-- Nakliye Tercihleri Section -->
+<section class="flex flex-col gap-4">
+<h4 class="text-slate-900 dark:text-slate-100 text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2">Nakliye Tercihleri</h4>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col gap-5">
+<p class="text-slate-600 dark:text-slate-400 text-sm">Müşterinin sıklıkla kullandığı taşıma modları ve tercih edilen rotalar.</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg text-blue-700 dark:text-blue-400">
+<span class="material-symbols-outlined">directions_boat</span>
 </div>
 <div>
-<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Ayşe Demir</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Kıdemli Satış Uzmanı</p>
+<h5 class="text-slate-900 dark:text-slate-100 font-bold text-sm">Denizyolu (FCL/LCL)</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Uzak Doğu - Türkiye, Avrupa - Türkiye</p>
+</div>
+</div>
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">Ana Tercih</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="bg-sky-100 dark:bg-sky-900/30 p-2 rounded-lg text-sky-700 dark:text-sky-400">
+<span class="material-symbols-outlined">flight</span>
+</div>
+<div>
+<h5 class="text-slate-900 dark:text-slate-100 font-bold text-sm">Havayolu</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Acil Yedek Parça, Numune Gönderimleri</p>
 </div>
 </div>
 </div>
-<hr class="border-slate-100 dark:border-slate-800"/>
-<div class="flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<div class="flex flex-col gap-1">
-<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Son Görüşme</span>
-<span class="text-sm font-medium text-slate-900 dark:text-slate-100">Dün, 14:30</span>
+<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-lg text-amber-700 dark:text-amber-400">
+<span class="material-symbols-outlined">local_shipping</span>
 </div>
-<span class="material-symbols-outlined text-slate-400 !text-[20px]">record_voice_over</span>
-</div>
-<div class="flex justify-between items-start">
-<div class="flex flex-col gap-1">
-<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Son Teklif</span>
-<a class="text-sm font-medium text-primary hover:underline" href="#">#TKF-2023-089</a>
-<span class="text-xs text-slate-500 dark:text-slate-400">₺145.000 (Beklemede)</span>
-</div>
-<span class="material-symbols-outlined text-slate-400 !text-[20px]">description</span>
+<div>
+<h5 class="text-slate-900 dark:text-slate-100 font-bold text-sm">Karayolu (FTL/LTL)</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Türkiye - Almanya, Türkiye - İtalya</p>
 </div>
 </div>
 </div>
-<!-- Quick Actions Block -->
-<div class="bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/20 p-5 flex flex-col gap-3">
-<button class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-primary hover:text-primary transition-colors text-sm font-semibold shadow-sm">
-<span class="material-symbols-outlined !text-lg">add_circle</span>
-                        Yeni Teklif Oluştur
-                    </button>
-<button class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-primary hover:text-primary transition-colors text-sm font-semibold shadow-sm">
-<span class="material-symbols-outlined !text-lg">event</span>
-                        Toplantı Planla
-                    </button>
 </div>
+</div>
+</section>
 </div>
 </div>
 </main>
+</div>
 </body></html>

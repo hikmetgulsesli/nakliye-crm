@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Lookup Settings Logistics CRM Turkish</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Karla", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Karla', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-body">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 shrink-0">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display leading-tight tracking-[-0.015em]">Admin Settings</h2>
+</div>
+<label class="flex flex-col min-w-40 !h-10 max-w-64 hidden md:flex">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary overflow-hidden">
+<div class="text-slate-500 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent placeholder:text-slate-500 px-3 text-sm font-normal leading-normal" placeholder="Ara..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Kullanıcılar</a>
+<a class="text-primary font-bold text-sm leading-normal border-b-2 border-primary pb-1" href="#">Ayarlar</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Yardım</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border border-slate-200 dark:border-slate-700" data-alt="User Avatar Placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBnUDXoCWI1O0C0YovKy___rPSFhifpnPZk2BGvEehdlHBaJgS9X_xuewUYdsZTmJ-64n1HOVwbVjw1b3HBqZRY96M6SBL-rVkpFoeOE_TJ-m3miisQBcwCRHe4kBpWxSqtGbK1b1ObzKvpAJcjMqpE9fd7MqG4QvbTRrrR3juok1w8uREdjJJ7HPQ02pYKua4vGPm-WWE8bKDxHMyGhcZx7YCYl2BPIWaEVcoCcDSZy2LqsT1-otx1X-6qT0TWITzUNhfObJYy9ijN");'></div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex-col hidden md:flex overflow-y-auto shrink-0">
+<div class="p-4">
+<p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">CRM Yapılandırması</p>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg font-medium text-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">list_alt</span>
+                            Lookup Değerleri
+                        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                            Firma Bilgileri
+                        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                            Lokalizasyon
+                        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span>
+                            Güvenlik &amp; İzinler
+                        </a>
+</nav>
+</div>
+<div class="p-4 mt-auto border-t border-slate-200 dark:border-slate-800">
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                            Çıkış Yap
+                        </a>
+</nav>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto p-6 lg:p-8">
+<div class="max-w-[1200px] w-full mx-auto flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+<div>
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl sm:text-[32px] font-bold font-display leading-tight">Lookup Değerleri</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">CRM için dinamik listeleri ve açılır menü değerlerini yönetin.</p>
+</div>
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 text-white px-5 py-2.5 text-sm font-semibold transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Yeni Değer Ekle
+                        </button>
+</div>
+<div class="flex flex-col lg:flex-row gap-6 mt-2">
+<div class="w-full lg:w-64 shrink-0">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="p-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+<h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Kategoriler</h3>
+</div>
+<div class="flex flex-col py-2">
+<a class="flex items-center justify-between px-4 py-2.5 bg-primary/10 text-primary border-l-4 border-primary font-semibold text-sm" href="#">
+                                        Taşıma Modu
+                                        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Servis Tipi
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Satış Şekli
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Müşteri Kaynağı
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Potansiyel
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Müşteri Durumu
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Teklif Sonucu
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Kaybedilme Nedeni
+                                    </a>
+<a class="flex items-center justify-between px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent hover:border-slate-300 dark:hover:border-slate-600 font-medium text-sm transition-colors" href="#">
+                                        Para Birimi
+                                    </a>
+</div>
+</div>
+</div>
+<div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+<h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Taşıma Modu Değerleri</h2>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">5 Kayıt</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+<th class="w-12 px-4 py-3 text-center">
+<span class="material-symbols-outlined text-[18px] text-slate-400">drag_indicator</span>
+</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider">Değer</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider text-center w-24">Sıralama</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider text-center w-24">Aktif</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider text-right w-32">İşlemler</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-4 py-4 text-center cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-[20px] text-slate-300 hover:text-slate-500 transition-colors">drag_indicator</span>
+</td>
+<td class="px-4 py-4 text-slate-900 dark:text-slate-100 font-semibold text-sm">Deniz Yolu</td>
+<td class="px-4 py-4 text-center text-slate-500 text-sm">1</td>
+<td class="px-4 py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Sil">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-4 py-4 text-center cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-[20px] text-slate-300 hover:text-slate-500 transition-colors">drag_indicator</span>
+</td>
+<td class="px-4 py-4 text-slate-900 dark:text-slate-100 font-semibold text-sm">Hava Yolu</td>
+<td class="px-4 py-4 text-center text-slate-500 text-sm">2</td>
+<td class="px-4 py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Sil">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-4 py-4 text-center cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-[20px] text-slate-300 hover:text-slate-500 transition-colors">drag_indicator</span>
+</td>
+<td class="px-4 py-4 text-slate-900 dark:text-slate-100 font-semibold text-sm">Kara Yolu</td>
+<td class="px-4 py-4 text-center text-slate-500 text-sm">3</td>
+<td class="px-4 py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Sil">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-4 py-4 text-center cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-[20px] text-slate-300 hover:text-slate-500 transition-colors">drag_indicator</span>
+</td>
+<td class="px-4 py-4 text-slate-900 dark:text-slate-100 font-semibold text-sm">Demir Yolu</td>
+<td class="px-4 py-4 text-center text-slate-500 text-sm">4</td>
+<td class="px-4 py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Sil">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-4 py-4 text-center cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-[20px] text-slate-300 hover:text-slate-500 transition-colors">drag_indicator</span>
+</td>
+<td class="px-4 py-4 text-slate-900 dark:text-slate-100 font-semibold text-sm">Kombine</td>
+<td class="px-4 py-4 text-center text-slate-500 text-sm">5</td>
+<td class="px-4 py-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+</label>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Sil">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</body></html>

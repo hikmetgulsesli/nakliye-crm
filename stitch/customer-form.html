@@ -3,36 +3,23 @@
 <html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Yeni Müşteri Ekleme Formu - Nakliye CRM</title>
+<title>Yeni Müşteri Ekle - Logistics CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Karla:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e3fae",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#121520",
-                        "slate": {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            200: '#e2e8f0',
-                            300: '#cbd5e1',
-                            400: '#94a3b8',
-                            500: '#64748b',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a',
-                        }
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
                     },
                     fontFamily: {
-                        "display": ["Manrope", "sans-serif"],
-                        "body": ["Karla", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"]
                     },
                     borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
                 },
@@ -40,248 +27,258 @@
         }
     </script>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 min-h-screen">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-3 font-display">
-<div class="flex items-center gap-4 text-slate-900 dark:text-white">
-<div class="size-6 text-primary">
-<span class="material-symbols-outlined text-2xl">local_shipping</span>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-row group/design-root overflow-x-hidden">
+<!-- Sidebar -->
+<div class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 h-screen sticky top-0 flex flex-col justify-between">
+<div class="flex flex-col p-4 gap-4">
+<div class="flex items-center gap-3 px-2 py-3 mb-4">
+<div class="bg-primary/20 aspect-square rounded-full size-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
 </div>
-<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Nakliye CRM</h2>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">Logistics CRM</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium leading-normal">Admin Paneli</p>
 </div>
-<div class="flex flex-1 justify-end gap-8">
-<nav class="flex items-center gap-9 hidden md:flex">
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
-<a class="text-primary font-bold text-sm leading-normal border-b-2 border-primary py-1" href="#">Müşteriler</a>
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Nakliyeler</a>
-<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Raporlar</a>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Kontrol Paneli</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-bold">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+<span class="text-sm font-medium">Yükler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">receipt_long</span>
+<span class="text-sm font-medium">Faturalar</span>
+</a>
 </nav>
-<div class="flex gap-2">
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-<span class="material-symbols-outlined text-xl">notifications</span>
+</div>
+<div class="p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col h-full min-h-screen">
+<!-- Header -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 py-4 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-colors p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">arrow_back</span>
 </button>
-<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-<span class="material-symbols-outlined text-xl">person</span>
+<h2 class="text-xl font-bold leading-tight">Yeni Müşteri Ekle</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">notifications</span>
 </button>
+<div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Portrait of a smiling user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzFMj-IS7rvewxqfp_lcONrDoqmsJerWAw1elmpgBclLKy2jeoJXmPcWz0SgXkRy2oZHJula5YQLg4YT3WdKvpMhcscyggpdEnbdHyqjXi5y4A2A8BJrmW5nZKfhKeC1lCcJPTLII2C8OWXYrVT0hXnkG4SC3DgoZryXjidWu3cribtWgQGn4a75v8UWhcwiLKawNiBlJRABoovz_yl-_6UP7UXvBdpuqPLUwbvKUOsj0IyCCC7-VmgTOTOPDz56WmqcoTuWrdT6Pc"/>
 </div>
 </div>
 </header>
-<main class="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
-<div class="layout-content-container flex flex-col w-full max-w-5xl bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-<div class="flex flex-wrap justify-between items-center gap-3 p-6 border-b border-slate-200 dark:border-slate-800 font-display">
-<div class="flex flex-col gap-1">
-<h1 class="text-slate-900 dark:text-white text-2xl md:text-3xl font-bold leading-tight">Yeni Müşteri Ekleme Formu</h1>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Yeni bir müşteri kaydı oluşturmak için aşağıdaki formu doldurun.</p>
+<!-- Form Content -->
+<div class="p-8 flex-1 max-w-5xl mx-auto w-full">
+<!-- Warning Banner -->
+<div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-8 flex items-start gap-4">
+<span class="material-symbols-outlined text-amber-500 dark:text-amber-400 mt-0.5">warning</span>
+<div class="flex-1">
+<h3 class="text-amber-800 dark:text-amber-200 font-bold text-sm mb-1">Bu müşteri zaten kayıtlı olabilir</h3>
+<p class="text-amber-700 dark:text-amber-300 text-sm mb-3">Sistemde benzer isme sahip kayıtlar bulundu. Lütfen mükerrer kayıt oluşturmamak için kontrol ediniz.</p>
+<button class="bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-sm font-semibold py-1.5 px-4 rounded hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors">Benzer Kayıtları Görüntüle</button>
 </div>
-<button class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm font-semibold gap-2">
-<span class="material-symbols-outlined text-lg">arrow_back</span>
-<span>Geri Dön</span>
-</button>
 </div>
-<div class="p-6 md:p-8 space-y-10">
-<!-- 1. Temel Bilgiler -->
-<section>
-<h2 class="text-slate-900 dark:text-white text-xl font-bold font-display mb-6 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">business</span>
-                                1. Temel Bilgiler
-                            </h2>
+<form class="space-y-8 pb-12">
+<!-- Temel Bilgiler -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<h2 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person</span>
+                        Temel Bilgiler
+                    </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="col-span-1 md:col-span-2">
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Firma Adı</span>
-<div class="relative flex items-center w-full">
-<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 pl-4 pr-12 text-sm" placeholder="Firma adını girin veya arayın..." type="text"/>
-<div class="absolute right-3 text-slate-400">
-<span class="material-symbols-outlined">search</span>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Firma Adı <span class="text-red-500">*</span></label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4" placeholder="Firma adını girin" type="text"/>
 </div>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Yetkili Adı <span class="text-red-500">*</span></label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4" placeholder="Yetkili adını girin" type="text"/>
 </div>
-</label>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Telefon</label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4" placeholder="+90 (___) ___ __ __" type="tel"/>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Yetkili Adı</span>
-<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm" placeholder="Ad Soyad" type="text"/>
-</label>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">E-posta</label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4" placeholder="ornek@firma.com" type="email"/>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Telefon</span>
-<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm" placeholder="+90 5XX XXX XX XX" type="tel"/>
-</label>
-</div>
-<div class="col-span-1 md:col-span-2">
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">E-posta</span>
-<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm" placeholder="ornek@firma.com" type="email"/>
-</label>
-</div>
-<div class="col-span-1 md:col-span-2">
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Adres</span>
-<textarea class="form-textarea flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-4 text-sm min-h-[100px] resize-y" placeholder="Açık adres bilgilerini girin..."></textarea>
-</label>
+<div class="space-y-2 md:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Adres</label>
+<textarea class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm px-4 py-3" placeholder="Açık adres bilgilerini girin" rows="3"></textarea>
 </div>
 </div>
 </section>
-<!-- 2. Nakliye Tercihleri -->
-<section>
-<h2 class="text-slate-900 dark:text-white text-xl font-bold font-display mb-6 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+<!-- Nakliye Tercihleri -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<h2 class="text-lg font-bold mb-6 flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">directions_boat</span>
-                                2. Nakliye Tercihleri
-                            </h2>
+                        Nakliye Tercihleri
+                    </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="col-span-1 md:col-span-2">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-3 block">İşlem Yönü</span>
-<div class="flex gap-6">
-<label class="flex items-center gap-2 cursor-pointer">
-<input class="form-checkbox text-primary rounded border-slate-300 focus:ring-primary h-5 w-5" type="checkbox"/>
-<span class="text-sm">İthalat</span>
-</label>
-<label class="flex items-center gap-2 cursor-pointer">
-<input class="form-checkbox text-primary rounded border-slate-300 focus:ring-primary h-5 w-5" type="checkbox"/>
-<span class="text-sm">İhracat</span>
-</label>
-</div>
-</div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Taşıma Modu</span>
-<select class="form-multiselect flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-2 text-sm min-h-[120px]" multiple="">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Taşıma Modu</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm px-4 py-2 h-24" multiple="">
 <option value="deniz">Denizyolu</option>
 <option value="hava">Havayolu</option>
 <option value="kara">Karayolu</option>
 <option value="kombine">Kombine</option>
 </select>
-<p class="text-xs text-slate-500 mt-1">Birden fazla seçmek için Ctrl/Cmd tuşuna basılı tutun.</p>
-</label>
+<p class="text-xs text-slate-500 mt-1">Birden fazla seçim yapmak için Ctrl/Cmd tuşuna basılı tutun.</p>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Servis Tipi</span>
-<select class="form-multiselect flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-2 text-sm min-h-[120px]" multiple="">
-<option value="fcl">FCL</option>
-<option value="lcl">LCL</option>
-<option value="parsiyel">Parsiyel</option>
-<option value="komple">Komple</option>
-<option value="bulk">Bulk</option>
-<option value="roro">RoRo</option>
+<div class="space-y-4">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Servis Tipi</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
+<option disabled="" selected="" value="">Seçiniz</option>
+<option value="fcl">FCL (Full Container Load)</option>
+<option value="lcl">LCL (Less than Container Load)</option>
+<option value="parsiyel">Parsiyel (LTL)</option>
+<option value="komple">Komple (FTL)</option>
 </select>
-</label>
 </div>
-<div class="col-span-1 md:col-span-2">
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Satış Şekli (Incoterms)</span>
-<select class="form-multiselect flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-2 text-sm min-h-[100px]" multiple="">
-<option value="fob">FOB</option>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Satış Şekli (Incoterms)</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
+<option disabled="" selected="" value="">Seçiniz</option>
 <option value="exw">EXW</option>
 <option value="fca">FCA</option>
-<option value="dap">DAP</option>
-<option value="cif">CIF</option>
+<option value="fob">FOB</option>
 <option value="cfr">CFR</option>
+<option value="cif">CIF</option>
+<option value="dap">DAP</option>
 <option value="ddp">DDP</option>
 </select>
+</div>
+</div>
+<div class="space-y-3 md:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">İşlem Yönü</label>
+<div class="flex gap-6">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-slate-300 text-primary focus:ring-primary w-5 h-5" type="checkbox"/>
+<span class="text-sm">İthalat</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-slate-300 text-primary focus:ring-primary w-5 h-5" type="checkbox"/>
+<span class="text-sm">İhracat</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-slate-300 text-primary focus:ring-primary w-5 h-5" type="checkbox"/>
+<span class="text-sm">Transit</span>
 </label>
 </div>
 </div>
+</div>
 </section>
-<!-- 3. Lokasyon Bilgileri -->
-<section>
-<h2 class="text-slate-900 dark:text-white text-xl font-bold font-display mb-6 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">public</span>
-                                3. Lokasyon Bilgileri
-                            </h2>
+<!-- Lokasyon -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<h2 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                        Lokasyon Bilgileri
+                    </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Çıkış Ülkeleri</span>
-<select class="form-multiselect flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-2 text-sm min-h-[120px]" multiple="">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Sık Çalışılan Çıkış Ülkeleri</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm px-4 py-2 h-32" multiple="">
 <option value="tr">Türkiye</option>
-<option value="cn">Çin</option>
 <option value="de">Almanya</option>
+<option value="cn">Çin</option>
 <option value="us">Amerika Birleşik Devletleri</option>
 <option value="it">İtalya</option>
+<option value="fr">Fransa</option>
 </select>
-</label>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Varış Ülkeleri</span>
-<select class="form-multiselect flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-2 text-sm min-h-[120px]" multiple="">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Sık Çalışılan Varış Ülkeleri</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm px-4 py-2 h-32" multiple="">
 <option value="tr">Türkiye</option>
-<option value="uk">İngiltere</option>
-<option value="ae">B.A.E.</option>
+<option value="de">Almanya</option>
+<option value="gb">Birleşik Krallık</option>
+<option value="nl">Hollanda</option>
+<option value="ae">Birleşik Arap Emirlikleri</option>
 <option value="ru">Rusya</option>
-<option value="sa">Suudi Arabistan</option>
 </select>
-</label>
 </div>
 </div>
 </section>
-<!-- 4. CRM Bilgileri -->
-<section>
-<h2 class="text-slate-900 dark:text-white text-xl font-bold font-display mb-6 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">query_stats</span>
-                                4. CRM Bilgileri
-                            </h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Müşteri Durumu</span>
-<select class="form-select flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm">
-<option value="aktif">Aktif</option>
-<option value="aday">Aday</option>
-<option value="pasif">Pasif</option>
-</select>
-</label>
-</div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Kaynak</span>
-<select class="form-select flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm">
+<!-- CRM Bilgileri -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<h2 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">pie_chart</span>
+                        CRM Bilgileri
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Kaynak</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
 <option value="web">Web Sitesi</option>
 <option value="referans">Referans</option>
 <option value="fuar">Fuar</option>
-<option value="diger">Diğer</option>
+<option value="soguk_arama">Soğuk Arama</option>
 </select>
-</label>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Potansiyel (Yıllık TEU/Tonaj)</span>
-<input class="form-input flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm" placeholder="Örn: 500 TEU" type="text"/>
-</label>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Potansiyel Hacim</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
+<option value="dusuk">Düşük</option>
+<option selected="" value="orta">Orta</option>
+<option value="yuksek">Yüksek</option>
+<option value="cok_yuksek">Çok Yüksek</option>
+</select>
 </div>
-<div>
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Atanan Temsilci</span>
-<select class="form-select flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 text-sm">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Durum</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
+<option value="yeni">Yeni Aday</option>
+<option value="gorusuluyor">Görüşülüyor</option>
+<option value="teklif">Teklif Verildi</option>
+<option value="musteri">Aktif Müşteri</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Atanan Temsilci</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm h-11 px-4">
 <option value="1">Ahmet Yılmaz</option>
-<option value="2">Ayşe Demir</option>
+<option selected="" value="2">Ayşe Demir</option>
 <option value="3">Mehmet Kaya</option>
 </select>
-</label>
 </div>
-<div class="col-span-1 md:col-span-2">
-<label class="flex flex-col">
-<span class="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-2">Açıklama / Notlar</span>
-<textarea class="form-textarea flex w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary p-4 text-sm min-h-[120px] resize-y" placeholder="Müşteri hakkında eklemek istediğiniz notlar..."></textarea>
-</label>
 </div>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Özel Notlar</label>
+<textarea class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-primary focus:border-primary shadow-sm px-4 py-3" placeholder="Müşteri hakkında eklemek istediğiniz diğer detaylar..." rows="4"></textarea>
 </div>
 </section>
-</div>
-<div class="bg-slate-50 dark:bg-slate-800/50 p-6 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-4 mt-auto">
-<button class="px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold text-sm transition-colors">
-                            İptal
-                        </button>
-<button class="px-8 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold text-sm shadow-sm transition-colors flex items-center gap-2">
+<!-- Actions -->
+<div class="flex items-center justify-end gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+<button class="px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="button">
+                        İptal
+                    </button>
+<button class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold shadow-sm transition-colors flex items-center gap-2" type="button">
 <span class="material-symbols-outlined text-sm">save</span>
-                            Kaydet
-                        </button>
+                        Müşteriyi Kaydet
+                    </button>
 </div>
+</form>
 </div>
-</main>
 </div>
 </div>
 </body></html>

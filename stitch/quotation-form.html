@@ -3,28 +3,26 @@
 <html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Yeni Teklif Oluşturma Formu</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<title>Teklif Oluştur - Lojistik CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Karla:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e3fae",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#121520",
+                        "primary": "#1e3a8a",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
                     },
                     fontFamily: {
                         "display": ["Manrope", "sans-serif"],
                         "body": ["Karla", "sans-serif"]
                     },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
                 },
             },
         }
@@ -34,127 +32,335 @@
         h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
-<!-- Header -->
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 py-4">
-<div class="flex items-center gap-4">
-<button class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
-<span class="material-symbols-outlined text-xl">arrow_back</span>
-</button>
-<h2 class="text-xl font-display font-bold leading-tight tracking-tight">Yeni Teklif</h2>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30">
+<div class="relative flex h-screen w-full flex-col overflow-hidden lg:flex-row group/design-root">
+<!-- Sidebar Navigation -->
+<div class="flex h-full w-full max-w-[280px] flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shrink-0 hidden lg:flex overflow-y-auto">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
+<span class="material-symbols-outlined text-[24px]">local_shipping</span>
 </div>
-<button class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
-<span class="material-symbols-outlined text-xl">close</span>
-</button>
-</header>
-<!-- Form Content -->
-<div class="p-6 space-y-8">
-<!-- Section 1: Teklif Bilgileri -->
-<section>
-<h3 class="text-lg font-display font-bold mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-xl">description</span>
-                                Teklif Bilgileri
-                            </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="col-span-1 md:col-span-2">
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Bağlı Müşteri</label>
-<div class="relative flex w-full">
-<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white" placeholder="Müşteri seçin veya arayın" type="text"/>
-<div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
-<span class="material-symbols-outlined text-xl">expand_more</span>
+<div class="flex flex-col">
+<h1 class="font-display text-base font-bold text-slate-900 dark:text-white">Lojistik CRM</h1>
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400">V 2.1.0</p>
 </div>
 </div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2.5 text-primary dark:bg-primary/20 dark:text-primary" href="#">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">inventory_2</span>
+<span class="text-sm font-medium">Yükler</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
 </div>
-<div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Teklif Tarihi</label>
+<div class="mt-8 flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-3 px-2">
+<img alt="User Avatar" class="size-9 rounded-full object-cover" data-alt="Profile picture of logged in user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXWWB9q1_GH22c8lEXRQWa-3KEYMVHiBJ1ctXDojCuB1Eadr6uqNbVLosFQfUs1iT_5mPgWFEG6t-a2uPE1rNm-foDRr1Kt50iX6nBKTKILF-lpH1CMI6dv_NY0wG7XQXAY_wXHv2HdINtmlq1RRt5Bt3QrzNgFsYEtPdG501SGNFYglNP_eXs3YAE6Uz_0nBjH26o4Ulf-OogYpmNPShtQ76zz9zqryHWCh1Y__IJer9-4t7ducYvcBHHdFF_sJkqPnI7p95eBrjq"/>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white">Ahmet Yılmaz</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Satış Temsilcisi</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto w-full">
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 xl:flex xl:gap-8">
+<!-- Form Section -->
+<div class="xl:flex-1">
+<div class="mb-8 flex flex-col gap-2">
+<h1 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">Teklif Oluştur</h1>
+<p class="text-slate-500 dark:text-slate-400">Yeni bir lojistik teklifi oluşturun veya mevcut birini revize edin.</p>
+</div>
+<form class="space-y-8">
+<!-- Müşteri Bilgileri -->
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<h2 class="mb-5 font-display text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">person</span>
+                                Müşteri Bilgileri
+                            </h2>
+<div class="grid gap-6 sm:grid-cols-2">
+<div class="col-span-2 sm:col-span-1">
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Bağlı Müşteri</label>
 <div class="relative">
-<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white" type="date"/>
+<select class="block w-full rounded-lg border-slate-300 bg-white py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white appearance-none">
+<option value="">Müşteri seçin veya arayın...</option>
+<option value="1">ABC Lojistik A.Ş.</option>
+<option value="2">XYZ Gümrükleme Ltd.</option>
+<option value="3">Global Kargo A.Ş.</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
 </div>
 </div>
-<div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Geçerlilik Tarihi</label>
+</div>
+<div class="col-span-2 sm:col-span-1">
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Atanan Temsilci</label>
 <div class="relative">
-<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white" type="date"/>
-</div>
-</div>
-</div>
-</section>
-<hr class="border-slate-200 dark:border-slate-800"/>
-<!-- Section 2: Yük Hareketi -->
-<section>
-<h3 class="text-lg font-display font-bold mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-xl">local_shipping</span>
-                                Yük Hareketi
-                            </h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Taşıma Modu</label>
-<select class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none">
-<option disabled="" selected="" value="">Seçiniz</option>
-<option>Denizyolu</option>
-<option>Havayolu</option>
-<option>Karayolu</option>
+<select class="block w-full rounded-lg border-slate-300 bg-white py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white appearance-none">
+<option selected="" value="1">Ahmet Yılmaz</option>
+<option value="2">Ayşe Demir</option>
 </select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tarih Bilgileri -->
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<h2 class="mb-5 font-display text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+                                Tarih Bilgileri
+                            </h2>
+<div class="grid gap-6 sm:grid-cols-2">
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Teklif Tarihi</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2.5 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white" type="date" value="2023-10-27"/>
 </div>
 <div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Servis Tipi</label>
-<select class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none">
-<option disabled="" selected="" value="">Seçiniz</option>
-<option>FCL</option>
-<option>LCL</option>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Geçerlilik Tarihi</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2.5 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white" type="date" value="2023-11-27"/>
+</div>
+</div>
+</div>
+<!-- Taşıma Detayları -->
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<h2 class="mb-5 font-display text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">route</span>
+                                Taşıma Detayları
+                            </h2>
+<div class="mb-6">
+<label class="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">Taşıma Modu</label>
+<div class="flex flex-wrap gap-3">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="transport_mode" type="radio" value="deniz"/>
+<div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:border-primary dark:peer-checked:bg-primary/20 dark:peer-checked:text-white transition-all">
+<span class="material-symbols-outlined text-[18px]">directions_boat</span>
+                                            Denizyolu
+                                        </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="transport_mode" type="radio" value="hava"/>
+<div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:border-primary dark:peer-checked:bg-primary/20 dark:peer-checked:text-white transition-all">
+<span class="material-symbols-outlined text-[18px]">flight</span>
+                                            Havayolu
+                                        </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="transport_mode" type="radio" value="kara"/>
+<div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:border-primary dark:peer-checked:bg-primary/20 dark:peer-checked:text-white transition-all">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+                                            Karayolu
+                                        </div>
+</label>
+</div>
+</div>
+<div class="grid gap-6 sm:grid-cols-2">
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Servis Tipi</label>
+<div class="relative">
+<select class="block w-full rounded-lg border-slate-300 bg-white py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white appearance-none">
+<option value="">Seçiniz...</option>
+<option value="fcl">FCL (Full Container Load)</option>
+<option value="lcl">LCL (Less than Container Load)</option>
+<option value="komple">Komple Kamyon</option>
+<option value="parsiyel">Parsiyel</option>
 </select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
+</div>
+</div>
 </div>
 <div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Çıkış Ülkesi</label>
-<select class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none">
-<option disabled="" selected="" value="">Ülke Seçiniz</option>
-<option>Türkiye</option>
-<option>Çin</option>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Satış Şekli (Incoterms)</label>
+<div class="relative">
+<select class="block w-full rounded-lg border-slate-300 bg-white py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white appearance-none">
+<option value="">Seçiniz...</option>
+<option value="fob">FOB</option>
+<option value="exw">EXW</option>
+<option value="cif">CIF</option>
+<option value="dap">DAP</option>
 </select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 grid gap-6 sm:grid-cols-2">
+<div class="space-y-4 rounded-lg border border-slate-100 bg-slate-50 p-4 dark:border-slate-700/50 dark:bg-slate-800/50">
+<h3 class="font-medium text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">flight_takeoff</span> Çıkış Bilgileri
+                                    </h3>
+<div>
+<label class="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">Çıkış Ülkesi</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-700 dark:text-white" placeholder="Örn: Türkiye" type="text"/>
 </div>
 <div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">POL - Liman</label>
-<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white" placeholder="Çıkış limanı giriniz" type="text"/>
+<label class="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">Yükleme Noktası (POL)</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-700 dark:text-white" placeholder="Liman/Havalimanı/Şehir" type="text"/>
+</div>
+</div>
+<div class="space-y-4 rounded-lg border border-slate-100 bg-slate-50 p-4 dark:border-slate-700/50 dark:bg-slate-800/50">
+<h3 class="font-medium text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">flight_land</span> Varış Bilgileri
+                                    </h3>
+<div>
+<label class="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">Varış Ülkesi</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-700 dark:text-white" placeholder="Örn: Almanya" type="text"/>
 </div>
 <div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Varış Ülkesi</label>
-<select class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none">
-<option disabled="" selected="" value="">Ülke Seçiniz</option>
-<option>Almanya</option>
-<option>ABD</option>
+<label class="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">Varış Noktası (POD)</label>
+<input class="block w-full rounded-lg border-slate-300 bg-white py-2 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-700 dark:text-white" placeholder="Liman/Havalimanı/Şehir" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Finansal Detaylar -->
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<h2 class="mb-5 font-display text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">payments</span>
+                                Finansal Detaylar
+                            </h2>
+<div class="grid gap-6 sm:grid-cols-2">
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Fiyat</label>
+<div class="relative flex rounded-lg shadow-sm">
+<input class="block w-full rounded-none rounded-l-lg border-slate-300 bg-white py-2.5 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white" placeholder="0.00" type="number"/>
+<div class="relative flex items-stretch">
+<select class="rounded-none rounded-r-lg border-l-0 border-slate-300 bg-slate-50 py-2.5 pl-3 pr-8 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-700 dark:text-white appearance-none">
+<option>USD</option>
+<option>EUR</option>
+<option>TRY</option>
 </select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span>
 </div>
+</div>
+</div>
+</div>
+<div class="sm:col-span-2">
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Fiyat Notu / Açıklama</label>
+<textarea class="block w-full rounded-lg border-slate-300 bg-white py-2 px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white" placeholder="Dahil olan veya olmayan hizmetleri belirtin..." rows="3"></textarea>
+</div>
+</div>
+</div>
+<!-- Durum -->
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<h2 class="mb-5 font-display text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">flag</span>
+                                Teklif Durumu
+                            </h2>
+<div class="grid gap-6 sm:grid-cols-2">
 <div>
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">POD - Varış Limanı</label>
-<input class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white" placeholder="Varış limanı giriniz" type="text"/>
-</div>
-<div class="col-span-1 md:col-span-2">
-<label class="block text-sm font-medium mb-1.5 text-slate-700 dark:text-slate-300">Satış Şekli - Incoterm</label>
-<select class="w-full md:w-1/2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none">
-<option disabled="" selected="" value="">Seçiniz</option>
-<option>FOB</option>
-<option>EXW</option>
-<option>CIF</option>
+<label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Sonuç</label>
+<div class="relative">
+<select class="block w-full rounded-lg border-slate-300 bg-white py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white appearance-none">
+<option selected="" value="bekliyor">Bekliyor</option>
+<option value="kazanildi">Kazanıldı</option>
+<option value="kaybedildi">Kaybedildi</option>
 </select>
-</div>
-</div>
-</section>
-</div>
-<!-- Footer -->
-<div class="border-t border-slate-200 dark:border-slate-800 px-6 py-4 bg-slate-50 dark:bg-slate-900 rounded-b-xl flex items-center justify-end gap-3">
-<button class="px-5 py-2.5 text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                            İptal
-                        </button>
-<button class="px-5 py-2.5 text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
-                            Kaydet
-                        </button>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
 </div>
 </div>
 </div>
 </div>
+</div>
+<div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+<button class="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus:ring-offset-slate-900 transition-colors" type="button">
+                                İptal
+                            </button>
+<button class="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-colors" type="submit">
+                                Teklifi Kaydet
+                            </button>
+</div>
+</form>
+</div>
+<!-- Right Sidebar: Revision History -->
+<aside class="mt-8 w-full shrink-0 xl:mt-0 xl:w-80">
+<div class="sticky top-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<div class="mb-4 flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+<h2 class="font-display text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">history</span>
+                                Revize Geçmişi
+                            </h2>
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800 dark:bg-slate-800 dark:text-slate-300">
+                                3 Sürüm
+                            </span>
+</div>
+<div class="relative space-y-0 before:absolute before:inset-y-0 before:left-3.5 before:w-px before:bg-slate-200 dark:before:bg-slate-700">
+<!-- Current Version -->
+<div class="relative flex gap-4 pb-6">
+<div class="absolute -left-[3px] mt-1.5 size-2 rounded-full bg-primary ring-4 ring-white dark:ring-slate-900"></div>
+<div class="pl-8 w-full">
+<div class="flex items-center justify-between">
+<p class="text-sm font-medium text-primary">v3 (Güncel)</p>
+<span class="text-xs text-slate-500">Bugün, 14:30</span>
+</div>
+<p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Fiyat revizesi yapıldı.</p>
+<div class="mt-2 flex items-center gap-2">
+<div class="size-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">AY</div>
+<span class="text-xs text-slate-500">Ahmet Yılmaz</span>
+</div>
+</div>
+</div>
+<!-- Previous Versions -->
+<div class="relative flex gap-4 pb-6">
+<div class="absolute -left-[3px] mt-1.5 size-2 rounded-full bg-slate-300 ring-4 ring-white dark:bg-slate-600 dark:ring-slate-900"></div>
+<div class="pl-8 w-full">
+<div class="flex items-center justify-between">
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300">v2</p>
+<span class="text-xs text-slate-500">24 Eki, 11:15</span>
+</div>
+<p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Varış limanı POD güncellendi.</p>
+<div class="mt-2 flex items-center gap-2">
+<div class="size-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">AY</div>
+<span class="text-xs text-slate-500">Ahmet Yılmaz</span>
+</div>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="absolute -left-[3px] mt-1.5 size-2 rounded-full bg-slate-300 ring-4 ring-white dark:bg-slate-600 dark:ring-slate-900"></div>
+<div class="pl-8 w-full">
+<div class="flex items-center justify-between">
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300">v1 (İlk Teklif)</p>
+<span class="text-xs text-slate-500">22 Eki, 09:40</span>
+</div>
+<p class="mt-1 text-xs text-slate-600 dark:text-slate-400">Teklif oluşturuldu.</p>
+<div class="mt-2 flex items-center gap-2">
+<div class="size-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">AD</div>
+<span class="text-xs text-slate-500">Ayşe Demir</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+<button class="w-full rounded-lg border border-dashed border-slate-300 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors" type="button">
+                                Yeni Revize Oluştur
+                            </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
 </div>
 </body></html>

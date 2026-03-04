@@ -3,458 +3,304 @@
 <html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Nakliye CRM Yönetici Paneli Dashboard</title>
+<title>Logistics CRM Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Karla:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Karla:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e40af",
-                        "background-light": "#f1f5f9",
-                        "background-dark": "#0f172a",
-                        "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
-                        "border-light": "#e2e8f0",
-                        "border-dark": "#334155",
-                        "text-primary-light": "#0f172a",
-                        "text-primary-dark": "#f8fafc",
-                        "text-secondary-light": "#64748b",
-                        "text-secondary-dark": "#94a3b8",
-                        "success": "#16a34a",
-                        "danger": "#dc2626"
+                        "primary": "#13ec92",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221a",
                     },
                     fontFamily: {
                         "display": ["Manrope", "sans-serif"],
                         "body": ["Karla", "sans-serif"]
                     },
-                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
                 },
             },
         }
     </script>
-<style>
-        body {
-            font-family: 'Karla', sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6, .font-display {
-            font-family: 'Manrope', sans-serif;
-        }
-    </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark min-h-screen">
-<div class="flex h-screen overflow-hidden">
+<body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+<div class="flex h-screen">
 <!-- Sidebar -->
-<aside class="w-64 flex-shrink-0 border-r border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark flex flex-col h-full overflow-y-auto">
-<div class="p-6 flex items-center gap-3 border-b border-border-light dark:border-border-dark">
-<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white shrink-0">
-<span class="material-symbols-outlined">local_shipping</span>
-</div>
-<div>
-<h1 class="font-display font-bold text-lg leading-tight">Nakliye CRM</h1>
-<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Yönetici Paneli</p>
-</div>
-</div>
-<nav class="flex-1 py-4 px-3 flex flex-col gap-1">
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">group</span>
-<span class="font-medium text-sm">Müşteriler</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">description</span>
-<span class="font-medium text-sm">Teklifler</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">trending_up</span>
-<span class="font-medium text-sm">Aktiviteler</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400 transition-colors" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
-<span class="font-medium text-sm">Dashboard</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">bar_chart</span>
-<span class="font-medium text-sm">Raporlar</span>
-</a>
-<div class="mt-4 mb-2 px-3">
-<p class="text-xs font-semibold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">Sistem</p>
-</div>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">manage_accounts</span>
-<span class="font-medium text-sm">Kullanıcı Yönetimi</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">settings</span>
-<span class="font-medium text-sm">Sistem Ayarları</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined">history</span>
-<span class="font-medium text-sm">Loglar</span>
-</a>
-</nav>
-<div class="p-4 border-t border-border-light dark:border-border-dark">
+<div class="w-64 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 h-full overflow-y-auto">
+<div class="p-4 flex flex-col gap-6">
+<!-- Branding -->
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-<img alt="Admin Profil Resmi" class="w-full h-full object-cover" data-alt="Admin user profile avatar image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNIhOmQNy_p5QHwREve5R38F8AmwR8UHgBl19KCN3fVZloCSGu-bmWbbhd7LrO6UZEdfmtHBFgb20qzahAtFo8AfzT5xwdZG6B4Fsyc6hhvZEY-DKGQJYcycccqZwk2Tx5RoEMbwPigFLEpV_XfRTbI1Mr7rcSn5x6iUQ4i_iLgOGgxMwECo-BMTu3fKHZ-4QnrRpoRhNmoKZ_sQpLKOAo-VgxnFSJe7NtZtgQd4GZiaJ0X79GPyYPG3p4UrHfO1VYs1lDMhYHZ9w"/>
-</div>
-<div class="overflow-hidden">
-<p class="text-sm font-medium truncate">Admin Kullanıcı</p>
-<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark truncate">admin@nakliyecrm.com</p>
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary material-symbols-outlined">local_shipping</div>
+<div class="flex flex-col">
+<h1 class="font-display font-bold text-base leading-tight">Logistics CRM</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400">Admin Paneli</p>
 </div>
 </div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">group</span>
+                        Temsilciler
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">work</span>
+                        Müşteriler
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">flight_takeoff</span>
+                        Sevkiyatlar
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">settings</span>
+                        Ayarlar
+                    </a>
+</nav>
 </div>
-</aside>
+<!-- User Profile -->
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<img alt="Admin Profile" class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of admin user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7ar1xM60KF0f1Fy4XyPoVssfvISYq24Qqlfd1-VwhbRwqdCTuUG07fOAZRytJKLQlFoOBxSwuFdN5QRrebarHpH1lRyimNDHZfTe13L46I60dqJbAoBYhNo0-myNBqp_BYf5tMqro_vvmyRb508D1RZJGA3F7c8u1cOkODVSsiADw1C2Ylpey8GEnJ1VJcC9KylmeDTTcpNe4k9IAmk-h8YxX2jfXrOLv-8wStyFG7jUFvDmDnBlp2XZh4ExO1vLLvLeQvVnOzvRZ"/>
+<div class="flex flex-col">
+<span class="font-medium text-sm">Kemal Sunal</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Yönetici</span>
+</div>
+</div>
+</div>
 <!-- Main Content -->
-<main class="flex-1 flex flex-col h-full overflow-hidden">
+<div class="flex-1 flex flex-col h-full overflow-hidden">
 <!-- Header -->
-<header class="h-16 flex-shrink-0 border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-6 flex items-center justify-between">
-<h2 class="font-display font-semibold text-lg">Genel Bakış</h2>
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between px-8 shrink-0">
+<h2 class="font-display font-bold text-xl">Genel Bakış</h2>
 <div class="flex items-center gap-4">
 <div class="relative">
-<span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark material-symbols-outlined text-sm">search</span>
-<input class="pl-9 pr-4 py-2 text-sm rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/50 w-64" placeholder="Arama yap..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm focus:ring-2 focus:ring-primary w-64 dark:text-white placeholder-slate-500" placeholder="Ara..." type="text"/>
 </div>
-<button class="w-10 h-10 rounded-lg flex items-center justify-center text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-slate-800 transition-colors relative">
+<button class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
 <span class="material-symbols-outlined">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full"></span>
 </button>
 </div>
 </header>
-<!-- Dashboard Content -->
-<div class="flex-1 overflow-y-auto p-6">
-<!-- Metrics Row -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-<!-- Metric Card 1 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Bu Hafta Teklif</p>
-<span class="material-symbols-outlined text-primary text-xl">calendar_today</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">45</h3>
-<span class="text-xs font-medium text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span>
-                                12%
-                            </span>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Metrics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-2">Verilen Teklif</h3>
+<div class="flex items-end justify-between">
+<span class="font-display font-bold text-3xl">125</span>
+<span class="text-primary text-sm font-medium flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +12%
+                                </span>
 </div>
 </div>
-<!-- Metric Card 2 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Bu Ay Teklif</p>
-<span class="material-symbols-outlined text-primary text-xl">insert_chart</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">180</h3>
-<span class="text-xs font-medium text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span>
-                                5%
-                            </span>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-2">Kazanılan</h3>
+<div class="flex items-end justify-between">
+<span class="font-display font-bold text-3xl">68</span>
+<span class="text-primary text-sm font-medium flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +5%
+                                </span>
 </div>
 </div>
-<!-- Metric Card 3 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Bu Ay Kazanılan</p>
-<span class="material-symbols-outlined text-success text-xl">emoji_events</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">42</h3>
-<span class="text-xs font-medium text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span>
-                                2%
-                            </span>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-2">Kazanma Oranı</h3>
+<div class="flex items-end justify-between">
+<span class="font-display font-bold text-3xl">54%</span>
+<span class="text-primary text-sm font-medium flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +2%
+                                </span>
 </div>
 </div>
-<!-- Metric Card 4 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Kazanma Oranı</p>
-<span class="material-symbols-outlined text-primary text-xl">percent</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">%23</h3>
-<span class="text-xs font-medium text-danger bg-danger/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_downward</span>
-                                1%
-                            </span>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-2">Aktif Müşteri</h3>
+<div class="flex items-end justify-between">
+<span class="font-display font-bold text-3xl">156</span>
+<span class="text-primary text-sm font-medium flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +8%
+                                </span>
 </div>
 </div>
-<!-- Metric Card 5 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Aktif Müşteri</p>
-<span class="material-symbols-outlined text-primary text-xl">group</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">1,240</h3>
-<span class="text-xs font-medium text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span>
-                                8%
-                            </span>
-</div>
-</div>
-<!-- Metric Card 6 -->
-<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-<div class="flex justify-between items-start mb-2">
-<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Yüksek Potansiyel</p>
-<span class="material-symbols-outlined text-primary text-xl">star</span>
-</div>
-<div class="flex items-baseline gap-2">
-<h3 class="font-display text-2xl font-bold">85</h3>
-<span class="text-xs font-medium text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center">
-<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span>
-                                15%
-                            </span>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-2">Yüksek Potansiyel</h3>
+<div class="flex items-end justify-between">
+<span class="font-display font-bold text-3xl">42</span>
+<span class="text-primary text-sm font-medium flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +15%
+                                </span>
 </div>
 </div>
 </div>
-<!-- Middle Section: Performance Table -->
-<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-8">
-<div class="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-<h3 class="font-display font-semibold text-lg">Personel Performans Tablosu</h3>
-<button class="text-sm text-primary hover:underline font-medium">Tümünü Gör</button>
+<!-- Main Table -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+<h3 class="font-display font-bold text-lg">Satış Temsilcisi Performansı</h3>
+<button class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors flex items-center gap-1">
+                                Tümünü Gör <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
 </div>
 <div class="overflow-x-auto">
-<table class="w-full text-left text-sm whitespace-nowrap">
-<thead class="bg-background-light dark:bg-slate-800 text-text-secondary-light dark:text-text-secondary-dark">
-<tr>
-<th class="px-6 py-3 font-medium">Temsilci</th>
-<th class="px-6 py-3 font-medium">Teklif</th>
-<th class="px-6 py-3 font-medium">Kazanılan</th>
-<th class="px-6 py-3 font-medium">Kazanma %</th>
-<th class="px-6 py-3 font-medium">Görüşülen</th>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Temsilci</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Teklif</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kazanılan</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kazanma %</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Görüşülen</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-border-light dark:divide-border-dark">
-<tr class="hover:bg-background-light/50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 font-medium flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">AY</div>
-                                        Ahmet Yılmaz
-                                    </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">50</td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">15</td>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<div class="w-24 h-2 bg-background-light dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 30%"></div>
-</div>
-<span class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">%30</span>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">AY</div>
+<span class="font-medium text-sm">Ahmet Yılmaz</span>
 </div>
 </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">45</td>
+<td class="px-6 py-4 text-sm">45</td>
+<td class="px-6 py-4 text-sm font-medium text-primary">28</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 62%"></div>
+</div>
+<span class="text-sm font-medium">62%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">120</td>
 </tr>
-<tr class="hover:bg-background-light/50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 font-medium flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">AD</div>
-                                        Ayşe Demir
-                                    </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">42</td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">12</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<div class="w-24 h-2 bg-background-light dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 28%"></div>
-</div>
-<span class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">%28</span>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">AD</div>
+<span class="font-medium text-sm">Ayşe Demir</span>
 </div>
 </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">38</td>
+<td class="px-6 py-4 text-sm">38</td>
+<td class="px-6 py-4 text-sm font-medium text-primary">22</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 58%"></div>
+</div>
+<span class="text-sm font-medium">58%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">95</td>
 </tr>
-<tr class="hover:bg-background-light/50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 font-medium flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">MK</div>
-                                        Mehmet Kaya
-                                    </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">38</td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">10</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<div class="w-24 h-2 bg-background-light dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 26%"></div>
-</div>
-<span class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">%26</span>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">MK</div>
+<span class="font-medium text-sm">Mehmet Kaya</span>
 </div>
 </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">35</td>
+<td class="px-6 py-4 text-sm">25</td>
+<td class="px-6 py-4 text-sm font-medium text-primary">12</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary/70 rounded-full" style="width: 48%"></div>
+</div>
+<span class="text-sm font-medium">48%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">70</td>
 </tr>
-<tr class="hover:bg-background-light/50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 font-medium flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">FÇ</div>
-                                        Fatma Çelik
-                                    </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">35</td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">8</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<div class="w-24 h-2 bg-background-light dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 22%"></div>
-</div>
-<span class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">%22</span>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">FÇ</div>
+<span class="font-medium text-sm">Fatma Çelik</span>
 </div>
 </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">30</td>
-</tr>
-<tr class="hover:bg-background-light/50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 font-medium flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">AC</div>
-                                        Ali Can
-                                    </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">30</td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">7</td>
+<td class="px-6 py-4 text-sm">17</td>
+<td class="px-6 py-4 text-sm font-medium text-primary">6</td>
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<div class="w-24 h-2 bg-background-light dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 23%"></div>
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-amber-400 rounded-full" style="width: 35%"></div>
 </div>
-<span class="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">%23</span>
+<span class="text-sm font-medium">35%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-text-secondary-light dark:text-text-secondary-dark">28</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">50</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<!-- Bottom Section: 2x2 Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-<!-- Çıkış Ülkesi Yoğunluğu Table -->
-<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm flex flex-col">
-<div class="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-<h3 class="font-display font-semibold text-base">Çıkış Ülkesi Yoğunluğu</h3>
-<span class="material-symbols-outlined text-text-secondary-light text-sm">more_vert</span>
+<!-- Secondary Tables Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Origin Countries -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+<h3 class="font-display font-bold text-base">Çıkış Ülkesi Analizi</h3>
 </div>
-<div class="p-4 flex-1">
-<table class="w-full text-sm">
-<tbody>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Türkiye
-                                        </td>
-<td class="py-3 text-right">45%</td>
-<td class="py-3 text-right text-text-secondary-light">1,240</td>
+<div class="p-0">
+<table class="w-full text-left">
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇹🇷</span> Türkiye</td>
+<td class="px-6 py-3 text-sm font-medium text-right">452</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Almanya
-                                        </td>
-<td class="py-3 text-right">25%</td>
-<td class="py-3 text-right text-text-secondary-light">680</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇩🇪</span> Almanya</td>
+<td class="px-6 py-3 text-sm font-medium text-right">215</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> İtalya
-                                        </td>
-<td class="py-3 text-right">15%</td>
-<td class="py-3 text-right text-text-secondary-light">410</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇮🇹</span> İtalya</td>
+<td class="px-6 py-3 text-sm font-medium text-right">148</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Hollanda
-                                        </td>
-<td class="py-3 text-right">10%</td>
-<td class="py-3 text-right text-text-secondary-light">275</td>
-</tr>
-<tr class="last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Diğer
-                                        </td>
-<td class="py-3 text-right">5%</td>
-<td class="py-3 text-right text-text-secondary-light">135</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇬🇧</span> İngiltere</td>
+<td class="px-6 py-3 text-sm font-medium text-right">96</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<!-- Varış Ülkesi Table -->
-<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm flex flex-col">
-<div class="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-<h3 class="font-display font-semibold text-base">Varış Ülkesi</h3>
-<span class="material-symbols-outlined text-text-secondary-light text-sm">more_vert</span>
+<!-- Destination Countries -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+<h3 class="font-display font-bold text-base">Varış Ülkesi Analizi</h3>
 </div>
-<div class="p-4 flex-1">
-<table class="w-full text-sm">
-<tbody>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Almanya
-                                        </td>
-<td class="py-3 text-right">35%</td>
-<td class="py-3 text-right text-text-secondary-light">965</td>
+<div class="p-0">
+<table class="w-full text-left">
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇺🇸</span> ABD</td>
+<td class="px-6 py-3 text-sm font-medium text-right">385</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Fransa
-                                        </td>
-<td class="py-3 text-right">20%</td>
-<td class="py-3 text-right text-text-secondary-light">550</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇦🇪</span> BAE</td>
+<td class="px-6 py-3 text-sm font-medium text-right">192</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> İngiltere
-                                        </td>
-<td class="py-3 text-right">18%</td>
-<td class="py-3 text-right text-text-secondary-light">495</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇫🇷</span> Fransa</td>
+<td class="px-6 py-3 text-sm font-medium text-right">164</td>
 </tr>
-<tr class="border-b border-border-light dark:border-border-dark last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> İspanya
-                                        </td>
-<td class="py-3 text-right">12%</td>
-<td class="py-3 text-right text-text-secondary-light">330</td>
-</tr>
-<tr class="last:border-0">
-<td class="py-3 flex items-center gap-2 font-medium">
-<span class="w-4 h-3 bg-slate-200 inline-block rounded-sm"></span> Diğer
-                                        </td>
-<td class="py-3 text-right">15%</td>
-<td class="py-3 text-right text-text-secondary-light">400</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20">
+<td class="px-6 py-3 text-sm flex items-center gap-2"><span class="text-xl">🇷🇺</span> Rusya</td>
+<td class="px-6 py-3 text-sm font-medium text-right">112</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<!-- Mod Bazlı Dağılım Placeholder -->
-<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm flex flex-col h-72">
-<div class="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-<h3 class="font-display font-semibold text-base">Mod Bazlı Dağılım</h3>
-<span class="material-symbols-outlined text-text-secondary-light text-sm">more_vert</span>
-</div>
-<div class="p-6 flex-1 flex items-center justify-center">
-<div class="w-40 h-40 rounded-full border-8 border-background-light dark:border-slate-800 relative flex items-center justify-center">
-<span class="text-text-secondary-light dark:text-text-secondary-dark text-sm">Grafik Alanı</span>
-</div>
-</div>
-</div>
-<!-- Kaybedilme Nedeni Placeholder -->
-<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm flex flex-col h-72">
-<div class="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-<h3 class="font-display font-semibold text-base">Kaybedilme Nedeni</h3>
-<span class="material-symbols-outlined text-text-secondary-light text-sm">more_vert</span>
-</div>
-<div class="p-6 flex-1 flex flex-col justify-end gap-3">
-<div class="flex items-end gap-2 h-full">
-<div class="w-full bg-background-light dark:bg-slate-800 rounded-t-sm h-[80%] relative group"></div>
-<div class="w-full bg-background-light dark:bg-slate-800 rounded-t-sm h-[40%] relative group"></div>
-<div class="w-full bg-background-light dark:bg-slate-800 rounded-t-sm h-[60%] relative group"></div>
-<div class="w-full bg-background-light dark:bg-slate-800 rounded-t-sm h-[20%] relative group"></div>
-<div class="w-full bg-background-light dark:bg-slate-800 rounded-t-sm h-[50%] relative group"></div>
-</div>
-<div class="flex justify-between text-xs text-text-secondary-light px-1">
-<span>Fiyat</span>
-<span>Süre</span>
-<span>Rkp.</span>
-<span>Kaps.</span>
-<span>Diğer</span>
 </div>
 </div>
 </div>
 </div>
-</div>
-</main>
 </div>
 </body></html>

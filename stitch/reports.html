@@ -1,234 +1,181 @@
 <!DOCTYPE html>
 
-<html class="light" lang="tr"><head>
+<html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Raporlar ve Analitik - Nakliye CRM</title>
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
+<title>Lojistik CRM - Raporlar</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Theme Configuration -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#1e3fae",
-              "background-light": "#f6f6f8",
-              "background-dark": "#121520",
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
             },
-            fontFamily: {
-              "display": ["Manrope", "sans-serif"]
-            },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-          },
-        },
-      }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-    </style>
+    </script>
 </head>
-<body class="bg-background-light text-slate-900 font-display min-h-screen flex flex-col antialiased">
-<!-- Top Navigation Bar -->
-<header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full group/design-root overflow-x-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 flex flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+<div class="flex flex-col gap-6">
 <div class="flex items-center gap-3">
-<div class="bg-primary text-white rounded p-1.5 flex items-center justify-center">
-<span class="material-symbols-outlined text-xl">local_shipping</span>
+<div class="bg-primary/20 bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 flex items-center justify-center text-primary material-symbols-outlined">local_shipping</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">Lojistik CRM</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Yönetici Paneli</p>
 </div>
-<h2 class="text-xl font-bold tracking-tight text-slate-800">Nakliye CRM</h2>
 </div>
-<div class="flex items-center gap-6">
-<nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-<a class="hover:text-primary transition-colors" href="#">Gösterge Paneli</a>
-<a class="hover:text-primary transition-colors" href="#">Teklifler</a>
-<a class="hover:text-primary transition-colors" href="#">Müşteriler</a>
-<a class="text-primary font-bold" href="#">Raporlar</a>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">dashboard</span>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium leading-normal">Gösterge Paneli</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">group</span>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium leading-normal">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">description</span>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium leading-normal">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary" href="#">
+<span class="material-symbols-outlined text-primary">bar_chart</span>
+<span class="text-primary text-sm font-bold leading-normal">Raporlar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">settings</span>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium leading-normal">Ayarlar</span>
+</a>
 </nav>
-<div class="h-6 w-px bg-slate-200 hidden md:block"></div>
-<div class="flex items-center gap-3">
-<button class="text-slate-500 hover:text-slate-800 transition-colors">
-<span class="material-symbols-outlined">notifications</span>
+</div>
+<!-- User Profile Snippet -->
+<div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+<img alt="Admin User" class="size-10 rounded-full" data-alt="Admin user profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApdTpW-iSZVOY2VbZqL0yOAYJCCfVjThSbiEV8TXBcnEzo5s7FpR3fnEj1bsHCErCZtRESyO2nYycWufJrKqHDSi47gk9hL8gGklelSN4TWRaI0B7FibvJrGqhT7xC7OKTwX5q-N4bSTo1UtGZCxNHze7N_HeWpAXg-OesBvPkVAn7Y12SWcj2UvsO0u-JHJoLtK65Nsf4uFo7FTs29gWy2vf-d-_RV66MFLXVCBPNCAumKAOOTNHtjX8tgMU16AX7ICdH8ylBYEKF"/>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 text-sm font-medium">Ahmet Yılmaz</span>
+<span class="text-slate-500 dark:text-slate-400 text-xs">Yönetici</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-y-auto">
+<div class="max-w-[1200px] w-full mx-auto px-6 py-8 flex flex-col gap-8">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight">Raporlar</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">Tüm lojistik analizlerini ve sistem raporlarını görüntüleyin.</p>
+</div>
+<div class="flex items-center gap-3 flex-wrap">
+<!-- Date Range Picker Mockup -->
+<div class="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm">
+<span class="material-symbols-outlined text-slate-400 size-5">calendar_today</span>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Son 30 Gün</span>
+<span class="material-symbols-outlined text-slate-400 size-4">expand_more</span>
+</div>
+<!-- Export Buttons -->
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg px-3 py-2 text-sm font-medium transition-colors shadow-sm" title="Excel'e Aktar">
+<span class="material-symbols-outlined size-5">table_view</span>
+<span class="hidden sm:inline">Excel</span>
 </button>
-<div class="h-9 w-9 bg-slate-200 rounded-full bg-cover bg-center border border-slate-300" data-alt="Kullanıcı Profil Fotoğrafı" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLkiwuqCL7vh7_zbJPPpfgUIGfWzWu27jCy-KpvZIJR0pJ_XX5y_Vw-PnhVyW461RKnFNrx7L9U-t7GHTUkNFQJoHa9RsbVfODVaPVjEVugvGyAmpVLThfOfLyrWpsUXrFWNTfzBptg-VSSKy7cD8iHzGebRgexJIAYomwFSmLH0XSEuGSuK5yoOXfSjEFIkOh0WX8nZWvt60QXQT13IkIhEldqkeZ5n_4CQz_2VfztB52C7gvu2r8dYB6t9R0WBWz6rdkkv9aP2w');"></div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-lg px-3 py-2 text-sm font-medium transition-colors shadow-sm" title="PDF İndir">
+<span class="material-symbols-outlined size-5">picture_as_pdf</span>
+<span class="hidden sm:inline">PDF</span>
+</button>
 </div>
 </div>
 </header>
-<!-- Page Content Container -->
-<div class="flex-1 flex flex-col max-w-[1400px] w-full mx-auto p-4 md:p-6 lg:p-8">
-<!-- Page Header -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-<div>
-<h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Raporlar ve Analitik</h1>
-<p class="text-slate-500 mt-1">İşletmenizin performansını detaylı raporlarla analiz edin.</p>
-</div>
-<div class="flex items-center gap-3 w-full sm:w-auto">
-<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-sm transition-all">
-<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
-<span>PDF</span>
-</button>
-<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold shadow-sm transition-all">
-<span class="material-symbols-outlined text-[20px]">table_view</span>
-<span>Excel</span>
-</button>
-</div>
-</div>
-<!-- Main Layout: Sidebar + Grid -->
-<div class="flex flex-col lg:flex-row gap-8">
-<!-- Filter Sidebar -->
-<aside class="w-full lg:w-72 flex-shrink-0">
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 sticky top-24">
-<div class="flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
-<span class="material-symbols-outlined text-primary">filter_list</span>
-<h3 class="font-bold text-lg text-slate-800">Filtreler</h3>
-</div>
-<div class="space-y-5">
-<!-- Tarih Aralığı -->
-<div class="flex flex-col">
-<label class="text-sm font-semibold text-slate-700 mb-1.5">Tarih Aralığı</label>
-<div class="relative">
-<select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-sm font-medium">
-<option value="last30">Son 30 Gün</option>
-<option value="last90">Son 90 Gün</option>
-<option value="thisYear">Bu Yıl</option>
-<option value="custom">Özel Tarih</option>
-</select>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-<!-- Çıkış Ülkesi -->
-<div class="flex flex-col">
-<label class="text-sm font-semibold text-slate-700 mb-1.5">Çıkış Ülkesi</label>
-<div class="relative">
-<select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-sm font-medium">
-<option value="all">Tümü</option>
-<option value="tr">Türkiye</option>
-<option value="de">Almanya</option>
-<option value="it">İtalya</option>
-</select>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-<!-- Varış Ülkesi -->
-<div class="flex flex-col">
-<label class="text-sm font-semibold text-slate-700 mb-1.5">Varış Ülkesi</label>
-<div class="relative">
-<select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-sm font-medium">
-<option value="all">Tümü</option>
-<option value="de">Almanya</option>
-<option value="fr">Fransa</option>
-<option value="uk">İngiltere</option>
-</select>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-<!-- Taşıma Modu -->
-<div class="flex flex-col">
-<label class="text-sm font-semibold text-slate-700 mb-1.5">Taşıma Modu</label>
-<div class="relative">
-<select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-sm font-medium">
-<option value="all">Tümü</option>
-<option value="road">Karayolu</option>
-<option value="sea">Denizyolu</option>
-<option value="air">Havayolu</option>
-<option value="rail">Demiryolu</option>
-</select>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-<!-- Atanan Temsilci -->
-<div class="flex flex-col">
-<label class="text-sm font-semibold text-slate-700 mb-1.5">Atanan Temsilci</label>
-<div class="relative">
-<select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-sm font-medium">
-<option value="all">Tümü</option>
-<option value="ahmet">Ahmet Yılmaz</option>
-<option value="ayse">Ayşe Demir</option>
-<option value="can">Can Korkmaz</option>
-</select>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-</div>
-<button class="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-lg transition-colors text-sm">
-                        Filtreleri Temizle
-                    </button>
-</div>
-</aside>
 <!-- Reports Grid -->
-<main class="flex-1">
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-<!-- Card 1 -->
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col hover:shadow-md transition-shadow group">
-<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[28px]">insights</span>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Report Card 1 -->
+<a class="group flex flex-col gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md hover:border-primary/50 transition-all" href="#">
+<div class="flex items-center justify-between">
+<div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">insert_chart</span>
 </div>
-<h3 class="text-lg font-bold text-slate-900 mb-2">Dönemsel Teklif Raporu</h3>
-<p class="text-slate-500 text-sm mb-6 flex-1">Belirli tarih aralıklarındaki teklif sayıları, toplam tutarlar ve ortalama teklif değerlerini inceleyin.</p>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
-<span>Rapor Oluştur</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
 </div>
-<!-- Card 2 -->
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col hover:shadow-md transition-shadow group">
-<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[28px]">group</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Dönemsel Teklif Raporu</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">Belirli bir dönemdeki tekliflerin performansını, dönüşüm oranlarını ve genel başarı durumunu inceleyin.</p>
 </div>
-<h3 class="text-lg font-bold text-slate-900 mb-2">Personel Performans Raporu</h3>
-<p class="text-slate-500 text-sm mb-6 flex-1">Satış temsilcilerinin aktivite sayıları, teklif dönüşüm oranları ve ciro katkılarını analiz edin.</p>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
-<span>Rapor Oluştur</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+</a>
+<!-- Report Card 2 -->
+<a class="group flex flex-col gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md hover:border-primary/50 transition-all" href="#">
+<div class="flex items-center justify-between">
+<div class="size-12 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-2xl">how_to_reg</span>
 </div>
-<!-- Card 3 -->
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col hover:shadow-md transition-shadow group">
-<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[28px]">trending_up</span>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
 </div>
-<h3 class="text-lg font-bold text-slate-900 mb-2">Kazanılan/Kaybedilen Teklif Analizi</h3>
-<p class="text-slate-500 text-sm mb-6 flex-1">Tekliflerin başarı oranlarını, kazanma/kaybetme trendlerini zaman içindeki değişimiyle görün.</p>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
-<span>Rapor Oluştur</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Personel Performans Raporu</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">Satış temsilcileri ve operasyon personelinin bazında satış kotaları, işlem hacimleri ve genel performans analizi.</p>
 </div>
-<!-- Card 4 -->
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col hover:shadow-md transition-shadow group">
-<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[28px]">public</span>
+</a>
+<!-- Report Card 3 -->
+<a class="group flex flex-col gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md hover:border-primary/50 transition-all" href="#">
+<div class="flex items-center justify-between">
+<div class="size-12 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined text-2xl">trending_up</span>
 </div>
-<h3 class="text-lg font-bold text-slate-900 mb-2">Ülke/Mod Bazlı Hacim Raporu</h3>
-<p class="text-slate-500 text-sm mb-6 flex-1">Taşıma hacimlerini ve gelirleri rotalara, varış ülkelerine ve taşıma modlarına göre dağılımlı inceleyin.</p>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
-<span>Rapor Oluştur</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
 </div>
-<!-- Card 5 -->
-<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col hover:shadow-md transition-shadow group">
-<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[28px]">donut_small</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Kazanılan/Kaybedilen Analizi</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">Olumlu sonuçlanan ve kaybedilen tekliflerin karşılaştırmalı analizi, karlılık oranları ve fırsat maliyetleri.</p>
 </div>
-<h3 class="text-lg font-bold text-slate-900 mb-2">Kaybedilme Nedeni Analizi</h3>
-<p class="text-slate-500 text-sm mb-6 flex-1">Olumsuz sonuçlanan tekliflerin ana nedenlerini belirleyin ve süreç iyileştirme fırsatlarını keşfedin.</p>
-<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
-<span>Rapor Oluştur</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
+</a>
+<!-- Report Card 4 -->
+<a class="group flex flex-col gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md hover:border-primary/50 transition-all" href="#">
+<div class="flex items-center justify-between">
+<div class="size-12 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
+<span class="material-symbols-outlined text-2xl">public</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Ülke/Mod Bazlı Hacim</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">Hedef ve kaynak ülkelere, ayrıca taşıma modlarına (Deniz, Hava, Kara) göre taşımacılık hacimlerinin dağılımı.</p>
+</div>
+</a>
+<!-- Report Card 5 -->
+<a class="group flex flex-col gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:shadow-md hover:border-primary/50 transition-all" href="#">
+<div class="flex items-center justify-between">
+<div class="size-12 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-2xl">error_outline</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Kaybedilme Nedeni Analizi</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed">Fiyat, transit süre, kapasite yetersizliği gibi çeşitli nedenlere göre kaybedilen işlerin detaylı kök neden analizi.</p>
+</div>
+</a>
+<!-- Add Custom Report Placeholder -->
+<a class="group flex flex-col items-center justify-center gap-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<div class="size-12 rounded-full bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">add</span>
+</div>
+<h3 class="text-slate-700 dark:text-slate-300 text-base font-medium text-center">Özel Rapor Oluştur</h3>
+</a>
 </div>
 </div>
 </main>
-</div>
 </div>
 </body></html>

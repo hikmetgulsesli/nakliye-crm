@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Temsilci Devir İşlemi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-row">
+<!-- Sidebar -->
+<div class="flex h-full min-h-screen w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shrink-0">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 items-center mb-6">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-10 bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">LojiCRM</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium leading-normal">Yönetici Paneli</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium leading-normal">Temsilciler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined">work</span>
+<p class="text-sm font-medium leading-normal">Müşteriler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<p class="text-sm font-medium leading-normal">Teklifler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Ayarlar</p>
+</a>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1 flex-col py-8 px-10 items-center justify-start overflow-y-auto">
+<div class="w-full max-w-[800px] flex flex-col gap-6">
+<!-- Header -->
+<div class="flex flex-col gap-2">
+<h2 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">Temsilci Devir İşlemi</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">Kayıtların ve sorumlulukların yeni bir temsilciye aktarılması.</p>
+</div>
+<!-- Form Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-8">
+<!-- Dropdowns -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold leading-normal pb-2">Devredilecek Temsilci</p>
+<div class="relative">
+<select class="form-input flex w-full flex-1 appearance-none rounded-lg text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 pl-4 pr-10 text-sm font-medium transition-all cursor-pointer">
+<option disabled="" selected="" value="">Temsilci seçin</option>
+<option value="ahmet">Ahmet Yılmaz</option>
+<option value="ayse">Ayşe Demir</option>
+<option value="mehmet">Mehmet Kaya</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+</div>
+</label>
+<label class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold leading-normal pb-2">Devralacak Temsilci</p>
+<div class="relative">
+<select class="form-input flex w-full flex-1 appearance-none rounded-lg text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 pl-4 pr-10 text-sm font-medium transition-all cursor-pointer">
+<option disabled="" selected="" value="">Temsilci seçin</option>
+<option value="fatma">Fatma Şahin</option>
+<option value="ali">Ali Can</option>
+<option value="zeynep">Zeynep Çelik</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+</div>
+</label>
+</div>
+<hr class="border-slate-200 dark:border-slate-800"/>
+<!-- Transfer Scope -->
+<div class="flex flex-col gap-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Transfer Kapsamı</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-radio text-primary border-slate-300 dark:border-slate-600 focus:ring-primary size-5" name="scope" type="radio" value="all"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors">Tüm kayıtlar</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-radio text-primary border-slate-300 dark:border-slate-600 focus:ring-primary size-5" name="scope" type="radio" value="active"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors">Sadece aktif müşteriler</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-radio text-primary border-slate-300 dark:border-slate-600 focus:ring-primary size-5" name="scope" type="radio" value="open"/>
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors">Açık teklifler</span>
+</label>
+</div>
+</div>
+<!-- Preview Box -->
+<div class="bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 p-5 flex flex-col gap-4">
+<h4 class="text-slate-900 dark:text-slate-100 text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary size-5">visibility</span>
+                                Devir Önizlemesi
+                            </h4>
+<div class="flex flex-wrap gap-4">
+<div class="flex flex-1 flex-col p-3 bg-white dark:bg-slate-800 rounded-md border border-slate-100 dark:border-slate-700 shadow-sm items-center text-center">
+<span class="text-2xl font-bold text-slate-900 dark:text-slate-100">32</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Müşteri</span>
+</div>
+<div class="flex flex-1 flex-col p-3 bg-white dark:bg-slate-800 rounded-md border border-slate-100 dark:border-slate-700 shadow-sm items-center text-center">
+<span class="text-2xl font-bold text-slate-900 dark:text-slate-100">18</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Teklif</span>
+</div>
+<div class="flex flex-1 flex-col p-3 bg-white dark:bg-slate-800 rounded-md border border-slate-100 dark:border-slate-700 shadow-sm items-center text-center">
+<span class="text-2xl font-bold text-slate-900 dark:text-slate-100">45</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Aktivite</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex justify-end gap-3 pt-2">
+<button class="px-5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-transparent focus:outline-none focus:ring-2 focus:ring-slate-400" type="button">
+                                İptal
+                            </button>
+<button class="px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-primary hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900" type="button">
+<span class="material-symbols-outlined size-4 text-[18px]">swap_horiz</span>
+                                Devri Onayla
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

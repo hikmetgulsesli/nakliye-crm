@@ -1,0 +1,5844 @@
+[
+  {
+    "screenId": "login",
+    "screenTitle": "Giriş Yap",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Yardım Merkezi",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "İletişim",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "Şifremi Unuttum",
+        "href": "#",
+        "line": 125
+      },
+      {
+        "type": "link",
+        "label": "Hizmet Şartları",
+        "href": "#",
+        "line": 138
+      },
+      {
+        "type": "link",
+        "label": "Gizlilik Politikası",
+        "href": "#",
+        "line": 138
+      },
+      {
+        "type": "button",
+        "label": "visibility",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Giriş Yap",
+        "line": 131
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: globe_asia]",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: lock]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility]",
+        "line": 112
+      },
+      {
+        "type": "input",
+        "label": "ornek@sirket.com",
+        "inputType": "email",
+        "placeholder": "ornek@sirket.com",
+        "line": 100
+      },
+      {
+        "type": "input",
+        "label": "••••••••",
+        "inputType": "password",
+        "placeholder": "••••••••",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 119
+      },
+      {
+        "type": "form",
+        "label": "form",
+        "line": 92
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Yardım Merkezi",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "İletişim",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "Şifremi Unuttum",
+        "href": "#",
+        "line": 125
+      },
+      {
+        "type": "link",
+        "label": "Hizmet Şartları",
+        "href": "#",
+        "line": 138
+      },
+      {
+        "type": "link",
+        "label": "Gizlilik Politikası",
+        "href": "#",
+        "line": 138
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "visibility",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Giriş Yap",
+        "line": 131
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: globe_asia]",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: lock]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility]",
+        "line": 112
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "ornek@sirket.com",
+        "inputType": "email",
+        "placeholder": "ornek@sirket.com",
+        "line": 100
+      },
+      {
+        "type": "input",
+        "label": "••••••••",
+        "inputType": "password",
+        "placeholder": "••••••••",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 119
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 18,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "user-dashboard",
+    "screenTitle": "Satış Temsilcisi Paneli",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "home\nAnasayfa",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 71
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "add\n                        Yeni Teklif",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör",
+        "line": 149
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 162
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 176
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 190
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "[icon: home]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: groups]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 155
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: post_add]",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 183
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 191
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "home\nAnasayfa",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 71
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 75
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add\n                        Yeni Teklif",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör",
+        "line": 149
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 162
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 176
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 190
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "[icon: home]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: groups]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 155
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: post_add]",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 183
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 191
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 29,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "admin-dashboard",
+    "screenTitle": "Yönetici Paneli",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\n                        Dashboard",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "group\n                        Temsilciler",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "work\n                        Müşteriler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "flight_takeoff\n                        Sevkiyatlar",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "settings\n                        Ayarlar",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 87
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör chevron_right",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: work]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 138
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 148
+      },
+      {
+        "type": "input",
+        "label": "Ara...",
+        "inputType": "text",
+        "placeholder": "Ara...",
+        "line": 85
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\n                        Dashboard",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "group\n                        Temsilciler",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "work\n                        Müşteriler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "flight_takeoff\n                        Sevkiyatlar",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "settings\n                        Ayarlar",
+        "href": "#",
+        "line": 62
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 87
+      },
+      {
+        "type": "button",
+        "label": "Tümünü Gör chevron_right",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: work]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 138
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 148
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Ara...",
+        "inputType": "text",
+        "placeholder": "Ara...",
+        "line": 85
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 21,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "customer-list",
+    "screenTitle": "Müşteri Listesi",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "home\nAnasayfa",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "add\n                            Yeni Müşteri Ekle",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "Durum: Tümü\nexpand_more",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "Potansiyel: Tümü\nexpand_more",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "Temsilci: Tümü\nexpand_more",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 160
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 230
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 265
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 276
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 279
+      },
+      {
+        "type": "button",
+        "label": "[icon: home]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 161
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 231
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 266
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 277
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 280
+      },
+      {
+        "type": "input",
+        "label": "Müşteri, yetkili veya e-posta ara...",
+        "inputType": "text",
+        "placeholder": "Müşteri, yetkili veya e-posta ara...",
+        "line": 95
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "home\nAnasayfa",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 62
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add\n                            Yeni Müşteri Ekle",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "Durum: Tümü\nexpand_more",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "Potansiyel: Tümü\nexpand_more",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "Temsilci: Tümü\nexpand_more",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 160
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 230
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 265
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 276
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 279
+      },
+      {
+        "type": "button",
+        "label": "[icon: home]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 161
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 231
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 266
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 277
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 280
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Müşteri, yetkili veya e-posta ara...",
+        "inputType": "text",
+        "placeholder": "Müşteri, yetkili veya e-posta ara...",
+        "line": 95
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 32,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "customer-form",
+    "screenTitle": "Müşteri Formu",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nKontrol Paneli",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nYükler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "receipt_long\nFaturalar",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "Benzer Kayıtları Görüntüle",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "save\n                        Müşteriyi Kaydet",
+        "line": 275
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 46
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: receipt_long]",
+        "line": 58
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 104
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: location_on]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: pie_chart]",
+        "line": 225
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 276
+      },
+      {
+        "type": "input",
+        "label": "Firma adını girin",
+        "inputType": "text",
+        "placeholder": "Firma adını girin",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "Yetkili adını girin",
+        "inputType": "text",
+        "placeholder": "Yetkili adını girin",
+        "line": 114
+      },
+      {
+        "type": "input",
+        "label": "+90 (___) ___ __ __",
+        "inputType": "tel",
+        "placeholder": "+90 (___) ___ __ __",
+        "line": 118
+      },
+      {
+        "type": "input",
+        "label": "ornek@firma.com",
+        "inputType": "email",
+        "placeholder": "ornek@firma.com",
+        "line": 122
+      },
+      {
+        "type": "input",
+        "label": "Açık adres bilgilerini girin",
+        "inputType": "textarea",
+        "placeholder": "Açık adres bilgilerini girin",
+        "line": 126
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 139
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 150
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 160
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 176
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 180
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 184
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 200
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 211
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 231
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 240
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 249
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 258
+      },
+      {
+        "type": "input",
+        "label": "Müşteri hakkında eklemek istediğiniz diğer detaylar...",
+        "inputType": "textarea",
+        "placeholder": "Müşteri hakkında eklemek istediğiniz diğer detaylar...",
+        "line": 267
+      },
+      {
+        "type": "form",
+        "label": "form",
+        "line": 100
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nKontrol Paneli",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nYükler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "receipt_long\nFaturalar",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 64
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "Benzer Kayıtları Görüntüle",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "save\n                        Müşteriyi Kaydet",
+        "line": 275
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 46
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: receipt_long]",
+        "line": 58
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 104
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: location_on]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: pie_chart]",
+        "line": 225
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 276
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Firma adını girin",
+        "inputType": "text",
+        "placeholder": "Firma adını girin",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "Yetkili adını girin",
+        "inputType": "text",
+        "placeholder": "Yetkili adını girin",
+        "line": 114
+      },
+      {
+        "type": "input",
+        "label": "+90 (___) ___ __ __",
+        "inputType": "tel",
+        "placeholder": "+90 (___) ___ __ __",
+        "line": 118
+      },
+      {
+        "type": "input",
+        "label": "ornek@firma.com",
+        "inputType": "email",
+        "placeholder": "ornek@firma.com",
+        "line": 122
+      },
+      {
+        "type": "input",
+        "label": "Açık adres bilgilerini girin",
+        "inputType": "textarea",
+        "placeholder": "Açık adres bilgilerini girin",
+        "line": 126
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 139
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 150
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 160
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 176
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 180
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 184
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 200
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 211
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 231
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 240
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 249
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 258
+      },
+      {
+        "type": "input",
+        "label": "Müşteri hakkında eklemek istediğiniz diğer detaylar...",
+        "inputType": "textarea",
+        "placeholder": "Müşteri hakkında eklemek istediğiniz diğer detaylar...",
+        "line": 267
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 43,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "customer-detail",
+    "screenTitle": "Müşteri Detay",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nKontrol Paneli",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nGönderiler",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "Bilgiler",
+        "href": "#",
+        "line": 134
+      },
+      {
+        "type": "link",
+        "label": "Aktiviteler (12)",
+        "href": "#",
+        "line": 137
+      },
+      {
+        "type": "link",
+        "label": "Teklifler (5)",
+        "href": "#",
+        "line": 140
+      },
+      {
+        "type": "link",
+        "label": "Geçmiş (8)",
+        "href": "#",
+        "line": 143
+      },
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "edit\nDüzenle",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "add_circle\nAktivite Ekle",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "post_add\nYeni Teklif",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_circle]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: post_add]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 106
+      },
+      {
+        "type": "button",
+        "label": "[icon: phone]",
+        "line": 114
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: language]",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 184
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 207
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nKontrol Paneli",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nGönderiler",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "Bilgiler",
+        "href": "#",
+        "line": 134
+      },
+      {
+        "type": "link",
+        "label": "Aktiviteler (12)",
+        "href": "#",
+        "line": 137
+      },
+      {
+        "type": "link",
+        "label": "Teklifler (5)",
+        "href": "#",
+        "line": 140
+      },
+      {
+        "type": "link",
+        "label": "Geçmiş (8)",
+        "href": "#",
+        "line": 143
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "edit\nDüzenle",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "add_circle\nAktivite Ekle",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "post_add\nYeni Teklif",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_circle]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: post_add]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 106
+      },
+      {
+        "type": "button",
+        "label": "[icon: phone]",
+        "line": 114
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: language]",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 184
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 207
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 29,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "quotation-list",
+    "screenTitle": "Teklif Listesi",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nGösterge Paneli",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklif Listesi",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "directions_boat\nSevkiyatlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "help\nYardım",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "add\nYeni Teklif",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "Yeni Teklif",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "download\nDışa Aktar",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Durum: Tümü\narrow_drop_down",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "Taşıma Modu: Tümü\narrow_drop_down",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "Tarih: Son 30 Gün\narrow_drop_down",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "Atanan: Tümü\narrow_drop_down",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "filter_alt_off\n                            Temizle",
+        "line": 138
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 295
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 341
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 355
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 358
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 359
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 39
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: help]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_alt_off]",
+        "line": 139
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 174
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 204
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 226
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 250
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 266
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 312
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 318
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 342
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 356
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 360
+      },
+      {
+        "type": "input",
+        "label": "Teklif no, müşteri veya lokasyon ara...",
+        "inputType": "text",
+        "placeholder": "Teklif no, müşteri veya lokasyon ara...",
+        "line": 118
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nGösterge Paneli",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklif Listesi",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "directions_boat\nSevkiyatlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "help\nYardım",
+        "href": "#",
+        "line": 79
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add\nYeni Teklif",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "Yeni Teklif",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "download\nDışa Aktar",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Durum: Tümü\narrow_drop_down",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "Taşıma Modu: Tümü\narrow_drop_down",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "Tarih: Son 30 Gün\narrow_drop_down",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "Atanan: Tümü\narrow_drop_down",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "filter_alt_off\n                            Temizle",
+        "line": 138
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 295
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 341
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 355
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 358
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 359
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 39
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: help]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_drop_down]",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_alt_off]",
+        "line": 139
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 174
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 204
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 226
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 250
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 266
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 312
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 318
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 342
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 356
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 360
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Teklif no, müşteri veya lokasyon ara...",
+        "inputType": "text",
+        "placeholder": "Teklif no, müşteri veya lokasyon ara...",
+        "line": 118
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 55,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "quotation-form",
+    "screenTitle": "Teklif Formu",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nYükler",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 289
+      },
+      {
+        "type": "button",
+        "label": "Teklifi Kaydet",
+        "line": 292
+      },
+      {
+        "type": "button",
+        "label": "Yeni Revize Oluştur",
+        "line": 357
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 42
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 170
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 188
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 211
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_land]",
+        "line": 224
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 240
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 255
+      },
+      {
+        "type": "button",
+        "label": "[icon: flag]",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 282
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 303
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 102
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 116
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 136
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 140
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 154
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 161
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 168
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 180
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 195
+      },
+      {
+        "type": "input",
+        "label": "Örn: Türkiye",
+        "inputType": "text",
+        "placeholder": "Örn: Türkiye",
+        "line": 215
+      },
+      {
+        "type": "input",
+        "label": "Liman/Havalimanı/Şehir",
+        "inputType": "text",
+        "placeholder": "Liman/Havalimanı/Şehir",
+        "line": 219
+      },
+      {
+        "type": "input",
+        "label": "Örn: Almanya",
+        "inputType": "text",
+        "placeholder": "Örn: Almanya",
+        "line": 228
+      },
+      {
+        "type": "input",
+        "label": "Liman/Havalimanı/Şehir",
+        "inputType": "text",
+        "placeholder": "Liman/Havalimanı/Şehir",
+        "line": 232
+      },
+      {
+        "type": "input",
+        "label": "0.00",
+        "inputType": "number",
+        "placeholder": "0.00",
+        "line": 247
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 249
+      },
+      {
+        "type": "input",
+        "label": "Dahil olan veya olmayan hizmetleri belirtin...",
+        "inputType": "textarea",
+        "placeholder": "Dahil olan veya olmayan hizmetleri belirtin...",
+        "line": 262
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 276
+      },
+      {
+        "type": "form",
+        "label": "form",
+        "line": 91
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nYükler",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 66
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 289
+      },
+      {
+        "type": "button",
+        "label": "Teklifi Kaydet",
+        "line": 292
+      },
+      {
+        "type": "button",
+        "label": "Yeni Revize Oluştur",
+        "line": 357
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 42
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 170
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 188
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 211
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_land]",
+        "line": 224
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 240
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 255
+      },
+      {
+        "type": "button",
+        "label": "[icon: flag]",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 282
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 303
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 102
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 116
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 136
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 140
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 154
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 161
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 168
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 180
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 195
+      },
+      {
+        "type": "input",
+        "label": "Örn: Türkiye",
+        "inputType": "text",
+        "placeholder": "Örn: Türkiye",
+        "line": 215
+      },
+      {
+        "type": "input",
+        "label": "Liman/Havalimanı/Şehir",
+        "inputType": "text",
+        "placeholder": "Liman/Havalimanı/Şehir",
+        "line": 219
+      },
+      {
+        "type": "input",
+        "label": "Örn: Almanya",
+        "inputType": "text",
+        "placeholder": "Örn: Almanya",
+        "line": 228
+      },
+      {
+        "type": "input",
+        "label": "Liman/Havalimanı/Şehir",
+        "inputType": "text",
+        "placeholder": "Liman/Havalimanı/Şehir",
+        "line": 232
+      },
+      {
+        "type": "input",
+        "label": "0.00",
+        "inputType": "number",
+        "placeholder": "0.00",
+        "line": 247
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 249
+      },
+      {
+        "type": "input",
+        "label": "Dahil olan veya olmayan hizmetleri belirtin...",
+        "inputType": "textarea",
+        "placeholder": "Dahil olan veya olmayan hizmetleri belirtin...",
+        "line": 262
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 276
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 49,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "quotation-detail",
+    "screenTitle": "Teklif Detay",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "Teklifler",
+        "href": "#",
+        "line": 48
+      },
+      {
+        "type": "link",
+        "label": "Ayarlar",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "Ana Sayfa",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "Teklifler",
+        "href": "#",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "edit\n                    Düzenle",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "delete\n                    Sil",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\n                    PDF İndir",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "mail\n                    E-posta Gönder",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "add\n                    Yeni Revize",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 41
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 53
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 178
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 197
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 201
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "Teklifler",
+        "href": "#",
+        "line": 48
+      },
+      {
+        "type": "link",
+        "label": "Ayarlar",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "Ana Sayfa",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "Teklifler",
+        "href": "#",
+        "line": 64
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "arrow_back",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "edit\n                    Düzenle",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "delete\n                    Sil",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\n                    PDF İndir",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "mail\n                    E-posta Gönder",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "add\n                    Yeni Revize",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 41
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 53
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 178
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 197
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 201
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 28,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "activity-list",
+    "screenTitle": "Aktivite Listesi",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Aktiviteler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Fırsatlar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "Raporlar",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "assignment\nAktiviteler",
+        "href": "#",
+        "line": 83
+      },
+      {
+        "type": "link",
+        "label": "calendar_month\nTakvim",
+        "href": "#",
+        "line": 87
+      },
+      {
+        "type": "link",
+        "label": "map\nGüzergahlar",
+        "href": "#",
+        "line": 91
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "Ahmet Y.\nexpand_more",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "add\nYeni Aktivite",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Müşteri\nkeyboard_arrow_down",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "Aktivite Tipi\nkeyboard_arrow_down",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "calendar_today\nSon 30 Gün\nkeyboard_arrow_down",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "Sonuç\nkeyboard_arrow_down",
+        "line": 143
+      },
+      {
+        "type": "button",
+        "label": "Temizle",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 201
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 237
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 309
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 323
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 326
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 327
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 328
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 330
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 38
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: assignment]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: map]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 112
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 139
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 217
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 238
+      },
+      {
+        "type": "button",
+        "label": "[icon: handshake]",
+        "line": 253
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 274
+      },
+      {
+        "type": "button",
+        "label": "[icon: videocam]",
+        "line": 289
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 310
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 324
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 331
+      },
+      {
+        "type": "input",
+        "label": "Aktivite, müşteri veya kişi ara...",
+        "inputType": "text",
+        "placeholder": "Aktivite, müşteri veya kişi ara...",
+        "line": 47
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Aktiviteler",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Fırsatlar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "Raporlar",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "assignment\nAktiviteler",
+        "href": "#",
+        "line": 83
+      },
+      {
+        "type": "link",
+        "label": "calendar_month\nTakvim",
+        "href": "#",
+        "line": 87
+      },
+      {
+        "type": "link",
+        "label": "map\nGüzergahlar",
+        "href": "#",
+        "line": 91
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 96
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "Ahmet Y.\nexpand_more",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "add\nYeni Aktivite",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Müşteri\nkeyboard_arrow_down",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "Aktivite Tipi\nkeyboard_arrow_down",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "calendar_today\nSon 30 Gün\nkeyboard_arrow_down",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "Sonuç\nkeyboard_arrow_down",
+        "line": 143
+      },
+      {
+        "type": "button",
+        "label": "Temizle",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 201
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 237
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 309
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 323
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 326
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 327
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 328
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 330
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 38
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: assignment]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: map]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 112
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 139
+      },
+      {
+        "type": "button",
+        "label": "[icon: keyboard_arrow_down]",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 217
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 238
+      },
+      {
+        "type": "button",
+        "label": "[icon: handshake]",
+        "line": 253
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 274
+      },
+      {
+        "type": "button",
+        "label": "[icon: videocam]",
+        "line": 289
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 310
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 324
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 331
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Aktivite, müşteri veya kişi ara...",
+        "inputType": "text",
+        "placeholder": "Aktivite, müşteri veya kişi ara...",
+        "line": 47
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 55,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "reports",
+    "screenTitle": "Raporlar",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nGösterge Paneli",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "insert_chart\n\narrow_forward\n\n\nDönemsel Teklif Raporu\nBelirli bir dönemdeki tekliflerin performansını, dönüşüm oranlarını ve genel başarı durumunu inceleyin.",
+        "href": "#",
+        "line": 106
+      },
+      {
+        "type": "link",
+        "label": "how_to_reg\n\narrow_forward\n\n\nPersonel Performans Raporu\nSatış temsilcileri ve operasyon personelinin bazında satış kotaları, işlem hacimleri ve genel performans analizi.",
+        "href": "#",
+        "line": 119
+      },
+      {
+        "type": "link",
+        "label": "trending_up\n\narrow_forward\n\n\nKazanılan/Kaybedilen Analizi\nOlumlu sonuçlanan ve kaybedilen tekliflerin karşılaştırmalı analizi, karlılık oranları ve fırsat maliyetleri.",
+        "href": "#",
+        "line": 132
+      },
+      {
+        "type": "link",
+        "label": "public\n\narrow_forward\n\n\nÜlke/Mod Bazlı Hacim\nHedef ve kaynak ülkelere, ayrıca taşıma modlarına (Deniz, Hava, Kara) göre taşımacılık hacimlerinin dağılımı.",
+        "href": "#",
+        "line": 145
+      },
+      {
+        "type": "link",
+        "label": "error_outline\n\narrow_forward\n\n\nKaybedilme Nedeni Analizi\nFiyat, transit süre, kapasite yetersizliği gibi çeşitli nedenlere göre kaybedilen işlerin detaylı kök neden analizi.",
+        "href": "#",
+        "line": 158
+      },
+      {
+        "type": "link",
+        "label": "add\n\nÖzel Rapor Oluştur",
+        "href": "#",
+        "line": 171
+      },
+      {
+        "type": "button",
+        "label": "table_view\nExcel",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\nPDF",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: table_view]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: insert_chart]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "[icon: how_to_reg]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: error_outline]",
+        "line": 161
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 173
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nGösterge Paneli",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\nRaporlar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "settings\nAyarlar",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "insert_chart\n\narrow_forward\n\n\nDönemsel Teklif Raporu\nBelirli bir dönemdeki tekliflerin performansını, dönüşüm oranlarını ve genel başarı durumunu inceleyin.",
+        "href": "#",
+        "line": 106
+      },
+      {
+        "type": "link",
+        "label": "how_to_reg\n\narrow_forward\n\n\nPersonel Performans Raporu\nSatış temsilcileri ve operasyon personelinin bazında satış kotaları, işlem hacimleri ve genel performans analizi.",
+        "href": "#",
+        "line": 119
+      },
+      {
+        "type": "link",
+        "label": "trending_up\n\narrow_forward\n\n\nKazanılan/Kaybedilen Analizi\nOlumlu sonuçlanan ve kaybedilen tekliflerin karşılaştırmalı analizi, karlılık oranları ve fırsat maliyetleri.",
+        "href": "#",
+        "line": 132
+      },
+      {
+        "type": "link",
+        "label": "public\n\narrow_forward\n\n\nÜlke/Mod Bazlı Hacim\nHedef ve kaynak ülkelere, ayrıca taşıma modlarına (Deniz, Hava, Kara) göre taşımacılık hacimlerinin dağılımı.",
+        "href": "#",
+        "line": 145
+      },
+      {
+        "type": "link",
+        "label": "error_outline\n\narrow_forward\n\n\nKaybedilme Nedeni Analizi\nFiyat, transit süre, kapasite yetersizliği gibi çeşitli nedenlere göre kaybedilen işlerin detaylı kök neden analizi.",
+        "href": "#",
+        "line": 158
+      },
+      {
+        "type": "link",
+        "label": "add\n\nÖzel Rapor Oluştur",
+        "href": "#",
+        "line": 171
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "table_view\nExcel",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\nPDF",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: table_view]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: insert_chart]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "[icon: how_to_reg]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: error_outline]",
+        "line": 161
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 163
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 173
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 33,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "settings",
+    "screenTitle": "Sistem Ayarları",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Sistem Ayarları",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "tune\nGenel Ayarlar",
+        "href": "#",
+        "line": 82
+      },
+      {
+        "type": "link",
+        "label": "list_alt\nListe Yönetimi",
+        "href": "#",
+        "line": 86
+      },
+      {
+        "type": "link",
+        "label": "group\nKullanıcı Yönetimi",
+        "href": "#",
+        "line": 90
+      },
+      {
+        "type": "link",
+        "label": "history\nLog Görüntüleme",
+        "href": "#",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "Çıkış Yap",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "Profil",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "settings",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "add\nYeni Liste Ekle",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 168
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "close",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "Kaydet",
+        "line": 222
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 61
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: tune]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: list_alt]",
+        "line": 87
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 110
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 168
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 201
+      },
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 206
+      },
+      {
+        "type": "input",
+        "label": "number",
+        "inputType": "number",
+        "line": 210
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Sistem Ayarları",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "tune\nGenel Ayarlar",
+        "href": "#",
+        "line": 82
+      },
+      {
+        "type": "link",
+        "label": "list_alt\nListe Yönetimi",
+        "href": "#",
+        "line": 86
+      },
+      {
+        "type": "link",
+        "label": "group\nKullanıcı Yönetimi",
+        "href": "#",
+        "line": 90
+      },
+      {
+        "type": "link",
+        "label": "history\nLog Görüntüleme",
+        "href": "#",
+        "line": 94
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "Çıkış Yap",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "Profil",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "settings",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "add\nYeni Liste Ekle",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 168
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "close",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "Kaydet",
+        "line": 222
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 61
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: tune]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: list_alt]",
+        "line": 87
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 110
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 168
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 196
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 201
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 206
+      },
+      {
+        "type": "input",
+        "label": "number",
+        "inputType": "number",
+        "line": 210
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 45,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "user-management",
+    "screenTitle": "Kullanıcı Yönetimi",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Gösterge Paneli",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Sevkiyatlar",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Kullanıcılar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "group\nKullanıcı Listesi",
+        "href": "#",
+        "line": 78
+      },
+      {
+        "type": "link",
+        "label": "swap_horiz\nTemsilci Devri",
+        "href": "#",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "person_add\nYeni Kullanıcı",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 153
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "Önizleme",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "check_circle\nDevri Onayla",
+        "line": 252
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_add]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 127
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 151
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 154
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 178
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 215
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 227
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 253
+      },
+      {
+        "type": "input",
+        "label": "Kullanıcı Ara...",
+        "inputType": "text",
+        "placeholder": "Kullanıcı Ara...",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 204
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 221
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 235
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 239
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 243
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Gösterge Paneli",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Müşteriler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Sevkiyatlar",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Kullanıcılar",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "group\nKullanıcı Listesi",
+        "href": "#",
+        "line": 78
+      },
+      {
+        "type": "link",
+        "label": "swap_horiz\nTemsilci Devri",
+        "href": "#",
+        "line": 82
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "person_add\nYeni Kullanıcı",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 153
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "Önizleme",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "check_circle\nDevri Onayla",
+        "line": 252
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_add]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 124
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 127
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 151
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 154
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 178
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 181
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 215
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 227
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 253
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Kullanıcı Ara...",
+        "inputType": "text",
+        "placeholder": "Kullanıcı Ara...",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 204
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 221
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 235
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 239
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 243
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 38,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "audit-log",
+    "screenTitle": "Denetim Günlükleri",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nPanel",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "trending_up\nAktiviteler",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "history\nSistem İşlem Geçmişi",
+        "href": "#",
+        "line": 61
+      },
+      {
+        "type": "button",
+        "label": "menu",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "download\nExcel/CSV Dışa Aktar",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "Kullanıcı Seç\nexpand_more",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "İşlem Tipi Seç\nexpand_more",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "calendar_today\nTarih Aralığı\n\nexpand_more",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Önceki",
+        "line": 222
+      },
+      {
+        "type": "button",
+        "label": "Sonraki",
+        "line": 223
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 46
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 58
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "[icon: menu]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 104
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: smart_toy]",
+        "line": 197
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 202
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nPanel",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "group\nMüşteriler",
+        "href": "#",
+        "line": 49
+      },
+      {
+        "type": "link",
+        "label": "description\nTeklifler",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "trending_up\nAktiviteler",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "history\nSistem İşlem Geçmişi",
+        "href": "#",
+        "line": 61
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "menu",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "download\nExcel/CSV Dışa Aktar",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "Kullanıcı Seç\nexpand_more",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "İşlem Tipi Seç\nexpand_more",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "calendar_today\nTarih Aralığı\n\nexpand_more",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Önceki",
+        "line": 222
+      },
+      {
+        "type": "button",
+        "label": "Sonraki",
+        "line": 223
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 46
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 58
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "[icon: menu]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 104
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: smart_toy]",
+        "line": 197
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 202
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 29,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "activity-form",
+    "screenTitle": "Aktivite Formu",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "button",
+        "label": "close",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "save\n                    Kaydet",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_task]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: domain]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 69
+      },
+      {
+        "type": "button",
+        "label": "[icon: category]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: schedule]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: timer]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: notes]",
+        "line": 114
+      },
+      {
+        "type": "button",
+        "label": "[icon: fact_check]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_upcoming]",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 149
+      },
+      {
+        "type": "input",
+        "label": "Müşteri Ara... (örn: Lojistik A.Ş.)",
+        "inputType": "text",
+        "placeholder": "Müşteri Ara... (örn: Lojistik A.Ş.)",
+        "line": 70
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 79
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 94
+      },
+      {
+        "type": "input",
+        "label": "time",
+        "inputType": "time",
+        "line": 101
+      },
+      {
+        "type": "input",
+        "label": "30 dk",
+        "inputType": "text",
+        "placeholder": "30 dk",
+        "line": 108
+      },
+      {
+        "type": "input",
+        "label": "Görüşme detaylarını buraya ekleyin...",
+        "inputType": "textarea",
+        "placeholder": "Görüşme detaylarını buraya ekleyin...",
+        "line": 117
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 126
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 139
+      }
+    ],
+    "navigation": [],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "close",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "İptal",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "save\n                    Kaydet",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_task]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: domain]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 69
+      },
+      {
+        "type": "button",
+        "label": "[icon: category]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: schedule]",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "[icon: timer]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: notes]",
+        "line": 114
+      },
+      {
+        "type": "button",
+        "label": "[icon: fact_check]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_upcoming]",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 149
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Müşteri Ara... (örn: Lojistik A.Ş.)",
+        "inputType": "text",
+        "placeholder": "Müşteri Ara... (örn: Lojistik A.Ş.)",
+        "line": 70
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 79
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 94
+      },
+      {
+        "type": "input",
+        "label": "time",
+        "inputType": "time",
+        "line": 101
+      },
+      {
+        "type": "input",
+        "label": "30 dk",
+        "inputType": "text",
+        "placeholder": "30 dk",
+        "line": 108
+      },
+      {
+        "type": "input",
+        "label": "Görüşme detaylarını buraya ekleyin...",
+        "inputType": "textarea",
+        "placeholder": "Görüşme detaylarını buraya ekleyin...",
+        "line": 117
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 126
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 139
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 23,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  }
+]

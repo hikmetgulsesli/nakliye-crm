@@ -3,11 +3,9 @@
 <html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sistem Logları - Nakliye CRM</title>
+<title>Lojistik CRM - Sistem İşlem Geçmişi</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;family=Karla:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -16,249 +14,219 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e40af",
-                        "background-light": "#f8f9fb",
-                        "background-dark": "#121520",
-                        "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
-                        "border-light": "#e8eaf2",
-                        "border-dark": "#334155",
-                        "text-main-light": "#0f111a",
-                        "text-main-dark": "#f1f5f9",
-                        "text-muted-light": "#536293",
-                        "text-muted-dark": "#94a3b8",
-                        "action-bg-light": "#e8eaf2",
-                        "action-bg-dark": "#334155"
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
                     },
                     fontFamily: {
-                        "display": ["Manrope", "sans-serif"],
-                        "body": ["Karla", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"]
                     },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
                 },
             },
         }
     </script>
-<style>
-        body { font-family: 'Karla', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Manrope', sans-serif; }
-    </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark antialiased">
-<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<div class="px-8 lg:px-40 flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-4 lg:px-10 py-4 mb-6 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm">
-<div class="flex items-center gap-4 text-text-main-light dark:text-text-main-dark">
-<div class="size-6 text-primary">
-<span class="material-symbols-outlined" style="font-size: 24px;">local_shipping</span>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col md:flex-row">
+<!-- Sidebar Navigation -->
+<nav class="flex flex-col w-full md:w-64 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-full min-h-screen p-4 gap-4 hidden md:flex">
+<div class="flex gap-3 items-center mb-6">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-primary/10 flex items-center justify-center text-primary" data-alt="Lojistik Logo">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
 </div>
-<h2 class="font-display text-lg font-bold leading-tight tracking-[-0.015em]">Nakliye CRM</h2>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">Lojistik CRM</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Admin Paneli</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Panel</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium leading-normal">Müşteriler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300" href="#">
+<span class="material-symbols-outlined">description</span>
+<p class="text-sm font-medium leading-normal">Teklifler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<p class="text-sm font-medium leading-normal">Aktiviteler</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary" href="#">
+<span class="material-symbols-outlined">history</span>
+<p class="text-sm font-bold leading-normal">Sistem İşlem Geçmişi</p>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4 lg:px-10">
+<div class="flex items-center gap-4 md:hidden">
+<button class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
 </div>
 <div class="flex flex-1 justify-end gap-6 items-center">
-<a class="text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Sistem Logları</a>
-<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary hover:bg-primary/90 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors gap-2">
-<span class="material-symbols-outlined" style="font-size: 18px;">download</span>
-<span>Export CSV</span>
+<div class="flex gap-3">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white hover:bg-primary/90 transition-colors text-sm font-bold leading-normal gap-2">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span class="truncate hidden sm:inline">Excel/CSV Dışa Aktar</span>
 </button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-border-light dark:border-border-dark" data-alt="Admin User Profile Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAUA2e3b6MeDf2Wj3DOUkyalqcz5vf5198YBElmTN2Uu6gxy6FwEL5WFttBqlbHIvh2roo6NrUSgDA1jnb_qguEvnJLKkGUBbbwYiVSrfX0INv_zV54XN8pHHfGZecu2B8Qf8ESU_y5oMuSajQJ5NxOxET0EpIq0NBdrHSHGWXwHP1IvTWFwAuAdUH6ArBdoi808iEBUIxgqG0BtPCJiz4_GpKEWRF6mwoWrORr5WYAu5_2ddOvk1TMmV_9SQJ1biv2YR0mB_Qt-QA");'></div>
+</div>
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center overflow-hidden border border-slate-300 dark:border-slate-600" data-alt="Admin User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3AphfqNZ3Duwea8ta0XxzfwBN5uMdm5v9qWHwD95cJR6LgjroAcpC14Kdqb2N3DBDgewmzagfpBYsnN1mJuQ9ZZ5rogBXVQIgU80ufcFbeAWwkcTsVza9TyBrQNt-iO6Rl_PY9INi2qUUMsqjsQiZT34I1eT7gNqP8gWO3oRWxI4tlOW2B8QrX43bIKeiqaNey04fYVZneStNgQC21cH53TaE7ecQZtdhe1l5PP6KmDoNVinl8OXVjNs1j7H2SF_kUaM7D73NjLtN");'></div>
 </div>
 </header>
-<div class="flex items-center justify-between px-4 pb-4">
-<h1 class="font-display text-[24px] font-bold leading-tight tracking-[-0.015em]">Sistem Logları ve Denetim Günlükleri</h1>
+<div class="flex flex-col flex-1 p-4 lg:p-8 gap-6 max-w-7xl mx-auto w-full">
+<!-- Page Title -->
+<div class="flex flex-col gap-2">
+<h2 class="text-slate-900 dark:text-white text-3xl font-black leading-tight">Sistem İşlem Geçmişi</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">Tüm sistem işlemlerinin detaylı tarihçesi ve denetim kayıtları.</p>
 </div>
-<div class="flex gap-3 px-4 pb-6 flex-wrap">
-<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-4 hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors">
-<p class="text-sm font-medium leading-normal">Kullanıcı: Tümü</p>
-<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 18px;">expand_more</span>
+<!-- Filters -->
+<div class="flex gap-3 flex-wrap">
+<button class="flex h-10 shrink-0 items-center justify-between gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 hover:border-primary/50 transition-colors min-w-[160px]">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Kullanıcı Seç</p>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
 </button>
-<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-4 hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors">
-<p class="text-sm font-medium leading-normal">İşlem Tipi: Tümü</p>
-<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 18px;">expand_more</span>
+<button class="flex h-10 shrink-0 items-center justify-between gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 hover:border-primary/50 transition-colors min-w-[160px]">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">İşlem Tipi Seç</p>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
 </button>
-<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-4 hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors">
-<p class="text-sm font-medium leading-normal">Tarih Aralığı: Son 30 Gün</p>
-<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 18px;">expand_more</span>
+<button class="flex h-10 shrink-0 items-center justify-between gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 hover:border-primary/50 transition-colors min-w-[200px]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">calendar_today</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Tarih Aralığı</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
 </button>
 </div>
-<div class="px-4 pb-6 w-full">
-<div class="flex overflow-x-auto rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm">
-<table class="w-full text-left min-w-[800px]">
+<!-- Data Table -->
+<div class="w-full @container">
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
 <thead>
-<tr class="bg-action-bg-light dark:bg-action-bg-dark border-b border-border-light dark:border-border-dark">
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider w-[180px]">Tarih/Saat</th>
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider w-[200px]">Kullanıcı</th>
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider w-[140px]">İşlem Tipi</th>
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider w-[120px]">Kayıt</th>
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider flex-1">İşlem</th>
-<th class="px-5 py-4 text-sm font-bold leading-normal text-text-muted-light dark:text-text-muted-dark font-display uppercase tracking-wider w-[100px] text-right">Detay</th>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider w-[180px]">Tarih</th>
+<th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider w-20 text-center">Kullanıcı</th>
+<th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider w-[160px]">İşlem Tipi</th>
+<th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider w-[180px]">Kayıt</th>
+<th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider min-w-[300px]">Detay</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-border-light dark:divide-border-dark">
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">10.10.2023 14:32</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">AY</div>
-                                            Ahmet Yılmaz
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2.5 py-1 text-xs font-semibold">Müşteri</span>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap">
+                                                12.10.2023 14:30
+                                            </td>
+<td class="px-6 py-4 flex justify-center">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border border-white dark:border-slate-800 ring-2 ring-transparent group-hover:ring-primary/20 transition-all" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDgC6whHtmMDM5fF3-rOlxPSxX2tV2KoB3n33NamwUwkoZEtKfAlWwrsO7ZClXGvQCrdnFvmjuZXrejh5mFh-9n4OJnnk159MXJ7RUD891k2KLS6zSd1F0VKWfW45sQpApcvgEY-g6xQq46GqZXsKq7tX3ut5hKHbhNqJ7-0lZqyh2GSuwZagVYEGXMtlvZZM7S-kfCMUJ57S3dLy-kbDjPCSOnmKBm4_9i3fLhSfKtkIOSwwTTeNHgic1kezltp5qVYyeNsv9TMRgc");'></div>
 </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">M-10234</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Müşteri oluşturuldu</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">description</span>
+                                                    Teklif
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-900 dark:text-slate-200 text-sm font-medium whitespace-nowrap">
+                                                TR-2023-045
+                                            </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">
+                                                Teklif durumu <span class="font-medium text-amber-600 dark:text-amber-400">Bekliyor</span>'dan <span class="font-medium text-emerald-600 dark:text-emerald-400">Kazanıldı</span>'ya güncellendi
+                                            </td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap">
+                                                12.10.2023 13:15
+                                            </td>
+<td class="px-6 py-4 flex justify-center">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border border-white dark:border-slate-800 ring-2 ring-transparent group-hover:ring-primary/20 transition-all" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBMBkmV0qDAGLXTj-iZBlpeMi-HrIOoGQ-WceDrqJwQFUk9zSKmdBlkdCpslNcq-4AbQ5V7XC2Z6pPhPc2WmlW8SKLr6UlBe_nYZjPaMswRZPoEhl9xs8Pmn-OmJblF2Lk9Fj-irMZPD3efQz1rPk4u2mz1dogPzLPBs14o6IHCQZIgrKwquwThRSbawJq6pAiN-KRE1FkiTTM0ojr0tauXEGP6mowdJHZwcwKA0OUffwMhHQdZEApAxzcgH2OkoE8ZruAbogZ4Y_S");'></div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">group</span>
+                                                    Müşteri
+                                                </span>
+</td>
+<td class="px-6 py-4 text-slate-900 dark:text-slate-200 text-sm font-medium whitespace-nowrap">
+                                                MŞT-892
+                                            </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">
+                                                Yeni müşteri kaydı oluşturuldu: <span class="font-medium text-slate-700 dark:text-slate-300">ABC Lojistik A.Ş.</span>
 </td>
 </tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">10.10.2023 15:10</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">MD</div>
-                                            Mehmet Demir
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 text-xs font-semibold">Teklif</span>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap">
+                                                12.10.2023 11:45
+                                            </td>
+<td class="px-6 py-4 flex justify-center">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border border-white dark:border-slate-800 ring-2 ring-transparent group-hover:ring-primary/20 transition-all flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300" data-alt="User Initials">
+                                                    AY
+                                                </div>
 </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">T-5011</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Durum değişti (Kazanıldı)</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                                    Aktivite
+                                                </span>
 </td>
+<td class="px-6 py-4 text-slate-900 dark:text-slate-200 text-sm font-medium whitespace-nowrap">
+                                                AKT-104
+                                            </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">
+                                                Müşteri toplantısı notu eklendi: "Yıllık sevkiyat planlaması görüşüldü."
+                                            </td>
 </tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">10.10.2023 16:45</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">AÇ</div>
-                                            Ayşe Çelik
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-2.5 py-1 text-xs font-semibold">Aktivite</span>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm font-medium whitespace-nowrap">
+                                                11.10.2023 16:20
+                                            </td>
+<td class="px-6 py-4 flex justify-center">
+<div class="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 bg-cover bg-center border border-white dark:border-slate-800 flex items-center justify-center text-slate-400" data-alt="System Avatar">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+</div>
 </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">A-205</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Not eklendi</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">settings</span>
+                                                    Sistem
+                                                </span>
 </td>
-</tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">11.10.2023 09:15</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">AY</div>
-                                            Ahmet Yılmaz
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2.5 py-1 text-xs font-semibold">Kullanıcı</span>
-</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">K-005</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Temsilci değiştirildi</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">11.10.2023 10:20</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">ZK</div>
-                                            Zeynep Kaya
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2.5 py-1 text-xs font-semibold">Müşteri</span>
-</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">M-10235</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Oluşturuldu</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">11.10.2023 11:05</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">MD</div>
-                                            Mehmet Demir
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 text-xs font-semibold">Teklif</span>
-</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">T-5012</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Oluşturuldu</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">11.10.2023 13:50</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">AÇ</div>
-                                            Ayşe Çelik
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 text-xs font-semibold">Teklif</span>
-</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">T-5011</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">Revize edildi</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group">
-<td class="px-5 py-4 text-sm font-medium leading-normal">11.10.2023 15:30</td>
-<td class="px-5 py-4 text-sm font-medium leading-normal flex items-center gap-2">
-<div class="size-6 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-xs font-bold">AD</div>
-                                            Admin
-                                        </td>
-<td class="px-5 py-4 text-sm font-normal leading-normal">
-<span class="inline-flex items-center justify-center rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2.5 py-1 text-xs font-semibold">Kullanıcı</span>
-</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal font-mono text-text-muted-light dark:text-text-muted-dark">K-006</td>
-<td class="px-5 py-4 text-sm font-normal leading-normal text-red-600 dark:text-red-400">Kullanıcı silindi</td>
-<td class="px-5 py-4 text-sm font-bold leading-normal text-right">
-<button class="text-primary hover:text-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end w-full gap-1">
-                                                İncele <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
-</button>
-</td>
+<td class="px-6 py-4 text-slate-900 dark:text-slate-200 text-sm font-medium whitespace-nowrap">
+                                                SİS-001
+                                            </td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">
+                                                Otomatik sistem yedeklemesi başarıyla tamamlandı.
+                                            </td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="flex items-center justify-between px-4 py-4 border-t border-border-light dark:border-border-dark mt-auto">
-<span class="text-sm text-text-muted-light dark:text-text-muted-dark">Toplam 142 kayıt, 1-8 arası gösteriliyor</span>
-<div class="flex items-center gap-1">
-<a class="flex size-9 items-center justify-center rounded-lg hover:bg-action-bg-light dark:hover:bg-action-bg-dark text-text-muted-light dark:text-text-muted-dark transition-colors" href="#">
-<span class="material-symbols-outlined" style="font-size: 20px;">chevron_left</span>
-</a>
-<a class="text-sm font-bold flex size-9 items-center justify-center rounded-lg bg-primary text-white" href="#">1</a>
-<a class="text-sm font-medium flex size-9 items-center justify-center rounded-lg hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors" href="#">2</a>
-<a class="text-sm font-medium flex size-9 items-center justify-center rounded-lg hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors" href="#">3</a>
-<span class="flex size-9 items-center justify-center text-text-muted-light dark:text-text-muted-dark">...</span>
-<a class="text-sm font-medium flex size-9 items-center justify-center rounded-lg hover:bg-action-bg-light dark:hover:bg-action-bg-dark transition-colors" href="#">18</a>
-<a class="flex size-9 items-center justify-center rounded-lg hover:bg-action-bg-light dark:hover:bg-action-bg-dark text-text-muted-light dark:text-text-muted-dark transition-colors" href="#">
-<span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
-</a>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 px-6 py-3 bg-white dark:bg-slate-900">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                                    Toplam <span class="font-medium text-slate-900 dark:text-slate-200">248</span> kayıttan <span class="font-medium text-slate-900 dark:text-slate-200">1-4</span> arası gösteriliyor
+                                </p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 text-sm font-medium" disabled="">Önceki</button>
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium">Sonraki</button>
 </div>
 </div>
 </div>
 </div>
+</div>
+</main>
 </div>
 </div>
 </body></html>

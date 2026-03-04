@@ -1,5 +1,6 @@
 {
-  "project": "nakliye-crm",
+  "projectId": "17114662658768776924",
+  "projectName": "nakliye-crm",
   "designSystem": {
     "aesthetic": "industrial",
     "palette": "saas",
@@ -10,125 +11,95 @@
   "screens": [
     {
       "id": "login",
-      "title": "Giriş Yap",
+      "title": "Giriş Yap - Login",
       "description": "Kullanıcı giriş sayfası",
       "htmlFile": "login.html",
-      "screenshotFile": "login.png",
-      "module": "Auth"
+      "screenshotFile": "login.png"
     },
     {
       "id": "user-dashboard",
-      "title": "Satış Temsilcisi Paneli",
-      "description": "Kullanıcı dashboard - kişisel metrikler ve widgetlar",
+      "title": "Kullanıcı Dashboard",
+      "description": "Satış temsilcisi kişisel dashboard",
       "htmlFile": "user-dashboard.html",
-      "screenshotFile": "user-dashboard.png",
-      "module": "Dashboard"
+      "screenshotFile": "user-dashboard.png"
     },
     {
       "id": "admin-dashboard",
-      "title": "Yönetici Paneli",
-      "description": "Admin dashboard - genel metrikler, personel performans, ülke/mod dağılımları",
+      "title": "Admin Dashboard",
+      "description": "Yönetici dashboard - tüm metrikler",
       "htmlFile": "admin-dashboard.html",
-      "screenshotFile": "admin-dashboard.png",
-      "module": "Dashboard"
+      "screenshotFile": "admin-dashboard.png"
     },
     {
       "id": "customer-list",
       "title": "Müşteri Listesi",
-      "description": "Müşteri listesi - arama, filtreleme, sayfalama",
+      "description": "Müşteri listesi ve arama",
       "htmlFile": "customer-list.html",
-      "screenshotFile": "customer-list.png",
-      "module": "Müşteri Kartı"
+      "screenshotFile": "customer-list.png"
     },
     {
       "id": "customer-form",
       "title": "Müşteri Formu",
-      "description": "Yeni müşteri ekleme / düzenleme formu",
+      "description": "Yeni müşteri ekleme formu",
       "htmlFile": "customer-form.html",
-      "screenshotFile": "customer-form.png",
-      "module": "Müşteri Kartı"
+      "screenshotFile": "customer-form.png"
     },
     {
       "id": "customer-detail",
       "title": "Müşteri Detay",
-      "description": "Müşteri detay sayfası - bilgiler, teklifler, aktiviteler, geçmiş sekmeleri",
+      "description": "Müşteri detay sayfası",
       "htmlFile": "customer-detail.html",
-      "screenshotFile": "customer-detail.png",
-      "module": "Müşteri Kartı"
+      "screenshotFile": "customer-detail.png"
     },
     {
       "id": "quotation-list",
       "title": "Teklif Listesi",
-      "description": "Teklif listesi - arama, filtreleme, durum badge",
+      "description": "Teklif listesi ve filtreleme",
       "htmlFile": "quotation-list.html",
-      "screenshotFile": "quotation-list.png",
-      "module": "Teklif Yönetimi"
+      "screenshotFile": "quotation-list.png"
     },
     {
       "id": "quotation-form",
       "title": "Teklif Formu",
-      "description": "Yeni teklif oluşturma / düzenleme formu",
+      "description": "Yeni teklif oluşturma formu",
       "htmlFile": "quotation-form.html",
-      "screenshotFile": "quotation-form.png",
-      "module": "Teklif Yönetimi"
-    },
-    {
-      "id": "quotation-detail",
-      "title": "Teklif Detay",
-      "description": "Teklif detay sayfası - bilgiler ve revizyon geçmişi",
-      "htmlFile": "quotation-detail.html",
-      "screenshotFile": "quotation-detail.png",
-      "module": "Teklif Yönetimi"
+      "screenshotFile": "quotation-form.png"
     },
     {
       "id": "activity-list",
       "title": "Aktivite Listesi",
-      "description": "Aktivite takip listesi - filtreleme, sonuç badge",
+      "description": "Aktivite görüşme takibi",
       "htmlFile": "activity-list.html",
-      "screenshotFile": "activity-list.png",
-      "module": "Aktivite Takibi"
+      "screenshotFile": "activity-list.png"
+    },
+    {
+      "id": "admin-settings",
+      "title": "Admin Ayarlar",
+      "description": "Dinamik liste yönetimi",
+      "htmlFile": "admin-settings.html",
+      "screenshotFile": "admin-settings.png"
     },
     {
       "id": "reports",
       "title": "Raporlar",
-      "description": "Rapor seçim sayfası - 5 rapor tipi kartları, filtreler, export",
+      "description": "Rapor türleri seçimi",
       "htmlFile": "reports.html",
-      "screenshotFile": "reports.png",
-      "module": "Raporlar"
+      "screenshotFile": "reports.png"
     },
     {
-      "id": "settings",
-      "title": "Sistem Ayarları",
-      "description": "Admin sistem ayarları - dinamik liste yönetimi",
-      "htmlFile": "settings.html",
-      "screenshotFile": "settings.png",
-      "module": "Ayarlar"
-    },
-    {
-      "id": "user-management",
-      "title": "Kullanıcı Yönetimi",
-      "description": "Admin kullanıcı yönetimi - kullanıcı listesi ve temsilci devri",
-      "htmlFile": "user-management.html",
-      "screenshotFile": "user-management.png",
-      "module": "Kullanıcı Yönetimi"
+      "id": "user-transfer",
+      "title": "Temsilci Devri",
+      "description": "Toplu temsilci devir işlemi",
+      "htmlFile": "user-transfer.html",
+      "screenshotFile": "user-transfer.png"
     },
     {
       "id": "audit-log",
-      "title": "Denetim Günlükleri",
-      "description": "Sistem log görüntüleme - filtreleme, export",
+      "title": "Denetim Günlüğü",
+      "description": "Tüm değişikliklerin logu",
       "htmlFile": "audit-log.html",
-      "screenshotFile": "audit-log.png",
-      "module": "Log/Denetim"
-    },
-    {
-      "id": "activity-form",
-      "title": "Aktivite Formu",
-      "description": "Yeni aktivite ekleme modal/formu",
-      "htmlFile": "activity-form.html",
-      "screenshotFile": "activity-form.png",
-      "module": "Aktivite Takibi"
+      "screenshotFile": "audit-log.png"
     }
   ],
-  "generatedAt": "2026-03-04T07:57:00Z",
-  "totalScreens": 15
+  "generatedAt": "2026-03-04T08:00:00Z"
 }
