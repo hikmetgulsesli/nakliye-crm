@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kullanıcı Yönetimi ve Veri Aktarımı Sayfası</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen">
+<!-- Sidebar -->
+<div class="fixed inset-y-0 left-0 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-10 hidden md:flex flex-col">
+<div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800">
+<span class="text-xl font-bold text-primary flex items-center gap-2">
+<span class="material-icons-outlined">local_shipping</span>
+                Nakliye CRM
+            </span>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<nav class="space-y-1 px-3">
+<a class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-icons-outlined mr-3">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-icons-outlined mr-3">people</span>
+                    Müşteriler
+                </a>
+<a class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-icons-outlined mr-3">description</span>
+                    Teklifler
+                </a>
+<div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+<p class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Sistem</p>
+<a class="flex items-center px-3 py-2 text-sm font-medium rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-icons-outlined mr-3">admin_panel_settings</span>
+                        Kullanıcı Yönetimi
+                    </a>
+</div>
+</nav>
+</div>
+</div>
+<!-- Main Content -->
+<div class="md:pl-64 flex flex-col min-h-screen">
+<!-- Header -->
+<header class="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+<h1 class="text-xl font-semibold">Kullanıcı Yönetimi</h1>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-icons-outlined text-sm">add</span>
+                    Yeni Kullanıcı
+                </button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 p-6 flex flex-col lg:flex-row gap-6">
+<!-- Users List -->
+<div class="flex-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h2 class="text-lg font-semibold">Sistem Kullanıcıları</h2>
+<div class="relative">
+<span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none w-64" placeholder="Kullanıcı ara..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm whitespace-nowrap">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-3 font-medium">Ad Soyad</th>
+<th class="px-6 py-3 font-medium">E-posta</th>
+<th class="px-6 py-3 font-medium">Rol</th>
+<th class="px-6 py-3 font-medium">Durum</th>
+<th class="px-6 py-3 font-medium">Oluşturma Tarihi</th>
+<th class="px-6 py-3 font-medium">Son Giriş</th>
+<th class="px-6 py-3 font-medium text-right">İşlemler</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<!-- User Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium">Ahmet Yılmaz</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">ahmet.yilmaz@nakliye.com</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">Admin</span>
+</td>
+<td class="px-6 py-4">
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-primary checked:right-0 right-5" id="toggle1" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary/20 cursor-pointer" for="toggle1"></label>
+</div>
+<span class="text-xs text-slate-500 dark:text-slate-400">Aktif</span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">12.01.2023</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">2 saat önce</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary mr-2 transition-colors"><span class="material-icons-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons-outlined text-[20px]">block</span></button>
+</td>
+</tr>
+<!-- User Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 font-medium">Ayşe Demir</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">ayse.demir@nakliye.com</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Kullanıcı</span>
+</td>
+<td class="px-6 py-4">
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-primary checked:right-0 right-5" id="toggle2" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary/20 cursor-pointer" for="toggle2"></label>
+</div>
+<span class="text-xs text-slate-500 dark:text-slate-400">Aktif</span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">05.03.2023</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Dün 14:30</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary mr-2 transition-colors"><span class="material-icons-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons-outlined text-[20px]">block</span></button>
+</td>
+</tr>
+<!-- User Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors opacity-60">
+<td class="px-6 py-4 font-medium">Mehmet Kaya</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">mehmet.kaya@nakliye.com</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Kullanıcı</span>
+</td>
+<td class="px-6 py-4">
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 dark:border-slate-600 right-5" id="toggle3" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer" for="toggle3"></label>
+</div>
+<span class="text-xs text-slate-500 dark:text-slate-400">Pasif</span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">22.06.2023</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">10.08.2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary mr-2 transition-colors"><span class="material-icons-outlined text-[20px]">edit</span></button>
+<button class="text-slate-400 hover:text-green-500 transition-colors"><span class="material-icons-outlined text-[20px]">check_circle</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400 mt-auto">
+<span>Toplam 3 kullanıcı gösteriliyor</span>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50" disabled=""><span class="material-icons-outlined text-sm">chevron_left</span></button>
+<span class="px-2 font-medium text-slate-900 dark:text-slate-100">1</span>
+<button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50" disabled=""><span class="material-icons-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Transfer Representative Panel -->
+<div class="w-full lg:w-[400px] shrink-0 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-fit">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
+<span class="material-icons-outlined text-[18px]">swap_horiz</span>
+</div>
+<h2 class="text-lg font-semibold">Temsilci Aktarımı</h2>
+</div>
+<div class="p-5 space-y-6">
+<div class="bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-800/30 rounded-lg p-4 flex gap-3 text-orange-800 dark:text-orange-300 text-sm">
+<span class="material-icons-outlined shrink-0 text-[20px]">warning_amber</span>
+<p>Bu işlem geri alınamaz. Veriler seçilen yeni temsilciye atanacaktır.</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Kaynak Kullanıcı</label>
+<select class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100">
+<option value="">Seçiniz</option>
+<option value="3">Mehmet Kaya (Pasif)</option>
+</select>
+</div>
+<div class="flex justify-center -my-2 relative z-10">
+<div class="bg-white dark:bg-slate-900 p-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm text-slate-400">
+<span class="material-icons-outlined text-sm">arrow_downward</span>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Hedef Kullanıcı</label>
+<select class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100">
+<option value="">Seçiniz</option>
+<option value="1">Ahmet Yılmaz</option>
+<option value="2">Ayşe Demir</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Aktarılacak Veriler</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<input checked="" class="rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 w-4 h-4" type="checkbox"/>
+<span class="text-sm font-medium flex-1">Müşteriler</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">14</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<input checked="" class="rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 w-4 h-4" type="checkbox"/>
+<span class="text-sm font-medium flex-1">Teklifler</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">8</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<input checked="" class="rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 w-4 h-4" type="checkbox"/>
+<span class="text-sm font-medium flex-1">Aktiviteler</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">32</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30 flex gap-3 mt-auto rounded-b-xl">
+<button class="flex-1 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-800">
+                        Önizleme
+                    </button>
+<button class="flex-1 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+                        Aktarımı Onayla
+                    </button>
+</div>
+</div>
+</main>
+</div>
+<!-- Hidden Edit Modal (for demonstration purposes, keep hidden by default using styling if interactive, here just showing markup if it were active, usually would use JS to toggle, but per rules no JS, so we hide it or show it. Let's keep it hidden via standard approach but structurally present) -->
+<div class="fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-lg font-semibold">Kullanıcı Düzenle</h3>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-icons-outlined">close</span>
+</button>
+</div>
+<div class="p-5 space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Ad Soyad</label>
+<input class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" type="text" value="Ahmet Yılmaz"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-posta</label>
+<input class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none" type="email" value="ahmet.yilmaz@nakliye.com"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Rol</label>
+<select class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option selected="" value="admin">Admin</option>
+<option value="user">Kullanıcı</option>
+</select>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Hesap Durumu (Aktif)</label>
+<div class="relative inline-block w-10 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-primary checked:right-0 right-5" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary/20 cursor-pointer"></label>
+</div>
+</div>
+</div>
+<div class="p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30 flex justify-end gap-3">
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 bg-white dark:bg-slate-800">
+                    İptal
+                </button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90">
+                    Kaydet
+                </button>
+</div>
+</div>
+</div>
+<style>
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #137fec;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: rgba(19, 127, 236, 0.2);
+        }
+    </style>
+</body></html>

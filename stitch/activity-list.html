@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aktivite Listesi - Nakliye CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Karla:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Karla", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- TopNavBar adapted -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 font-display">
+<div class="px-6 lg:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<div class="text-primary">
+<span class="material-symbols-outlined text-[32px]">local_shipping</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">Nakliye CRM</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Müşteriler</a>
+<a class="text-primary text-sm font-bold relative after:absolute after:-bottom-[18px] after:left-0 after:w-full after:h-0.5 after:bg-primary" href="#">Aktiviteler</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Teklifler</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Raporlar</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-slate-200 dark:bg-slate-800 bg-center bg-no-repeat bg-cover rounded-full size-10 border border-slate-300 dark:border-slate-700" data-alt="Kullanıcı Profil Fotoğrafı" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQ75YUXJo-YUIlQRQ5hreL_Dz81SlQonz1hVj0KRlRSeTu_ch7NoXdhCXYxYgkTew5eZX968pCyD9KOZUagOk0gvAO9wBrsOE5RM_tTW8tDUIKX3lA3WLsvxzmEdZvF6mFVbZ40YWKCE_caDVOJ1ljJLXkBmI2y4gdJUs_OmBw6jnQ216B-UO6dpt-Mmv_4aJvedy-97QHheLjwn-1pCNh3t7xv-cv8R4uu3G7ltCW65hliL8bLFgQzUB8VyCRfuHSKCrGm3Clq1I');"></div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-6 py-8">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<h1 class="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Aktiviteler</h1>
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+                Yeni Aktivite
+            </button>
+</div>
+<!-- Filter Bar -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+<label class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Tarih Aralığı</span>
+<select class="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary h-10">
+<option>Son 7 Gün</option>
+<option>Bu Ay</option>
+<option>Geçen Ay</option>
+<option>Özel Tarih...</option>
+</select>
+</label>
+<label class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Müşteri</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="form-input w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary h-10 pl-9" placeholder="Müşteri ara..." type="text"/>
+</div>
+</label>
+<label class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Aktivite Tipi</span>
+<select class="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary h-10">
+<option>Tümü</option>
+<option>Telefon</option>
+<option>E-posta</option>
+<option>Yüz Yüze</option>
+<option>Video Görüşme</option>
+</select>
+</label>
+<label class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Sonuç</span>
+<select class="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary h-10">
+<option>Tümü</option>
+<option>Olumlu</option>
+<option>Nötr</option>
+<option>Olumsuz</option>
+<option>Teklif İstendi</option>
+</select>
+</label>
+<label class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Temsilci</span>
+<select class="form-select w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary h-10">
+<option>Benim Aktivitelerim</option>
+<option>Tüm Temsilciler</option>
+<option>Ahmet Yılmaz</option>
+<option>Ayşe Demir</option>
+</select>
+</label>
+</div>
+</div>
+<!-- Activity List Timeline -->
+<div class="space-y-10">
+<!-- Group: Bugün -->
+<div class="relative">
+<h3 class="font-display text-sm font-bold text-slate-500 dark:text-slate-400 mb-4 sticky top-[72px] bg-background-light dark:bg-background-dark py-2 z-0 uppercase tracking-wider">
+                    Bugün - 24 Mayıs
+                </h3>
+<div class="space-y-3">
+<!-- Item 1: Phone / Olumlu -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
+<div class="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:items-start relative">
+<!-- Left: Time & Type Icon -->
+<div class="flex items-center sm:flex-col sm:items-end sm:min-w-[80px] gap-3 sm:gap-1">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">14:30</span>
+<span class="text-xs text-slate-500 hidden sm:block">20 dk</span>
+<div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center sm:mt-2">
+<span class="material-symbols-outlined text-lg">call</span>
+</div>
+</div>
+<!-- Middle: Details -->
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<a class="font-display font-bold text-primary hover:underline text-base" href="#">Lojistik Çözümleri A.Ş.</a>
+<span class="text-slate-300 dark:text-slate-600 px-1">•</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Telefon Görüşmesi</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                            Olumlu
+                                        </span>
+<div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+<div class="w-5 h-5 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Kullanıcı: Ahmet Yılmaz" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqvYlB6ICAuF1sup5bUpaIXOYwDFaT0un1YVkam2lp8Uk8_43U7b57UJr8MiMQkIYU3TPT8OFl4xqlxm-rCIlOnQU-Hhz-ZOTYDwGlmc1Fdfz3HvW6bQ-7yzjnBi2lt5Qk_Wh9Pa1BjkSOtDH7oMz2RWd_qhlscDfZ_s_cBVZVtd89YKNnrCrxD19opVS4egJInibqs9UHddfYgDWucNwhYOMN7iwrWiCtS92xcNS45kxDRdNF1ZdcFdV81qSWrCLP313jGyhbzA4')"></div>
+                                            Ahmet Yılmaz
+                                        </div>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                    Yeni Avrupa rotaları hakkında görüşüldü. Fiyatlandırma konusunda detaylı bilgi talep ettiler. Özellikle Almanya hattı için hacimli yük gönderimleri planlıyorlar. İkinci çeyrek için sözleşme yenilemeye sıcak bakıyorlar.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Item 2: Email / Teklif İstendi -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
+<div class="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:items-start relative">
+<div class="flex items-center sm:flex-col sm:items-end sm:min-w-[80px] gap-3 sm:gap-1">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">11:15</span>
+<span class="text-xs text-slate-500 hidden sm:block">5 dk</span>
+<div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center sm:mt-2">
+<span class="material-symbols-outlined text-lg">mail</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<a class="font-display font-bold text-primary hover:underline text-base" href="#">Global İthalat İhracat</a>
+<span class="text-slate-300 dark:text-slate-600 px-1">•</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">E-posta</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                                            Teklif İstendi
+                                        </span>
+<div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+<div class="w-5 h-5 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Kullanıcı: Ahmet Yılmaz" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2v5Vmmzy2bOPqBdrdoC6DdHvwWJc3sHPywIBs78tCWwAD8QvGiRuQtZgJaASJM1jQ5cJUa16Fvw7Snv07wSQ_r-6xEblDj2rGLNIOp6xScTRhMNDtTWYjcCWGKfaCP8bEIb7UpH_J_W_woIM-Y2XI0p4bzkgoOPQ1RlFQanmsa9h2IbVfCjHROHcKZdTTph6YIAlhBwonWg34JsiiopC-oRsbujhWXEt6a4U1ZKdLDGDD6mMfGgrDn-cvApmVtNGzXumdrhE_sY8')"></div>
+                                            Ahmet Y.
+                                        </div>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                    Aylık 50 konteyner Çin-İstanbul rotası için navlun fiyatı istendi. Detaylı proforma fatura hazırlanıp gönderilecek.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Dün -->
+<div class="relative">
+<h3 class="font-display text-sm font-bold text-slate-500 dark:text-slate-400 mb-4 sticky top-[72px] bg-background-light dark:bg-background-dark py-2 z-0 uppercase tracking-wider">
+                    Dün - 23 Mayıs
+                </h3>
+<div class="space-y-3">
+<!-- Item 3: In Person / Nötr -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
+<div class="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:items-start relative">
+<div class="flex items-center sm:flex-col sm:items-end sm:min-w-[80px] gap-3 sm:gap-1">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">15:00</span>
+<span class="text-xs text-slate-500 hidden sm:block">45 dk</span>
+<div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center sm:mt-2">
+<span class="material-symbols-outlined text-lg">groups</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<a class="font-display font-bold text-primary hover:underline text-base" href="#">Anadolu Makina Ltd.</a>
+<span class="text-slate-300 dark:text-slate-600 px-1">•</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Yüz Yüze Görüşme</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">
+                                            Nötr
+                                        </span>
+<div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+<div class="w-5 h-5 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Kullanıcı: Elif Demir" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9Lx-rtjAhfFpuv2Plj2-j5dut1AUK5v-BIuV8dAxRbk_J18hEi-RQEY0OMtFhKxit3fevs1E3XCgh-7tz_pbyVqbfPFptJZ-GkQHYEsgBOsj1mJGsRXCLkrrQGnb6rPZHLQqPuZTqWPTgAxXn9twnOi1wKydnKOKB95t_GHw0xA4tfOiJPQYQ5kek45IaTOTfHuNRfF3A-NYnpAybXrmIDNQ3WPQ-dWhTSazYpqQbZIKqa020ofwJvh-gK-cW7u01G93nRK1GPAo')"></div>
+                                            Elif Demir
+                                        </div>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                    Fabrika ziyareti gerçekleştirildi. Mevcut nakliye süreçleri incelendi. Şu an için değişiklik düşünmüyorlar ancak sene sonu değerlendirmesine alınmamızı rica ettiler.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Item 4: Video / Olumsuz -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
+<div class="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:items-start relative">
+<div class="flex items-center sm:flex-col sm:items-end sm:min-w-[80px] gap-3 sm:gap-1">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">09:30</span>
+<span class="text-xs text-slate-500 hidden sm:block">30 dk</span>
+<div class="w-8 h-8 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center sm:mt-2">
+<span class="material-symbols-outlined text-lg">videocam</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<a class="font-display font-bold text-primary hover:underline text-base" href="#">TeknoParça Gıda A.Ş.</a>
+<span class="text-slate-300 dark:text-slate-600 px-1">•</span>
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Video Görüşme</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                            Olumsuz
+                                        </span>
+<div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+<div class="w-5 h-5 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Kullanıcı: Ahmet Yılmaz" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDG1NEDTG_yZkL2crrzHboEoXayO6ju77yRKHStk1HPMPtSFrUcBCvBPcutwKGVGBwFrGma8NDybUMAZxb_mle7bsEBCv43r5ekht-Xv7J3N-fY1mwnU8-_Awd84X8O_If7CLhhkbXGsO7eryuJ2FG2cMoKUtAhmw4Z3rlhh35oSqJA2Q22lsoNKMUdmqgeeeSJahurhBGGAoVhCyi_4VDUn69uFp0hKxWnkG4-gep5LdRX1Ii4B88UchlcaZc4z3yjf5VSFnFj1CA')"></div>
+                                            Ahmet Y.
+                                        </div>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                    Fiyatlarımızı yüksek buldular. Rakip firmanın %15 daha düşük teklif verdiğini ilettiler. Kar marjımız kurtarmadığı için revize teklif verilmedi, dosya kapatıldı.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

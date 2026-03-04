@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nakliye CRM Giriş Ekranı</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;family=Karla:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Karla", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .bg-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="font-body bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col bg-pattern">
+<!-- Top Navigation Area (Simplified for Login) -->
+<header class="w-full flex items-center justify-between px-8 py-6 bg-white dark:bg-slate-800 shadow-sm z-10 border-b border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="text-primary w-8 h-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">local_shipping</span>
+</div>
+<h1 class="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">Nakliye CRM</h1>
+</div>
+<div class="flex items-center gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Destek</a>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex items-center justify-center p-6 w-full">
+<div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+<!-- Login Header -->
+<div class="px-8 pt-10 pb-6 text-center">
+<h2 class="font-display text-3xl font-bold text-slate-900 dark:text-white mb-2">Giriş Yap</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Nakliye CRM'e hoş geldiniz, hesabınıza erişmek için bilgilerinizi girin.</p>
+</div>
+<!-- Login Form -->
+<div class="px-8 pb-10">
+<form class="flex flex-col gap-5">
+<!-- Email Input -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="email">E-posta</label>
+<input class="w-full h-12 px-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="email" placeholder="ornek@sirket.com" required="" type="email"/>
+</div>
+<!-- Password Input -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="password">Şifre</label>
+<div class="relative flex items-center">
+<input class="w-full h-12 pl-4 pr-12 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="password" placeholder="Şifrenizi girin" required="" type="password"/>
+<button aria-label="Şifreyi Göster" class="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me & Forgot Password -->
+<div class="flex items-center justify-between mt-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-900" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">Beni Hatırla</span>
+</label>
+<a class="text-sm font-medium text-primary hover:text-primary/80 transition-colors" href="#">Şifremi Unuttum?</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-12 mt-4 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-slate-800 transition-all font-display text-base shadow-sm flex items-center justify-center gap-2" type="submit">
+<span>Giriş Yap</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="mt-8 flex items-center justify-center space-x-4">
+<span class="h-px w-1/4 bg-slate-200 dark:bg-slate-700"></span>
+<span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Yardımcı Linkler</span>
+<span class="h-px w-1/4 bg-slate-200 dark:bg-slate-700"></span>
+</div>
+<!-- Footer Links -->
+<div class="mt-6 text-center">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                        Sisteme giriş yapamıyor musunuz? <a class="text-primary hover:underline font-medium" href="#">BT Destek</a> ile iletişime geçin.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="py-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        © 2024 Nakliye A.Ş. Tüm hakları saklıdır.
+    </footer>
+</body></html>
