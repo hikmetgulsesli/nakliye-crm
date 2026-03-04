@@ -1,120 +1,134 @@
 {
-  "projectId": "5568060153664014349",
-  "projectName": "nakliye-crm",
+  "project": "nakliye-crm",
   "designSystem": {
     "aesthetic": "industrial",
     "palette": "saas",
-    "heading_font": "Manrope",
-    "body_font": "Karla",
-    "icon_library": "lucide-react"
+    "headingFont": "Manrope",
+    "bodyFont": "Karla",
+    "iconLibrary": "lucide-react"
   },
   "screens": [
     {
-      "screenId": "3e697f14c0724a6ab75c8dce1d594521",
-      "storyId": "login",
-      "title": "Nakliye CRM Giriş Ekranı",
+      "id": "login",
+      "title": "Giriş Yap",
+      "description": "Kullanıcı giriş sayfası",
       "htmlFile": "login.html",
-      "description": "User authentication page with email/password fields"
+      "screenshotFile": "login.png",
+      "module": "Auth"
     },
     {
-      "screenId": "07112fe46961441ca5541d20211ee62d",
-      "storyId": "user-dashboard",
+      "id": "user-dashboard",
       "title": "Satış Temsilcisi Paneli",
+      "description": "Kullanıcı dashboard - kişisel metrikler ve widgetlar",
       "htmlFile": "user-dashboard.html",
-      "description": "Personal dashboard for sales representatives with metrics and widgets"
+      "screenshotFile": "user-dashboard.png",
+      "module": "Dashboard"
     },
     {
-      "screenId": "35d96ad3ea1441d5a9c80e8ab85fa698",
-      "storyId": "admin-dashboard",
-      "title": "Nakliye CRM Yönetici Paneli",
+      "id": "admin-dashboard",
+      "title": "Yönetici Paneli",
+      "description": "Admin dashboard - genel metrikler, personel performans, ülke/mod dağılımları",
       "htmlFile": "admin-dashboard.html",
-      "description": "Executive dashboard with KPIs, performance tables and analytics"
+      "screenshotFile": "admin-dashboard.png",
+      "module": "Dashboard"
     },
     {
-      "screenId": "6b2ecd6b8be14b57bcac650f1293c5cf",
-      "storyId": "customer-list",
-      "title": "Nakliye CRM Müşteri Listesi",
+      "id": "customer-list",
+      "title": "Müşteri Listesi",
+      "description": "Müşteri listesi - arama, filtreleme, sayfalama",
       "htmlFile": "customer-list.html",
-      "description": "Customer data table with search and filters"
+      "screenshotFile": "customer-list.png",
+      "module": "Müşteri Kartı"
     },
     {
-      "screenId": "04f0122837424d86970e8c67b067a242",
-      "storyId": "customer-form",
-      "title": "Müşteri Ekleme Formu",
+      "id": "customer-form",
+      "title": "Müşteri Formu",
+      "description": "Yeni müşteri ekleme / düzenleme formu",
       "htmlFile": "customer-form.html",
-      "description": "Customer add/edit form with duplicate detection"
+      "screenshotFile": "customer-form.png",
+      "module": "Müşteri Kartı"
     },
     {
-      "screenId": "57d1793e371b4b1783436bf13bde9a85",
-      "storyId": "customer-detail",
-      "title": "Müşteri Detay Sayfası",
+      "id": "customer-detail",
+      "title": "Müşteri Detay",
+      "description": "Müşteri detay sayfası - bilgiler, teklifler, aktiviteler, geçmiş sekmeleri",
       "htmlFile": "customer-detail.html",
-      "description": "Customer detail with tabs for overview, quotes, activities, history"
+      "screenshotFile": "customer-detail.png",
+      "module": "Müşteri Kartı"
     },
     {
-      "screenId": "4b49eabcf2b54b6a9f8606391416c194",
-      "storyId": "quotation-list",
-      "title": "Teklif Listesi Sayfası",
+      "id": "quotation-list",
+      "title": "Teklif Listesi",
+      "description": "Teklif listesi - arama, filtreleme, durum badge",
       "htmlFile": "quotation-list.html",
-      "description": "Quotation data table with filters and status badges"
+      "screenshotFile": "quotation-list.png",
+      "module": "Teklif Yönetimi"
     },
     {
-      "screenId": "6e5e1ae32446446a810134e85e1628aa",
-      "storyId": "quotation-form",
-      "title": "Teklif Oluşturma Formu",
+      "id": "quotation-form",
+      "title": "Teklif Formu",
+      "description": "Yeni teklif oluşturma / düzenleme formu",
       "htmlFile": "quotation-form.html",
-      "description": "Quotation create/edit form with cargo details"
+      "screenshotFile": "quotation-form.png",
+      "module": "Teklif Yönetimi"
     },
     {
-      "screenId": "4d902acef4684112b56d2d87ae5ab3e3",
-      "storyId": "quotation-detail",
-      "title": "Teklif Detay ve Revizyon Sayfası",
+      "id": "quotation-detail",
+      "title": "Teklif Detay",
+      "description": "Teklif detay sayfası - bilgiler ve revizyon geçmişi",
       "htmlFile": "quotation-detail.html",
-      "description": "Quotation detail with revision history timeline"
+      "screenshotFile": "quotation-detail.png",
+      "module": "Teklif Yönetimi"
     },
     {
-      "screenId": "9ac25dc0f8d24eaaa4944ae5a034cc4c",
-      "storyId": "activity-form",
-      "title": "Yeni Aktivite Ekleme Modalı",
-      "htmlFile": "activity-form.html",
-      "description": "Modal for adding new customer activities"
-    },
-    {
-      "screenId": "8b1dcf4c962c40bfba823fa7f86158a3",
-      "storyId": "activity-list",
-      "title": "Aktivite Listesi ve Takibi",
+      "id": "activity-list",
+      "title": "Aktivite Listesi",
+      "description": "Aktivite takip listesi - filtreleme, sonuç badge",
       "htmlFile": "activity-list.html",
-      "description": "Timeline view of all customer interactions"
+      "screenshotFile": "activity-list.png",
+      "module": "Aktivite Takibi"
     },
     {
-      "screenId": "17ea6267b2f94b308eb34898bcd7eddb",
-      "storyId": "reports",
-      "title": "Yönetici Raporları Paneli",
+      "id": "reports",
+      "title": "Raporlar",
+      "description": "Rapor seçim sayfası - 5 rapor tipi kartları, filtreler, export",
       "htmlFile": "reports.html",
-      "description": "Admin report generation with PDF/Excel export"
+      "screenshotFile": "reports.png",
+      "module": "Raporlar"
     },
     {
-      "screenId": "2ba4a337212c42ab9c21d4cd3c565782",
-      "storyId": "settings",
-      "title": "Dinamik Liste Yönetimi Sayfası",
+      "id": "settings",
+      "title": "Sistem Ayarları",
+      "description": "Admin sistem ayarları - dinamik liste yönetimi",
       "htmlFile": "settings.html",
-      "description": "Admin settings for managing dynamic lookup values"
+      "screenshotFile": "settings.png",
+      "module": "Ayarlar"
     },
     {
-      "screenId": "1ef41a85205c46a08865a5c0c2bf1b3a",
-      "storyId": "user-management",
-      "title": "Kullanıcı Yönetimi ve Veri Aktarımı Sayfası",
+      "id": "user-management",
+      "title": "Kullanıcı Yönetimi",
+      "description": "Admin kullanıcı yönetimi - kullanıcı listesi ve temsilci devri",
       "htmlFile": "user-management.html",
-      "description": "User admin and representative transfer interface"
+      "screenshotFile": "user-management.png",
+      "module": "Kullanıcı Yönetimi"
     },
     {
-      "screenId": "f1c467a480f04dcab396c36442ef822a",
-      "storyId": "audit-logs",
-      "title": "Sistem Denetim Günlükleri Sayfası",
-      "htmlFile": "audit-logs.html",
-      "description": "Admin audit log viewer with filters and export"
+      "id": "audit-log",
+      "title": "Denetim Günlükleri",
+      "description": "Sistem log görüntüleme - filtreleme, export",
+      "htmlFile": "audit-log.html",
+      "screenshotFile": "audit-log.png",
+      "module": "Log/Denetim"
+    },
+    {
+      "id": "activity-form",
+      "title": "Aktivite Formu",
+      "description": "Yeni aktivite ekleme modal/formu",
+      "htmlFile": "activity-form.html",
+      "screenshotFile": "activity-form.png",
+      "module": "Aktivite Takibi"
     }
   ],
-  "generatedAt": "2026-03-04T07:27:00Z",
+  "generatedAt": "2026-03-04T07:57:00Z",
   "totalScreens": 15
 }

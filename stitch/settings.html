@@ -3,262 +3,182 @@
 <html lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dinamik Liste Yönetimi Sayfası</title>
+<title>Sistem Ayarları ve Liste Yönetimi - Nakliye CRM</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Karla:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#137fec",
-              "background-light": "#f6f7f8",
-              "background-dark": "#101922",
-              "slate-50": "#f8fafc",
-              "slate-100": "#f1f5f9",
-              "slate-200": "#e2e8f0",
-              "slate-300": "#cbd5e1",
-              "slate-400": "#94a3b8",
-              "slate-500": "#64748b",
-              "slate-600": "#475569",
-              "slate-700": "#334155",
-              "slate-800": "#1e293b",
-              "slate-900": "#0f172a",
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e3fae",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121520",
+                        "slate-900": "#0f111a",
+                        "slate-100": "#f8f9fb",
+                        "slate-500": "#536293",
+                        "slate-200": "#e8eaf2",
+                        "slate-300": "#d1d6e5"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Karla", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
             },
-            fontFamily: {
-              "display": ["Manrope", "sans-serif"],
-              "body": ["Karla", "sans-serif"]
-            },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-          },
-        },
-      }
+        }
     </script>
 <style>
         body { font-family: 'Karla', sans-serif; }
         h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-body overflow-x-hidden">
-<!-- TopNavBar -->
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 py-3 bg-white dark:bg-slate-900 sticky top-0 z-50 shadow-sm">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-3 text-slate-900 dark:text-slate-100">
-<div class="text-primary material-symbols-outlined text-2xl">local_shipping</div>
-<h2 class="text-lg font-display font-bold leading-tight tracking-tight">Nakliye CRM</h2>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 relative h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-slate-200 dark:border-b-slate-700 px-10 py-3 bg-white dark:bg-slate-800">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<div class="size-6 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
 </div>
-<nav class="hidden md:flex items-center gap-6">
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Dashboard</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Müşteriler</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Teklifler</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Operasyonlar</a>
-<a class="text-primary dark:text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" href="#">Ayarlar</a>
-</nav>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] font-display">Nakliye CRM</h2>
 </div>
-<div class="flex flex-1 justify-end gap-6 items-center">
-<label class="hidden lg:flex flex-col min-w-40 h-10 max-w-64">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all">
-<div class="text-slate-500 flex border-none items-center justify-center pl-3 rounded-l-lg border-r-0 material-symbols-outlined text-lg">search</div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 px-3 rounded-l-none border-l-0 text-sm font-normal leading-normal" placeholder="Arama..." value=""/>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-primary text-sm font-semibold leading-normal font-display border-b-2 border-primary pb-1" href="#">Sistem Ayarları</a>
 </div>
-</label>
-<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-xl">notifications</button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-9 w-9 border border-slate-200 dark:border-slate-700 shadow-sm" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB6Uhyff7Iax-e7G7v6NK2VjJJE4hamo6xYm_Diqa_nyVnpT8zGBy0ish6OX-qknYWUWLlB6tH7PBBQVoElnNHxGY6f8gk9DiLm-YGyzZxtAL-ebuVeTqYFXlIaAt8IHz8rl568C4HJ3y2h0kcnPz6zoirchKrn2h5M9AEoC9fbXs2kQNuw9hQM69fvfPIugHEfGwWBdQGk-8ak1Z0HUexDbD-2eidUrxZ9Jy78K3KvETKA_6YWv8KvAjDVTN7csLK6YDdAP2YnTDA");'></div>
+<div class="flex gap-2 items-center">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors hover:bg-primary/90">
+<span class="truncate">Çıkış Yap</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+<span class="truncate">Profil</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-300 dark:border-slate-600 ml-2" data-alt="Admin User Avatar Placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAu6ZbwrwH1TfYXdiYEYA4C1zh1Z7mz2MFkDDreOaS_TLa2C-WtjGyDJu-XRFBvs8Xs-1MQPGugnFEZUJg1kZkdMwus3koAc375nadodZ7hP4-TJOMYsaoLvoBN6zYKpKOXa9ehHjQmWO-YPMmi2vI-GhPEhPKd6T8SUd7hvYU1xXiBmignV3hhR36dKASsmTZC5aD6Nc3-czk8AnNsZgkIaYzfQDVf9xNH5zeeKhilmQxkxewt9UulMuzmdnnqnSCN05ImCJaSecI");'></div>
+</div>
 </div>
 </header>
-<!-- Main Layout Container -->
-<div class="flex flex-1 max-w-[1440px] mx-auto w-full w-full">
-<!-- Secondary Sidebar -->
-<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hidden md:flex flex-col overflow-y-auto min-h-[calc(100vh-65px)]">
-<div class="p-5 flex flex-col gap-1 border-b border-slate-100 dark:border-slate-800">
-<h1 class="font-display text-lg font-bold text-slate-900 dark:text-slate-100">Dinamik Listeler</h1>
-<p class="text-sm text-slate-500 dark:text-slate-400">CRM Veri Tanımları</p>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hidden md:block overflow-y-auto">
+<div class="p-6">
+<div class="flex gap-3 items-center mb-8">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 shadow-sm" data-alt="Admin User Avatar Placeholder Large" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmatffYBGMnJTulkzXj8q8lIJlB-9ZCpudI9d3Ta7GgqStLvGCxBm6IUUZ_oJn_keXsmqekHLsGYK2G2u1NFHzIKyHCeDEtVRCAjCl8DMTTSnJMPgIgEktcxRz20bgHgIYL6IFVG48KBReJJmxPzsrJGPAVhWMDGWaTf5jX--uD0itNsI2OVaU3FqExhN1cykTb7JKUMkajzlNgZpAqvRFpyj6SH24oocMnvSmflI_KX_Lh38r3yE-nEk5h94u9WX2uydnN8NmNaI");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal font-display">Admin</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Sistem Yöneticisi</p>
 </div>
-<nav class="flex-1 py-4 px-3 flex flex-col gap-1">
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">inventory_2</span>
-<span class="text-sm font-medium">Taşıma Modu</span>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">tune</span>
+<p class="text-sm font-semibold leading-normal">Genel Ayarlar</p>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">rv_hookup</span>
-<span class="text-sm font-medium">Servis Tipi</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-400" href="#">
+<span class="material-symbols-outlined text-xl">list_alt</span>
+<p class="text-sm font-bold leading-normal">Liste Yönetimi</p>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">language</span>
-<span class="text-sm font-medium">Satış Şekli</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">group</span>
+<p class="text-sm font-semibold leading-normal">Kullanıcı Yönetimi</p>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">group</span>
-<span class="text-sm font-medium">Müşteri Kaynağı</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">account_circle</span>
-<span class="text-sm font-medium">Müşteri Durumu</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">star</span>
-<span class="text-sm font-medium">Potansiyel</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">description</span>
-<span class="text-sm font-medium">Teklif Sonucu</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary font-bold transition-colors group relative" href="#">
-<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full"></div>
-<span class="material-symbols-outlined text-primary text-xl">cancel</span>
-<span class="text-sm">Kaybedilme Nedeni</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">payments</span>
-<span class="text-sm font-medium">Para Birimi</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">sailing</span>
-<span class="text-sm font-medium">Liman/Şehir</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined text-slate-400 group-hover:text-primary text-xl">location_on</span>
-<span class="text-sm font-medium">Ülke</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-semibold leading-normal">Log Görüntüleme</p>
 </a>
 </nav>
+</div>
 </aside>
-<!-- Main Content Area -->
-<main class="flex-1 p-6 lg:p-10 flex flex-col gap-6 relative">
-<!-- Content Header -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
-<div>
-<h2 class="font-display text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Kaybedilme Nedeni</h2>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Bu liste tekliflerin neden kaybedildiğini seçmek için kullanılır.</p>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-6 lg:p-10 relative">
+<div class="max-w-5xl mx-auto">
+<div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+<div class="flex flex-col gap-2">
+<h2 class="text-slate-900 dark:text-slate-100 text-3xl font-extrabold leading-tight font-display tracking-tight">Liste Yönetimi</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base font-medium leading-normal">Sistemdeki arama ve açılır liste değerlerini yönetin</p>
 </div>
-<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal shadow-sm hover:bg-primary/90 transition-colors">
 <span class="material-symbols-outlined text-lg">add</span>
-                    Yeni Değer Ekle
-                </button>
+<span>Yeni Liste Ekle</span>
+</button>
 </div>
-<!-- Table Section -->
-<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
-<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-12"></th>
-<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Değer Adı</th>
-<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-24">Sıralama</th>
-<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-32">Durum</th>
-<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right w-32">İşlemler</th>
+<tr class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700">
+<th class="px-6 py-4 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider w-[400px]">Liste Adı</th>
+<th class="px-6 py-4 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider w-40">Değer Sayısı</th>
+<th class="px-6 py-4 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider text-right">İşlemler</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
-<!-- Row 1 -->
-<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-<td class="px-6 py-4 text-slate-400 cursor-move">
-<span class="material-symbols-outlined text-lg opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
-</td>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold">Taşıma Modu</td>
 <td class="px-6 py-4">
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Yüksek Fiyat</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 py-1 px-2.5 rounded-md font-mono">1</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                        Aktif
-                                    </span>
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold min-w-[2rem]">4</span>
 </td>
 <td class="px-6 py-4 text-right">
 <div class="flex justify-end gap-2">
-<button class="p-1.5 text-slate-400 hover:text-primary rounded-md hover:bg-primary/10 transition-colors" title="Düzenle">
-<span class="material-symbols-outlined text-[20px]">edit</span>
-</button>
-<button class="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Devre Dışı Bırak">
-<span class="material-symbols-outlined text-[20px]">block</span>
-</button>
+<button class="p-1.5 text-slate-500 hover:text-primary dark:hover:text-blue-400 rounded-md hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
 </div>
 </td>
 </tr>
-<!-- Row 2 -->
-<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-<td class="px-6 py-4 text-slate-400 cursor-move">
-<span class="material-symbols-outlined text-lg opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
-</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold">Servis Tipi</td>
 <td class="px-6 py-4">
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Geç Teslimat</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 py-1 px-2.5 rounded-md font-mono">2</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                        Aktif
-                                    </span>
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold min-w-[2rem]">6</span>
 </td>
 <td class="px-6 py-4 text-right">
 <div class="flex justify-end gap-2">
-<button class="p-1.5 text-slate-400 hover:text-primary rounded-md hover:bg-primary/10 transition-colors" title="Düzenle">
-<span class="material-symbols-outlined text-[20px]">edit</span>
-</button>
-<button class="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Devre Dışı Bırak">
-<span class="material-symbols-outlined text-[20px]">block</span>
-</button>
+<button class="p-1.5 text-slate-500 hover:text-primary dark:hover:text-blue-400 rounded-md hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
 </div>
 </td>
 </tr>
-<!-- Row 3 -->
-<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-<td class="px-6 py-4 text-slate-400 cursor-move">
-<span class="material-symbols-outlined text-lg opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
-</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors bg-primary/5 dark:bg-primary/10">
+<td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold">Satış Şekli</td>
 <td class="px-6 py-4">
-<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Rakip Tercihi</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 py-1 px-2.5 rounded-md font-mono">3</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                        Aktif
-                                    </span>
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-primary text-white text-xs font-bold min-w-[2rem]">8</span>
 </td>
 <td class="px-6 py-4 text-right">
 <div class="flex justify-end gap-2">
-<button class="p-1.5 text-slate-400 hover:text-primary rounded-md hover:bg-primary/10 transition-colors" title="Düzenle">
-<span class="material-symbols-outlined text-[20px]">edit</span>
-</button>
-<button class="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Devre Dışı Bırak">
-<span class="material-symbols-outlined text-[20px]">block</span>
-</button>
+<button class="p-1.5 text-primary rounded-md bg-primary/10 transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
 </div>
 </td>
 </tr>
-<!-- Row 4 (Inactive) -->
-<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group bg-slate-50/30 dark:bg-slate-800/10">
-<td class="px-6 py-4 text-slate-400 cursor-move">
-<span class="material-symbols-outlined text-lg opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
-</td>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold">Müşteri Kaynağı</td>
 <td class="px-6 py-4">
-<span class="text-sm font-semibold text-slate-500 dark:text-slate-500">Eksik Hizmet</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm text-slate-400 dark:text-slate-500 bg-slate-100/50 dark:bg-slate-800/50 py-1 px-2.5 rounded-md font-mono">4</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                                        Pasif
-                                    </span>
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold min-w-[2rem]">6</span>
 </td>
 <td class="px-6 py-4 text-right">
 <div class="flex justify-end gap-2">
-<button class="p-1.5 text-slate-400 hover:text-primary rounded-md hover:bg-primary/10 transition-colors" title="Düzenle">
-<span class="material-symbols-outlined text-[20px]">edit</span>
-</button>
-<button class="p-1.5 text-slate-400 hover:text-green-500 rounded-md hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Aktifleştir">
-<span class="material-symbols-outlined text-[20px]">check_circle</span>
-</button>
+<button class="p-1.5 text-slate-500 hover:text-primary dark:hover:text-blue-400 rounded-md hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold">Ülke</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold min-w-[2rem]">50+</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 text-slate-500 hover:text-primary dark:hover:text-blue-400 rounded-md hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
 </div>
 </td>
 </tr>
@@ -266,60 +186,44 @@
 </table>
 </div>
 </div>
-<!-- Modal Overlay (Visual representation) -->
-<div class="absolute inset-0 bg-slate-900/40 dark:bg-slate-900/60 backdrop-blur-sm z-40 flex items-center justify-center p-4">
-<!-- Değer Düzenle Modal -->
-<div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full max-w-md flex flex-col overflow-hidden relative top-10">
-<!-- Modal Header -->
-<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-<h3 class="font-display text-lg font-bold text-slate-900 dark:text-slate-100">Değer Düzenle</h3>
+</div>
+<!-- Modal Overlay -->
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-md border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold font-display">Liste Değeri Düzenle</h3>
 <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
-<!-- Modal Body -->
 <div class="p-6 flex flex-col gap-5">
-<!-- Warning Alert -->
-<div class="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg p-4 text-amber-800 dark:text-amber-200">
-<span class="material-symbols-outlined text-amber-500 dark:text-amber-400 shrink-0 mt-0.5">warning</span>
-<div>
-<h4 class="text-sm font-bold mb-1">Dikkat</h4>
-<p class="text-xs font-medium opacity-90">Bu değişiklik mevcut 245 teklif kaydını etkileyecektir. Listelerde eski isim yerine yeni isim görünecektir.</p>
+<div class="bg-primary/5 dark:bg-primary/10 rounded-lg p-3 border border-primary/20 dark:border-primary/30 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300"><span class="font-bold text-slate-900 dark:text-white">Satış Şekli</span> listesi için değer düzenliyorsunuz.</p>
 </div>
-</div>
-<!-- Form Fields -->
-<div class="flex flex-col gap-4">
 <div class="flex flex-col gap-1.5">
-<label class="text-sm font-bold text-slate-700 dark:text-slate-300" for="valueName">Değer Adı</label>
-<input class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-sm" id="valueName" type="text" value="Yüksek Fiyat"/>
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Değer Adı</label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary shadow-sm" type="text" value="EXW (Ex Works)"/>
 </div>
-<div class="flex gap-4">
-<div class="flex flex-col gap-1.5 w-1/3">
-<label class="text-sm font-bold text-slate-700 dark:text-slate-300" for="sortOrder">Sıralama</label>
-<input class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-sm font-mono text-center" id="sortOrder" type="number" value="1"/>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Sıralama</label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary shadow-sm" type="number" value="10"/>
 </div>
-<div class="flex flex-col gap-1.5 flex-1">
-<label class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5">Durum</label>
-<label class="relative inline-flex items-center cursor-pointer h-[42px] mt-0.5 w-max">
-<input checked="" class="sr-only peer" type="checkbox" value=""/>
-<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[11px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
-<span class="ml-3 text-sm font-semibold text-slate-700 dark:text-slate-300 peer-checked:text-primary">Aktif</span>
-</label>
+<div class="flex items-center justify-between mt-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 cursor-pointer select-none">Durum (Aktif)</label>
+<!-- Toggle Switch -->
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 bg-primary" role="switch" type="button">
+<span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
 </div>
 </div>
-</div>
-</div>
-<!-- Modal Footer -->
-<div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-end gap-3">
-<button class="px-4 py-2.5 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                            İptal
-                        </button>
-<button class="px-4 py-2.5 rounded-lg text-sm font-bold bg-primary hover:bg-primary/90 text-white shadow-sm transition-colors">
-                            Kaydet
-                        </button>
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-3 bg-slate-50 dark:bg-slate-900/50">
+<button class="px-4 py-2 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">İptal</button>
+<button class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">Kaydet</button>
 </div>
 </div>
 </div>
 </main>
+</div>
 </div>
 </body></html>
