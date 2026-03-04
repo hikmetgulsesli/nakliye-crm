@@ -1,0 +1,120 @@
+{
+  "projectId": "5568060153664014349",
+  "projectName": "nakliye-crm",
+  "designSystem": {
+    "aesthetic": "industrial",
+    "palette": "saas",
+    "heading_font": "Manrope",
+    "body_font": "Karla",
+    "icon_library": "lucide-react"
+  },
+  "screens": [
+    {
+      "screenId": "3e697f14c0724a6ab75c8dce1d594521",
+      "storyId": "login",
+      "title": "Nakliye CRM Giriş Ekranı",
+      "htmlFile": "login.html",
+      "description": "User authentication page with email/password fields"
+    },
+    {
+      "screenId": "07112fe46961441ca5541d20211ee62d",
+      "storyId": "user-dashboard",
+      "title": "Satış Temsilcisi Paneli",
+      "htmlFile": "user-dashboard.html",
+      "description": "Personal dashboard for sales representatives with metrics and widgets"
+    },
+    {
+      "screenId": "35d96ad3ea1441d5a9c80e8ab85fa698",
+      "storyId": "admin-dashboard",
+      "title": "Nakliye CRM Yönetici Paneli",
+      "htmlFile": "admin-dashboard.html",
+      "description": "Executive dashboard with KPIs, performance tables and analytics"
+    },
+    {
+      "screenId": "6b2ecd6b8be14b57bcac650f1293c5cf",
+      "storyId": "customer-list",
+      "title": "Nakliye CRM Müşteri Listesi",
+      "htmlFile": "customer-list.html",
+      "description": "Customer data table with search and filters"
+    },
+    {
+      "screenId": "04f0122837424d86970e8c67b067a242",
+      "storyId": "customer-form",
+      "title": "Müşteri Ekleme Formu",
+      "htmlFile": "customer-form.html",
+      "description": "Customer add/edit form with duplicate detection"
+    },
+    {
+      "screenId": "57d1793e371b4b1783436bf13bde9a85",
+      "storyId": "customer-detail",
+      "title": "Müşteri Detay Sayfası",
+      "htmlFile": "customer-detail.html",
+      "description": "Customer detail with tabs for overview, quotes, activities, history"
+    },
+    {
+      "screenId": "4b49eabcf2b54b6a9f8606391416c194",
+      "storyId": "quotation-list",
+      "title": "Teklif Listesi Sayfası",
+      "htmlFile": "quotation-list.html",
+      "description": "Quotation data table with filters and status badges"
+    },
+    {
+      "screenId": "6e5e1ae32446446a810134e85e1628aa",
+      "storyId": "quotation-form",
+      "title": "Teklif Oluşturma Formu",
+      "htmlFile": "quotation-form.html",
+      "description": "Quotation create/edit form with cargo details"
+    },
+    {
+      "screenId": "4d902acef4684112b56d2d87ae5ab3e3",
+      "storyId": "quotation-detail",
+      "title": "Teklif Detay ve Revizyon Sayfası",
+      "htmlFile": "quotation-detail.html",
+      "description": "Quotation detail with revision history timeline"
+    },
+    {
+      "screenId": "9ac25dc0f8d24eaaa4944ae5a034cc4c",
+      "storyId": "activity-form",
+      "title": "Yeni Aktivite Ekleme Modalı",
+      "htmlFile": "activity-form.html",
+      "description": "Modal for adding new customer activities"
+    },
+    {
+      "screenId": "8b1dcf4c962c40bfba823fa7f86158a3",
+      "storyId": "activity-list",
+      "title": "Aktivite Listesi ve Takibi",
+      "htmlFile": "activity-list.html",
+      "description": "Timeline view of all customer interactions"
+    },
+    {
+      "screenId": "17ea6267b2f94b308eb34898bcd7eddb",
+      "storyId": "reports",
+      "title": "Yönetici Raporları Paneli",
+      "htmlFile": "reports.html",
+      "description": "Admin report generation with PDF/Excel export"
+    },
+    {
+      "screenId": "2ba4a337212c42ab9c21d4cd3c565782",
+      "storyId": "settings",
+      "title": "Dinamik Liste Yönetimi Sayfası",
+      "htmlFile": "settings.html",
+      "description": "Admin settings for managing dynamic lookup values"
+    },
+    {
+      "screenId": "1ef41a85205c46a08865a5c0c2bf1b3a",
+      "storyId": "user-management",
+      "title": "Kullanıcı Yönetimi ve Veri Aktarımı Sayfası",
+      "htmlFile": "user-management.html",
+      "description": "User admin and representative transfer interface"
+    },
+    {
+      "screenId": "f1c467a480f04dcab396c36442ef822a",
+      "storyId": "audit-logs",
+      "title": "Sistem Denetim Günlükleri Sayfası",
+      "htmlFile": "audit-logs.html",
+      "description": "Admin audit log viewer with filters and export"
+    }
+  ],
+  "generatedAt": "2026-03-04T07:27:00Z",
+  "totalScreens": 15
+}
