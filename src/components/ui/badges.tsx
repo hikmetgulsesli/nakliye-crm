@@ -1,96 +1,97 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import type { CustomerStatus, Potential } from '@/types/index.js';
 
-const statusBadgeVariants = cva(
-  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-  {
-    variants: {
-      status: {
-        Aktif: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-        active: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-        Pasif: "bg-slate-50 text-slate-700 ring-1 ring-slate-600/20",
-        inactive: "bg-slate-50 text-slate-700 ring-1 ring-slate-600/20",
-        Soguk: "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20",
-        cold: "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20",
-      },
-    },
-    defaultVariants: {
-      status: "active",
-    },
-  }
-);
-
-interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  status: "Aktif" | "Pasif" | "Soguk" | "active" | "inactive" | "cold" | string;
+interface StatusBadgeProps {
+  status: CustomerStatus;
+  className?: string;
 }
 
-export function StatusBadge({ status, className, ...props }: StatusBadgeProps) {
-  const statusMap: Record<string, string> = {
-    Aktif: "Aktif",
-    active: "Aktif",
-    Pasif: "Pasif",
-    inactive: "Pasif",
-    Soguk: "Soğuk",
-    cold: "Soğuk",
-  };
+const statusStyles: Record<CustomerStatus, string> = {
+  Aktif: 'bg-green-100 text-green-800',
+  Pasif: 'bg-gray-100 text-gray-800',
+  Soguk: 'bg-blue-100 text-blue-800',
+};
 
+export function StatusBadge({ status, className }: StatusBadgeProps) {
   return (
     <span
-      className={cn(statusBadgeVariants({ status: status as "Aktif" | "active" | "Pasif" | "inactive" | "Soguk" | "cold" }), className)}
-      {...props}
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        statusStyles[status],
+        className
+      )}
     >
-      {statusMap[status] || status}
+      {status}
     </span>
   );
 }
 
-const potentialBadgeVariants = cva(
-  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-  {
-    variants: {
-      potential: {
-        Yuksek: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-        high: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-        Orta: "bg-sky-50 text-sky-700 ring-1 ring-sky-600/20",
-        medium: "bg-sky-50 text-sky-700 ring-1 ring-sky-600/20",
-        Dusuk: "bg-neutral-50 text-neutral-700 ring-1 ring-neutral-600/20",
-        low: "bg-neutral-50 text-neutral-700 ring-1 ring-neutral-600/20",
-      },
-    },
-    defaultVariants: {
-      potential: "medium",
-    },
-  }
-);
-
-interface PotentialBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  potential: "Yuksek" | "Orta" | "Dusuk" | "high" | "medium" | "low" | string | null;
+interface PotentialBadgeProps {
+  potential: Potential;
+  className?: string;
 }
 
-export function PotentialBadge({ potential, className, ...props }: PotentialBadgeProps) {
-  if (!potential) return <span className="text-muted-foreground">-</span>;
+const potentialStyles: Record<Potential, string> = {
+  Dusuk: 'bg-red-100 text-red-800',
+  Orta: 'bg-yellow-100 text-yellow-800',
+  Yuksek: 'bg-green-100 text-green-800',
+};
 
-  const potentialMap: Record<string, string> = {
-    Yuksek: "Yüksek",
-    high: "Yüksek",
-    Orta: "Orta",
-    medium: "Orta",
-    Dusuk: "Düşük",
-    low: "Düşük",
-  };
-
+export function PotentialBadge({ potential, className }: PotentialBadgeProps) {
   return (
     <span
       className={cn(
-        potentialBadgeVariants({
-          potential: potential as "Yuksek" | "high" | "Orta" | "medium" | "Dusuk" | "low",
-        }),
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        potentialStyles[potential],
         className
       )}
-      {...props}
     >
-      {potentialMap[potential] || potential}
+      {potential}
+    </span>
+  );
+}
+
+interface ActivityTypeBadgeProps {
+  type: string;
+  className?: string;
+}
+
+export function ActivityTypeBadge({ type, className }: ActivityTypeBadgeProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800',
+        className
+      )}
+    >
+      {type}
+    </span>
+  );
+}
+
+interface OutcomeBadgeProps {
+  outcome: string;
+  className?: string;
+}
+
+const outcomeStyles: Record<string, string> = {
+  Olumlu: 'bg-green-100 text-green-800',
+  Notr: 'bg-gray-100 text-gray-800',
+  Olumsuz: 'bg-red-100 text-red-800',
+  'Teklif Istendi': 'bg-blue-100 text-blue-800',
+};
+
+export function OutcomeBadge({ outcome, className }: OutcomeBadgeProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        outcomeStyles[outcome] || 'bg-gray-100 text-gray-800',
+        className
+      )}
+    >
+      {outcome}
     </span>
   );
 }
