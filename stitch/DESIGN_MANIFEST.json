@@ -1,0 +1,441 @@
+{
+  "projectId": "5082355446741681883",
+  "projectName": "nakliye-crm",
+  "generatedAt": "2026-03-05T21:39:00+03:00",
+  "designSystem": {
+    "aesthetic": "corporate",
+    "palette": "saas",
+    "headingFont": "Plus Jakarta Sans",
+    "bodyFont": "Work Sans",
+    "iconLibrary": "lucide-react"
+  },
+  "totalScreens": 47,
+  "deviceType": "DESKTOP",
+  "screens": [
+    {
+      "id": "66d6f7831fcc47ca80102f5449f055b8",
+      "title": "Nakliye CRM Customer Form - Variant 1",
+      "category": "customers",
+      "type": "form",
+      "htmlFile": "66d6f7831fcc47ca80102f5449f055b8_customer-form-variant-1.html",
+      "pngFile": "66d6f7831fcc47ca80102f5449f055b8_customer-form-variant-1.png"
+    },
+    {
+      "id": "d6924bc516984b5da21edb8bcbd07fa1",
+      "title": "Nakliye CRM Customer Form - Variant 1 Extended",
+      "category": "customers",
+      "type": "form",
+      "htmlFile": "d6924bc516984b5da21edb8bcbd07fa1_customer-form-variant-1-extended.html",
+      "pngFile": "d6924bc516984b5da21edb8bcbd07fa1_customer-form-variant-1-extended.png"
+    },
+    {
+      "id": "9bf7145631e5414fbb6ff990e1a103e2",
+      "title": "Nakliye CRM Quotation Form - Variant 2",
+      "category": "quotations",
+      "type": "form",
+      "htmlFile": "9bf7145631e5414fbb6ff990e1a103e2_quotation-form-variant-2.html",
+      "pngFile": "9bf7145631e5414fbb6ff990e1a103e2_quotation-form-variant-2.png"
+    },
+    {
+      "id": "e0e3703d44514fc9bcf526f2d5c943ea",
+      "title": "Nakliye CRM Login - Variant 2",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "e0e3703d44514fc9bcf526f2d5c943ea_login-variant-2.html",
+      "pngFile": "e0e3703d44514fc9bcf526f2d5c943ea_login-variant-2.png"
+    },
+    {
+      "id": "feb5434d4fd640f7b570df30c79726e0",
+      "title": "Sales Rep Dashboard - Variant 1",
+      "category": "dashboard",
+      "type": "dashboard-user",
+      "htmlFile": "feb5434d4fd640f7b570df30c79726e0_sales-rep-dashboard-variant-1.html",
+      "pngFile": "feb5434d4fd640f7b570df30c79726e0_sales-rep-dashboard-variant-1.png"
+    },
+    {
+      "id": "60d8a3f7e8cd4cceab720c32fd589820",
+      "title": "Admin Dashboard - Variant 1",
+      "category": "dashboard",
+      "type": "dashboard-admin",
+      "htmlFile": "60d8a3f7e8cd4cceab720c32fd589820_admin-dashboard-variant-1.html",
+      "pngFile": "60d8a3f7e8cd4cceab720c32fd589820_admin-dashboard-variant-1.png"
+    },
+    {
+      "id": "068355c6a380436fbf1e18cd7ae220cf",
+      "title": "Logistics CRM Login Variant 1",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "068355c6a380436fbf1e18cd7ae220cf_login-variant-1.html",
+      "pngFile": "068355c6a380436fbf1e18cd7ae220cf_login-variant-1.png"
+    },
+    {
+      "id": "40aff91e24874753b5747293fe702521",
+      "title": "Nakliye CRM Customer Detail - Variant 1",
+      "category": "customers",
+      "type": "detail",
+      "htmlFile": "40aff91e24874753b5747293fe702521_customer-detail-variant-1.html",
+      "pngFile": "40aff91e24874753b5747293fe702521_customer-detail-variant-1.png"
+    },
+    {
+      "id": "321d4d18153f4299af0ddab70811ffce",
+      "title": "Quotation Detail - Variant 1",
+      "category": "quotations",
+      "type": "detail",
+      "htmlFile": "321d4d18153f4299af0ddab70811ffce_quotation-detail-variant-1.html",
+      "pngFile": "321d4d18153f4299af0ddab70811ffce_quotation-detail-variant-1.png"
+    },
+    {
+      "id": "ce4d53f4a5d74fbb8a4333e3853110bd",
+      "title": "Nakliye CRM Login - Variant 1",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "ce4d53f4a5d74fbb8a4333e3853110bd_login-variant-1.html",
+      "pngFile": "ce4d53f4a5d74fbb8a4333e3853110bd_login-variant-1.png"
+    },
+    {
+      "id": "6d4ac33c824844728026e6e79d61da47",
+      "title": "Lookup Management - Variant 2",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "6d4ac33c824844728026e6e79d61da47_lookup-management-variant-2.html",
+      "pngFile": "6d4ac33c824844728026e6e79d61da47_lookup-management-variant-2.png"
+    },
+    {
+      "id": "b7ede5d950ad4580a093e5d7860b3155",
+      "title": "Nakliye CRM Quotation List - Variant 2",
+      "category": "quotations",
+      "type": "list",
+      "htmlFile": "b7ede5d950ad4580a093e5d7860b3155_quotation-list-variant-2.html",
+      "pngFile": "b7ede5d950ad4580a093e5d7860b3155_quotation-list-variant-2.png"
+    },
+    {
+      "id": "2545fa5f0f6c41a9ae4167d61785def6",
+      "title": "Nakliye CRM Customer Detail - Variant 2",
+      "category": "customers",
+      "type": "detail",
+      "htmlFile": "2545fa5f0f6c41a9ae4167d61785def6_customer-detail-variant-2.html",
+      "pngFile": "2545fa5f0f6c41a9ae4167d61785def6_customer-detail-variant-2.png"
+    },
+    {
+      "id": "bd9b5cb40c544bc7a63d14cbf6ab7021",
+      "title": "Nakliye CRM Quotation Form - Variant 2 Extended",
+      "category": "quotations",
+      "type": "form",
+      "htmlFile": "bd9b5cb40c544bc7a63d14cbf6ab7021_quotation-form-variant-2-extended.html",
+      "pngFile": "bd9b5cb40c544bc7a63d14cbf6ab7021_quotation-form-variant-2-extended.png"
+    },
+    {
+      "id": "37d3ba410ad941f7bc1841ad9a47f704",
+      "title": "Admin Dashboard - Variant 2",
+      "category": "dashboard",
+      "type": "dashboard-admin",
+      "htmlFile": "37d3ba410ad941f7bc1841ad9a47f704_admin-dashboard-variant-2.html",
+      "pngFile": "37d3ba410ad941f7bc1841ad9a47f704_admin-dashboard-variant-2.png"
+    },
+    {
+      "id": "590e408a601d413f9e3494dad94eb72b",
+      "title": "Nakliye CRM Login - Variant 1 Alt",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "590e408a601d413f9e3494dad94eb72b_login-variant-1-alt.html",
+      "pngFile": "590e408a601d413f9e3494dad94eb72b_login-variant-1-alt.png"
+    },
+    {
+      "id": "cc60f610052b4f34ae2b0d25a7cf93a6",
+      "title": "Activity Modal - Variant 2",
+      "category": "activities",
+      "type": "modal",
+      "htmlFile": "cc60f610052b4f34ae2b0d25a7cf93a6_activity-modal-variant-2.html",
+      "pngFile": "cc60f610052b4f34ae2b0d25a7cf93a6_activity-modal-variant-2.png"
+    },
+    {
+      "id": "df483d830d0c42a88f607751a3178048",
+      "title": "Nakliye CRM Customer Detail - Variant 1 Alt",
+      "category": "customers",
+      "type": "detail",
+      "htmlFile": "df483d830d0c42a88f607751a3178048_customer-detail-variant-1-alt.html",
+      "pngFile": "df483d830d0c42a88f607751a3178048_customer-detail-variant-1-alt.png"
+    },
+    {
+      "id": "b8d4e8543b8d413999d8f6a7bf12601b",
+      "title": "Nakliye CRM Customer Form - Variant 2",
+      "category": "customers",
+      "type": "form",
+      "htmlFile": "b8d4e8543b8d413999d8f6a7bf12601b_customer-form-variant-2.html",
+      "pngFile": "b8d4e8543b8d413999d8f6a7bf12601b_customer-form-variant-2.png"
+    },
+    {
+      "id": "eaefa32b7dc544f187f8a7743c17862a",
+      "title": "Nakliye CRM Reports - Variant 2",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "eaefa32b7dc544f187f8a7743c17862a_reports-variant-2.html",
+      "pngFile": "eaefa32b7dc544f187f8a7743c17862a_reports-variant-2.png"
+    },
+    {
+      "id": "728b1094975d4d73a97d7643ad176326",
+      "title": "Admin Dashboard - Variant 2 Alt",
+      "category": "dashboard",
+      "type": "dashboard-admin",
+      "htmlFile": "728b1094975d4d73a97d7643ad176326_admin-dashboard-variant-2-alt.html",
+      "pngFile": "728b1094975d4d73a97d7643ad176326_admin-dashboard-variant-2-alt.png"
+    },
+    {
+      "id": "5f064a721c7d4e539b4e81f8dc444a5f",
+      "title": "Nakliye CRM Customer List - Variant 2",
+      "category": "customers",
+      "type": "list",
+      "htmlFile": "5f064a721c7d4e539b4e81f8dc444a5f_customer-list-variant-2.html",
+      "pngFile": "5f064a721c7d4e539b4e81f8dc444a5f_customer-list-variant-2.png"
+    },
+    {
+      "id": "81aac2d1546d4bb29dff4d6ba8339d1a",
+      "title": "Nakliye CRM Quotation Form - Variant 1",
+      "category": "quotations",
+      "type": "form",
+      "htmlFile": "81aac2d1546d4bb29dff4d6ba8339d1a_quotation-form-variant-1.html",
+      "pngFile": "81aac2d1546d4bb29dff4d6ba8339d1a_quotation-form-variant-1.png"
+    },
+    {
+      "id": "bd35ae47722a4f2ebeb433512c3bf1b9",
+      "title": "Lookup Management - Variant 1",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "bd35ae47722a4f2ebeb433512c3bf1b9_lookup-management-variant-1.html",
+      "pngFile": "bd35ae47722a4f2ebeb433512c3bf1b9_lookup-management-variant-1.png"
+    },
+    {
+      "id": "98faa75484c64a03995e9a731e888abf",
+      "title": "Lookup Management - Variant 1 Alt",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "98faa75484c64a03995e9a731e888abf_lookup-management-variant-1-alt.html",
+      "pngFile": "98faa75484c64a03995e9a731e888abf_lookup-management-variant-1-alt.png"
+    },
+    {
+      "id": "b5d257c9ba0940789015353461c3fbb1",
+      "title": "Nakliye CRM Quotation List - Variant 1",
+      "category": "quotations",
+      "type": "list",
+      "htmlFile": "b5d257c9ba0940789015353461c3fbb1_quotation-list-variant-1.html",
+      "pngFile": "b5d257c9ba0940789015353461c3fbb1_quotation-list-variant-1.png"
+    },
+    {
+      "id": "ed3ec51507a14777b7a5704e4cb0beeb",
+      "title": "Lookup Management - Variant 2 Alt",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "ed3ec51507a14777b7a5704e4cb0beeb_lookup-management-variant-2-alt.html",
+      "pngFile": "ed3ec51507a14777b7a5704e4cb0beeb_lookup-management-variant-2-alt.png"
+    },
+    {
+      "id": "395293781bf34fafad9a56a23b79a9d5",
+      "title": "Sales Rep Dashboard - Variant 2",
+      "category": "dashboard",
+      "type": "dashboard-user",
+      "htmlFile": "395293781bf34fafad9a56a23b79a9d5_sales-rep-dashboard-variant-2.html",
+      "pngFile": "395293781bf34fafad9a56a23b79a9d5_sales-rep-dashboard-variant-2.png"
+    },
+    {
+      "id": "28b8d9e217d14bdfaef095abd9858b88",
+      "title": "Quotation Detail - Variant 2",
+      "category": "quotations",
+      "type": "detail",
+      "htmlFile": "28b8d9e217d14bdfaef095abd9858b88_quotation-detail-variant-2.html",
+      "pngFile": "28b8d9e217d14bdfaef095abd9858b88_quotation-detail-variant-2.png"
+    },
+    {
+      "id": "00f45c27eac949e7b14ac2e2468ba789",
+      "title": "Nakliye CRM Quotation List - Variant 1 Alt",
+      "category": "quotations",
+      "type": "list",
+      "htmlFile": "00f45c27eac949e7b14ac2e2468ba789_quotation-list-variant-1-alt.html",
+      "pngFile": "00f45c27eac949e7b14ac2e2468ba789_quotation-list-variant-1-alt.png"
+    },
+    {
+      "id": "69eabc7e9a694ec5a3153011f6a47f39",
+      "title": "Nakliye CRM Reports - Variant 1",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "69eabc7e9a694ec5a3153011f6a47f39_reports-variant-1.html",
+      "pngFile": "69eabc7e9a694ec5a3153011f6a47f39_reports-variant-1.png"
+    },
+    {
+      "id": "4e8ff58e12ad4f8d873a194b3e07ded7",
+      "title": "Nakliye CRM Customer Detail - Variant 2 Alt",
+      "category": "customers",
+      "type": "detail",
+      "htmlFile": "4e8ff58e12ad4f8d873a194b3e07ded7_customer-detail-variant-2-alt.html",
+      "pngFile": "4e8ff58e12ad4f8d873a194b3e07ded7_customer-detail-variant-2-alt.png"
+    },
+    {
+      "id": "7c6158fa3d714b52823e8a87e527572a",
+      "title": "Activity Modal - Variant 1",
+      "category": "activities",
+      "type": "modal",
+      "htmlFile": "7c6158fa3d714b52823e8a87e527572a_activity-modal-variant-1.html",
+      "pngFile": "7c6158fa3d714b52823e8a87e527572a_activity-modal-variant-1.png"
+    },
+    {
+      "id": "f25950a8fd7f44dba63db8a569fe4c8a",
+      "title": "Nakliye CRM Login - Variant 2 Alt",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "f25950a8fd7f44dba63db8a569fe4c8a_login-variant-2-alt.html",
+      "pngFile": "f25950a8fd7f44dba63db8a569fe4c8a_login-variant-2-alt.png"
+    },
+    {
+      "id": "a5566fdfc3694990bfe398c9f423e91f",
+      "title": "Lookup Management - Variant 2 Extended",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "a5566fdfc3694990bfe398c9f423e91f_lookup-management-variant-2-extended.html",
+      "pngFile": "a5566fdfc3694990bfe398c9f423e91f_lookup-management-variant-2-extended.png"
+    },
+    {
+      "id": "685037287edf443caf3c49e24a49c5e1",
+      "title": "Nakliye CRM Quotation List - Variant 2 Alt",
+      "category": "quotations",
+      "type": "list",
+      "htmlFile": "685037287edf443caf3c49e24a49c5e1_quotation-list-variant-2-alt.html",
+      "pngFile": "685037287edf443caf3c49e24a49c5e1_quotation-list-variant-2-alt.png"
+    },
+    {
+      "id": "e2b37522f30c4a16869c878c28d5f077",
+      "title": "Nakliye CRM Reports - Variant 2 Extended",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "e2b37522f30c4a16869c878c28d5f077_reports-variant-2-extended.html",
+      "pngFile": "e2b37522f30c4a16869c878c28d5f077_reports-variant-2-extended.png"
+    },
+    {
+      "id": "e6505c60a80444a8be37e25a318a6c79",
+      "title": "Nakliye CRM Reports - Variant 2 Alt",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "e6505c60a80444a8be37e25a318a6c79_reports-variant-2-alt.html",
+      "pngFile": "e6505c60a80444a8be37e25a318a6c79_reports-variant-2-alt.png"
+    },
+    {
+      "id": "786ad81831f44cc5b0ee5f35db4eede3",
+      "title": "Admin Dashboard - Variant 1 Alt",
+      "category": "dashboard",
+      "type": "dashboard-admin",
+      "htmlFile": "786ad81831f44cc5b0ee5f35db4eede3_admin-dashboard-variant-1-alt.html",
+      "pngFile": "786ad81831f44cc5b0ee5f35db4eede3_admin-dashboard-variant-1-alt.png"
+    },
+    {
+      "id": "47ef3006514a4130a59f482729ffebfb",
+      "title": "Nakliye CRM Customer Form - Variant 2 Extended",
+      "category": "customers",
+      "type": "form",
+      "htmlFile": "47ef3006514a4130a59f482729ffebfb_customer-form-variant-2-extended.html",
+      "pngFile": "47ef3006514a4130a59f482729ffebfb_customer-form-variant-2-extended.png"
+    },
+    {
+      "id": "7eafc66022034f9ea558a848421a18d7",
+      "title": "Activity Modal - Variant 1 Alt",
+      "category": "activities",
+      "type": "modal",
+      "htmlFile": "7eafc66022034f9ea558a848421a18d7_activity-modal-variant-1-alt.html",
+      "pngFile": "7eafc66022034f9ea558a848421a18d7_activity-modal-variant-1-alt.png"
+    },
+    {
+      "id": "0fbcdfdcbddf40bd8ec6b4a1b8e6b170",
+      "title": "Nakliye CRM Reports - Variant 1 Extended",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "0fbcdfdcbddf40bd8ec6b4a1b8e6b170_reports-variant-1-extended.html",
+      "pngFile": "0fbcdfdcbddf40bd8ec6b4a1b8e6b170_reports-variant-1-extended.png"
+    },
+    {
+      "id": "814ce499e804484297eef0a2ca78bf91",
+      "title": "Sales Rep Dashboard - Variant 1 Alt",
+      "category": "dashboard",
+      "type": "dashboard-user",
+      "htmlFile": "814ce499e804484297eef0a2ca78bf91_sales-rep-dashboard-variant-1-alt.html",
+      "pngFile": "814ce499e804484297eef0a2ca78bf91_sales-rep-dashboard-variant-1-alt.png"
+    },
+    {
+      "id": "4e2a3a3a6e0642bb99ce180561c9742f",
+      "title": "Sales Rep Dashboard - Variant 2 Alt",
+      "category": "dashboard",
+      "type": "dashboard-user",
+      "htmlFile": "4e2a3a3a6e0642bb99ce180561c9742f_sales-rep-dashboard-variant-2-alt.html",
+      "pngFile": "4e2a3a3a6e0642bb99ce180561c9742f_sales-rep-dashboard-variant-2-alt.png"
+    },
+    {
+      "id": "619efeabc65c4748aa7b50b3ee37c55d",
+      "title": "Nakliye CRM Customer List - Variant 2 Alt",
+      "category": "customers",
+      "type": "list",
+      "htmlFile": "619efeabc65c4748aa7b50b3ee37c55d_customer-list-variant-2-alt.html",
+      "pngFile": "619efeabc65c4748aa7b50b3ee37c55d_customer-list-variant-2-alt.png"
+    },
+    {
+      "id": "d30a8534230640b8b182c22f8cc038f9",
+      "title": "Nakliye CRM Customer List - Variant 1",
+      "category": "customers",
+      "type": "list",
+      "htmlFile": "d30a8534230640b8b182c22f8cc038f9_customer-list-variant-1.html",
+      "pngFile": "d30a8534230640b8b182c22f8cc038f9_customer-list-variant-1.png"
+    },
+    {
+      "id": "10eded0679d24d2e86b7c5cf02260a42",
+      "title": "Nakliye CRM Reports - Variant 1 Alt",
+      "category": "reports",
+      "type": "report",
+      "htmlFile": "10eded0679d24d2e86b7c5cf02260a42_reports-variant-1-alt.html",
+      "pngFile": "10eded0679d24d2e86b7c5cf02260a42_reports-variant-1-alt.png"
+    },
+    {
+      "id": "4c2011648b9b4e828509cc9280ac19ee",
+      "title": "Logistics CRM Login Variant 2",
+      "category": "auth",
+      "type": "login",
+      "htmlFile": "4c2011648b9b4e828509cc9280ac19ee_login-variant-2-alt.html",
+      "pngFile": "4c2011648b9b4e828509cc9280ac19ee_login-variant-2-alt.png"
+    },
+    {
+      "id": "928a180c7d544b8396242cf9faef1682",
+      "title": "Nakliye CRM Quotation Form - Variant 1 Extended",
+      "category": "quotations",
+      "type": "form",
+      "htmlFile": "928a180c7d544b8396242cf9faef1682_quotation-form-variant-1-extended.html",
+      "pngFile": "928a180c7d544b8396242cf9faef1682_quotation-form-variant-1-extended.png"
+    },
+    {
+      "id": "0f603dfd6ed94953bbb4d7082d33f95b",
+      "title": "Nakliye CRM Customer List - Variant 1 Alt",
+      "category": "customers",
+      "type": "list",
+      "htmlFile": "0f603dfd6ed94953bbb4d7082d33f95b_customer-list-variant-1-alt.html",
+      "pngFile": "0f603dfd6ed94953bbb4d7082d33f95b_customer-list-variant-1-alt.png"
+    },
+    {
+      "id": "92bc364c0e0c4fa4bdb8fe58576da6d9",
+      "title": "Activity Modal - Variant 2 Extended",
+      "category": "activities",
+      "type": "modal",
+      "htmlFile": "92bc364c0e0c4fa4bdb8fe58576da6d9_activity-modal-variant-2-extended.html",
+      "pngFile": "92bc364c0e0c4fa4bdb8fe58576da6d9_activity-modal-variant-2-extended.png"
+    },
+    {
+      "id": "c26611520c3040a4afed334b32235476",
+      "title": "Lookup Management - Variant 1 Extended",
+      "category": "admin",
+      "type": "list",
+      "htmlFile": "c26611520c3040a4afed334b32235476_lookup-management-variant-1-extended.html",
+      "pngFile": "c26611520c3040a4afed334b32235476_lookup-management-variant-1-extended.png"
+    }
+  ],
+  "screenCategories": {
+    "auth": { "count": 7, "screens": ["login"] },
+    "dashboard": { "count": 8, "screens": ["dashboard-user", "dashboard-admin"] },
+    "customers": { "count": 10, "screens": ["list", "form", "detail"] },
+    "quotations": { "count": 10, "screens": ["list", "form", "detail"] },
+    "activities": { "count": 4, "screens": ["modal"] },
+    "admin": { "count": 5, "screens": ["list"] },
+    "reports": { "count": 6, "screens": ["report"] }
+  }
+}
