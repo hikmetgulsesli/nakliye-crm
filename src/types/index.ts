@@ -134,3 +134,172 @@ export type LookupCategory =
   | 'currency'
   | 'country'
   | 'port';
+
+// Quotation Types
+export type QuoteStatus = 'Bekliyor' | 'Kazanildi' | 'Kaybedildi';
+export type LossReason = 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger';
+export type Currency = 'USD' | 'EUR' | 'TRY';
+
+export interface Quotation {
+  id: string;
+  quote_no: string;
+  customer_id: string;
+  quote_date: string;
+  valid_until: string | null;
+  transport_mode: TransportMode;
+  service_type: ServiceType;
+  origin_country: string;
+  destination_country: string;
+  pol: string | null; // Port of Loading
+  pod: string | null; // Port of Discharge
+  incoterm: Incoterm;
+  price: number;
+  currency: Currency;
+  price_note: string | null;
+  status: QuoteStatus;
+  loss_reason: LossReason | null;
+  assigned_user_id: string;
+  revision_count: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+export interface QuotationWithCustomer extends Quotation {
+  customer: {
+    id: string;
+    company_name: string;
+    contact_name: string;
+  };
+  assigned_user: {
+    id: string;
+    full_name: string;
+  };
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateQuotationInput {
+  customer_id: string;
+  quote_date: string;
+  valid_until?: string | null;
+  transport_mode: TransportMode;
+  service_type: ServiceType;
+  origin_country: string;
+  destination_country: string;
+  pol?: string | null;
+  pod?: string | null;
+  incoterm: Incoterm;
+  price: number;
+  currency: Currency;
+  price_note?: string | null;
+  status?: QuoteStatus;
+  loss_reason?: LossReason | null;
+  assigned_user_id: string;
+}
+
+export type UpdateQuotationInput = Partial<CreateQuotationInput>;
+
+// Quotation Revision Types
+export interface QuotationRevision {
+  id: string;
+  quotation_id: string;
+  revision_no: number;
+  changed_fields: RevisionChange[];
+  revised_by: string;
+  revised_at: string;
+}
+
+export interface RevisionChange {
+  field: string;
+  old_value: unknown;
+  new_value: unknown;
+}
+
+export interface QuotationRevisionWithUser extends QuotationRevision {
+  revised_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+// Quotation Filters
+export interface QuotationFilters {
+  status?: QuoteStatus;
+  customer_id?: string;
+  assigned_user_id?: string;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+}
+
+// Activity Types
+export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
+export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
+
+export interface Activity {
+  id: string;
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ActivityWithUser extends Activity {
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateActivityInput {
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration?: number;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date?: string;
+}
+
+export type UpdateActivityInput = Partial<CreateActivityInput>;
+
+// Audit Log Types
+export type AuditAction = 'create' | 'update' | 'delete' | 'assign' | 'force_create';
+export type AuditRecordType = 'customer' | 'quotation' | 'activity' | 'user';
+
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes: Record<string, { old: unknown; new: unknown }> | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes?: Record<string, { old: unknown; new: unknown }>;
+  metadata?: Record<string, unknown>;
+}
