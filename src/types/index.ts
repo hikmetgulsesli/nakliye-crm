@@ -134,3 +134,59 @@ export type LookupCategory =
   | 'currency'
   | 'country'
   | 'port';
+
+// Re-export quotation types
+export * from './quotations.js';
+
+// Activity Types
+export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
+export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
+
+export interface Activity {
+  id: string;
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ActivityWithUser extends Activity {
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateActivityInput {
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration?: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date?: string | null;
+}
+
+// Audit Log Types
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes: Record<string, { old: unknown; new: unknown }> | null;
+  created_at: string;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user: {
+    id: string;
+    full_name: string;
+  };
+}
