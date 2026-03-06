@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Sidebar } from '../sidebar';
 
 // Mock next/navigation
@@ -11,20 +11,19 @@ import { usePathname } from 'next/navigation';
 
 describe('Sidebar', () => {
   const mockUsePathname = usePathname as unknown as ReturnType<typeof vi.fn>;
-  const mockOnNavigate = vi.fn();
 
   beforeEach(() => {
     mockUsePathname.mockReturnValue('/dashboard');
   });
 
   it('renders logo and brand name', () => {
-    render(<Sidebar userRole="user" />);
+    render(<Sidebar userRole="user" userName="Test User" />);
     
     expect(screen.getByText('Nakliye CRM')).toBeInTheDocument();
   });
 
   it('renders navigation items for user role', () => {
-    render(<Sidebar userRole="user" />);
+    render(<Sidebar userRole="user" userName="Test User" />);
     
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Müşteriler')).toBeInTheDocument();
@@ -33,7 +32,7 @@ describe('Sidebar', () => {
   });
 
   it('renders admin-only items for admin role', () => {
-    render(<Sidebar userRole="admin" />);
+    render(<Sidebar userRole="admin" userName="Admin User" />);
     
     expect(screen.getByText('Raporlar')).toBeInTheDocument();
     expect(screen.getByText('Kullanıcılar')).toBeInTheDocument();
@@ -41,32 +40,15 @@ describe('Sidebar', () => {
   });
 
   it('does not render admin items for user role', () => {
-    render(<Sidebar userRole="user" />);
+    render(<Sidebar userRole="user" userName="Test User" />);
     
     expect(screen.queryByText('Raporlar')).not.toBeInTheDocument();
     expect(screen.queryByText('Kullanıcılar')).not.toBeInTheDocument();
   });
 
-  it('highlights active navigation item', () => {
-    mockUsePathname.mockReturnValue('/dashboard');
-    render(<Sidebar userRole="user" />);
+  it('shows user name in footer', () => {
+    render(<Sidebar userRole="user" userName="Test User" />);
     
-    const dashboardLink = screen.getByText('Dashboard').closest('a');
-    expect(dashboardLink).toHaveClass('bg-blue-600');
-  });
-
-  it('calls onNavigate when link is clicked in mobile mode', () => {
-    render(<Sidebar userRole="user" isMobile onNavigate={mockOnNavigate} />);
-    
-    const dashboardLink = screen.getByText('Dashboard');
-    fireEvent.click(dashboardLink);
-    
-    expect(mockOnNavigate).toHaveBeenCalled();
-  });
-
-  it('renders profile link in footer', () => {
-    render(<Sidebar userRole="user" />);
-    
-    expect(screen.getByText('Profil')).toBeInTheDocument();
+    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });

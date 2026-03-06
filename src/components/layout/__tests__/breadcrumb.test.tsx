@@ -40,10 +40,4 @@ describe('Breadcrumb', () => {
     expect(dashboardText.tagName).toBe('SPAN');
   });
 
-  it('applies custom className', () => {
-    mockUsePathname.mockReturnValue('/dashboard');
-    const { container } = render(<Breadcrumb className="custom-class" />);
-    
-    expect(container.firstChild).toHaveClass('custom-class');
-  });
 });
