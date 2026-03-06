@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-// InputProps extends HTML input attributes for type safety and documentation
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  // Additional custom props can be added here
-  variant?: 'default' | 'error';
-}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, ...props }, ref) => {
     return (
       <input

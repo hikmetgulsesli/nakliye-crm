@@ -8,7 +8,6 @@ export interface User {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  password_hash?: string; // Internal use only (auth)
 }
 
 export interface CreateUserInput {
@@ -136,6 +135,9 @@ export type LookupCategory =
   | 'country'
   | 'port';
 
+// Re-export quotation types
+export * from './quotations.js';
+
 // Activity Types
 export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
 export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
@@ -165,24 +167,20 @@ export interface CreateActivityInput {
   customer_id: string;
   type: ActivityType;
   date: string;
-  duration?: number;
+  duration?: number | null;
   notes: string;
   outcome: ActivityOutcome;
-  next_action_date?: string;
+  next_action_date?: string | null;
 }
 
 // Audit Log Types
-export type AuditAction = 'create' | 'update' | 'delete' | 'force_create' | 'force_update' | 'transfer';
-export type AuditRecordType = 'customer' | 'quotation' | 'activity';
-
 export interface AuditLog {
   id: string;
   user_id: string;
-  record_type: AuditRecordType;
+  record_type: string;
   record_id: string;
-  action: AuditAction;
+  action: string;
   changes: Record<string, { old: unknown; new: unknown }> | null;
-  metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -191,40 +189,4 @@ export interface AuditLogWithUser extends AuditLog {
     id: string;
     full_name: string;
   };
-}
-
-export interface CreateAuditLogInput {
-  user_id: string;
-  record_type: AuditRecordType;
-  record_id: string;
-  action: AuditAction;
-  changes?: Record<string, { old: unknown; new: unknown }>;
-  metadata?: Record<string, unknown>;
-}
-
-// Transfer Types
-export type TransferScope = 'all' | 'active' | 'open_quotes';
-
-export interface TransferPreview {
-  customers: number;
-  quotations: number;
-  customers_count: number;
-  quotations_count: number;
-  source_user_name: string;
-  target_user_name: string;
-}
-
-export interface BulkTransferResult {
-  transferredCustomers: number;
-  transferredQuotations: number;
-  transferred_customers: number;
-  transferred_quotations: number;
-  deactivated_user?: boolean;
-}
-
-// Dashboard Types
-export interface LossReasonAnalysis {
-  reason: string;
-  count: number;
-  percentage: number;
 }

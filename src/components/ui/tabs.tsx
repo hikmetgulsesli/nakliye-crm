@@ -1,30 +1,29 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-const TabsContext = React.createContext<{
-  value?: string;
-  onValueChange?: (value: string) => void;
-}>({});
-
 const Tabs = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & { value?: string; onValueChange?: (value: string) => void }
 >(({ className, value, onValueChange, children, ...props }, ref) => {
   return (
-    <TabsContext.Provider value={{ value, onValueChange }}>
-      <div ref={ref} className={cn('w-full', className)} {...props}>
-        {children}
-      </div>
-    </TabsContext.Provider>
+    <div ref={ref} className={cn('w-full', className)} {...props}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child as React.ReactElement, {
+            value,
+            onValueChange,
+          });
+        }
+        return child;
+      })}
+    </div>
   );
 });
 Tabs.displayName = 'Tabs';
 
-const useTabsContext = () => React.useContext(TabsContext);
-
 const TabsList = React.forwardRef<
   React.ElementRef<'div'>,
-  React.ComponentPropsWithoutRef<'div'>
+  React.ComponentPropsWithoutRef<'div'> & { value?: string; onValueChange?: (value: string) => void }
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
@@ -39,10 +38,11 @@ TabsList.displayName = 'TabsList';
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<'button'>,
-  React.ComponentPropsWithoutRef<'button'> & { value: string }
+  React.ComponentPropsWithoutRef<'button'> & { value?: string; onValueChange?: (value: string) => void }
 >(({ className, value: triggerValue, onClick, ...props }, ref) => {
-  const { value, onValueChange } = useTabsContext();
-  const isActive = value === triggerValue;
+  const contextValue = (props as Record<string, unknown>)?.value;
+  const contextOnChange = (props as Record<string, unknown>)?.onValueChange as ((value: string) => void) | undefined;
+  const isActive = contextValue === triggerValue;
   
   return (
     <button
@@ -57,7 +57,9 @@ const TabsTrigger = React.forwardRef<
         className
       )}
       onClick={(e) => {
-        onValueChange?.(triggerValue);
+        if (contextOnChange && triggerValue) {
+          contextOnChange(triggerValue);
+        }
         onClick?.(e);
       }}
       {...props}
@@ -68,10 +70,10 @@ TabsTrigger.displayName = 'TabsTrigger';
 
 const TabsContent = React.forwardRef<
   React.ElementRef<'div'>,
-  React.ComponentPropsWithoutRef<'div'> & { value: string }
+  React.ComponentPropsWithoutRef<'div'> & { value?: string }
 >(({ className, value: contentValue, ...props }, ref) => {
-  const { value } = useTabsContext();
-  const isActive = value === contentValue;
+  const contextValue = (props as Record<string, unknown>)?.value;
+  const isActive = contextValue === contentValue;
   
   if (!isActive) return null;
   

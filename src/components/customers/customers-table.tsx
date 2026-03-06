@@ -64,7 +64,7 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
     {
       key: 'company_name',
       header: 'Firma',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
           <div>
@@ -77,7 +77,7 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
     {
       key: 'contact',
       header: 'İletişim',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-sm">
             <Phone className="h-3.5 w-3.5 text-muted-foreground" />
@@ -93,7 +93,7 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
     {
       key: 'assigned_user',
       header: 'Temsilci',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <div className="flex items-center gap-2">
           <User className="h-4 w-4 text-muted-foreground" />
           {customer.assigned_user.full_name}
@@ -103,21 +103,21 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
     {
       key: 'potential',
       header: 'Potansiyel',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <PotentialBadge potential={customer.potential} />
       ),
     },
     {
       key: 'status',
       header: 'Durum',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <StatusBadge status={customer.status} />
       ),
     },
     {
       key: 'transport',
       header: 'Taşıma',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <div className="max-w-[200px] truncate text-sm text-muted-foreground">
           {customer.transport_modes.join(', ')}
         </div>
@@ -127,7 +127,7 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
       key: 'actions',
       header: '',
       width: '50px',
-      render: (customer: CustomerWithUser) => (
+      cell: (customer: CustomerWithUser) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">

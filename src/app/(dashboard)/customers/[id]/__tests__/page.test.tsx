@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import CustomerDetailPage from '../page';
 import type { CustomerWithUser, ActivityWithUser, AuditLogWithUser } from '@/types/index.js';
 
@@ -68,6 +69,20 @@ const mockActivities: ActivityWithUser[] = [
     created_at: '2026-03-01T10:00:00Z',
     updated_at: '2026-03-01T10:00:00Z',
   },
+  {
+    id: 'activity-2',
+    customer_id: 'test-customer-123',
+    type: 'E-posta',
+    date: '2026-02-20T14:00:00Z',
+    duration: null,
+    notes: 'Sent quotation for new route',
+    outcome: 'Teklif Istendi',
+    next_action_date: null,
+    created_by: 'user-1',
+    created_by_user: { id: 'user-1', full_name: 'Ali Veli' },
+    created_at: '2026-02-20T14:00:00Z',
+    updated_at: '2026-02-20T14:00:00Z',
+  },
 ];
 
 const mockAuditLogs: AuditLogWithUser[] = [
@@ -78,7 +93,22 @@ const mockAuditLogs: AuditLogWithUser[] = [
     record_id: 'test-customer-123',
     action: 'create',
     changes: null,
+    metadata: null,
     created_at: '2026-01-15T09:00:00Z',
+    user: { id: 'user-1', full_name: 'Ali Veli' },
+  },
+  {
+    id: 'audit-2',
+    user_id: 'user-1',
+    record_type: 'customer',
+    record_id: 'test-customer-123',
+    action: 'update',
+    changes: {
+      phone: { old: '+90 532 123 4566', new: '+90 532 123 4567' },
+      status: { old: 'Pasif', new: 'Aktif' },
+    },
+    metadata: null,
+    created_at: '2026-02-01T10:00:00Z',
     user: { id: 'user-1', full_name: 'Ali Veli' },
   },
 ];
@@ -224,6 +254,40 @@ describe('CustomerDetailPage', () => {
     expect(screen.getByText('Nakliye Tercihleri')).toBeInTheDocument();
     expect(screen.getByText('Deniz')).toBeInTheDocument();
     expect(screen.getByText('Hava')).toBeInTheDocument();
+  });
+
+  it('opens activity form modal when clicking add activity button', async () => {
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ customer: mockCustomer }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ activities: mockActivities }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ logs: mockAuditLogs }),
+      });
+
+    render(<CustomerDetailPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Company Ltd.')).toBeInTheDocument();
+    });
+
+    // Find the Aktivite Ekle button by looking for buttons with "Aktivite" in the name
+    const buttons = screen.getAllByRole('button');
+    const addActivityButton = buttons.find(btn => btn.textContent?.includes('Aktivite'));
+    expect(addActivityButton).toBeDefined();
+    if (addActivityButton) {
+      await userEvent.click(addActivityButton);
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('Yeni Aktivite')).toBeInTheDocument();
+    });
   });
 
   it('displays responsive card layout', async () => {

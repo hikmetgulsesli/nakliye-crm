@@ -442,7 +442,7 @@ export default function CustomerDetailPage() {
 
         {/* History Tab */}
         <TabsContent value="history">
-          <AuditHistory logs={auditLogs} loading={isLoading} />
+          <AuditHistory logs={auditLogs} />
         </TabsContent>
       </Tabs>
     </div>

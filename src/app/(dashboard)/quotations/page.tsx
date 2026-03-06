@@ -1,23 +1,33 @@
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth/session';
+import { getQuotations } from '@/lib/db/quotations';
+import { QuotationsTable } from '@/components/quotations/quotations-table';
 
 export default async function QuotationsPage() {
   const session = await getSession();
-
+  
   if (!session) {
     redirect('/login');
   }
 
+  const quotations = getQuotations();
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Teklifler</h1>
-        <p className="text-slate-600">Teklif yönetimi ve takibi</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Teklifler</h1>
+          <p className="text-muted-foreground">
+            Tüm teklifleri görüntüleyin ve yönetin
+          </p>
+        </div>
       </div>
-      
-      <div className="rounded-lg border bg-white p-12 shadow-sm text-center">
-        <p className="text-slate-500">Teklif modülü yakında eklenecek</p>
-      </div>
+
+      <QuotationsTable 
+        quotations={quotations} 
+        isAdmin={session.user.role === 'admin'}
+        onRefresh={() => {}}
+      />
     </div>
   );
 }
