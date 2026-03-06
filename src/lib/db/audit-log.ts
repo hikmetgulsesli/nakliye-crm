@@ -1,5 +1,5 @@
 import DatabaseConstructor from 'better-sqlite3';
-import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditAction, AuditRecordType } from '@/types/index.js';
+import type { AuditLog, CreateAuditLogInput, AuditLogWithUser } from '@/types/index.js';
 
 let db: import('better-sqlite3').Database | null = null;
 
@@ -86,13 +86,73 @@ export function getAuditLogsByRecord(recordType: string, recordId: string): Audi
   return rows.map(mapRowToAuditLogWithUser);
 }
 
+export function getAuditLogs(options: {
+  limit?: number;
+  record_type?: string;
+  record_id?: string;
+  customer_id?: string;
+} = {}): AuditLogWithUser[] {
+  const database = getDb();
+  const { limit = 50, record_type, record_id, customer_id } = options;
+  
+  let query = `
+    SELECT 
+      al.*,
+      u.full_name as user_name
+    FROM audit_log al
+    LEFT JOIN users u ON al.user_id = u.id
+    WHERE 1=1
+  `;
+  const params: (string | number)[] = [];
+  
+  if (record_type) {
+    query += ` AND al.record_type = ?`;
+    params.push(record_type);
+  }
+  
+  if (record_id) {
+    query += ` AND al.record_id = ?`;
+    params.push(record_id);
+  }
+  
+  if (customer_id) {
+    query += ` AND (al.metadata LIKE ? OR al.record_id = ?)`;
+    params.push(`%"customer_id":"${customer_id}"%`, customer_id);
+  }
+  
+  query += ` ORDER BY al.created_at DESC LIMIT ?`;
+  params.push(limit);
+  
+  const stmt = database.prepare(query);
+  const rows = stmt.all(...params) as Record<string, unknown>[];
+  return rows.map(mapRowToAuditLogWithUser);
+}
+
+export function buildChangesObject(
+  oldData: Record<string, unknown>,
+  newData: Record<string, unknown>
+): Record<string, { old: unknown; new: unknown }> {
+  const changes: Record<string, { old: unknown; new: unknown }> = {};
+  
+  for (const key of Object.keys(newData)) {
+    if (oldData[key] !== newData[key]) {
+      changes[key] = {
+        old: oldData[key],
+        new: newData[key],
+      };
+    }
+  }
+  
+  return changes;
+}
+
 function mapRowToAuditLog(row: Record<string, unknown>): AuditLog {
   return {
     id: row.id as string,
     user_id: row.user_id as string,
-    record_type: row.record_type as AuditRecordType,
+    record_type: row.record_type as string,
     record_id: row.record_id as string,
-    action: row.action as AuditAction,
+    action: row.action as string,
     changes: row.changes ? JSON.parse(row.changes as string) : null,
     metadata: row.metadata ? JSON.parse(row.metadata as string) : null,
     created_at: row.created_at as string,
