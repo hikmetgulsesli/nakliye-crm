@@ -1,5 +1,6 @@
 import { jwtVerify, SignJWT } from "jose";
 
+<<<<<<< HEAD
 function getJwtSecret(): Uint8Array {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
@@ -9,6 +10,17 @@ function getJwtSecret(): Uint8Array {
     throw new Error("JWT_SECRET must be at least 32 characters long");
   }
   return new TextEncoder().encode(secret);
+=======
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET environment variable is required');
+}
+
+const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+
+// Hash password
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 }
 
 export interface TokenPayload {

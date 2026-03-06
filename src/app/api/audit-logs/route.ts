@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
 import { getSession } from '@/lib/auth/session';
+=======
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 import { getAuditLogs } from '@/lib/audit';
 
 function errorResponse(code: string, message: string, status = 400) {
@@ -12,6 +17,7 @@ function errorResponse(code: string, message: string, status = 400) {
 // GET /api/audit-logs - Get audit logs (admin only)
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+<<<<<<< HEAD
     const session = await getSession();
     if (!session) {
       return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
@@ -19,6 +25,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // Only admins can view audit logs
     if (session.user.role !== 'admin') {
+=======
+    // Check admin role
+    const session = await getServerSession(authOptions);
+    if (!session?.user || session.user.role !== 'admin') {
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
       return errorResponse('FORBIDDEN', 'Admin access required', 403);
     }
 
