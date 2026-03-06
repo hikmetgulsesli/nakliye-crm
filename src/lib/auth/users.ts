@@ -92,7 +92,6 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     is_active: Boolean(row.is_active),
     created_at: String(row.created_at),
     updated_at: String(row.updated_at),
-    password_hash: String(row.password_hash),
   };
 }
 

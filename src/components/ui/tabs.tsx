@@ -4,9 +4,10 @@ import { cn } from '@/lib/utils';
 const Tabs = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & { value?: string; onValueChange?: (value: string) => void }
->(({ className, value, onValueChange, children, ...props }, ref) => {
+>((props, ref) => {
+  const { className, value, onValueChange, children, ...rest } = props;
   return (
-    <div ref={ref} className={cn('w-full', className)} {...props}>
+    <div ref={ref} className={cn('w-full', className)} {...rest}>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child as React.ReactElement, {
@@ -24,24 +25,28 @@ Tabs.displayName = 'Tabs';
 const TabsList = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & { value?: string; onValueChange?: (value: string) => void }
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'inline-flex h-10 items-center justify-center rounded-md bg-slate-100 p-1 text-slate-500',
-      className
-    )}
-    {...props}
-  />
-));
+>((props, ref) => {
+  const { className, ...rest } = props;
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'inline-flex h-10 items-center justify-center rounded-md bg-slate-100 p-1 text-slate-500',
+        className
+      )}
+      {...rest}
+    />
+  );
+});
 TabsList.displayName = 'TabsList';
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentPropsWithoutRef<'button'> & { value?: string; onValueChange?: (value: string) => void }
->(({ className, value: triggerValue, onClick, ...props }, ref) => {
-  const contextValue = (props as Record<string, unknown>)?.value;
-  const contextOnChange = (props as Record<string, unknown>)?.onValueChange as ((value: string) => void) | undefined;
+>((props, ref) => {
+  const { className, value: triggerValue, onClick, ...rest } = props;
+  const contextValue = (rest as Record<string, unknown>)?.value;
+  const contextOnChange = (rest as Record<string, unknown>)?.onValueChange as ((value: string) => void) | undefined;
   const isActive = contextValue === triggerValue;
   
   return (
@@ -62,7 +67,7 @@ const TabsTrigger = React.forwardRef<
         }
         onClick?.(e);
       }}
-      {...props}
+      {...rest}
     />
   );
 });
@@ -71,8 +76,9 @@ TabsTrigger.displayName = 'TabsTrigger';
 const TabsContent = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & { value?: string }
->(({ className, value: contentValue, ...props }, ref) => {
-  const contextValue = (props as Record<string, unknown>)?.value;
+>((props, ref) => {
+  const { className, value: contentValue, ...rest } = props;
+  const contextValue = (rest as Record<string, unknown>)?.value;
   const isActive = contextValue === contentValue;
   
   if (!isActive) return null;
@@ -85,7 +91,7 @@ const TabsContent = React.forwardRef<
         'mt-2 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2',
         className
       )}
-      {...props}
+      {...rest}
     />
   );
 });

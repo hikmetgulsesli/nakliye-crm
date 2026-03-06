@@ -173,6 +173,8 @@ export interface CreateActivityInput {
   next_action_date?: string | null;
 }
 
+export type UpdateActivityInput = Partial<CreateActivityInput>;
+
 // Audit Log Types
 export interface AuditLog {
   id: string;
@@ -181,6 +183,7 @@ export interface AuditLog {
   record_id: string;
   action: string;
   changes: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -189,4 +192,53 @@ export interface AuditLogWithUser extends AuditLog {
     id: string;
     full_name: string;
   };
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes?: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown>;
+}
+
+// Transfer System Types
+export type TransferScope = 'all' | 'active' | 'open_quotes';
+
+export interface TransferPreview {
+  source_user_name: string;
+  target_user_name: string;
+  customers_count: number;
+  quotations_count: number;
+}
+
+export interface BulkTransferResult {
+  success: boolean;
+  transferred_customers: number;
+  transferred_quotations: number;
+  deactivated_user?: boolean;
+  errors?: string[];
+}
+
+// Dashboard Types
+export interface LossReasonAnalysis {
+  reason: string;
+  count: number;
+  percentage: number;
+}
+
+export interface SingleTransferInput {
+  customer_id: string;
+  from_user_id: string;
+  to_user_id: string;
+  reason: string;
+  cascade_to_open_quotes: boolean;
+}
+
+export interface BulkTransferInput {
+  from_user_id: string;
+  to_user_id: string;
+  scope: TransferScope;
+  deactivate_source: boolean;
 }
