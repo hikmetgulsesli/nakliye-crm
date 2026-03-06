@@ -207,8 +207,8 @@ export function BulkTransferModal({ isOpen, onClose, users }: BulkTransferModalP
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tüm Müşteri ve Teklifler</SelectItem>
-                  <SelectItem value="active_customers">Sadece Aktif Müşteriler</SelectItem>
-                  <SelectItem value="open_quotations">Sadece Açık Teklifler</SelectItem>
+                  <SelectItem value="active">Sadece Aktif Müşteriler</SelectItem>
+                  <SelectItem value="open_quotes">Sadece Açık Teklifler</SelectItem>
                 </SelectContent>
               </Select>
             </div>
