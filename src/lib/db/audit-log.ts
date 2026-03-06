@@ -1,5 +1,5 @@
 import DatabaseConstructor from 'better-sqlite3';
-import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditAction, AuditRecordType } from '@/types/index.js';
+import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditAction, AuditRecordType } from '@/types';
 
 let db: import('better-sqlite3').Database | null = null;
 
@@ -65,8 +65,8 @@ export function createAuditLog(input: CreateAuditLogInput): AuditLog {
     record_type: input.record_type,
     record_id: input.record_id,
     action: input.action,
-    changes: input.changes ?? null,
-    metadata: input.metadata ?? null,
+    changes: input.changes ?? undefined,
+    metadata: input.metadata ?? undefined,
     created_at: now,
   };
 }
@@ -106,6 +106,7 @@ function mapRowToAuditLogWithUser(row: Record<string, unknown>): AuditLogWithUse
     user: {
       id: log.user_id,
       full_name: row.user_name as string,
+      email: '',
     },
   };
 }

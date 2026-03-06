@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserById, updateUser, softDeleteUser } from '@/lib/db/users';
 import { updateUserSchema } from '@/lib/validation';
-import { verifyToken } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/session';
 
 // GET /api/users/[id] - Get a specific user
 export async function GET(
@@ -9,23 +9,17 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify authentication
-    const token = request.cookies.get('auth-token')?.value;
-    if (!token) {
+    const session = await getSession();
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
     // Check admin role
-    if (payload.role !== 'admin') {
+    if (session.user.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const user = await getUserById(params.id);
+    const user = getUserById(params.id);
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -47,19 +41,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify authentication
-    const token = request.cookies.get('auth-token')?.value;
-    if (!token) {
+    const session = await getSession();
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
     // Check admin role
-    if (payload.role !== 'admin') {
+    if (session.user.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -74,7 +62,7 @@ export async function PATCH(
       );
     }
 
-    const user = await updateUser(params.id, result.data);
+    const user = updateUser(params.id, result.data);
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -84,7 +72,7 @@ export async function PATCH(
   } catch (error) {
     console.error('Error updating user:', error);
     
-    if (error instanceof Error && error.message.includes('unique constraint')) {
+    if (error instanceof Error && error.message.includes('UNIQUE constraint')) {
       return NextResponse.json(
         { error: 'Email already exists' },
         { status: 409 }
@@ -104,31 +92,25 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify authentication
-    const token = request.cookies.get('auth-token')?.value;
-    if (!token) {
+    const session = await getSession();
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
     // Check admin role
-    if (payload.role !== 'admin') {
+    if (session.user.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Prevent self-deletion
-    if (params.id === payload.sub) {
+    if (params.id === session.user.id) {
       return NextResponse.json(
         { error: 'Cannot delete your own account' },
         { status: 400 }
       );
     }
 
-    const success = await softDeleteUser(params.id);
+    const success = softDeleteUser(params.id);
 
     if (!success) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

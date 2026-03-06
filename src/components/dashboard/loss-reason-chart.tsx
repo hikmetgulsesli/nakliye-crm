@@ -40,8 +40,8 @@ export function LossReasonChart({ data, className }: LossReasonChartProps) {
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               }}
-              formatter={(value: number, name: string, props: { payload: { percentage: number } }) => [
-                `${value} teklif (${props.payload.percentage}%)`,
+              formatter={(value, name, props) => [
+                `${value} teklif (${(props?.payload as { percentage: number })?.percentage}%)`,
                 'Sayı',
               ]}
             />

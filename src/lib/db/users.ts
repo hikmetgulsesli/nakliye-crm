@@ -1,4 +1,4 @@
-import type { User, UpdateUserInput } from '@/types';
+import type { User, UpdateUserInput, CreateUserInput } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
 
 let db: import('better-sqlite3').Database | null = null;
@@ -16,6 +16,86 @@ export function getAllUsers(): User[] {
   const stmt = database.prepare('SELECT * FROM users WHERE is_active = 1 ORDER BY full_name ASC');
   const rows = stmt.all() as Record<string, unknown>[];
   return rows.map(mapRowToUser);
+}
+
+interface GetUsersOptions {
+  page?: number;
+  limit?: number;
+  includeInactive?: boolean;
+}
+
+interface PaginatedUsers {
+  data: User[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export function getUsers(options: GetUsersOptions = {}): PaginatedUsers {
+  const database = getDb();
+  const { page = 1, limit = 10, includeInactive = false } = options;
+  const offset = (page - 1) * limit;
+
+  // Get total count
+  const countStmt = database.prepare(
+    includeInactive 
+      ? 'SELECT COUNT(*) as count FROM users'
+      : 'SELECT COUNT(*) as count FROM users WHERE is_active = 1'
+  );
+  const { count } = countStmt.get() as { count: number };
+
+  // Get users
+  const stmt = database.prepare(
+    includeInactive
+      ? 'SELECT * FROM users ORDER BY full_name ASC LIMIT ? OFFSET ?'
+      : 'SELECT * FROM users WHERE is_active = 1 ORDER BY full_name ASC LIMIT ? OFFSET ?'
+  );
+  const rows = stmt.all(limit, offset) as Record<string, unknown>[];
+
+  return {
+    data: rows.map(mapRowToUser),
+    total: count,
+    page,
+    limit,
+    totalPages: Math.ceil(count / limit),
+  };
+}
+
+interface CreateUserData extends CreateUserInput {
+  password_hash: string;
+}
+
+export function createUser(data: CreateUserData): User {
+  const database = getDb();
+  const stmt = database.prepare(
+    `INSERT INTO users (email, password_hash, full_name, role, is_active)
+     VALUES (?, ?, ?, ?, ?)`
+  );
+  
+  const result = stmt.run(
+    data.email,
+    data.password_hash,
+    data.full_name,
+    data.role || 'user',
+    1
+  );
+  
+  const user = getUserById(result.lastInsertRowid.toString());
+  if (!user) {
+    throw new Error('Failed to create user');
+  }
+  
+  return user;
+}
+
+export function softDeleteUser(id: string): boolean {
+  const database = getDb();
+  const stmt = database.prepare(
+    'UPDATE users SET is_active = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+  );
+  const result = stmt.run(id);
+  return result.changes > 0;
 }
 
 export function getUserById(id: string): User | null {

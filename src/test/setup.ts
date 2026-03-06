@@ -1,6 +1,10 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
+// Set required environment variables
+process.env.JWT_SECRET = 'test-secret-for-testing-only';
+process.env.NEXTAUTH_SECRET = 'test-secret-for-testing-only';
+
 // Mock Next.js router
 vi.mock("next/navigation", () => ({
   useRouter: () => ({

@@ -13,7 +13,7 @@ const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
 interface RouteParams {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { id } = params;
     const customer = getCustomerByIdWithUser(id);
     
     if (!customer) {
@@ -50,7 +50,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { id } = params;
     const existingCustomer = getCustomerById(id);
     
     if (!existingCustomer) {
@@ -178,7 +178,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const { id } = await params;
+    const { id } = params;
     const existingCustomer = getCustomerById(id);
     
     if (!existingCustomer) {

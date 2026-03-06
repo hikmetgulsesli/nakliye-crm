@@ -6,6 +6,7 @@ export interface User {
   full_name: string;
   role: UserRole;
   is_active: boolean;
+  password_hash?: string;
   created_at: string;
   updated_at: string;
 }
@@ -120,6 +121,61 @@ export interface LookupValue {
   sort_order: number;
   created_at: string;
   updated_at: string;
+}
+
+// Transfer Types
+export type TransferScope = 'all' | 'active_customers' | 'open_quotations';
+
+export interface TransferPreview {
+  customers_count: number;
+  quotations_count: number;
+  source_user_name: string;
+  target_user_name: string;
+}
+
+export interface BulkTransferResult {
+  transferred_customers: number;
+  transferred_quotations: number;
+  deactivated_user: boolean;
+}
+
+// Dashboard Types
+export interface LossReasonAnalysis {
+  reason: string;
+  count: number;
+  percentage: number;
+}
+
+// Audit Log Types
+export type AuditAction = 'create' | 'update' | 'delete' | 'login' | 'logout' | 'force_create';
+export type AuditRecordType = 'customer' | 'quotation' | 'activity' | 'user' | 'transfer';
+
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes?: Record<string, { old: unknown; new: unknown }>;
+  metadata?: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes?: Record<string, { old: unknown; new: unknown }>;
+  metadata?: Record<string, unknown>;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user: {
+    id: string;
+    full_name: string;
+    email: string;
+  };
 }
 
 export type LookupCategory =
