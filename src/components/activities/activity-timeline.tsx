@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Phone, Mail, Users, Video, Clock, Calendar, FileText, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OutcomeBadge, ActivityTypeBadge } from '@/components/ui/badges';
-import type { ActivityWithUser } from '@/types/index.js';
+import type { ActivityWithUser } from '@/types/index';
 
 interface ActivityTimelineProps {
   activities: ActivityWithUser[];
@@ -12,7 +12,7 @@ interface ActivityTimelineProps {
   loading?: boolean;
 }
 
-const activityIcons: Record<string, typeof Phone> = {
+const activityIcons = {
   Telefon: Phone,
   'E-posta': Mail,
   'Yuz Yuze': Users,
@@ -32,7 +32,7 @@ export function ActivityTimeline({ activities, onAddActivity, loading }: Activit
     return (
       <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
         <AlertCircle className="mx-auto h-12 w-12 text-slate-400" />
-        <h3 className="mt-4 text-lg font-medium text-slate-900">Henüz aktivite bulunmuyor</h3>
+        <h3 className="mt-4 text-lg font-medium text-slate-900">Aktivite bulunamadı</h3>
         <p className="mt-2 text-sm text-slate-600">
           Bu müşteri için henüz aktivite kaydı bulunmuyor.
         </p>
@@ -59,7 +59,7 @@ export function ActivityTimeline({ activities, onAddActivity, loading }: Activit
 
         <div className="space-y-4">
           {activities.map((activity) => {
-            const IconComponent = activityIcons[activity.type] || Phone;
+            const IconComponent = activityIcons[activity.type];
             const date = new Date(activity.date);
             const isToday = new Date().toDateString() === date.toDateString();
             const isUpcoming = date > new Date();

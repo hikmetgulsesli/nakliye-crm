@@ -1,4 +1,4 @@
-import type { QuotationRevision, RevisionChange, QuotationRevisionWithUser } from '@/types';
+import type { QuotationRevision, QuotationRevisionWithUser, RevisionChange } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
 
 let db: import('better-sqlite3').Database | null = null;
@@ -23,43 +23,25 @@ function initializeRevisionsTable() {
       changed_fields TEXT NOT NULL,
       revised_by TEXT NOT NULL,
       revised_at TEXT NOT NULL,
-      FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE,
+      FOREIGN KEY (quotation_id) REFERENCES quotations(id),
       FOREIGN KEY (revised_by) REFERENCES users(id)
     )
   `);
 
-  // Create indexes
   database.exec(`
-    CREATE INDEX IF NOT EXISTS idx_quotation_revisions_quotation ON quotation_revisions(quotation_id);
-    CREATE INDEX IF NOT EXISTS idx_quotation_revisions_revised_at ON quotation_revisions(revised_at);
+    CREATE INDEX IF NOT EXISTS idx_revisions_quotation ON quotation_revisions(quotation_id);
+    CREATE INDEX IF NOT EXISTS idx_revisions_date ON quotation_revisions(revised_at);
   `);
 }
 
-/**
- * Get the next revision number for a quotation
- */
-export function getNextRevisionNumber(quotationId: string): number {
-  const database = getDb();
-  const stmt = database.prepare(`
-    SELECT MAX(revision_no) as max_rev 
-    FROM quotation_revisions 
-    WHERE quotation_id = ?
-  `);
-  const row = stmt.get(quotationId) as { max_rev: number | null } | undefined;
-  return (row?.max_rev ?? 0) + 1;
-}
-
-/**
- * Create a revision record
- */
 export function createRevision(
   quotationId: string,
-  changedFields: RevisionChange[],
+  revisionNo: number,
+  changes: RevisionChange[],
   revisedBy: string
 ): QuotationRevision {
   const database = getDb();
   const id = crypto.randomUUID();
-  const revisionNo = getNextRevisionNumber(quotationId);
   const now = new Date().toISOString();
 
   const stmt = database.prepare(`
@@ -72,7 +54,7 @@ export function createRevision(
     id,
     quotationId,
     revisionNo,
-    JSON.stringify(changedFields),
+    JSON.stringify(changes),
     revisedBy,
     now
   );
@@ -81,15 +63,12 @@ export function createRevision(
     id,
     quotation_id: quotationId,
     revision_no: revisionNo,
-    changed_fields: changedFields,
+    changed_fields: changes,
     revised_by: revisedBy,
     revised_at: now,
   };
 }
 
-/**
- * Get all revisions for a quotation
- */
 export function getRevisionsByQuotationId(quotationId: string): QuotationRevisionWithUser[] {
   const database = getDb();
   const stmt = database.prepare(`
@@ -99,15 +78,13 @@ export function getRevisionsByQuotationId(quotationId: string): QuotationRevisio
     FROM quotation_revisions r
     LEFT JOIN users u ON r.revised_by = u.id
     WHERE r.quotation_id = ?
-    ORDER BY r.revision_no ASC
+    ORDER BY r.revision_no DESC
   `);
+  
   const rows = stmt.all(quotationId) as Record<string, unknown>[];
   return rows.map(mapRowToRevisionWithUser);
 }
 
-/**
- * Get a single revision by ID
- */
 export function getRevisionById(id: string): QuotationRevision | null {
   const database = getDb();
   const stmt = database.prepare('SELECT * FROM quotation_revisions WHERE id = ?');
@@ -115,40 +92,56 @@ export function getRevisionById(id: string): QuotationRevision | null {
   return row ? mapRowToRevision(row) : null;
 }
 
-/**
- * Delete all revisions for a quotation (useful for cleanup)
- */
-export function deleteRevisionsByQuotationId(quotationId: string): number {
+export function getNextRevisionNumber(quotationId: string): number {
   const database = getDb();
-  const stmt = database.prepare('DELETE FROM quotation_revisions WHERE quotation_id = ?');
-  const result = stmt.run(quotationId);
-  return result.changes;
+  const stmt = database.prepare(`
+    SELECT MAX(revision_no) as max_revision 
+    FROM quotation_revisions 
+    WHERE quotation_id = ?
+  `);
+  const row = stmt.get(quotationId) as { max_revision: number | null } | undefined;
+  return (row?.max_revision || 0) + 1;
 }
 
-/**
- * Calculate field-level differences between old and new values
- */
-export function calculateDiff(
+export function computeChanges(
   oldData: Record<string, unknown>,
   newData: Record<string, unknown>
 ): RevisionChange[] {
   const changes: RevisionChange[] = [];
-  const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
+  const fieldsToTrack = [
+    'customer_id',
+    'quote_date',
+    'valid_until',
+    'transport_mode',
+    'service_type',
+    'origin_country',
+    'destination_country',
+    'pol',
+    'pod',
+    'incoterm',
+    'price',
+    'currency',
+    'price_note',
+    'status',
+    'loss_reason',
+    'assigned_user_id',
+  ];
 
-  for (const key of Array.from(allKeys)) {
-    const oldValue = oldData[key];
-    const newValue = newData[key];
+  for (const field of fieldsToTrack) {
+    const oldValue = oldData[field];
+    const newValue = newData[field];
 
-    // Skip if values are the same
-    if (JSON.stringify(oldValue) === JSON.stringify(newValue)) {
-      continue;
+    // Handle null/undefined comparison
+    const oldNormalized = oldValue === undefined ? null : oldValue;
+    const newNormalized = newValue === undefined ? null : newValue;
+
+    if (JSON.stringify(oldNormalized) !== JSON.stringify(newNormalized)) {
+      changes.push({
+        field,
+        old_value: oldNormalized,
+        new_value: newNormalized,
+      });
     }
-
-    changes.push({
-      field: key,
-      old_value: oldValue ?? null,
-      new_value: newValue ?? null,
-    });
   }
 
   return changes;

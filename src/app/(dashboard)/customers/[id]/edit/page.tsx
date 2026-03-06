@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CustomerForm } from '@/components/customers/customer-form';
-import type { Customer, User } from '@/types/index.js';
+import type { Customer, User } from '@/types';
 
 interface CustomerFormData {
   company_name: string;

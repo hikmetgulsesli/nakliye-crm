@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ActivityTimeline } from '@/components/activities/activity-timeline';
 import { ActivityForm } from '@/components/activities/activity-form';
 import { AuditHistory } from '@/components/audit/audit-history';
-import type { CustomerWithUser, ActivityWithUser, AuditLogWithUser, CreateActivityInput } from '@/types/index.js';
+import type { CustomerWithUser, ActivityWithUser, AuditLogWithUser, CreateActivityInput } from '@/types/index';
 
 export default function CustomerDetailPage() {
   const router = useRouter();
@@ -109,7 +109,7 @@ export default function CustomerDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center" role="status" aria-label="Yükleniyor">
+      <div className="flex h-96 items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
       </div>
     );
@@ -165,7 +165,7 @@ export default function CustomerDetailPage() {
 
       {/* Quick Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border bg-white p-4 shadow-sm">
+        <div className="rounded-lg border bg-white p-4">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Calendar className="h-4 w-4" />
             Son Görüşme
@@ -176,7 +176,7 @@ export default function CustomerDetailPage() {
               : '-'}
           </p>
         </div>
-        <div className="rounded-lg border bg-white p-4 shadow-sm">
+        <div className="rounded-lg border bg-white p-4">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <TrendingUp className="h-4 w-4" />
             Son Teklif
@@ -187,14 +187,14 @@ export default function CustomerDetailPage() {
               : '-'}
           </p>
         </div>
-        <div className="rounded-lg border bg-white p-4 shadow-sm">
+        <div className="rounded-lg border bg-white p-4">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Activity className="h-4 w-4" />
             Aktivite Sayısı
           </div>
           <p className="mt-1 text-lg font-semibold">{activities.length}</p>
         </div>
-        <div className="rounded-lg border bg-white p-4 shadow-sm">
+        <div className="rounded-lg border bg-white p-4">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <User className="h-4 w-4" />
             Temsilci
@@ -442,7 +442,7 @@ export default function CustomerDetailPage() {
 
         {/* History Tab */}
         <TabsContent value="history">
-          <AuditHistory logs={auditLogs} />
+          <AuditHistory logs={auditLogs} loading={isLoading} />
         </TabsContent>
       </Tabs>
     </div>

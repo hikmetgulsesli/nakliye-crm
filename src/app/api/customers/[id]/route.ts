@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/index';
-import {
-  getCustomerById,
-  updateCustomer,
-  deleteCustomer,
-} from '@/lib/services/customer';
-import { customerUpdateSchema, type CustomerUpdateInput } from '@/lib/validators/customer';
+import { getSession } from '@/lib/auth/session';
+import { getCustomerById, updateCustomer, deleteCustomer, getCustomerByIdWithUser, checkConflicts } from '@/lib/db/customers';
+import { getAllUsers } from '@/lib/db/users';
+import type { UpdateCustomerInput } from '@/types';
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
 const VALID_SERVICE_TYPES = ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'] as const;
@@ -16,85 +12,45 @@ const VALID_SOURCES = ['Referans', 'Soguk arama', 'Fuar', 'Dijital'] as const;
 const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
-function successResponse(data: unknown) {
-  return NextResponse.json({ data });
+interface RouteParams {
+  params: Promise<{ id: string }>;
 }
 
-// GET /api/customers/[id] - Get a single customer
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
-  try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
-    }
-
-    const { id } = params;
-    const customerId = parseInt(id, 10);
-
-    if (isNaN(customerId)) {
-      return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
-    }
-
-    const { id } = params;
-    const customer = getCustomerByIdWithUser(id);
-    
-    if (!customer) {
-      return errorResponse('NOT_FOUND', 'Customer not found', 404);
-    }
-
-    return successResponse(customer);
-  } catch (error) {
-    console.error('Error fetching customer:', error);
-    return errorResponse('INTERNAL_ERROR', 'Failed to fetch customer', 500);
-  }
-}
-
-// PATCH /api/customers/[id] - Update a customer
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
-  try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
-    }
-
-    const { id } = params;
-    const customerId = parseInt(id, 10);
-
-    if (isNaN(customerId)) {
-      return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
-    }
-
-    const body = await request.json();
-    const validation = customerUpdateSchema.safeParse(body);
-
-    if (!validation.success) {
-      return errorResponse(
-        'VALIDATION_ERROR',
-        'Invalid customer data',
-        400,
-        validation.error.issues
-      );
-    }
-
-    const data = validation.data as CustomerUpdateInput;
-    const updatedBy = session.user.id;
-
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
+    const customer = getCustomerByIdWithUser(id);
+    
+    if (!customer) {
+      return NextResponse.json(
+        { error: 'Customer not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ customer });
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch customer' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: NextRequest, { params }: RouteParams) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { id } = await params;
     const existingCustomer = getCustomerById(id);
     
     if (!existingCustomer) {
@@ -207,38 +163,22 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-// DELETE /api/customers/[id] - Soft delete a customer (admin only)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    // Check admin role
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Only admin can delete customers
+    // Only admins can delete customers
     if (session.user.role !== 'admin') {
-      return errorResponse('FORBIDDEN', 'Admin access required', 403);
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      );
     }
 
-    const { id } = params;
-    const customerId = parseInt(id, 10);
-
-    if (isNaN(customerId)) {
-      return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
-    }
-
-    const deletedBy = session.user.id;
-    const customer = await deleteCustomer(customerId, deletedBy);
-
-    if (!customer) {
-      return errorResponse('NOT_FOUND', 'Customer not found', 404);
-    }
-
-    const { id } = params;
+    const { id } = await params;
     const existingCustomer = getCustomerById(id);
     
     if (!existingCustomer) {

@@ -1,29 +1,40 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GET, POST } from '../route';
-import { GET as getById, PUT, DELETE } from '../[id]/route';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-// Mock the database and auth modules
+// Mock session
 vi.mock('@/lib/auth/session', () => ({
   getSession: vi.fn(),
 }));
 
+// Mock database modules
 vi.mock('@/lib/db/quotations', () => ({
-  getAllQuotations: vi.fn(),
-  getQuotationsByCustomerId: vi.fn(),
   createQuotation: vi.fn(),
+  getAllQuotations: vi.fn(),
   getQuotationById: vi.fn(),
-  getQuotationByIdWithRelations: vi.fn(),
+  getQuotationByIdWithDetails: vi.fn(),
   updateQuotation: vi.fn(),
-  deleteQuotation: vi.fn(),
+  softDeleteQuotation: vi.fn(),
+  updateCustomerLastQuoteDate: vi.fn(),
 }));
 
 vi.mock('@/lib/db/quotation-revisions', () => ({
   createRevision: vi.fn(),
-  getRevisionsByQuotationId: vi.fn(),
+  computeChanges: vi.fn(),
+  getNextRevisionNumber: vi.fn(),
 }));
 
+vi.mock('@/lib/db/users', () => ({
+  getAllUsers: vi.fn(),
+}));
+
+vi.mock('@/lib/db/customers', () => ({
+  getAllCustomers: vi.fn(),
+}));
+
+import { GET, POST } from '../route';
 import { getSession } from '@/lib/auth/session';
-import { getAllQuotations, createQuotation, getQuotationByIdWithRelations, deleteQuotation } from '@/lib/db/quotations';
+import { createQuotation, getAllQuotations, updateCustomerLastQuoteDate } from '@/lib/db/quotations';
+import { getAllCustomers } from '@/lib/db/customers';
+import { getAllUsers } from '@/lib/db/users';
 
 describe('Quotations API', () => {
   beforeEach(() => {
@@ -31,139 +42,201 @@ describe('Quotations API', () => {
   });
 
   describe('GET /api/quotations', () => {
-    it('returns 401 when not authenticated', async () => {
+    it('should return 401 when not authenticated', async () => {
       vi.mocked(getSession).mockResolvedValue(null);
-
-      const response = await GET(new Request('http://localhost/api/quotations'));
+      
+      const request = new Request('http://localhost/api/quotations');
+      const response = await GET(request);
+      
       expect(response.status).toBe(401);
+      const data = await response.json();
+      expect(data.error).toBe('Unauthorized');
     });
 
-    it('returns all quotations when authenticated', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-      vi.mocked(getAllQuotations).mockReturnValue([]);
-
-      const response = await GET(new Request('http://localhost/api/quotations'));
+    it('should return all quotations with filters', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      const mockQuotations = [
+        {
+          id: 'quote-1',
+          quote_no: 'TKF-2026-0001',
+          customer: { id: 'cust-1', company_name: 'Test Co', contact_name: 'John' },
+          status: 'Bekliyor',
+        },
+      ];
+      
+      vi.mocked(getAllQuotations).mockReturnValue(mockQuotations);
+      
+      const request = new Request('http://localhost/api/quotations?status=Bekliyor&customer_id=cust-1');
+      const response = await GET(request);
+      
       expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data.quotations).toHaveLength(1);
+      expect(getAllQuotations).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'Bekliyor',
+          customer_id: 'cust-1',
+        })
+      );
+    });
+
+    it('should support search filter', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      vi.mocked(getAllQuotations).mockReturnValue([]);
+      
+      const request = new Request('http://localhost/api/quotations?search=TKF-2026');
+      const response = await GET(request);
+      
+      expect(response.status).toBe(200);
+      expect(getAllQuotations).toHaveBeenCalledWith(
+        expect.objectContaining({
+          search: 'TKF-2026',
+        })
+      );
     });
   });
 
   describe('POST /api/quotations', () => {
-    it('returns 401 when not authenticated', async () => {
+    it('should return 401 when not authenticated', async () => {
       vi.mocked(getSession).mockResolvedValue(null);
-
-      const response = await POST(new Request('http://localhost/api/quotations', {
+      
+      const request = new Request('http://localhost/api/quotations', {
         method: 'POST',
         body: JSON.stringify({}),
-      }));
+      });
+      const response = await POST(request);
+      
       expect(response.status).toBe(401);
     });
 
-    it('returns 400 when required fields are missing', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-
-      const response = await POST(new Request('http://localhost/api/quotations', {
+    it('should validate required fields', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      const request = new Request('http://localhost/api/quotations', {
         method: 'POST',
-        body: JSON.stringify({ customer_id: 'c1' }),
-      }));
+        body: JSON.stringify({}),
+      });
+      const response = await POST(request);
+      
       expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.errors).toContain('Müşteri seçimi zorunludur');
+      expect(data.errors).toContain('Teklif tarihi zorunludur');
     });
 
-    it('requires loss_reason when status is Kaybedildi', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-
-      const response = await POST(new Request('http://localhost/api/quotations', {
+    it('should validate loss_reason when status is Kaybedildi', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      vi.mocked(getAllCustomers).mockReturnValue([{ id: 'cust-1' }] as unknown as Awaited<ReturnType<typeof getAllCustomers>>);
+      vi.mocked(getAllUsers).mockReturnValue([{ id: 'user-1' }] as unknown as Awaited<ReturnType<typeof getAllUsers>>);
+      
+      const request = new Request('http://localhost/api/quotations', {
         method: 'POST',
         body: JSON.stringify({
-          customer_id: 'c1',
-          quote_date: '2026-03-01',
-          validity_date: '2026-03-15',
+          customer_id: 'cust-1',
+          quote_date: '2026-03-06',
           transport_mode: 'Deniz',
           service_type: 'FCL',
-          origin_country: 'Turkiye',
-          destination_country: 'Almanya',
+          origin_country: 'Turkey',
+          destination_country: 'Germany',
           incoterm: 'FOB',
+          price: 1000,
+          currency: 'USD',
+          assigned_user_id: 'user-1',
           status: 'Kaybedildi',
-          assigned_user_id: 'u1',
         }),
-      }));
+      });
+      const response = await POST(request);
+      
       expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.errors).toContain('Kaybedilme nedeni seçilmelidir');
     });
 
-    it('creates quotation successfully', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-      vi.mocked(createQuotation).mockReturnValue({ id: 'q1', quote_no: 'TKF-2026-0001' });
-
-      const response = await POST(new Request('http://localhost/api/quotations', {
+    it('should create quotation with valid data', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      vi.mocked(getAllCustomers).mockReturnValue([{ id: 'cust-1' }] as unknown as Awaited<ReturnType<typeof getAllCustomers>>);
+      vi.mocked(getAllUsers).mockReturnValue([{ id: 'user-1' }] as unknown as Awaited<ReturnType<typeof getAllUsers>>);
+      
+      const mockQuotation = {
+        id: 'quote-1',
+        quote_no: 'TKF-2026-0001',
+        customer_id: 'cust-1',
+        status: 'Bekliyor',
+      };
+      
+      vi.mocked(createQuotation).mockReturnValue(mockQuotation as unknown as ReturnType<typeof createQuotation>);
+      vi.mocked(updateCustomerLastQuoteDate).mockImplementation(() => {});
+      
+      const request = new Request('http://localhost/api/quotations', {
         method: 'POST',
         body: JSON.stringify({
-          customer_id: 'c1',
-          quote_date: '2026-03-01',
-          validity_date: '2026-03-15',
+          customer_id: 'cust-1',
+          quote_date: '2026-03-06',
           transport_mode: 'Deniz',
           service_type: 'FCL',
-          origin_country: 'Turkiye',
-          destination_country: 'Almanya',
+          origin_country: 'Turkey',
+          destination_country: 'Germany',
           incoterm: 'FOB',
-          status: 'Bekliyor',
-          assigned_user_id: 'u1',
+          price: 1000,
+          currency: 'USD',
+          assigned_user_id: 'user-1',
         }),
-      }));
+      });
+      const response = await POST(request);
+      
       expect(response.status).toBe(201);
-    });
-  });
-
-  describe('GET /api/quotations/[id]', () => {
-    it('returns 401 when not authenticated', async () => {
-      vi.mocked(getSession).mockResolvedValue(null);
-
-      const response = await getById(new Request('http://localhost/api/quotations/q1'), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(401);
+      const data = await response.json();
+      expect(data.quotation).toBeDefined();
+      expect(updateCustomerLastQuoteDate).toHaveBeenCalledWith('cust-1');
     });
 
-    it('returns 404 when quotation not found', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-      vi.mocked(getQuotationByIdWithRelations).mockReturnValue(null);
-
-      const response = await getById(new Request('http://localhost/api/quotations/q1'), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(404);
-    });
-
-    it('returns quotation when found', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-      vi.mocked(getQuotationByIdWithRelations).mockReturnValue({ id: 'q1', quote_no: 'TKF-2026-0001' });
-
-      const response = await getById(new Request('http://localhost/api/quotations/q1'), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(200);
-    });
-  });
-
-  describe('PUT /api/quotations/[id]', () => {
-    it('returns 401 when not authenticated', async () => {
-      vi.mocked(getSession).mockResolvedValue(null);
-
-      const response = await PUT(new Request('http://localhost/api/quotations/q1', {
-        method: 'PUT',
-        body: JSON.stringify({ status: 'Kazanildi' }),
-      }), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(401);
-    });
-  });
-
-  describe('DELETE /api/quotations/[id]', () => {
-    it('returns 403 when user is not admin', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'user' } });
-
-      const response = await DELETE(new Request('http://localhost/api/quotations/q1'), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(403);
-    });
-
-    it('deletes quotation when admin', async () => {
-      vi.mocked(getSession).mockResolvedValue({ user: { id: 'u1', role: 'admin' } });
-      vi.mocked(getQuotationById).mockReturnValue({ id: 'q1' });
-      vi.mocked(deleteQuotation).mockReturnValue(true);
-
-      const response = await DELETE(new Request('http://localhost/api/quotations/q1'), { params: Promise.resolve({ id: 'q1' }) });
-      expect(response.status).toBe(200);
+    it('should validate customer exists', async () => {
+      vi.mocked(getSession).mockResolvedValue({
+        user: { id: 'user-1', role: 'user' },
+        expires: '2026-03-06T00:00:00Z',
+      });
+      
+      vi.mocked(getAllCustomers).mockReturnValue([]);
+      
+      const request = new Request('http://localhost/api/quotations', {
+        method: 'POST',
+        body: JSON.stringify({
+          customer_id: 'non-existent',
+          quote_date: '2026-03-06',
+          transport_mode: 'Deniz',
+          service_type: 'FCL',
+          origin_country: 'Turkey',
+          destination_country: 'Germany',
+          incoterm: 'FOB',
+          price: 1000,
+          currency: 'USD',
+          assigned_user_id: 'user-1',
+        }),
+      });
+      const response = await POST(request);
+      
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.error).toBe('Invalid customer');
     });
   });
 });

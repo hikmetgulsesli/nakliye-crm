@@ -247,19 +247,6 @@ export function deleteCustomer(id: string): boolean {
   return result.changes > 0;
 }
 
-/**
- * Update customer's last_quote_date
- */
-export function updateCustomerLastQuoteDate(customerId: string, quoteDate: string): void {
-  const database = getDb();
-  const stmt = database.prepare(`
-    UPDATE customers 
-    SET last_quote_date = ?, updated_at = ?
-    WHERE id = ?
-  `);
-  stmt.run(quoteDate, new Date().toISOString(), customerId);
-}
-
 export function checkConflicts(
   companyName: string,
   phone: string,

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ActivityTimeline } from '../activity-timeline';
-import type { ActivityWithUser } from '@/types/index.js';
+import type { ActivityWithUser } from '@/types/index';
 
 const mockActivities: ActivityWithUser[] = [
   {
@@ -48,7 +48,8 @@ describe('ActivityTimeline', () => {
 
   it('renders empty state when no activities', () => {
     render(<ActivityTimeline activities={[]} onAddActivity={() => {}} />);
-    expect(screen.getByText('Henüz aktivite bulunmuyor')).toBeInTheDocument();
+    expect(screen.getByText('Aktivite bulunamadı')).toBeInTheDocument();
+    expect(screen.getByText('Bu müşteri için henüz aktivite kaydı bulunmuyor.')).toBeInTheDocument();
   });
 
   it('renders activities list', () => {
@@ -59,7 +60,7 @@ describe('ActivityTimeline', () => {
     expect(screen.getByText('Teklif detayları gönderildi')).toBeInTheDocument();
   });
 
-  it('displays activity types', () => {
+  it('displays activity type badges', () => {
     render(<ActivityTimeline activities={mockActivities} onAddActivity={() => {}} />);
     
     expect(screen.getByText('Telefon')).toBeInTheDocument();
@@ -70,7 +71,7 @@ describe('ActivityTimeline', () => {
     render(<ActivityTimeline activities={mockActivities} onAddActivity={() => {}} />);
     
     expect(screen.getByText('Olumlu')).toBeInTheDocument();
-    expect(screen.getByText('Teklif Istendi')).toBeInTheDocument();
+    expect(screen.getByText('Teklif İstendi')).toBeInTheDocument();
   });
 
   it('displays duration information', () => {

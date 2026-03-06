@@ -135,8 +135,106 @@ export type LookupCategory =
   | 'country'
   | 'port';
 
-// Re-export quotation types
-export * from './quotations.js';
+// Quotation Types
+export type QuoteStatus = 'Bekliyor' | 'Kazanildi' | 'Kaybedildi';
+export type LossReason = 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger';
+export type Currency = 'USD' | 'EUR' | 'TRY';
+
+export interface Quotation {
+  id: string;
+  quote_no: string;
+  customer_id: string;
+  quote_date: string;
+  valid_until: string | null;
+  transport_mode: TransportMode;
+  service_type: ServiceType;
+  origin_country: string;
+  destination_country: string;
+  pol: string | null; // Port of Loading
+  pod: string | null; // Port of Discharge
+  incoterm: Incoterm;
+  price: number;
+  currency: Currency;
+  price_note: string | null;
+  status: QuoteStatus;
+  loss_reason: LossReason | null;
+  assigned_user_id: string;
+  revision_count: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+export interface QuotationWithCustomer extends Quotation {
+  customer: {
+    id: string;
+    company_name: string;
+    contact_name: string;
+  };
+  assigned_user: {
+    id: string;
+    full_name: string;
+  };
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateQuotationInput {
+  customer_id: string;
+  quote_date: string;
+  valid_until?: string | null;
+  transport_mode: TransportMode;
+  service_type: ServiceType;
+  origin_country: string;
+  destination_country: string;
+  pol?: string | null;
+  pod?: string | null;
+  incoterm: Incoterm;
+  price: number;
+  currency: Currency;
+  price_note?: string | null;
+  status?: QuoteStatus;
+  loss_reason?: LossReason | null;
+  assigned_user_id: string;
+}
+
+export type UpdateQuotationInput = Partial<CreateQuotationInput>;
+
+// Quotation Revision Types
+export interface QuotationRevision {
+  id: string;
+  quotation_id: string;
+  revision_no: number;
+  changed_fields: RevisionChange[];
+  revised_by: string;
+  revised_at: string;
+}
+
+export interface RevisionChange {
+  field: string;
+  old_value: unknown;
+  new_value: unknown;
+}
+
+export interface QuotationRevisionWithUser extends QuotationRevision {
+  revised_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+// Quotation Filters
+export interface QuotationFilters {
+  status?: QuoteStatus;
+  customer_id?: string;
+  assigned_user_id?: string;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+}
 
 // Activity Types
 export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
@@ -167,23 +265,26 @@ export interface CreateActivityInput {
   customer_id: string;
   type: ActivityType;
   date: string;
-  duration?: number | null;
+  duration?: number;
   notes: string;
   outcome: ActivityOutcome;
-  next_action_date?: string | null;
+  next_action_date?: string;
 }
 
 export type UpdateActivityInput = Partial<CreateActivityInput>;
 
 // Audit Log Types
+export type AuditAction = 'create' | 'update' | 'delete' | 'assign' | 'force_create';
+export type AuditRecordType = 'customer' | 'quotation' | 'activity' | 'user';
+
 export interface AuditLog {
   id: string;
   user_id: string;
-  record_type: string;
+  record_type: AuditRecordType;
   record_id: string;
-  action: string;
+  action: AuditAction;
   changes: Record<string, { old: unknown; new: unknown }> | null;
-  metadata?: Record<string, unknown> | null;
+  metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -196,227 +297,9 @@ export interface AuditLogWithUser extends AuditLog {
 
 export interface CreateAuditLogInput {
   user_id: string;
-  record_type: string;
+  record_type: AuditRecordType;
   record_id: string;
-  action: string;
-  changes?: Record<string, { old: unknown; new: unknown }> | null;
+  action: AuditAction;
+  changes?: Record<string, { old: unknown; new: unknown }>;
   metadata?: Record<string, unknown>;
-}
-
-// Transfer System Types
-export type TransferScope = 'all' | 'active' | 'open_quotes';
-
-export interface TransferPreview {
-  source_user_name: string;
-  target_user_name: string;
-  customers_count: number;
-  quotations_count: number;
-}
-
-export interface BulkTransferResult {
-  success: boolean;
-  transferred_customers: number;
-  transferred_quotations: number;
-  deactivated_user?: boolean;
-  errors?: string[];
-}
-
-// Dashboard Types
-export interface LossReasonAnalysis {
-  reason: string;
-  count: number;
-  percentage: number;
-}
-
-export interface SingleTransferInput {
-  customer_id: string;
-  from_user_id: string;
-  to_user_id: string;
-  reason: string;
-  cascade_to_open_quotes: boolean;
-}
-
-export interface BulkTransferInput {
-  from_user_id: string;
-  to_user_id: string;
-  scope: TransferScope;
-  deactivate_source: boolean;
-}
-
-// ============================================
-// User Dashboard Types
-// ============================================
-
-export interface UserDashboardMetrics {
-  quotesThisWeek: number;
-  quotesThisMonth: number;
-  wonQuotesThisMonth: number;
-  winRateThisMonth: number;
-  customersContactedThisMonth: number;
-  pendingQuotes: number;
-  activeCustomersAssigned: number;
-  activitiesThisWeek: number;
-}
-
-export interface UpcomingFollowUp {
-  id: string;
-  customerId: string;
-  customerName: string;
-  nextActionDate: string;
-  notes: string;
-  lastContactDate: string;
-}
-
-export interface RecentActivity {
-  id: string;
-  customerId: string;
-  customerName: string;
-  type: string;
-  typeLabel: string;
-  activityDate: string;
-  outcome: string | null;
-  outcomeLabel: string | null;
-  notes: string;
-  createdAt: string;
-}
-
-export interface UserDashboardData {
-  metrics: UserDashboardMetrics;
-  upcomingFollowUps: UpcomingFollowUp[];
-  recentActivities: RecentActivity[];
-}
-
-// ============================================
-// Alert Types
-// ============================================
-
-export type AlertType = 'no_contact_14d' | 'pending_quote_7d' | 'expired_quote' | 'high_potential_no_quote_30d';
-export type AlertSeverity = 'low' | 'medium' | 'high';
-export type AlertStatus = 'active' | 'reviewed' | 'dismissed';
-
-export interface AlertCounts {
-  no_contact_14d: number;
-  pending_quote_7d: number;
-  expired_quote: number;
-  high_potential_no_quote_30d: number;
-  total: number;
-}
-
-// ============================================
-// Report Types
-// ============================================
-
-export type ReportType = 'period' | 'performance' | 'won-lost' | 'country-volume';
-
-export interface PeriodReportFilters {
-  startDate: string;
-  endDate: string;
-  status?: QuotationStatus;
-  assignedUserId?: number;
-  currency?: Currency;
-}
-
-export interface PeriodReportStats {
-  totalQuotations: number;
-  totalValue: number;
-  wonCount: number;
-  wonValue: number;
-  lostCount: number;
-  lostValue: number;
-  pendingCount: number;
-  pendingValue: number;
-  winRate: number;
-}
-
-export interface PeriodReportRow {
-  id: number;
-  quote_no: string;
-  quote_date: string;
-  customer_name: string;
-  transport_mode: string | null;
-  origin_country: string | null;
-  destination_country: string | null;
-  price: number | null;
-  currency: Currency | null;
-  status: QuotationStatus;
-  loss_reason: LossReason | null;
-  assigned_user_name: string | null;
-}
-
-export interface PerformanceReportRow {
-  user_id: number;
-  user_name: string;
-  totalQuotations: number;
-  totalValue: number;
-  wonCount: number;
-  wonValue: number;
-  lostCount: number;
-  lostValue: number;
-  pendingCount: number;
-  winRate: number;
-  avgQuoteValue: number;
-}
-
-export interface WonLostAnalysis {
-  totalQuotes: number;
-  wonCount: number;
-  lostCount: number;
-  wonPercentage: number;
-  lostPercentage: number;
-  byLossReason: {
-    reason: string;
-    count: number;
-    percentage: number;
-  }[];
-  byMonth: {
-    month: string;
-    won: number;
-    lost: number;
-    pending: number;
-  }[];
-}
-
-export interface CountryVolumeReport {
-  originCountries: {
-    country: string;
-    count: number;
-    percentage: number;
-  }[];
-  destinationCountries: {
-    country: string;
-    count: number;
-    percentage: number;
-  }[];
-  modeDistribution: {
-    mode: string;
-    count: number;
-    percentage: number;
-  }[];
-  combinations: {
-    origin: string;
-    destination: string;
-    mode: string;
-    count: number;
-  }[];
-}
-
-export interface SavedReport {
-  id: number;
-  user_id: number;
-  report_type: ReportType;
-  name: string;
-  params: Record<string, unknown>;
-  created_at: string;
-}
-
-export interface ReportExportData {
-  title: string;
-  generatedAt: string;
-  dateRange: {
-    start: string;
-    end: string;
-  };
-  filters: Record<string, unknown>;
-  summary: Record<string, unknown>;
-  rows: Record<string, unknown>[];
 }

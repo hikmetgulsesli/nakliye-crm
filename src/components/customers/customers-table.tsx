@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, MoreHorizontal, Edit, Trash2, Building2, Phone, Mail, User } from 'lucide-react';
+import { Plus, Search, Filter, MoreHorizontal, Edit, Trash2, Building2, Phone, Mail, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTable, type Column } from '@/components/ui/data-table';
+import { DataTable } from '@/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { StatusBadge, PotentialBadge } from '@/components/ui/badges';
 import {
   DropdownMenu,
@@ -28,21 +29,19 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
 
   const filteredCustomers = React.useMemo(() => {
     if (!searchTerm) return customers;
-
     const lowerSearch = searchTerm.toLowerCase();
     return customers.filter(
       (customer) =>
         customer.company_name.toLowerCase().includes(lowerSearch) ||
         customer.contact_name.toLowerCase().includes(lowerSearch) ||
-        customer.phone.includes(lowerSearch) ||
-        customer.email.toLowerCase().includes(lowerSearch)
+        customer.email.toLowerCase().includes(lowerSearch) ||
+        customer.phone.toLowerCase().includes(lowerSearch) ||
+        customer.assigned_user.full_name.toLowerCase().includes(lowerSearch)
     );
   }, [customers, searchTerm]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Bu müşteriyi silmek istediğinize emin misiniz?')) {
-      return;
-    }
+    if (!confirm('Bu müşteriyi silmek istediğinize emin misiniz?')) return;
 
     setIsDeleting(id);
     try {
@@ -53,81 +52,84 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
       if (response.ok) {
         onRefresh();
       } else {
-        alert('Müşteri silinirken bir hata oluştu');
+        const data = await response.json();
+        alert(data.error || 'Müşteri silinirken bir hata oluştu');
       }
+    } catch (error) {
+      console.error('Error deleting customer:', error);
+      alert('Müşteri silinirken bir hata oluştu');
     } finally {
       setIsDeleting(null);
     }
   };
 
-  const columns: Column<CustomerWithUser>[] = [
+  const columns: ColumnDef<CustomerWithUser>[] = [
     {
-      key: 'company_name',
+      id: 'company_name',
       header: 'Firma',
-      cell: (customer: CustomerWithUser) => (
+      accessorFn: (row) => row.company_name,
+      cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
           <div>
-            <div className="font-medium">{customer.company_name}</div>
-            <div className="text-sm text-muted-foreground">{customer.contact_name}</div>
+            <div className="font-medium">{row.original.company_name}</div>
+            <div className="text-sm text-muted-foreground">{row.original.contact_name}</div>
           </div>
         </div>
       ),
     },
     {
-      key: 'contact',
+      id: 'contact',
       header: 'İletişim',
-      cell: (customer: CustomerWithUser) => (
+      cell: ({ row }) => (
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-sm">
             <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-            {customer.phone}
+            {row.original.phone}
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-            {customer.email}
+            {row.original.email}
           </div>
         </div>
       ),
     },
     {
-      key: 'assigned_user',
+      id: 'assigned_user',
       header: 'Temsilci',
-      cell: (customer: CustomerWithUser) => (
+      accessorFn: (row) => row.assigned_user.full_name,
+      cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <User className="h-4 w-4 text-muted-foreground" />
-          {customer.assigned_user.full_name}
+          {row.original.assigned_user.full_name}
         </div>
       ),
     },
     {
-      key: 'potential',
+      id: 'potential',
       header: 'Potansiyel',
-      cell: (customer: CustomerWithUser) => (
-        <PotentialBadge potential={customer.potential} />
-      ),
+      accessorFn: (row) => row.potential,
+      cell: ({ row }) => <PotentialBadge potential={row.original.potential} />,
     },
     {
-      key: 'status',
+      id: 'status',
       header: 'Durum',
-      cell: (customer: CustomerWithUser) => (
-        <StatusBadge status={customer.status} />
-      ),
+      accessorFn: (row) => row.status,
+      cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
-      key: 'transport',
+      id: 'transport',
       header: 'Taşıma',
-      cell: (customer: CustomerWithUser) => (
+      cell: ({ row }) => (
         <div className="max-w-[200px] truncate text-sm text-muted-foreground">
-          {customer.transport_modes.join(', ')}
+          {row.original.transport_modes.join(', ')}
         </div>
       ),
     },
     {
-      key: 'actions',
+      id: 'actions',
       header: '',
-      width: '50px',
-      cell: (customer: CustomerWithUser) => (
+      cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -136,19 +138,19 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => router.push(`/customers/${customer.id}/edit`)}
+              onClick={() => router.push(`/customers/${row.original.id}/edit`)}
             >
               <Edit className="mr-2 h-4 w-4" />
               Düzenle
             </DropdownMenuItem>
             {isAdmin && (
               <DropdownMenuItem
-                onClick={() => handleDelete(customer.id)}
-                disabled={isDeleting === customer.id}
+                onClick={() => handleDelete(row.original.id)}
+                disabled={isDeleting === row.original.id}
                 className="text-red-600 focus:text-red-600"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                {isDeleting === customer.id ? 'Siliniyor...' : 'Sil'}
+                {isDeleting === row.original.id ? 'Siliniyor...' : 'Sil'}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -169,17 +171,21 @@ export function CustomersTable({ customers, isAdmin, onRefresh }: CustomersTable
             className="pl-9"
           />
         </div>
-        <Button onClick={() => router.push('/customers/new')}>
-          <Plus className="mr-2 h-4 w-4" />
-          Yeni Müşteri
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm">
+            <Filter className="mr-2 h-4 w-4" />
+            Filtrele
+          </Button>
+          <Button size="sm" onClick={() => router.push('/customers/new')}>
+            <Plus className="mr-2 h-4 w-4" />
+            Yeni Müşteri
+          </Button>
+        </div>
       </div>
 
       <DataTable
-        data={filteredCustomers}
         columns={columns}
-        keyExtractor={(customer) => customer.id}
-        emptyMessage="Müşteri bulunamadı"
+        data={filteredCustomers}
       />
     </div>
   );
