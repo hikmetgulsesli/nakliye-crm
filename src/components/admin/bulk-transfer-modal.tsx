@@ -134,7 +134,9 @@ export function BulkTransferModal({ isOpen, onClose, users }: BulkTransferModalP
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sourceUser = activeUsers.find((u) => u.id === sourceUserId);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const targetUser = activeUsers.find((u) => u.id === targetUserId);
 
   return (

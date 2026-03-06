@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getSession } from '@/lib/auth/session';
 import { getAuditLogs } from '@/lib/audit';
 
 function errorResponse(code: string, message: string, status = 400) {
@@ -8,9 +9,19 @@ function errorResponse(code: string, message: string, status = 400) {
   );
 }
 
-// GET /api/audit-logs - Get audit logs
+// GET /api/audit-logs - Get audit logs (admin only)
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    const session = await getSession();
+    if (!session) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    // Only admins can view audit logs
+    if (session.user.role !== 'admin') {
+      return errorResponse('FORBIDDEN', 'Admin access required', 403);
+    }
+
     const { searchParams } = new URL(request.url);
 
     const recordType = searchParams.get('record_type') || undefined;

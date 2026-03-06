@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         const email: string = credentials.email;
         const password: string = credentials.password;
 
-        const user = getUserByEmail(email);
+        const user = await getUserByEmail(email);
         
         if (!user) {
           return null;

@@ -1,5 +1,5 @@
 import { compare, hash } from "bcryptjs";
-import { getDb } from "@/lib/db/index";
+import { getPool } from "@/lib/db/users";
 import type { User } from "@/types/index";
 
 const SALT_ROUNDS = 12;
@@ -12,18 +12,44 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return compare(password, hashedPassword);
 }
 
-export function getUserByEmail(email: string): User | null {
-  const db = getDb();
-  const stmt = db.prepare("SELECT * FROM users WHERE email = ? AND is_active = 1");
-  const row = stmt.get(email) as User | undefined;
-  return row ?? null;
+export async function getUserByEmail(email: string): Promise<User | null> {
+  const pool = getPool();
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1 AND is_active = true",
+    [email]
+  );
+  
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  const row = result.rows[0];
+  return {
+    ...row,
+    id: row.id.toString(),
+    created_at: row.created_at.toISOString(),
+    updated_at: row.updated_at.toISOString(),
+  };
 }
 
-export function getUserById(id: number): User | null {
-  const db = getDb();
-  const stmt = db.prepare("SELECT * FROM users WHERE id = ? AND is_active = 1");
-  const row = stmt.get(id) as User | undefined;
-  return row ?? null;
+export async function getUserById(id: string): Promise<User | null> {
+  const pool = getPool();
+  const result = await pool.query(
+    "SELECT * FROM users WHERE id = $1 AND is_active = true",
+    [id]
+  );
+  
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  const row = result.rows[0];
+  return {
+    ...row,
+    id: row.id.toString(),
+    created_at: row.created_at.toISOString(),
+    updated_at: row.updated_at.toISOString(),
+  };
 }
 
 export interface CreateUserInput {
@@ -34,32 +60,33 @@ export interface CreateUserInput {
 }
 
 export async function createUser(input: CreateUserInput): Promise<User> {
-  const db = getDb();
+  const pool = getPool();
   const passwordHash = await hashPassword(input.password);
-  
-  const stmt = db.prepare(`
-    INSERT INTO users (email, password_hash, full_name, role)
-    VALUES (?, ?, ?, ?)
-  `);
-  
-  const result = stmt.run(input.email, passwordHash, input.fullName, input.role ?? "user");
-  
-  const user = getUserById(Number(result.lastInsertRowid));
-  if (!user) {
-    throw new Error("Failed to create user");
-  }
-  
-  return user;
+
+  const result = await pool.query(
+    `INSERT INTO users (email, password_hash, full_name, role)
+     VALUES ($1, $2, $3, $4)
+     RETURNING *`,
+    [input.email, passwordHash, input.fullName, input.role ?? "user"]
+  );
+
+  const row = result.rows[0];
+  return {
+    ...row,
+    id: row.id.toString(),
+    created_at: row.created_at.toISOString(),
+    updated_at: row.updated_at.toISOString(),
+  };
 }
 
 export function validatePassword(password: string): { valid: boolean; message?: string } {
   if (password.length < 8) {
     return { valid: false, message: "Şifre en az 8 karakter olmalıdır" };
   }
-  
+
   if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
     return { valid: false, message: "Şifre en az 1 özel karakter içermelidir" };
   }
-  
+
   return { valid: true };
 }
