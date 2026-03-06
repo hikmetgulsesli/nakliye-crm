@@ -13,10 +13,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { QuotationWithRelations } from '@/types/quotations';
+import type { QuotationWithCustomer } from '@/types/quotations';
 
 interface QuotationsTableProps {
-  quotations: QuotationWithRelations[];
+  quotations: QuotationWithCustomer[];
   isAdmin: boolean;
   onRefresh: () => void;
 }
@@ -79,11 +79,11 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     return `${price.toLocaleString('tr-TR')} ${currency || ''}`;
   };
 
-  const columns: Column<QuotationWithRelations>[] = [
+  const columns: Column<QuotationWithCustomer>[] = [
     {
       key: 'quote_no',
       header: 'Teklif No',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div className="flex items-center gap-2">
           <FileText className="h-4 w-4 text-muted-foreground" />
           <span className="font-medium">{q.quote_no}</span>
@@ -93,7 +93,7 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'customer',
       header: 'Müşteri',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div>
           <div className="font-medium">{q.customer.company_name}</div>
           <div className="text-sm text-muted-foreground">{q.customer.contact_name}</div>
@@ -103,14 +103,14 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'dates',
       header: 'Tarihler',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div className="space-y-1 text-sm">
           <div className="flex items-center gap-2">
             <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
             <span>T: {formatDate(q.quote_date)}</span>
           </div>
           <div className="text-muted-foreground">
-            G: {formatDate(q.validity_date)}
+            G: {q.validity_date ? formatDate(q.validity_date) : '-'}
           </div>
         </div>
       ),
@@ -118,7 +118,7 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'transport',
       header: 'Taşıma',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div className="space-y-1 text-sm">
           <div>{q.transport_mode}</div>
           <div className="text-muted-foreground">{q.service_type}</div>
@@ -128,7 +128,7 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'route',
       header: 'Güzergah',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div className="text-sm">
           <div>{q.origin_country} → {q.destination_country}</div>
           <div className="text-muted-foreground">{q.incoterm}</div>
@@ -138,7 +138,7 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'price',
       header: 'Fiyat',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <div className="flex items-center gap-1">
           <DollarSign className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="text-sm font-medium">
@@ -150,12 +150,12 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
     {
       key: 'status',
       header: 'Durum',
-      render: (q: QuotationWithRelations) => <StatusBadge status={q.status} />,
+      cell: (q: QuotationWithCustomer) => <StatusBadge status={q.status} />,
     },
     {
       key: 'assigned_user',
       header: 'Temsilci',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <span className="text-sm">{q.assigned_user.full_name}</span>
       ),
     },
@@ -163,7 +163,7 @@ export function QuotationsTable({ quotations, isAdmin, onRefresh }: QuotationsTa
       key: 'actions',
       header: '',
       width: '50px',
-      render: (q: QuotationWithRelations) => (
+      cell: (q: QuotationWithCustomer) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">

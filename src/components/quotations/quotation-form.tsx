@@ -15,32 +15,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { QuotationWithRelations, User, Customer } from '@/types';
+import type { User, Customer } from '@/types';
+import type { QuotationWithCustomer } from '@/types/quotations';
 import type { CreateQuotationInput, UpdateQuotationInput } from '@/types/quotations';
 
 interface QuotationFormData {
   customer_id: string;
   quote_date: string;
-  validity_date: string;
+  validity_date?: string;
   transport_mode: string;
   service_type: string;
   origin_country: string;
   destination_country: string;
-  pol: string;
-  pod: string;
+  pol?: string;
+  pod?: string;
   incoterm: string;
-  price: string;
-  currency: 'USD' | 'EUR' | 'TRY' | '';
-  price_note: string;
+  price?: string;
+  currency?: 'USD' | 'EUR' | 'TRY' | '';
+  price_note?: string;
   status: 'Bekliyor' | 'Kazanildi' | 'Kaybedildi';
-  loss_reason: 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger' | '';
+  loss_reason?: 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger' | '';
   assigned_user_id: string;
 }
 
 const quotationSchema = z.object({
   customer_id: z.string().min(1, 'Müşteri seçiniz'),
   quote_date: z.string().min(1, 'Teklif tarihi zorunludur'),
-  validity_date: z.string().min(1, 'Geçerlilik tarihi zorunludur'),
+  validity_date: z.string().optional(),
   transport_mode: z.string().min(1, 'Taşıma modu seçiniz'),
   service_type: z.string().min(1, 'Servis tipi seçiniz'),
   origin_country: z.string().min(1, 'Çıkış ülkesi seçiniz'),
@@ -49,10 +50,10 @@ const quotationSchema = z.object({
   pod: z.string().optional(),
   incoterm: z.string().min(1, 'Satış şekli seçiniz'),
   price: z.string().optional(),
-  currency: z.string().optional(),
+  currency: z.enum(['', 'USD', 'EUR', 'TRY']).optional(),
   price_note: z.string().optional(),
   status: z.enum(['Bekliyor', 'Kazanildi', 'Kaybedildi']),
-  loss_reason: z.string().optional(),
+  loss_reason: z.enum(['', 'Fiyat', 'Rakip', 'Gecikmeli donus', 'Diger']).optional(),
   assigned_user_id: z.string().min(1, 'Temsilci seçiniz'),
 }).refine((data) => {
   if (data.status === 'Kaybedildi') {
@@ -123,7 +124,7 @@ const COUNTRIES = [
 ];
 
 interface QuotationFormProps {
-  quotation?: QuotationWithRelations;
+  quotation?: QuotationWithCustomer;
   customers: Customer[];
   users: User[];
   currentUser: User;
@@ -159,7 +160,7 @@ export function QuotationForm({
       ? {
           customer_id: quotation.customer_id,
           quote_date: quotation.quote_date,
-          validity_date: quotation.validity_date,
+          validity_date: quotation.validity_date || undefined,
           transport_mode: quotation.transport_mode,
           service_type: quotation.service_type,
           origin_country: quotation.origin_country,

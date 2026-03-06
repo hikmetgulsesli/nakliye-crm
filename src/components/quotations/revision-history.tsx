@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import { Clock, User } from 'lucide-react';
-import type { QuotationRevision } from '@/types/quotations';
+import type { QuotationRevisionWithUser } from '@/types/quotations';
 
 interface RevisionHistoryProps {
-  revisions: QuotationRevision[];
+  revisions: QuotationRevisionWithUser[];
 }
 
 export function RevisionHistory({ revisions }: RevisionHistoryProps) {
@@ -74,19 +74,19 @@ export function RevisionHistory({ revisions }: RevisionHistoryProps) {
           </div>
 
           <div className="mt-3 space-y-2">
-            {Object.entries(revision.changed_fields).map(([field, change]) => (
+            {revision.changed_fields.map((change, index) => (
               <div
-                key={field}
+                key={index}
                 className="grid grid-cols-[120px_1fr_1fr] items-center gap-2 text-sm"
               >
                 <span className="font-medium text-muted-foreground">
-                  {formatFieldName(field)}:
+                  {formatFieldName(change.field)}:
                 </span>
                 <span className="rounded bg-red-50 px-2 py-1 text-red-700 line-through">
-                  {formatValue(change.old)}
+                  {formatValue(change.old_value)}
                 </span>
                 <span className="rounded bg-green-50 px-2 py-1 text-green-700">
-                  {formatValue(change.new)}
+                  {formatValue(change.new_value)}
                 </span>
               </div>
             ))}

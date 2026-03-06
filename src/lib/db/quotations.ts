@@ -3,7 +3,9 @@ import type {
   CreateQuotationInput, 
   UpdateQuotationInput, 
   QuotationFilters,
-  QuotationWithCustomer 
+  QuotationWithCustomer,
+  Currency,
+  LossReason
 } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
 
@@ -115,7 +117,7 @@ export function createQuotation(input: CreateQuotationInput, createdBy: string):
     quoteNo,
     input.customer_id,
     input.quote_date,
-    input.valid_until || null,
+    input.validity_date || null,
     input.transport_mode,
     input.service_type,
     input.origin_country,
@@ -418,10 +420,10 @@ function mapRowToQuotation(row: Record<string, unknown>): Quotation {
     pod: row.pod as string | null,
     incoterm: row.incoterm as string,
     price: row.price as number | null,
-    currency: row.currency as string | null,
+    currency: row.currency as Currency | null,
     price_note: row.price_note as string | null,
     status: row.status as Quotation['status'],
-    loss_reason: row.loss_reason as string | null,
+    loss_reason: row.loss_reason as LossReason | null,
     assigned_user_id: row.assigned_user_id as string,
     revision_count: row.revision_count as number,
     created_by: row.created_by as string,

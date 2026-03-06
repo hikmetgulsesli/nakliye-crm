@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Edit, Phone, Mail, MapPin, Calendar, User, Building2, Package, Globe, TrendingUp, Activity, Plus, FileText, History, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, Edit, Phone, Mail, MapPin, Calendar, User, TrendingUp, Activity, Plus, FileText, History, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge, PotentialBadge } from '@/components/ui/badges';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -442,7 +442,7 @@ export default function CustomerDetailPage() {
 
         {/* History Tab */}
         <TabsContent value="history">
-          <AuditHistory logs={auditLogs} loading={isLoading} />
+          <AuditHistory logs={auditLogs} />
         </TabsContent>
       </Tabs>
     </div>

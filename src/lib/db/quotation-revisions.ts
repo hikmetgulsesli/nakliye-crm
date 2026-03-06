@@ -135,7 +135,7 @@ export function calculateDiff(
   const changes: RevisionChange[] = [];
   const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
 
-  for (const key of allKeys) {
+  for (const key of Array.from(allKeys)) {
     const oldValue = oldData[key];
     const newValue = newData[key];
 

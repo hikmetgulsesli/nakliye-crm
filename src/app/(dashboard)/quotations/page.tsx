@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth/session';
-import { getAllQuotations } from '@/lib/db/quotations';
+import { getQuotations } from '@/lib/db/quotations';
 import { QuotationsTable } from '@/components/quotations/quotations-table';
 
 export default async function QuotationsPage() {
@@ -10,7 +10,7 @@ export default async function QuotationsPage() {
     redirect('/login');
   }
 
-  const quotations = getAllQuotations();
+  const quotations = getQuotations();
 
   return (
     <div className="space-y-6">

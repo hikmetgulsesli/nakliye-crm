@@ -39,7 +39,7 @@ TabsList.displayName = 'TabsList';
 const TabsTrigger = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentPropsWithoutRef<'button'> & { value?: string; onValueChange?: (value: string) => void }
->(({ className, value: triggerValue, onValueChange, onClick, ...props }, ref) => {
+>(({ className, value: triggerValue, onClick, ...props }, ref) => {
   const contextValue = (props as Record<string, unknown>)?.value;
   const contextOnChange = (props as Record<string, unknown>)?.onValueChange as ((value: string) => void) | undefined;
   const isActive = contextValue === triggerValue;

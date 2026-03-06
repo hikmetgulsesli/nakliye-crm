@@ -1,16 +1,22 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import type { CustomerStatus, Potential } from '@/types/index.js';
+import type { QuoteStatus } from '@/types/quotations';
+
+type StatusType = CustomerStatus | QuoteStatus;
 
 interface StatusBadgeProps {
-  status: CustomerStatus;
+  status: StatusType;
   className?: string;
 }
 
-const statusStyles: Record<CustomerStatus, string> = {
+const statusStyles: Record<StatusType, string> = {
   Aktif: 'bg-green-100 text-green-800',
   Pasif: 'bg-gray-100 text-gray-800',
   Soguk: 'bg-blue-100 text-blue-800',
+  Bekliyor: 'bg-yellow-100 text-yellow-800',
+  Kazanildi: 'bg-green-100 text-green-800',
+  Kaybedildi: 'bg-red-100 text-red-800',
 };
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {

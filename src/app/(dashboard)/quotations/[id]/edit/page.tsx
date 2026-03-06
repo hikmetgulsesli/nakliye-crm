@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { QuotationForm } from '@/components/quotations/quotation-form';
 import type { User, Customer } from '@/types';
-import type { QuotationWithRelations, UpdateQuotationInput } from '@/types/quotations';
+import type { QuotationWithCustomer, UpdateQuotationInput } from '@/types/quotations';
 
 interface EditQuotationPageProps {
   params: Promise<{ id: string }>;
@@ -18,10 +17,10 @@ export default function EditQuotationPage({ params }: EditQuotationPageProps) {
   const { id } = React.use(params);
   const [isLoading, setIsLoading] = React.useState(true);
   const [users, setUsers] = React.useState<User[]>([]);
-  const [customers] = React.useState<Customer[]>([]); // Not needed for edit
+  const [customers, setCustomers] = React.useState<Customer[]>([]);
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const [isAdmin, setIsAdmin] = React.useState(false);
-  const [quotation, setQuotation] = React.useState<QuotationWithRelations | null>(null);
+  const [quotation, setQuotation] = React.useState<QuotationWithCustomer | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -42,6 +41,13 @@ export default function EditQuotationPage({ params }: EditQuotationPageProps) {
         if (usersRes.ok) {
           const usersData = await usersRes.json();
           setUsers(usersData.users || []);
+        }
+
+        // Fetch customers
+        const customersRes = await fetch('/api/customers');
+        if (customersRes.ok) {
+          const customersData = await customersRes.json();
+          setCustomers(customersData.customers || []);
         }
 
         // Fetch quotation
@@ -70,7 +76,7 @@ export default function EditQuotationPage({ params }: EditQuotationPageProps) {
 
   const handleSubmit = async (data: UpdateQuotationInput) => {
     const response = await fetch(`/api/quotations/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
@@ -101,8 +107,8 @@ export default function EditQuotationPage({ params }: EditQuotationPageProps) {
       <div className="flex h-64 flex-col items-center justify-center gap-4">
         <AlertCircle className="h-12 w-12 text-red-500" />
         <p className="text-lg text-muted-foreground">{error || 'Teklif bulunamadı'}</p>
-        <Button asChild>
-          <Link href="/quotations">Tekliflere Dön</Link>
+        <Button onClick={() => router.push('/quotations')}>
+          Tekliflere Dön
         </Button>
       </div>
     );
@@ -115,11 +121,9 @@ export default function EditQuotationPage({ params }: EditQuotationPageProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" asChild>
-          <Link href={`/quotations/${id}`}>
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Geri
-          </Link>
+        <Button variant="outline" size="sm" onClick={() => router.push(`/quotations/${id}`)}>
+          <ChevronLeft className="mr-2 h-4 w-4" />
+          Geri
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Teklif Düzenle</h1>

@@ -10,7 +10,7 @@ import {
   FileText, 
   Calendar, 
   DollarSign,
-  User,
+  User as UserIcon,
   Clock,
   Loader2,
   AlertCircle
@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/badges';
 import { RevisionHistory } from '@/components/quotations/revision-history';
-import type { QuotationWithRelations, QuotationRevision } from '@/types/quotations';
+import type { QuotationWithCustomer, QuotationRevisionWithUser } from '@/types/quotations';
 import type { User } from '@/types';
 
 interface QuotationDetailPageProps {
@@ -28,8 +28,8 @@ interface QuotationDetailPageProps {
 export default function QuotationDetailPage({ params }: QuotationDetailPageProps) {
   const router = useRouter();
   const { id } = React.use(params);
-  const [quotation, setQuotation] = React.useState<QuotationWithRelations | null>(null);
-  const [revisions, setRevisions] = React.useState<QuotationRevision[]>([]);
+  const [quotation, setQuotation] = React.useState<QuotationWithCustomer | null>(null);
+  const [revisions, setRevisions] = React.useState<QuotationRevisionWithUser[]>([]);
   const [, setCurrentUser] = React.useState<User | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -103,8 +103,8 @@ export default function QuotationDetailPage({ params }: QuotationDetailPageProps
       <div className="flex h-64 flex-col items-center justify-center gap-4">
         <AlertCircle className="h-12 w-12 text-red-500" />
         <p className="text-lg text-muted-foreground">{error || 'Teklif bulunamadı'}</p>
-        <Button asChild>
-          <Link href="/quotations">Tekliflere Dön</Link>
+        <Button onClick={() => router.push('/quotations')}>
+          Tekliflere Dön
         </Button>
       </div>
     );
@@ -115,11 +115,9 @@ export default function QuotationDetailPage({ params }: QuotationDetailPageProps
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/quotations">
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Geri
-            </Link>
+          <Button variant="outline" size="sm" onClick={() => router.push('/quotations')}>
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Geri
           </Button>
           <div>
             <h1 className="text-2xl font-bold">{quotation.quote_no}</h1>
@@ -131,11 +129,9 @@ export default function QuotationDetailPage({ params }: QuotationDetailPageProps
             <Printer className="mr-2 h-4 w-4" />
             Yazdır
           </Button>
-          <Button size="sm" asChild>
-            <Link href={`/quotations/${quotation.id}/edit`}>
-              <Edit className="mr-2 h-4 w-4" />
-              Düzenle
-            </Link>
+          <Button size="sm" onClick={() => router.push(`/quotations/${quotation.id}/edit`)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Düzenle
           </Button>
         </div>
       </div>
@@ -188,7 +184,7 @@ export default function QuotationDetailPage({ params }: QuotationDetailPageProps
                 <Calendar className="mt-0.5 h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="text-sm text-muted-foreground">Geçerlilik Tarihi</p>
-                  <p className="font-medium">{formatDate(quotation.validity_date)}</p>
+                  <p className="font-medium">{quotation.validity_date ? formatDate(quotation.validity_date) : '-'}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -279,14 +275,14 @@ export default function QuotationDetailPage({ params }: QuotationDetailPageProps
             <h3 className="mb-4 text-lg font-medium">Atama</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <User className="h-5 w-5 text-muted-foreground" />
+                <UserIcon className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="text-sm text-muted-foreground">Atanan Temsilci</p>
                   <p className="font-medium">{quotation.assigned_user.full_name}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <User className="h-5 w-5 text-muted-foreground" />
+                <UserIcon className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="text-sm text-muted-foreground">Oluşturan</p>
                   <p className="font-medium">{quotation.created_by_user.full_name}</p>

@@ -5,6 +5,7 @@ import {
   getQuotationByIdWithCustomer,
   updateQuotation,
   softDeleteQuotation,
+  deleteQuotation,
   incrementRevisionCount 
 } from '@/lib/db/quotations';
 import { createRevision, calculateDiff } from '@/lib/db/quotation-revisions';
@@ -212,7 +213,6 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     if (hardDelete) {
       // Hard delete - only for admins
-      const { deleteQuotation } = await import('@/lib/db/quotations');
       const success = deleteQuotation(id);
       if (!success) {
         return NextResponse.json(

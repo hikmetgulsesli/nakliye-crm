@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { QuotationForm } from '@/components/quotations/quotation-form';
@@ -53,7 +52,7 @@ export default function NewQuotationPage() {
     fetchData();
   }, [router]);
 
-  const handleSubmit = async (data: CreateQuotationInput) => {
+  const handleSubmit = async (data: CreateQuotationInput | Partial<CreateQuotationInput>) => {
     const response = await fetch('/api/quotations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -88,11 +87,9 @@ export default function NewQuotationPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/quotations">
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Geri
-          </Link>
+        <Button variant="outline" size="sm" onClick={() => router.push('/quotations')}>
+          <ChevronLeft className="mr-2 h-4 w-4" />
+          Geri
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Yeni Teklif</h1>
