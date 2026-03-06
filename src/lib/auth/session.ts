@@ -2,12 +2,14 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import type { User, Session } from '@/types';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'nakliye-crm-secret-key-min-32-chars-long'
-);
+const JWT_SECRET_VALUE = process.env.JWT_SECRET;
+if (!JWT_SECRET_VALUE) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_VALUE);
 
 export async function createSession(user: User): Promise<string> {
-  const token = await new SignJWT({ userId: user.id, role: user.role })
+  const token = await new SignJWT({ userId: user.id, role: user.role, full_name: user.full_name })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('8h')
@@ -16,12 +18,13 @@ export async function createSession(user: User): Promise<string> {
   return token;
 }
 
-export async function verifySession(token: string): Promise<{ userId: string; role: string } | null> {
+export async function verifySession(token: string): Promise<{ userId: string; role: string; full_name: string } | null> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
     return {
       userId: payload.userId as string,
       role: payload.role as string,
+      full_name: payload.full_name as string,
     };
   } catch {
     return null;
@@ -37,12 +40,11 @@ export async function getSession(): Promise<Session | null> {
   const payload = await verifySession(token);
   if (!payload) return null;
 
-  // TODO: Fetch user from database
-  // For now, return a minimal session
   return {
     user: {
       id: payload.userId,
       role: payload.role,
+      full_name: payload.full_name,
     } as User,
     expires: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
   };

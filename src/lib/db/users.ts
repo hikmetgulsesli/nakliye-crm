@@ -1,54 +1,53 @@
-import type { User, CreateUserInput, UpdateUserInput, UserRole } from '@/types';
+import type { User, CreateUserInput, UpdateUserInput } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
 import bcrypt from 'bcryptjs';
 
-// Lazy initialization of database
 let db: import('better-sqlite3').Database | null = null;
 
 function getDb() {
   if (!db) {
     const dbPath = process.env.DATABASE_PATH || './data/crm.db';
     db = new DatabaseConstructor(dbPath);
-    
-    // Initialize users table
-    db.exec(`
-      CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        full_name TEXT NOT NULL,
-        role TEXT NOT NULL CHECK (role IN ('admin', 'user')),
-        is_active INTEGER NOT NULL DEFAULT 1,
-        created_at TEXT NOT NULL,
-        updated_at TEXT NOT NULL
-      )
-    `);
+    initializeUsersTable();
   }
   return db;
 }
 
-export function createUser(input: CreateUserInput): User {
-  const database = getDb();
-  const id = crypto.randomUUID();
-  const passwordHash = bcrypt.hashSync(input.password, 10);
-  const now = new Date().toISOString();
-
-  const stmt = database.prepare(`
-    INSERT INTO users (id, email, password_hash, full_name, role, is_active, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+function initializeUsersTable() {
+  const database = db!;
+  
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      password_hash TEXT NOT NULL,
+      full_name TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT 'user',
+      is_active INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    )
   `);
 
-  stmt.run(id, input.email, passwordHash, input.full_name, input.role, 1, now, now);
+  // Create indexes
+  database.exec(`
+    CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+    CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+  `);
+}
 
-  return {
-    id,
-    email: input.email,
-    full_name: input.full_name,
-    role: input.role,
-    is_active: true,
-    created_at: now,
-    updated_at: now,
-  };
+export function getAllUsers(): User[] {
+  const database = getDb();
+  const stmt = database.prepare('SELECT * FROM users WHERE is_active = 1 ORDER BY full_name ASC');
+  const rows = stmt.all() as Record<string, unknown>[];
+  return rows.map(mapRowToUser);
+}
+
+export function getAllUsersIncludingInactive(): User[] {
+  const database = getDb();
+  const stmt = database.prepare('SELECT * FROM users ORDER BY full_name ASC');
+  const rows = stmt.all() as Record<string, unknown>[];
+  return rows.map(mapRowToUser);
 }
 
 export function getUserById(id: string): User | null {
@@ -61,21 +60,38 @@ export function getUserById(id: string): User | null {
 export function getUserByEmail(email: string): User | null {
   const database = getDb();
   const stmt = database.prepare('SELECT * FROM users WHERE email = ? AND is_active = 1');
-  const row = stmt.get(email) as Record<string, unknown> | undefined;
+  const row = stmt.get(email.toLowerCase()) as Record<string, unknown> | undefined;
   return row ? mapRowToUser(row) : null;
 }
 
-export function getAllUsers(): User[] {
+export function createUser(input: CreateUserInput): User {
   const database = getDb();
-  const stmt = database.prepare('SELECT * FROM users ORDER BY created_at DESC');
-  const rows = stmt.all() as Record<string, unknown>[];
-  return rows.map(mapRowToUser);
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
+  const passwordHash = bcrypt.hashSync(input.password, 10);
+
+  const stmt = database.prepare(`
+    INSERT INTO users (id, email, password_hash, full_name, role, is_active, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, 1, ?, ?)
+  `);
+
+  stmt.run(id, input.email.toLowerCase(), passwordHash, input.full_name, input.role, now, now);
+
+  return {
+    id,
+    email: input.email.toLowerCase(),
+    full_name: input.full_name,
+    role: input.role,
+    is_active: true,
+    created_at: now,
+    updated_at: now,
+  };
 }
 
 export function updateUser(id: string, input: UpdateUserInput): User | null {
   const database = getDb();
   const sets: string[] = [];
-  const values: (string | number)[] = [];
+  const values: (string | boolean | number)[] = [];
 
   if (input.full_name !== undefined) {
     sets.push('full_name = ?');
@@ -104,8 +120,8 @@ export function updateUser(id: string, input: UpdateUserInput): User | null {
 
 export function deleteUser(id: string): boolean {
   const database = getDb();
-  const stmt = database.prepare('UPDATE users SET is_active = 0, updated_at = ? WHERE id = ?');
-  const result = stmt.run(new Date().toISOString(), id);
+  const stmt = database.prepare('DELETE FROM users WHERE id = ?');
+  const result = stmt.run(id);
   return result.changes > 0;
 }
 
@@ -120,13 +136,18 @@ export function validatePassword(user: User, password: string): boolean {
 export function seedInitialAdmin(): void {
   const existing = getUserByEmail('admin@nakliye.com');
   if (!existing) {
+    // Use environment variable for admin password
+    const adminPassword = process.env.ADMIN_INITIAL_PASSWORD;
+    if (!adminPassword) {
+      throw new Error('ADMIN_INITIAL_PASSWORD environment variable is required for initial admin setup');
+    }
+    const hashedPassword = bcrypt.hashSync(adminPassword, 10);
     createUser({
       email: 'admin@nakliye.com',
-      password: 'Admin123!',
+      password: hashedPassword,
       full_name: 'System Admin',
       role: 'admin',
     });
-    console.log('Created initial admin user: admin@nakliye.com / Admin123!');
   }
 }
 
@@ -135,7 +156,7 @@ function mapRowToUser(row: Record<string, unknown>): User {
     id: row.id as string,
     email: row.email as string,
     full_name: row.full_name as string,
-    role: row.role as UserRole,
+    role: row.role as User['role'],
     is_active: Boolean(row.is_active),
     created_at: row.created_at as string,
     updated_at: row.updated_at as string,

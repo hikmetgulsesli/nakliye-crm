@@ -1,8 +1,10 @@
 import { jwtVerify, SignJWT } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "nakliye-crm-secret-key-min-32-chars-long"
-);
+const JWT_SECRET_VALUE = process.env.JWT_SECRET;
+if (!JWT_SECRET_VALUE) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_VALUE);
 
 export interface TokenPayload {
   sub: string;
