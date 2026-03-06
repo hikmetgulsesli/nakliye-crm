@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
 import { getSession } from '@/lib/auth/session';
 import { createCustomer, getAllCustomers, checkConflicts } from '@/lib/db/customers';
 import { getAllUsers } from '@/lib/db/users';
 import type { CreateCustomerInput } from '@/types';
+=======
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
+import {
+  getCustomers,
+  createCustomer,
+} from '@/lib/services/customer';
+import { customerSchema, customerFilterSchema, type CustomerInput } from '@/lib/validators/customer';
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
 const VALID_SERVICE_TYPES = ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'] as const;
@@ -14,9 +24,32 @@ const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
 export async function GET() {
   try {
+<<<<<<< HEAD
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+=======
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    const { searchParams } = new URL(request.url);
+    const rawParams: Record<string, string | undefined> = {};
+    searchParams.forEach((value, key) => {
+      rawParams[key] = value;
+    });
+
+    const validation = customerFilterSchema.safeParse(rawParams);
+    if (!validation.success) {
+      return errorResponse(
+        'VALIDATION_ERROR',
+        'Invalid filter parameters',
+        400,
+        validation.error.issues
+      );
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
     }
 
     const customers = getAllCustomers();
@@ -32,10 +65,21 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+<<<<<<< HEAD
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+=======
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    const body = await request.json();
+    const validation = customerSchema.safeParse(body);
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
     const body = await request.json();
     
@@ -81,6 +125,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+<<<<<<< HEAD
     // Check for conflicts
     const conflicts = checkConflicts(body.company_name, body.phone, body.email);
     
@@ -95,6 +140,10 @@ export async function POST(request: NextRequest) {
         { status: 409 }
       );
     }
+=======
+    const data = validation.data as CustomerInput;
+    const createdBy = session.user.id;
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
     // Validate assigned_user_id exists
     const users = getAllUsers();

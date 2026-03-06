@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { Session } from '@/types';
 import { cookies } from 'next/headers';
 
@@ -63,4 +64,23 @@ export async function clearSession(): Promise<void> {
 // Alias for backward compatibility
 export async function clearSessionCookie(): Promise<void> {
   return clearSession();
+=======
+import { getServerSession } from 'next-auth';
+import { authOptions } from './index';
+
+export async function getSession() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return null;
+  }
+  return {
+    user: {
+      id: session.user.id as string,
+      email: session.user.email as string,
+      full_name: session.user.name as string,
+      role: session.user.role as 'admin' | 'user',
+    },
+    expires: session.expires,
+  };
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 }
