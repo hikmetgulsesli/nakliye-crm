@@ -120,13 +120,33 @@ export function validatePassword(user: User, password: string): boolean {
 export function seedInitialAdmin(): void {
   const existing = getUserByEmail('admin@nakliye.com');
   if (!existing) {
-    createUser({
-      email: 'admin@nakliye.com',
-      password: 'Admin123!',
-      full_name: 'System Admin',
-      role: 'admin',
-    });
-    console.log('Created initial admin user: admin@nakliye.com / Admin123!');
+    // Use environment variable for initial admin password or generate a random one
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+    if (!adminPassword) {
+      // Generate a random password and log it (only during first initialization)
+      const randomPassword = crypto.randomUUID().slice(0, 12) + '!' + Math.floor(Math.random() * 100);
+      createUser({
+        email: 'admin@nakliye.com',
+        password: randomPassword,
+        full_name: 'System Admin',
+        role: 'admin',
+      });
+      console.log('=================================================================');
+      console.log('INITIAL ADMIN USER CREATED');
+      console.log('Email: admin@nakliye.com');
+      console.log('Password:', randomPassword);
+      console.log('=================================================================');
+      console.log('IMPORTANT: Please change this password after first login.');
+      console.log('Set INITIAL_ADMIN_PASSWORD env var to use a fixed password.');
+      console.log('=================================================================');
+    } else {
+      createUser({
+        email: 'admin@nakliye.com',
+        password: adminPassword,
+        full_name: 'System Admin',
+        role: 'admin',
+      });
+    }
   }
 }
 
