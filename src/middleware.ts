@@ -1,28 +1,46 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  const session = request.cookies.get('session');
-  const { pathname } = request.nextUrl;
+export default withAuth(
+  function middleware(req) {
+    const { pathname } = req.nextUrl;
+    const { token } = req.nextauth;
 
-  // Public paths that don't require authentication
-  const publicPaths = ['/login', '/api/auth/login', '/api/auth/logout'];
-  
-  if (publicPaths.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  // Check for session cookie
-  if (!session) {
-    if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Admin-only routes
+    if (pathname.startsWith("/admin") && token?.role !== "admin") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
 
-  return NextResponse.next();
-}
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized({ req, token }) {
+        // Public routes that don't require authentication
+        const publicPaths = ["/login", "/api/auth"];
+        const isPublicPath = publicPaths.some((path) =>
+          req.nextUrl.pathname.startsWith(path)
+        );
+
+        if (isPublicPath) {
+          return true;
+        }
+
+        return token !== null;
+      },
+    },
+  }
+);
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

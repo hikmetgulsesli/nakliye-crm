@@ -1,8 +1,13 @@
-export type UserRole = 'admin' | 'user';
+// ============================================
+// Nakliye CRM Type Definitions
+// ============================================
+
+export type UserRole = "admin" | "user";
 
 export interface User {
   id: string;
   email: string;
+  password_hash?: string;
   full_name: string;
   role: UserRole;
   is_active: boolean;
@@ -10,283 +15,164 @@ export interface User {
   updated_at: string;
 }
 
+// Create user input
 export interface CreateUserInput {
   email: string;
-  password: string;
   full_name: string;
+  password: string;
   role: UserRole;
 }
 
+// Update user input
 export interface UpdateUserInput {
+  email?: string;
   full_name?: string;
+  password?: string;
   role?: UserRole;
   is_active?: boolean;
 }
 
-export interface Session {
-  user: User;
-  expires: string;
+// Pagination parameters
+export interface PaginationParams {
+  page: number;
+  limit: number;
 }
 
-export interface NavItem {
-  label: string;
-  href: string;
-  icon: string;
-  roles?: UserRole[];
+// Paginated response
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
-// Customer Types
-export type TransportMode = 'Deniz' | 'Hava' | 'Kara' | 'Kombine';
-export type ServiceType = 'FCL' | 'LCL' | 'Parsiyel' | 'Komple' | 'Bulk' | 'RoRo';
-export type Incoterm = 'FOB' | 'EXW' | 'FCA' | 'DAP' | 'CIF' | 'CFR' | 'DDP';
-export type Direction = 'Ithalat' | 'Ihracat';
-export type CustomerSource = 'Referans' | 'Soguk arama' | 'Fuar' | 'Dijital';
-export type Potential = 'Dusuk' | 'Orta' | 'Yuksek';
-export type CustomerStatus = 'Aktif' | 'Pasif' | 'Soguk';
+export type CustomerStatus = "active" | "inactive" | "cold";
+export type CustomerPotential = "low" | "medium" | "high";
+export type Direction = "import" | "export" | "both";
 
 export interface Customer {
-  id: string;
+  id: number;
   company_name: string;
-  contact_name: string;
+  contact_name: string | null;
   phone: string;
   email: string;
   address: string | null;
-  transport_modes: TransportMode[];
-  service_types: ServiceType[];
-  incoterms: Incoterm[];
-  direction: Direction[];
-  origin_countries: string[];
-  destination_countries: string[];
-  source: CustomerSource;
-  potential: Potential;
+  transport_modes: string[] | null; // JSON array
+  service_types: string[] | null; // JSON array
+  incoterms: string[] | null; // JSON array
+  direction: Direction | null;
+  origin_countries: string[] | null; // JSON array
+  destination_countries: string[] | null; // JSON array
+  source: string | null;
+  potential: CustomerPotential | null;
   status: CustomerStatus;
-  assigned_user_id: string;
+  assigned_user_id: number | null;
   last_contact_date: string | null;
   last_quote_date: string | null;
   notes: string | null;
-  created_by: string;
+  created_by: number;
   created_at: string;
   updated_at: string;
 }
 
-export interface CustomerWithUser extends Customer {
-  assigned_user: {
-    id: string;
-    full_name: string;
-  };
-  created_by_user: {
-    id: string;
-    full_name: string;
-  };
+export type QuotationStatus = "pending" | "won" | "lost";
+export type LossReason = "price" | "competitor" | "delayed" | "other";
+export type Currency = "USD" | "EUR" | "TRY";
+
+export interface Quotation {
+  id: number;
+  quote_no: string;
+  customer_id: number;
+  quote_date: string;
+  validity_date: string | null;
+  transport_mode: string | null;
+  service_type: string | null;
+  origin_country: string | null;
+  destination_country: string | null;
+  pol: string | null; // Port of Loading
+  pod: string | null; // Port of Discharge
+  incoterm: string | null;
+  price: number | null;
+  currency: Currency | null;
+  price_note: string | null;
+  status: QuotationStatus;
+  loss_reason: LossReason | null;
+  assigned_user_id: number | null;
+  revision_count: number;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface CreateCustomerInput {
-  company_name: string;
-  contact_name: string;
-  phone: string;
-  email: string;
-  address?: string;
-  transport_modes: TransportMode[];
-  service_types: ServiceType[];
-  incoterms: Incoterm[];
-  direction: Direction[];
-  origin_countries: string[];
-  destination_countries: string[];
-  source: CustomerSource;
-  potential: Potential;
-  status: CustomerStatus;
-  assigned_user_id: string;
-  notes?: string;
+export interface QuotationRevision {
+  id: number;
+  quotation_id: number;
+  revision_no: number;
+  changed_fields: Record<string, { old: unknown; new: unknown }>; // JSON
+  revised_by: number;
+  revised_at: string;
 }
 
-export type UpdateCustomerInput = Partial<CreateCustomerInput>;
+export type ActivityType = "phone" | "email" | "meeting" | "video";
+export type ActivityOutcome = "positive" | "neutral" | "negative" | "quote_requested";
 
-export interface CustomerConflict {
-  id: string;
-  company_name: string;
-  contact_name: string;
-  phone: string;
-  email: string;
-  matched_field: 'company_name' | 'phone' | 'email';
-  match_score: number;
+export interface Activity {
+  id: number;
+  customer_id: number;
+  type: ActivityType;
+  activity_date: string;
+  duration: number | null; // in minutes
+  notes: string | null;
+  outcome: ActivityOutcome | null;
+  next_action_date: string | null;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
 }
 
-// Lookup Values Types
 export interface LookupValue {
-  id: string;
+  id: number;
   category: string;
   value: string;
+  label: string;
   is_active: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;
 }
 
-export type LookupCategory =
-  | 'transport_mode'
-  | 'service_type'
-  | 'incoterm'
-  | 'customer_source'
-  | 'customer_potential'
-  | 'customer_status'
-  | 'quote_status'
-  | 'loss_reason'
-  | 'currency'
-  | 'country'
-  | 'port';
+export type AuditAction = "create" | "update" | "delete" | "force_create";
 
-// Quotation Types
-export type QuoteStatus = 'Bekliyor' | 'Kazanildi' | 'Kaybedildi';
-export type LossReason = 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger';
-export type Currency = 'USD' | 'EUR' | 'TRY';
-
-export interface Quotation {
-  id: string;
-  quote_no: string;
-  customer_id: string;
-  quote_date: string;
-  validity_date: string | null;
-  transport_mode: string;
-  service_type: string;
-  origin_country: string;
-  destination_country: string;
-  pol: string | null;
-  pod: string | null;
-  incoterm: string;
-  price: number | null;
-  currency: Currency | null;
-  price_note: string | null;
-  status: QuoteStatus;
-  loss_reason: LossReason | null;
-  assigned_user_id: string;
-  revision_count: number;
-  created_by: string;
+export interface AuditLog {
+  id: number;
+  user_id: number | null;
+  record_type: "customer" | "quotation" | "activity" | "user";
+  record_id: number;
+  action: AuditAction;
+  changes: Record<string, { old: unknown; new: unknown }>; // JSON
+  ip_address: string | null;
+  user_agent: string | null;
   created_at: string;
-  updated_at: string;
 }
 
-export interface QuotationWithCustomer extends Quotation {
-  customer: {
-    id: string;
-    company_name: string;
-    contact_name: string;
-  };
-  assigned_user: {
-    id: string;
-    full_name: string;
-  };
-  created_by_user: {
-    id: string;
-    full_name: string;
-  };
+// API response wrapper
+export interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+  message?: string;
 }
 
-export interface CreateQuotationInput {
-  customer_id: string;
-  quote_date: string;
-  validity_date?: string | null;
-  transport_mode: string;
-  service_type: string;
-  origin_country: string;
-  destination_country: string;
-  pol?: string | null;
-  pod?: string | null;
-  incoterm: string;
-  price?: number | null;
-  currency?: Currency | null;
-  price_note?: string | null;
-  status?: QuoteStatus;
-  loss_reason?: LossReason | null;
-  assigned_user_id: string;
+// Navigation item for sidebar
+export interface NavItem {
+  label: string;
+  href: string;
+  icon: string;
+  requiredRole?: UserRole;
 }
 
-export type UpdateQuotationInput = Partial<CreateQuotationInput>;
-
-// Activity Types
-export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
-export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
-
-export interface Activity {
-  id: string;
-  customer_id: string;
-  type: ActivityType;
-  date: string;
-  duration: number | null;
-  notes: string;
-  outcome: ActivityOutcome;
-  next_action_date: string | null;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface ActivityWithUser extends Activity {
-  customer: {
-    id: string;
-    company_name: string;
-  };
-  created_by_user: {
-    id: string;
-    full_name: string;
-  };
-}
-
-export interface CreateActivityInput {
-  customer_id: string;
-  type: ActivityType;
-  date: string;
-  duration?: number | null;
-  notes: string;
-  outcome: ActivityOutcome;
-  next_action_date?: string | null;
-}
-
-// Dashboard Types
-export interface DashboardMetrics {
-  totalQuotes: number;
-  wonQuotes: number;
-  lostQuotes: number;
-  winRate: number;
-  activeCustomers: number;
-  highPotentialCustomers: number;
-  totalRevenue: number;
-}
-
-export interface PersonnelPerformance {
-  userId: string;
-  fullName: string;
-  totalQuotes: number;
-  wonQuotes: number;
-  lostQuotes: number;
-  winRate: number;
-  totalRevenue: number;
-}
-
-export interface CountryVolume {
-  country: string;
-  count: number;
-}
-
-export interface TransportModeDistribution {
-  mode: string;
-  count: number;
-}
-
-export interface LossReasonAnalysis {
-  reason: string;
-  count: number;
-  percentage: number;
-}
-
-export interface DashboardData {
-  metrics: DashboardMetrics;
-  personnelPerformance: PersonnelPerformance[];
-  topOriginCountries: CountryVolume[];
-  topDestinationCountries: CountryVolume[];
-  transportModeDistribution: TransportModeDistribution[];
-  lossReasonAnalysis: LossReasonAnalysis[];
-  dateRange: {
-    from: string;
-    to: string;
-  };
+// Breadcrumb item
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
 }
