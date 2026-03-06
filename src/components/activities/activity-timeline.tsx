@@ -32,7 +32,7 @@ export function ActivityTimeline({ activities, onAddActivity, loading }: Activit
     return (
       <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
         <AlertCircle className="mx-auto h-12 w-12 text-slate-400" />
-        <h3 className="mt-4 text-lg font-medium text-slate-900">Aktivite bulunamadı</h3>
+        <h3 className="mt-4 text-lg font-medium text-slate-900">Henüz aktivite bulunmuyor</h3>
         <p className="mt-2 text-sm text-slate-600">
           Bu müşteri için henüz aktivite kaydı bulunmuyor.
         </p>
