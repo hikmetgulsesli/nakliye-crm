@@ -13,24 +13,27 @@ const actionIcons: Record<AuditAction, typeof UserPlus> = {
   create: UserPlus,
   update: Edit,
   delete: Trash2,
-  assign: ArrowRightLeft,
+  transfer: ArrowRightLeft,
   force_create: AlertTriangle,
+  force_update: AlertTriangle,
 };
 
 const actionLabels: Record<AuditAction, string> = {
   create: 'Oluşturuldu',
   update: 'Güncellendi',
   delete: 'Silindi',
-  assign: 'Atama yapıldı',
+  transfer: 'Atama yapıldı',
   force_create: 'Zorla kaydedildi',
+  force_update: 'Zorla güncellendi',
 };
 
 const actionColors: Record<AuditAction, string> = {
   create: 'bg-green-100 text-green-800',
   update: 'bg-blue-100 text-blue-800',
   delete: 'bg-red-100 text-red-800',
-  assign: 'bg-purple-100 text-purple-800',
+  transfer: 'bg-purple-100 text-purple-800',
   force_create: 'bg-orange-100 text-orange-800',
+  force_update: 'bg-orange-100 text-orange-800',
 };
 
 function formatFieldName(field: string): string {
