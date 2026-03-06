@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createActivity, getActivitiesByCustomer, updateActivity, deleteActivity, updateCustomerLastContactDate } from '@/lib/db/activities';
+import { createActivity, getActivitiesByCustomer, updateActivity, deleteActivity, updateCustomerLastContactDate, getActivityById } from '@/lib/db/activities';
 import { createAuditLog, buildChangesObject } from '@/lib/db/audit-log';
 import { getSession } from '@/lib/auth/session';
+import { getCustomerById } from '@/lib/db/customers';
 
 const createActivitySchema = z.object({
   customer_id: z.string().min(1, 'Müşteri seçimi zorunludur'),
@@ -28,6 +29,15 @@ export async function GET(request: NextRequest) {
 
     if (!customerId) {
       return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'customer_id parametresi gerekli' } }, { status: 400 });
+    }
+
+    // Check permission: user must be assigned to customer or be admin
+    const customer = getCustomerById(customerId);
+    if (!customer) {
+      return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Müşteri bulunamadı' } }, { status: 404 });
+    }
+    if (session.user.role !== 'admin' && customer.assigned_user_id !== session.user.id) {
+      return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Bu müşterinin aktivitelerini görme yetkiniz yok' } }, { status: 403 });
     }
 
     const activities = getActivitiesByCustomer(customerId);
@@ -70,6 +80,15 @@ export async function POST(request: NextRequest) {
       duration: validation.data.duration === null ? undefined : validation.data.duration,
       next_action_date: validation.data.next_action_date === null ? undefined : validation.data.next_action_date,
     };
+
+    // Check permission: user must be assigned to customer or be admin
+    const customer = getCustomerById(data.customer_id);
+    if (!customer) {
+      return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Müşteri bulunamadı' } }, { status: 404 });
+    }
+    if (session.user.role !== 'admin' && customer.assigned_user_id !== session.user.id) {
+      return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Bu müşteri için aktivite oluşturma yetkiniz yok' } }, { status: 403 });
+    }
 
     const activity = createActivity(data, session.user.id);
     
@@ -133,10 +152,14 @@ export async function PUT(request: NextRequest) {
     };
 
     // Get old activity for audit log
-    const { getActivityById } = await import('@/lib/db/activities.js');
     const oldActivity = getActivityById(id);
     if (!oldActivity) {
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Aktivite bulunamadı' } }, { status: 404 });
+    }
+
+    // Check permission: user must be creator of activity or be admin
+    if (session.user.role !== 'admin' && oldActivity.created_by !== session.user.id) {
+      return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Bu aktiviteyi güncelleme yetkiniz yok' } }, { status: 403 });
     }
 
     const activity = updateActivity(id, data);
@@ -145,7 +168,10 @@ export async function PUT(request: NextRequest) {
     }
 
     // Create audit log with changes
-    const changes = buildChangesObject(oldActivity as unknown as Record<string, unknown>, data as unknown as Record<string, unknown>);
+    const changes = buildChangesObject(
+      oldActivity as Record<string, unknown>,
+      data as Record<string, unknown>
+    );
     if (Object.keys(changes).length > 0) {
       createAuditLog({
         user_id: session.user.id,
@@ -189,7 +215,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Get activity before deletion for audit log
-    const { getActivityById } = await import('@/lib/db/activities.js');
     const activity = getActivityById(id);
     if (!activity) {
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Aktivite bulunamadı' } }, { status: 404 });

@@ -220,12 +220,13 @@ export function deleteActivity(id: string): boolean {
 
 export function updateCustomerLastContactDate(customerId: string): void {
   const database = getDb();
+  const now = new Date().toISOString();
   const stmt = database.prepare(`
     UPDATE customers 
-    SET last_contact_date = ?
+    SET last_contact_date = ?, updated_at = ?
     WHERE id = ?
   `);
-  stmt.run(new Date().toISOString(), customerId);
+  stmt.run(now, now, customerId);
 }
 
 function mapRowToActivity(row: Record<string, unknown>): Activity {
