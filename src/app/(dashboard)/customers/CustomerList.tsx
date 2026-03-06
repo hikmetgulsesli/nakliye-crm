@@ -284,8 +284,7 @@ export default function CustomerListPage() {
     {
       key: "company_name",
       header: "Firma Adı",
-      sortable: true,
-      render: (row) => (
+      cell: (row) => (
         <div>
           <div className="font-medium">{row.company_name}</div>
           {row.contact_name && (
@@ -297,31 +296,27 @@ export default function CustomerListPage() {
     {
       key: "status",
       header: "Durum",
-      sortable: true,
-      render: (row) => <StatusBadge status={row.status} />,
+      cell: (row) => <StatusBadge status={row.status} />,
     },
     {
       key: "potential",
       header: "Potansiyel",
-      sortable: true,
-      render: (row) => row.potential ? <PotentialBadge potential={row.potential as Potential} /> : "-",
+      cell: (row) => row.potential ? <PotentialBadge potential={row.potential as Potential} /> : "-",
     },
     {
       key: "assigned_user_name",
       header: "Temsilci",
-      sortable: true,
-      render: (row) => row.assigned_user_name || "-",
+      cell: (row) => row.assigned_user_name || "-",
     },
     {
       key: "source",
       header: "Kaynak",
-      sortable: true,
-      render: (row) => row.source || "-",
+      cell: (row) => row.source || "-",
     },
     {
       key: "transport_modes",
       header: "Taşıma Modu",
-      render: (row) => (
+      cell: (row) => (
         <div className="flex flex-wrap gap-1">
           {row.transport_modes?.slice(0, 2).map((mode) => (
             <span
@@ -342,8 +337,7 @@ export default function CustomerListPage() {
     {
       key: "actions",
       header: "İşlemler",
-      align: "right",
-      render: (row) => (
+      cell: (row) => (
         <div className="flex items-center justify-end gap-2">
           <Button
             variant="ghost"

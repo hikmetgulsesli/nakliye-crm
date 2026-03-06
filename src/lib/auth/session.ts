@@ -3,6 +3,25 @@ import { cookies } from 'next/headers';
 
 const SESSION_COOKIE = 'session';
 
+export async function requireAdmin(): Promise<Session> {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+  if (session.user.role !== 'admin') {
+    throw new Error('Forbidden');
+  }
+  return session;
+}
+
+export async function requireAuth(): Promise<Session> {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+  return session;
+}
+
 export async function getSession(): Promise<Session | null> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(SESSION_COOKIE);
@@ -39,4 +58,9 @@ export async function setSession(session: Session): Promise<void> {
 export async function clearSession(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE);
+}
+
+// Alias for backward compatibility
+export async function clearSessionCookie(): Promise<void> {
+  return clearSession();
 }

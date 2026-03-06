@@ -169,8 +169,8 @@ export async function PUT(request: NextRequest) {
 
     // Create audit log with changes
     const changes = buildChangesObject(
-      oldActivity as Record<string, unknown>,
-      data as Record<string, unknown>
+      oldActivity as unknown as Record<string, unknown>,
+      data as unknown as Record<string, unknown>
     );
     if (Object.keys(changes).length > 0) {
       createAuditLog({
