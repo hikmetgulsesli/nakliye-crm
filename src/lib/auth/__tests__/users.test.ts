@@ -51,16 +51,24 @@ describe("Auth - Password Validation", () => {
 
 describe("Auth - User Management", () => {
   beforeAll(() => {
+    // Skip if no PostgreSQL connection available
+    if (!process.env.DATABASE_URL) {
+      console.log("Skipping User Management tests - no DATABASE_URL");
+      return;
+    }
     // Use in-memory database for tests
     process.env.DATABASE_PATH = ":memory:";
     initDb();
   });
 
   afterAll(() => {
-    closeDb();
+    if (process.env.DATABASE_URL) {
+      closeDb();
+    }
   });
 
   beforeEach(() => {
+    if (!process.env.DATABASE_URL) return;
     // Clear users table before each test
     const db = getDb();
     db.exec("DELETE FROM users");

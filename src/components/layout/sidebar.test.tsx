@@ -52,6 +52,6 @@ describe('MobileSidebar', () => {
   it('renders hamburger menu button', () => {
     render(<MobileSidebar userRole="admin" userName="Test User" />);
     
-    expect(screen.getByLabelText('Menüyü Aç')).toBeInTheDocument();
+    expect(screen.getByText('Menüyü Aç')).toBeInTheDocument();
   });
 });
