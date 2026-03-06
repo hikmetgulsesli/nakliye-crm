@@ -1,35 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyToken } from "@/lib/auth/utils";
+import { NextResponse } from "next/server";
+import { getSession } from "@/lib/auth/session";
 
 export const dynamic = 'force-dynamic';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const cookieStore = cookies();
-    const token = cookieStore.get("auth-token")?.value;
+    const session = await getSession();
 
-    if (!token) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const payload = await verifyToken(token);
-
-    if (!payload) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-    }
-
+    // Return the full user data from the session
     return NextResponse.json({
-      data: {
-        id: payload.sub,
-        email: payload.email,
-        full_name: payload.full_name,
-        role: payload.role,
-      },
+      data: session.user,
     });
   } catch (error) {
-    console.error("Error verifying token:", error);
+    console.error("Error getting current user:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -1,0 +1,5 @@
+STATUS: done
+STORY_BRANCH: ce6f3019-US-017-components
+PR_URL: https://github.com/hikmetgulsesli/nakliye-crm/pull/15
+CHANGES: Implemented reusable UI components library including MultiSelect with search/checkboxes/select-all, SearchableDropdown with async loading/debounced search/virtual scrolling/keyboard navigation, DataTable with sorting/filtering/pagination/row selection/bulk actions/column visibility, and form components (Textarea, Checkbox) with consistent styling. All components have full ARIA accessibility attributes and TypeScript types.
+TESTS: Created comprehensive unit tests for all new components covering search functionality, selection behavior, keyboard navigation, and accessibility attributes.

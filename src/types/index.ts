@@ -32,66 +32,215 @@ export interface NavItem {
   label: string;
   href: string;
   icon: string;
-  requiredRole?: UserRole;
+  roles?: UserRole[];
 }
 
-// Breadcrumb item
-export interface BreadcrumbItem {
-  label: string;
-  href?: string;
+// Customer Types
+export type TransportMode = 'Deniz' | 'Hava' | 'Kara' | 'Kombine';
+export type ServiceType = 'FCL' | 'LCL' | 'Parsiyel' | 'Komple' | 'Bulk' | 'RoRo';
+export type Incoterm = 'FOB' | 'EXW' | 'FCA' | 'DAP' | 'CIF' | 'CFR' | 'DDP';
+export type Direction = 'Ithalat' | 'Ihracat';
+export type CustomerSource = 'Referans' | 'Soguk arama' | 'Fuar' | 'Dijital';
+export type Potential = 'Dusuk' | 'Orta' | 'Yuksek';
+export type CustomerStatus = 'Aktif' | 'Pasif' | 'Soguk';
+
+export interface Customer {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  address: string | null;
+  transport_modes: TransportMode[];
+  service_types: ServiceType[];
+  incoterms: Incoterm[];
+  direction: Direction[];
+  origin_countries: string[];
+  destination_countries: string[];
+  source: CustomerSource;
+  potential: Potential;
+  status: CustomerStatus;
+  assigned_user_id: string;
+  last_contact_date: string | null;
+  last_quote_date: string | null;
+  notes: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
 }
 
-// ============================================
-// Admin Dashboard Types
-// ============================================
-
-export interface AdminDashboardMetrics {
-  totalQuotes: number;
-  winRate: number;
-  activeCustomers: number;
-  highPotentialCustomers: number;
-  totalRevenue: number;
-  pendingQuotes: number;
-  wonQuotes: number;
-  lostQuotes: number;
+export interface CustomerWithUser extends Customer {
+  assigned_user: {
+    id: string;
+    full_name: string;
+  };
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
 }
 
-export interface PersonnelPerformance {
-  userId: number;
-  userName: string;
-  totalQuotes: number;
-  wonQuotes: number;
-  lostQuotes: number;
-  winRate: number;
-  totalRevenue: number;
-  avgQuoteValue: number;
+export interface CreateCustomerInput {
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  address?: string;
+  transport_modes: TransportMode[];
+  service_types: ServiceType[];
+  incoterms: Incoterm[];
+  direction: Direction[];
+  origin_countries: string[];
+  destination_countries: string[];
+  source: CustomerSource;
+  potential: Potential;
+  status: CustomerStatus;
+  assigned_user_id: string;
+  notes?: string;
 }
 
-export interface CountryVolume {
-  country: string;
-  count: number;
-  percentage: number;
+export type UpdateCustomerInput = Partial<CreateCustomerInput>;
+
+export interface CustomerConflict {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  matched_field: 'company_name' | 'phone' | 'email';
+  match_score: number;
 }
 
-export interface ModeDistribution {
-  mode: string;
-  count: number;
-  percentage: number;
+// Lookup Values Types
+export interface LookupValue {
+  id: string;
+  category: string;
+  value: string;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface LossReasonDistribution {
+export type LookupCategory =
+  | 'transport_mode'
+  | 'service_type'
+  | 'incoterm'
+  | 'customer_source'
+  | 'customer_potential'
+  | 'customer_status'
+  | 'quote_status'
+  | 'loss_reason'
+  | 'currency'
+  | 'country'
+  | 'port';
+
+// Re-export quotation types
+export * from './quotations.js';
+
+// Activity Types
+export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
+export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
+
+export interface Activity {
+  id: string;
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ActivityWithUser extends Activity {
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateActivityInput {
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration?: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date?: string | null;
+}
+
+export type UpdateActivityInput = Partial<CreateActivityInput>;
+
+// Audit Log Types
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes?: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown>;
+}
+
+// Transfer System Types
+export type TransferScope = 'all' | 'active' | 'open_quotes';
+
+export interface TransferPreview {
+  source_user_name: string;
+  target_user_name: string;
+  customers_count: number;
+  quotations_count: number;
+}
+
+export interface BulkTransferResult {
+  success: boolean;
+  transferred_customers: number;
+  transferred_quotations: number;
+  deactivated_user?: boolean;
+  errors?: string[];
+}
+
+// Dashboard Types
+export interface LossReasonAnalysis {
   reason: string;
   count: number;
   percentage: number;
 }
 
-export interface AdminDashboardData {
-  metrics: AdminDashboardMetrics;
-  personnelPerformance: PersonnelPerformance[];
-  originCountries: CountryVolume[];
-  destinationCountries: CountryVolume[];
-  modeDistribution: ModeDistribution[];
-  lossReasons: LossReasonDistribution[];
+export interface SingleTransferInput {
+  customer_id: string;
+  from_user_id: string;
+  to_user_id: string;
+  reason: string;
+  cascade_to_open_quotes: boolean;
+}
+
+export interface BulkTransferInput {
+  from_user_id: string;
+  to_user_id: string;
+  scope: TransferScope;
+  deactivate_source: boolean;
 }
 
 // ============================================
@@ -153,32 +302,11 @@ export interface AlertCounts {
   total: number;
 }
 
-export interface Alert {
-  id: string;
-  type: AlertType;
-  severity: AlertSeverity;
-  status: AlertStatus;
-  title: string;
-  description: string;
-  entity_type: 'customer' | 'quotation';
-  entity_id: string;
-  assigned_user_id: string | null;
-  assigned_user_name: string | null;
-  reviewed_by: string | null;
-  reviewed_by_name: string | null;
-  reviewed_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 // ============================================
 // Report Types
 // ============================================
 
 export type ReportType = 'period' | 'performance' | 'won-lost' | 'country-volume';
-export type QuotationStatus = 'pending' | 'won' | 'lost';
-export type LossReason = 'price' | 'competitor' | 'delayed' | 'other';
-export type Currency = 'USD' | 'EUR' | 'TRY';
 
 export interface PeriodReportFilters {
   startDate: string;

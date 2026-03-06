@@ -1,93 +1,54 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle } from 'lucide-react';
-import type { LossReasonDistribution } from '@/types';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts';
+import type { LossReasonAnalysis } from '@/types';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { cn } from '@/lib/utils';
 
 interface LossReasonChartProps {
-  data: LossReasonDistribution[];
-  loading: boolean;
+  data: LossReasonAnalysis[];
+  className?: string;
 }
 
-const COLORS = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6'];
-
-export function LossReasonChart({ data, loading }: LossReasonChartProps) {
-  if (loading) {
+export function LossReasonChart({ data, className }: LossReasonChartProps) {
+  if (data.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Kaybedilme Nedenleri</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="animate-pulse h-64 bg-gray-200 rounded"></div>
-        </CardContent>
-      </Card>
+      <div className={cn('bg-white rounded-xl border border-slate-200 p-6 shadow-sm', className)}>
+        <h3 className="text-lg font-semibold text-slate-900 mb-1">Kaybedilme Nedenleri</h3>
+        <p className="text-sm text-slate-500 mb-6">Kaybedilen tekliflerin neden analizi</p>
+        <div className="h-64 flex items-center justify-center">
+          <p className="text-slate-400">Bu dönemde kaybedilen teklif bulunmuyor</p>
+        </div>
+      </div>
     );
   }
 
-  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900">{label}</p>
-          <p className="text-red-600">
-            <span className="font-bold">{payload[0].value}</span> teklif
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-red-600" />
-          Kaybedilme Nedenleri
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {data.length === 0 ? (
-          <div className="h-64 flex items-center justify-center text-gray-500">
-            Bu dönem için kaybedilen teklif bulunamadı
-          </div>
-        ) : (
-          <ResponsiveContainer width="100%" height={256}>
-            <BarChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey="reason" 
-                tick={{ fontSize: 12 }}
-                interval={0}
-              />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                {data.map((_, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]} 
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-      </CardContent>
-    </Card>
+    <div className={cn('bg-white rounded-xl border border-slate-200 p-6 shadow-sm', className)}>
+      <h3 className="text-lg font-semibold text-slate-900 mb-1">Kaybedilme Nedenleri</h3>
+      <p className="text-sm text-slate-500 mb-6">Kaybedilen tekliflerin neden analizi</p>
+      
+      <div className="h-72">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="reason" stroke="#64748b" fontSize={12} />
+            <YAxis stroke="#64748b" fontSize={12} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'white',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              }}
+              formatter={(value, _name, props) => {
+                const percentage = (props?.payload as { percentage?: number })?.percentage ?? 0;
+                return [`${value ?? 0} teklif (${percentage}%)`, 'Sayı'];
+              }}
+            />
+            <Bar dataKey="count" fill="#ef4444" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }

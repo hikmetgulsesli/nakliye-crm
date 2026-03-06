@@ -15,14 +15,14 @@ export async function GET(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || !payload.sub) {
+    if (!payload || typeof payload.userId !== 'number') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const reportType = searchParams.get('reportType') as ReportType | undefined;
 
-    const reports = getSavedReports(parseInt(payload.sub, 10), reportType);
+    const reports = getSavedReports(payload.userId, reportType);
     return NextResponse.json({ reports });
   } catch (error) {
     console.error('Get saved reports error:', error);
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || !payload.sub) {
+    if (!payload || typeof payload.userId !== 'number') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     const saved = saveReportParams(
-      parseInt(payload.sub, 10),
+      payload.userId,
       reportType as ReportType,
       name,
       params
@@ -80,7 +80,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || !payload.sub) {
+    if (!payload || typeof payload.userId !== 'number') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -94,7 +94,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const deleted = deleteSavedReport(parseInt(id, 10), parseInt(payload.sub, 10));
+    const deleted = deleteSavedReport(parseInt(id, 10), payload.userId);
 
     if (!deleted) {
       return NextResponse.json(
