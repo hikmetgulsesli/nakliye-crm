@@ -65,8 +65,8 @@ export function createAuditLog(input: CreateAuditLogInput): AuditLog {
     record_type: input.record_type,
     record_id: input.record_id,
     action: input.action,
-    changes: input.changes ?? null,
-    metadata: input.metadata ?? null,
+    changes: input.changes ? JSON.stringify(input.changes) : null,
+    metadata: input.metadata ? JSON.stringify(input.metadata) : null,
     created_at: now,
   };
 }
@@ -103,9 +103,6 @@ function mapRowToAuditLogWithUser(row: Record<string, unknown>): AuditLogWithUse
   const log = mapRowToAuditLog(row);
   return {
     ...log,
-    user: {
-      id: log.user_id,
-      full_name: row.user_name as string,
-    },
+    user_name: row.user_name as string,
   };
 }

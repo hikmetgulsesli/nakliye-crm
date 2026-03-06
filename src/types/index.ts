@@ -23,6 +23,33 @@ export interface UpdateUserInput {
   is_active?: boolean;
 }
 
+// Transfer Types
+export type TransferScope = 'all' | 'active' | 'with_open_quotes';
+
+export interface TransferPreview {
+  customersCount: number;
+  quotationsCount: number;
+  activitiesCount: number;
+  // snake_case variants for API compatibility
+  customers_count?: number;
+  quotations_count?: number;
+  activities_count?: number;
+  source_user_name?: string;
+  target_user_name?: string;
+}
+
+export interface BulkTransferResult {
+  success: boolean;
+  customersTransferred: number;
+  quotationsTransferred: number;
+  activitiesTransferred: number;
+  // snake_case variants for API compatibility
+  transferred_customers?: number;
+  transferred_quotations?: number;
+  transferred_activities?: number;
+  deactivated_user?: boolean;
+}
+
 export interface Session {
   user: User;
   expires: string;
@@ -134,3 +161,38 @@ export type LookupCategory =
   | 'currency'
   | 'country'
   | 'port';
+
+// Dashboard/Report Types
+export interface LossReasonAnalysis {
+  reason: string;
+  count: number;
+  percentage: number;
+}
+
+// Audit Log Types
+export type AuditAction = 'create' | 'update' | 'delete' | 'transfer' | 'force_create';
+export type AuditRecordType = 'customer' | 'quotation' | 'activity' | 'user' | 'lookup_value';
+
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes: string | null;
+  metadata: string | null;
+  created_at: string;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user_name: string;
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: AuditRecordType;
+  record_id: string;
+  action: AuditAction;
+  changes?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+}

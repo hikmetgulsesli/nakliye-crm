@@ -134,9 +134,6 @@ export function BulkTransferModal({ isOpen, onClose, users }: BulkTransferModalP
     }
   };
 
-  const sourceUser = activeUsers.find((u) => u.id === sourceUserId);
-  const targetUser = activeUsers.find((u) => u.id === targetUserId);
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">

@@ -24,7 +24,8 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const passwordHash = user.password_hash;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const passwordHash = (user as unknown as Record<string, unknown>).password_hash as string | undefined;
         if (!passwordHash) {
           return null;
         }
