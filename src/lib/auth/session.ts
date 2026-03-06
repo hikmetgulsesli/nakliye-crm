@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
-import type { Session } from '@/types';
+import { NextResponse } from 'next/server';
+import type { Session, User } from '@/types';
 
 const SESSION_COOKIE = 'session';
 
@@ -42,4 +43,28 @@ export async function setSession(session: Session): Promise<void> {
 export async function clearSession(): Promise<void> {
   const cookieStore = cookies();
   cookieStore.delete(SESSION_COOKIE);
+}
+
+// Aliases for compatibility
+export const createSession = setSession;
+export const setSessionCookie = setSession;
+export const clearSessionCookie = clearSession;
+
+// Admin requirement helper
+export async function requireAdmin(): Promise<{ user: User; response?: never } | { user?: never; response: NextResponse }> {
+  const session = await getSession();
+  
+  if (!session) {
+    return {
+      response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    };
+  }
+  
+  if (session.user.role !== 'admin') {
+    return {
+      response: NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
+    };
+  }
+  
+  return { user: session.user };
 }

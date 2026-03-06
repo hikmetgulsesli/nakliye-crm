@@ -4,7 +4,11 @@ import { cn } from '@/lib/utils';
 export interface Column<T> {
   key: string;
   header: string;
-  cell: (row: T) => React.ReactNode;
+  cell?: (row: T) => React.ReactNode;
+  render?: (row: T) => React.ReactNode;
+  sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
+  width?: string;
   className?: string;
 }
 
@@ -66,7 +70,7 @@ export function DataTable<T>({
                   key={`${keyExtractor(row)}-${column.key}`}
                   className={cn('px-4 py-3', column.className)}
                 >
-                  {column.cell(row)}
+                  {column.render ? column.render(row) : column.cell ? column.cell(row) : null}
                 </td>
               ))}
             </tr>

@@ -4,6 +4,11 @@ import type { User } from "@/types/index";
 
 const SALT_ROUNDS = 12;
 
+// Internal type that includes password_hash for auth
+interface UserWithPassword extends User {
+  password_hash: string;
+}
+
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, SALT_ROUNDS);
 }
@@ -12,7 +17,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return compare(password, hashedPassword);
 }
 
-export async function getUserByEmail(email: string): Promise<User | null> {
+export async function getUserByEmail(email: string): Promise<UserWithPassword | null> {
   const pool = getPool();
   const result = await pool.query(
     "SELECT * FROM users WHERE email = $1 AND is_active = 1",
@@ -32,10 +37,11 @@ export async function getUserByEmail(email: string): Promise<User | null> {
     is_active: Boolean(row.is_active),
     created_at: String(row.created_at),
     updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 
-export async function getUserById(id: string): Promise<User | null> {
+export async function getUserById(id: string): Promise<UserWithPassword | null> {
   const pool = getPool();
   const result = await pool.query(
     "SELECT * FROM users WHERE id = $1 AND is_active = 1",
@@ -55,6 +61,7 @@ export async function getUserById(id: string): Promise<User | null> {
     is_active: Boolean(row.is_active),
     created_at: String(row.created_at),
     updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 
@@ -85,6 +92,7 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     is_active: Boolean(row.is_active),
     created_at: String(row.created_at),
     updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 
