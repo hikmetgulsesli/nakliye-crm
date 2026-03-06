@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 import { getSession } from '@/lib/auth/session';
 import { createCustomer, getAllCustomers, checkConflicts } from '@/lib/db/customers';
 import { getAllUsers } from '@/lib/db/users';
 import type { CreateCustomerInput } from '@/types';
 =======
+>>>>>>> origin/feature/crm-core-modules
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/index';
 import {
@@ -12,6 +15,23 @@ import {
   createCustomer,
 } from '@/lib/services/customer';
 import { customerSchema, customerFilterSchema, type CustomerInput } from '@/lib/validators/customer';
+<<<<<<< HEAD
+
+function errorResponse(code: string, message: string, status = 400, details?: unknown) {
+  return NextResponse.json(
+    { error: { code, message, details } },
+    { status }
+  );
+}
+
+function successResponse(data: unknown, meta?: Record<string, unknown>) {
+  return NextResponse.json({ data, meta });
+}
+
+// GET /api/customers - List customers with filters
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
@@ -29,6 +49,7 @@ export async function GET() {
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 =======
+>>>>>>> origin/feature/crm-core-modules
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -49,6 +70,28 @@ export async function GET() {
         400,
         validation.error.issues
       );
+<<<<<<< HEAD
+    }
+
+    const filters = validation.data;
+    const { customers, total } = await getCustomers(filters);
+
+    return successResponse(customers, {
+      page: filters.page,
+      limit: filters.limit,
+      total,
+      totalPages: Math.ceil(total / filters.limit),
+    });
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    return errorResponse('INTERNAL_ERROR', 'Failed to fetch customers', 500);
+  }
+}
+
+// POST /api/customers - Create a new customer
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
     }
 
@@ -71,6 +114,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 =======
+>>>>>>> origin/feature/crm-core-modules
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -79,6 +123,29 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validation = customerSchema.safeParse(body);
+<<<<<<< HEAD
+
+    if (!validation.success) {
+      return errorResponse(
+        'VALIDATION_ERROR',
+        'Invalid customer data',
+        400,
+        validation.error.issues
+      );
+    }
+
+    const data = validation.data as CustomerInput;
+    const createdBy = parseInt(session.user.id, 10);
+
+    const customer = await createCustomer(data, createdBy);
+    return successResponse(customer);
+  } catch (error) {
+    console.error('Error creating customer:', error);
+    if ((error as Error).message?.includes('unique constraint')) {
+      return errorResponse('CONFLICT', 'Customer with this information already exists', 409);
+    }
+    return errorResponse('INTERNAL_ERROR', 'Failed to create customer', 500);
+=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
     const body = await request.json();
@@ -183,5 +250,6 @@ export async function POST(request: NextRequest) {
       { error: 'Failed to create customer' },
       { status: 500 }
     );
+>>>>>>> origin/feature/crm-core-modules
   }
 }

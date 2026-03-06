@@ -6,7 +6,14 @@ interface SavedReportsProps {
   onLoadReport?: (type: string) => void;
 }
 
+<<<<<<< HEAD
+export function SavedReports({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onLoadReport,
+}: SavedReportsProps) {
+=======
 export function SavedReports({ onLoadReport }: SavedReportsProps) {
+>>>>>>> origin/feature/crm-core-modules
   return (
     <Card>
       <CardHeader>

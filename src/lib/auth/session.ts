@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 import type { Session } from '@/types';
 import { cookies } from 'next/headers';
 
@@ -65,6 +67,7 @@ export async function clearSession(): Promise<void> {
 export async function clearSessionCookie(): Promise<void> {
   return clearSession();
 =======
+>>>>>>> origin/feature/crm-core-modules
 import { getServerSession } from 'next-auth';
 import { authOptions } from './index';
 
@@ -82,5 +85,8 @@ export async function getSession() {
     },
     expires: session.expires,
   };
+<<<<<<< HEAD
+=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+>>>>>>> origin/feature/crm-core-modules
 }

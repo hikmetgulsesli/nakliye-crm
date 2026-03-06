@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -100,6 +102,7 @@ TabsContent.displayName = 'TabsContent';
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };
 =======
+>>>>>>> origin/feature/crm-core-modules
 "use client"
 
 import * as React from "react"
@@ -154,4 +157,7 @@ const TabsContent = React.forwardRef<
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
 export { Tabs, TabsList, TabsTrigger, TabsContent }
+<<<<<<< HEAD
+=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+>>>>>>> origin/feature/crm-core-modules

@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 <<<<<<< HEAD
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
+=======
+<<<<<<< HEAD
 import { getSession } from '@/lib/auth/session';
 =======
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/index';
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+>>>>>>> origin/feature/crm-core-modules
 import { getAuditLogs } from '@/lib/audit';
 
 function errorResponse(code: string, message: string, status = 400) {
@@ -18,6 +23,11 @@ function errorResponse(code: string, message: string, status = 400) {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
 <<<<<<< HEAD
+    // Check admin role
+    const session = await getServerSession(authOptions);
+    if (!session?.user || session.user.role !== 'admin') {
+=======
+<<<<<<< HEAD
     const session = await getSession();
     if (!session) {
       return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
@@ -30,6 +40,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const session = await getServerSession(authOptions);
     if (!session?.user || session.user.role !== 'admin') {
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+>>>>>>> origin/feature/crm-core-modules
       return errorResponse('FORBIDDEN', 'Admin access required', 403);
     }
 
