@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUsers, createUser } from '@/lib/db/users';
+import { hashPassword } from '@/lib/auth/users';
 import { createUserSchema } from '@/lib/validation';
-import { hashPassword } from '@/lib/auth/utils';
 import { verifyToken } from '@/lib/auth/utils';
 
 // GET /api/users - List all users (admin only)

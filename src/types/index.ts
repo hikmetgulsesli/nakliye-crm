@@ -236,6 +236,22 @@ export interface AlertCounts {
   total: number;
 }
 
+export interface Alert {
+  id: string;
+  type: AlertType;
+  severity: AlertSeverity;
+  status: AlertStatus;
+  title: string;
+  description: string;
+  entity_type: 'customer' | 'quotation';
+  entity_id: string;
+  assigned_user_name?: string;
+  reviewed_by_name?: string;
+  reviewed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 // ============================================
 // Report Types
 // ============================================

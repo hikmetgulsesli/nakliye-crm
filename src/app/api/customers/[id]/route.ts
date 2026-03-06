@@ -83,7 +83,7 @@ export async function PATCH(
     }
 
     const data = validation.data as CustomerUpdateInput;
-    const updatedBy = session.user.id;
+    const updatedBy = parseInt(session.user.id, 10);
 
     const customer = await updateCustomer(customerId, data, updatedBy);
 
@@ -122,7 +122,7 @@ export async function DELETE(
       return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
     }
 
-    const deletedBy = session.user.id;
+    const deletedBy = parseInt(session.user.id, 10);
     const customer = await deleteCustomer(customerId, deletedBy);
 
     if (!customer) {

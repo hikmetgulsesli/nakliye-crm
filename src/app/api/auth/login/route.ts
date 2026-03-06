@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPool } from '@/lib/db/users';
-import { verifyPassword, createToken } from '@/lib/auth/utils';
+import { getUserByEmail, verifyPassword } from '@/lib/auth/users';
+import { createToken } from '@/lib/auth/utils';
 import { loginSchema } from '@/lib/validation';
 
 // POST /api/auth/login - Login user
@@ -19,23 +19,15 @@ export async function POST(request: NextRequest) {
 
     const { email, password } = result.data;
 
-    // Find user with password
-    const pool = getPool();
-    const userResult = await pool.query(
-      `SELECT id, email, full_name, role, is_active, password_hash 
-       FROM users 
-       WHERE email = $1`,
-      [email]
-    );
+    // Find user
+    const user = await getUserByEmail(email);
 
-    if (userResult.rows.length === 0) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
     }
-
-    const user = userResult.rows[0];
 
     // Check if user is active
     if (!user.is_active) {
@@ -46,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const isValid = await verifyPassword(password, user.password_hash);
+    const isValid = await verifyPassword(password, user.password_hash || '');
     if (!isValid) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
@@ -54,16 +46,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create JWT token - pass full user object with required fields
+    // Create JWT token
     const token = await createToken({
       id: user.id,
       email: user.email,
-      password_hash: user.password_hash,
+      password_hash: user.password_hash || '',
       full_name: user.full_name,
       role: user.role,
       is_active: user.is_active,
-      created_at: user.created_at ? user.created_at.toISOString() : new Date().toISOString(),
-      updated_at: user.updated_at ? user.updated_at.toISOString() : new Date().toISOString(),
+      created_at: user.created_at || new Date().toISOString(),
+      updated_at: user.updated_at || new Date().toISOString(),
     });
 
     // Set cookie
@@ -80,8 +72,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 8 * 60 * 60, // 8 hours
-      path: '/',
+      maxAge: 60 * 60 * 8, // 8 hours
     });
 
     return response;
