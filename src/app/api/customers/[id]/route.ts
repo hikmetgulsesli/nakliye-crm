@@ -1,13 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-import { getSession } from '@/lib/auth/session';
-import { getCustomerById, updateCustomer, deleteCustomer, getCustomerByIdWithUser, checkConflicts } from '@/lib/db/customers';
-import { getAllUsers } from '@/lib/db/users';
-import type { UpdateCustomerInput } from '@/types';
-=======
->>>>>>> origin/feature/crm-core-modules
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/index';
 import {
@@ -16,17 +7,6 @@ import {
   deleteCustomer,
 } from '@/lib/services/customer';
 import { customerUpdateSchema, type CustomerUpdateInput } from '@/lib/validators/customer';
-<<<<<<< HEAD
-
-function errorResponse(code: string, message: string, status = 400, details?: unknown) {
-  return NextResponse.json(
-    { error: { code, message, details } },
-    { status }
-  );
-}
-
-=======
->>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
 const VALID_SERVICE_TYPES = ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'] as const;
@@ -36,14 +16,6 @@ const VALID_SOURCES = ['Referans', 'Soguk arama', 'Fuar', 'Dijital'] as const;
 const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
-<<<<<<< HEAD
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-=======
->>>>>>> origin/feature/crm-core-modules
 function successResponse(data: unknown) {
   return NextResponse.json({ data });
 }
@@ -65,38 +37,12 @@ export async function GET(
 
     if (isNaN(customerId)) {
       return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
-<<<<<<< HEAD
-    }
-
-    const customer = await getCustomerById(customerId);
-
-    if (!customer) {
-=======
->>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
     }
 
     const { id } = params;
     const customer = getCustomerByIdWithUser(id);
     
     if (!customer) {
-<<<<<<< HEAD
-      return NextResponse.json(
-        { error: 'Customer not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ customer });
-  } catch (error) {
-    console.error('Error fetching customer:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch customer' },
-      { status: 500 }
-    );
-  }
-}
-=======
->>>>>>> origin/feature/crm-core-modules
       return errorResponse('NOT_FOUND', 'Customer not found', 404);
     }
 
@@ -139,25 +85,7 @@ export async function PATCH(
     }
 
     const data = validation.data as CustomerUpdateInput;
-<<<<<<< HEAD
-    const updatedBy = parseInt(session.user.id, 10);
-
-    const customer = await updateCustomer(customerId, data, updatedBy);
-
-    if (!customer) {
-      return errorResponse('NOT_FOUND', 'Customer not found', 404);
-    }
-
-    return successResponse(customer);
-  } catch (error) {
-    console.error('Error updating customer:', error);
-    return errorResponse('INTERNAL_ERROR', 'Failed to update customer', 500);
-  }
-}
-
-=======
     const updatedBy = session.user.id;
->>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -279,22 +207,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-<<<<<<< HEAD
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Only admins can delete customers
-    if (session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
-      );
-=======
->>>>>>> origin/feature/crm-core-modules
 // DELETE /api/customers/[id] - Soft delete a customer (admin only)
 export async function DELETE(
   request: NextRequest,
@@ -319,24 +231,11 @@ export async function DELETE(
       return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
     }
 
-<<<<<<< HEAD
-    const deletedBy = parseInt(session.user.id, 10);
-=======
     const deletedBy = session.user.id;
->>>>>>> origin/feature/crm-core-modules
     const customer = await deleteCustomer(customerId, deletedBy);
 
     if (!customer) {
       return errorResponse('NOT_FOUND', 'Customer not found', 404);
-<<<<<<< HEAD
-    }
-
-    return successResponse(customer);
-  } catch (error) {
-    console.error('Error deleting customer:', error);
-    return errorResponse('INTERNAL_ERROR', 'Failed to delete customer', 500);
-=======
->>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
     }
 
     const { id } = params;
@@ -365,6 +264,5 @@ export async function DELETE(
       { error: 'Failed to delete customer' },
       { status: 500 }
     );
->>>>>>> origin/feature/crm-core-modules
   }
 }

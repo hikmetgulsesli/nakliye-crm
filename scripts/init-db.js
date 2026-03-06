@@ -35,22 +35,11 @@ async function initDatabase() {
       // Create default admin user
       const adminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
       if (!adminPassword) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-        console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is required');
-        process.exit(1);
-      }
-=======
->>>>>>> origin/feature/crm-core-modules
         console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set');
         process.exit(1);
       }
       
-<<<<<<< HEAD
-=======
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
->>>>>>> origin/feature/crm-core-modules
       const passwordHash = await hashPassword(adminPassword);
       
       await pool.query(
@@ -61,15 +50,8 @@ async function initDatabase() {
 
       console.log('Default admin user created:');
       console.log('Email: admin@nakliye.com');
-<<<<<<< HEAD
-      console.log('Password: <set via DEFAULT_ADMIN_PASSWORD env var>');
-=======
-<<<<<<< HEAD
-      console.log('Password: [set via DEFAULT_ADMIN_PASSWORD env var]');
-=======
       console.log('Password: <set via DEFAULT_ADMIN_PASSWORD env var>');
 >>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
->>>>>>> origin/feature/crm-core-modules
     } else {
       console.log('Admin user already exists');
     }
