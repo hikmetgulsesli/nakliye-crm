@@ -84,8 +84,8 @@ export async function POST(request: NextRequest) {
     // Check for conflicts
     const conflicts = checkConflicts(body.company_name, body.phone, body.email);
     
-    // If conflicts exist and force is not set, return conflicts
-    if (conflicts.length > 0 && !body.force) {
+    // If conflicts exist and force is not set, return conflicts (only admin can force)
+    if (conflicts.length > 0 && !(body.force && session.user.role === 'admin')) {
       return NextResponse.json(
         { 
           error: 'Potential conflicts detected',
