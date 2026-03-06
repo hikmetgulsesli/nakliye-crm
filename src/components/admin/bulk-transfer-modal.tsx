@@ -262,7 +262,7 @@ export function BulkTransferModal({ isOpen, onClose, users }: BulkTransferModalP
               <Checkbox
                 id="deactivate"
                 checked={deactivateSource}
-                onCheckedChange={(checked) => setDeactivateSource(checked === true)}
+                onCheckedChange={(checked: boolean | 'indeterminate') => setDeactivateSource(checked === true)}
               />
               <div className="grid gap-1.5 leading-none">
                 <Label

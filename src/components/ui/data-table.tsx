@@ -1,137 +1,76 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
 export interface Column<T> {
-  key: keyof T | string;
+  key: string;
   header: string;
-  sortable?: boolean;
-  width?: string;
-  align?: "left" | "center" | "right";
+  cell?: (row: T) => React.ReactNode;
   render?: (row: T) => React.ReactNode;
+  sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
+  width?: string;
+  className?: string;
 }
 
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  sortColumn?: string;
-  sortDirection?: "asc" | "desc";
-  onSort?: (column: string) => void;
-  isLoading?: boolean;
+  keyExtractor: (row: T) => string;
   emptyMessage?: string;
-  keyExtractor: (row: T) => string | number;
+  onRowClick?: (row: T) => void;
+  className?: string;
 }
 
 export function DataTable<T>({
   data,
   columns,
-  sortColumn,
-  sortDirection,
-  onSort,
-  isLoading,
-  emptyMessage = "Veri bulunamadı",
   keyExtractor,
+  emptyMessage = 'Veri bulunamadı',
+  onRowClick,
+  className,
 }: DataTableProps<T>) {
-  const handleSort = (columnKey: string) => {
-    if (onSort && sortColumn !== undefined && sortDirection !== undefined) {
-      onSort(columnKey);
-    }
-  };
-
-  const getSortIcon = (columnKey: string) => {
-    if (sortColumn !== columnKey) {
-      return <ChevronsUpDown className="h-4 w-4 text-muted-foreground/50" />;
-    }
-    if (sortDirection === "asc") {
-      return <ChevronUp className="h-4 w-4 text-primary" />;
-    }
-    return <ChevronDown className="h-4 w-4 text-primary" />;
-  };
-
-  if (isLoading) {
-    return (
-      <div className="w-full overflow-x-auto">
-        <div className="animate-pulse space-y-3">
-          <div className="h-10 bg-muted rounded" />
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-14 bg-muted/50 rounded" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   if (data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="rounded-full bg-muted p-4 mb-4">
-          <svg
-            className="h-8 w-8 text-muted-foreground"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <p className="text-muted-foreground">{emptyMessage}</p>
+      <div className="flex h-32 items-center justify-center rounded-md border border-dashed">
+        <p className="text-sm text-slate-500">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full caption-bottom text-sm">
-        <thead className="border-b bg-muted/50">
+    <div className={cn('overflow-x-auto rounded-md border', className)}>
+      <table className="w-full text-sm">
+        <thead className="bg-slate-50">
           <tr>
             {columns.map((column) => (
               <th
-                key={String(column.key)}
+                key={column.key}
                 className={cn(
-                  "h-12 px-4 text-left align-middle font-medium text-muted-foreground",
-                  column.sortable && "cursor-pointer hover:text-foreground",
-                  column.width && column.width
+                  'px-4 py-3 text-left font-medium text-slate-700',
+                  column.className
                 )}
-                style={{ width: column.width }}
-                onClick={() => column.sortable && handleSort(String(column.key))}
               >
-                <div
-                  className={cn(
-                    "flex items-center gap-2",
-                    column.align === "center" && "justify-center",
-                    column.align === "right" && "justify-end"
-                  )}
-                >
-                  {column.header}
-                  {column.sortable && getSortIcon(String(column.key))}
-                </div>
+                {column.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y">
           {data.map((row) => (
             <tr
               key={keyExtractor(row)}
-              className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+              onClick={() => onRowClick?.(row)}
+              className={cn(
+                'bg-white transition-colors hover:bg-slate-50',
+                onRowClick && 'cursor-pointer'
+              )}
             >
               {columns.map((column) => (
                 <td
-                  key={`${keyExtractor(row)}-${String(column.key)}`}
-                  className={cn(
-                    "p-4 align-middle",
-                    column.align === "center" && "text-center",
-                    column.align === "right" && "text-right"
-                  )}
+                  key={`${keyExtractor(row)}-${column.key}`}
+                  className={cn('px-4 py-3', column.className)}
                 >
-                  {column.render
-                    ? column.render(row)
-                    : String((row as Record<string, unknown>)[column.key as string] ?? "-")}
+                  {column.render ? column.render(row) : column.cell ? column.cell(row) : null}
                 </td>
               ))}
             </tr>

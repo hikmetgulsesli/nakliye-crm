@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { DataTable, type Column } from "@/components/ui/data-table";
 import { Pagination } from "@/components/ui/pagination";
 import { StatusBadge, PotentialBadge } from "@/components/ui/badges";
+import type { Potential } from "@/types";
 import {
   Select,
   SelectContent,
@@ -93,7 +94,6 @@ export default function CustomerListPage() {
   const searchParams = useSearchParams();
 
   const [customers, setCustomers] = React.useState<Customer[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [showFilters, setShowFilters] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
@@ -115,10 +115,6 @@ export default function CustomerListPage() {
   const [potential, setPotential] = React.useState("");
   const [source, setSource] = React.useState("");
   const [transportMode, setTransportMode] = React.useState("");
-
-  // Sorting state
-  const [sortColumn, setSortColumn] = React.useState<string>("created_at");
-  const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
@@ -183,7 +179,6 @@ export default function CustomerListPage() {
 
   // Fetch customers
   const fetchCustomers = React.useCallback(async () => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -207,23 +202,12 @@ export default function CustomerListPage() {
       setTotalItems(result.meta.total);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
-    } finally {
-      setIsLoading(false);
     }
   }, [page, pageSize, debouncedSearch, status, potential, source, transportMode]);
 
   React.useEffect(() => {
     fetchCustomers();
   }, [fetchCustomers]);
-
-  const handleSort = (column: string) => {
-    if (sortColumn === column) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortDirection("asc");
-    }
-  };
 
   const handleClearFilters = () => {
     setSearch("");
@@ -320,7 +304,7 @@ export default function CustomerListPage() {
       key: "potential",
       header: "Potansiyel",
       sortable: true,
-      render: (row) => <PotentialBadge potential={row.potential} />,
+      render: (row) => row.potential ? <PotentialBadge potential={row.potential as Potential} /> : "-",
     },
     {
       key: "assigned_user_name",
@@ -535,12 +519,8 @@ export default function CustomerListPage() {
         <DataTable
           data={customers}
           columns={columns}
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          onSort={handleSort}
-          isLoading={isLoading}
           emptyMessage="Müşteri bulunamadı"
-          keyExtractor={(row) => row.id}
+          keyExtractor={(row) => String(row.id)}
         />
 
         {/* Pagination */}

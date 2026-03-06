@@ -4,6 +4,11 @@ import type { User } from "@/types/index";
 
 const SALT_ROUNDS = 12;
 
+// Internal type that includes password_hash for auth
+interface UserWithPassword extends User {
+  password_hash: string;
+}
+
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, SALT_ROUNDS);
 }
@@ -12,10 +17,10 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return compare(password, hashedPassword);
 }
 
-export async function getUserByEmail(email: string): Promise<User | null> {
+export async function getUserByEmail(email: string): Promise<UserWithPassword | null> {
   const pool = getPool();
   const result = await pool.query(
-    "SELECT * FROM users WHERE email = $1 AND is_active = true",
+    "SELECT * FROM users WHERE email = $1 AND is_active = 1",
     [email]
   );
   
@@ -25,17 +30,21 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 
   const row = result.rows[0];
   return {
-    ...row,
-    id: row.id.toString(),
-    created_at: row.created_at.toISOString(),
-    updated_at: row.updated_at.toISOString(),
+    id: String(row.id),
+    email: String(row.email),
+    full_name: String(row.full_name),
+    role: row.role as "admin" | "user",
+    is_active: Boolean(row.is_active),
+    created_at: String(row.created_at),
+    updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 
-export async function getUserById(id: string): Promise<User | null> {
+export async function getUserById(id: string): Promise<UserWithPassword | null> {
   const pool = getPool();
   const result = await pool.query(
-    "SELECT * FROM users WHERE id = $1 AND is_active = true",
+    "SELECT * FROM users WHERE id = $1 AND is_active = 1",
     [id]
   );
   
@@ -45,10 +54,14 @@ export async function getUserById(id: string): Promise<User | null> {
 
   const row = result.rows[0];
   return {
-    ...row,
-    id: row.id.toString(),
-    created_at: row.created_at.toISOString(),
-    updated_at: row.updated_at.toISOString(),
+    id: String(row.id),
+    email: String(row.email),
+    full_name: String(row.full_name),
+    role: row.role as "admin" | "user",
+    is_active: Boolean(row.is_active),
+    created_at: String(row.created_at),
+    updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 
@@ -70,12 +83,16 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     [input.email, passwordHash, input.fullName, input.role ?? "user"]
   );
 
-  const row = result.rows[0];
+  const row = result.rows[0] as Record<string, unknown>;
   return {
-    ...row,
-    id: row.id.toString(),
-    created_at: row.created_at.toISOString(),
-    updated_at: row.updated_at.toISOString(),
+    id: String(row.id),
+    email: String(row.email),
+    full_name: String(row.full_name),
+    role: row.role as "admin" | "user",
+    is_active: Boolean(row.is_active),
+    created_at: String(row.created_at),
+    updated_at: String(row.updated_at),
+    password_hash: String(row.password_hash),
   };
 }
 

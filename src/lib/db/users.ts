@@ -2,6 +2,11 @@ import type { User, CreateUserInput, UpdateUserInput, UserRole } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
 import bcrypt from 'bcryptjs';
 
+// Internal type that includes password_hash for auth
+interface UserWithPassword extends User {
+  password_hash: string;
+}
+
 // Lazy initialization of database
 let db: import('better-sqlite3').Database | null = null;
 
@@ -25,6 +30,30 @@ function getDb() {
     `);
   }
   return db;
+}
+
+// Compatibility layer for PostgreSQL-style queries
+// Wraps better-sqlite3 to provide a pg-pool like interface
+export function getPool() {
+  const database = getDb();
+  return {
+    query: async (sql: string, params?: unknown[]) => {
+      // Convert PostgreSQL $1, $2, ... to SQLite ?, ?, ...
+      const sqliteSql = sql.replace(/\$(\d+)/g, '?');
+      const stmt = database.prepare(sqliteSql);
+      
+      if (sql.trim().toLowerCase().startsWith('select')) {
+        const rows = params ? stmt.all(...params) : stmt.all();
+        return { rows: rows as Record<string, unknown>[] };
+      } else {
+        const result = params ? stmt.run(...params) : stmt.run();
+        return { 
+          rows: [] as Record<string, unknown>[],
+          rowCount: result.changes 
+        };
+      }
+    }
+  };
 }
 
 export function createUser(input: CreateUserInput): User {
@@ -58,11 +87,15 @@ export function getUserById(id: string): User | null {
   return row ? mapRowToUser(row) : null;
 }
 
-export function getUserByEmail(email: string): User | null {
+export function getUserByEmail(email: string): UserWithPassword | null {
   const database = getDb();
   const stmt = database.prepare('SELECT * FROM users WHERE email = ? AND is_active = 1');
   const row = stmt.get(email) as Record<string, unknown> | undefined;
-  return row ? mapRowToUser(row) : null;
+  if (!row) return null;
+  return {
+    ...mapRowToUser(row),
+    password_hash: row.password_hash as string,
+  };
 }
 
 export function getAllUsers(): User[] {
@@ -159,5 +192,6 @@ function mapRowToUser(row: Record<string, unknown>): User {
     is_active: Boolean(row.is_active),
     created_at: row.created_at as string,
     updated_at: row.updated_at as string,
+    password_hash: row.password_hash as string | undefined,
   };
 }
