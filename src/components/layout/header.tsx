@@ -18,10 +18,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Sidebar } from './sidebar';
-import type { User as UserType } from '@/types';
-
 interface HeaderProps {
-  user: UserType;
+  user: {
+    id: string;
+    email: string;
+    full_name: string;
+    role: 'admin' | 'user';
+  };
 }
 
 export function Header({ user }: HeaderProps) {

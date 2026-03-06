@@ -3,13 +3,26 @@
 import type { LossReasonAnalysis } from '@/types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface LossReasonChartProps {
   data: LossReasonAnalysis[];
+  loading?: boolean;
   className?: string;
 }
 
-export function LossReasonChart({ data, className }: LossReasonChartProps) {
+export function LossReasonChart({ data, loading, className }: LossReasonChartProps) {
+  if (loading) {
+    return (
+      <div className={cn('bg-white rounded-xl border border-slate-200 p-6 shadow-sm', className)}>
+        <h3 className="text-lg font-semibold text-slate-900 mb-1">Kaybedilme Nedenleri</h3>
+        <p className="text-sm text-slate-500 mb-6">Kaybedilen tekliflerin neden analizi</p>
+        <div className="h-72">
+          <Skeleton className="h-full w-full" />
+        </div>
+      </div>
+    );
+  }
   if (data.length === 0) {
     return (
       <div className={cn('bg-white rounded-xl border border-slate-200 p-6 shadow-sm', className)}>

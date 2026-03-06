@@ -1,5 +1,11 @@
 export type UserRole = 'admin' | 'user';
 
+// Re-export types from quotations.ts for convenience
+export type QuoteStatus = 'Bekliyor' | 'Kazanildi' | 'Kaybedildi';
+export type QuotationStatus = QuoteStatus;
+export type LossReason = 'Fiyat' | 'Rakip' | 'Gecikmeli donus' | 'Diger';
+export type Currency = 'USD' | 'EUR' | 'TRY';
+
 export interface User {
   id: string;
   email: string;
@@ -8,6 +14,7 @@ export interface User {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  password_hash?: string;
 }
 
 export interface CreateUserInput {
@@ -287,12 +294,114 @@ export interface UserDashboardData {
 }
 
 // ============================================
+// Admin Dashboard Types
+// ============================================
+
+export interface AdminDashboardMetrics {
+  totalQuotations: number;
+  totalQuotes: number;
+  totalValue: number;
+  totalRevenue: number;
+  wonCount: number;
+  wonQuotes: number;
+  lostCount: number;
+  lostQuotes: number;
+  pendingCount: number;
+  pendingQuotes: number;
+  winRate: number;
+  activeCustomers: number;
+  highPotentialCustomers: number;
+}
+
+export interface AdminPersonnelPerformance {
+  id: number;
+  userId: number;
+  name: string;
+  userName: string;
+  quotations: number;
+  totalQuotes: number;
+  value: number;
+  totalRevenue: number;
+  won: number;
+  wonQuotes: number;
+  lost: number;
+  lostQuotes: number;
+  winRate: number;
+  avgQuoteValue: number;
+}
+
+export type PersonnelPerformance = AdminPersonnelPerformance;
+
+export interface AdminCountryData {
+  country: string;
+  count: number;
+  percentage: number;
+}
+
+export interface CountryVolume {
+  country: string;
+  count: number;
+  percentage: number;
+}
+
+export interface AdminModeData {
+  mode: string;
+  count: number;
+  percentage: number;
+}
+
+export interface ModeDistribution {
+  mode: string;
+  count: number;
+  percentage: number;
+}
+
+export interface AdminLossReasonData {
+  reason: string;
+  count: number;
+  percentage: number;
+}
+
+export interface AdminDashboardData {
+  metrics: AdminDashboardMetrics;
+  personnelPerformance: AdminPersonnelPerformance[];
+  originCountries: AdminCountryData[];
+  destinationCountries: AdminCountryData[];
+  modeDistribution: AdminModeData[];
+  lossReasons: AdminLossReasonData[];
+  dateRange: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
+// ============================================
 // Alert Types
 // ============================================
 
 export type AlertType = 'no_contact_14d' | 'pending_quote_7d' | 'expired_quote' | 'high_potential_no_quote_30d';
 export type AlertSeverity = 'low' | 'medium' | 'high';
 export type AlertStatus = 'active' | 'reviewed' | 'dismissed';
+
+export interface Alert {
+  id: string;
+  type: AlertType;
+  severity: AlertSeverity;
+  status: AlertStatus;
+  customerId: string;
+  customerName: string;
+  message: string;
+  title: string;
+  description: string;
+  entity_type: 'customer' | 'quotation';
+  entity_id: string;
+  assigned_user_name?: string;
+  reviewed_by_name?: string;
+  reviewed_at?: string;
+  created_at: string;
+  createdAt: string;
+  updatedAt?: string;
+}
 
 export interface AlertCounts {
   no_contact_14d: number;
@@ -308,10 +417,12 @@ export interface AlertCounts {
 
 export type ReportType = 'period' | 'performance' | 'won-lost' | 'country-volume';
 
+export type ReportStatus = 'pending' | 'won' | 'lost';
+
 export interface PeriodReportFilters {
   startDate: string;
   endDate: string;
-  status?: QuotationStatus;
+  status?: ReportStatus;
   assignedUserId?: number;
   currency?: Currency;
 }

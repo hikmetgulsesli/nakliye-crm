@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/session";
 import { UserMetricsCards } from "@/components/dashboard/user-metrics-cards";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { UpcomingFollowUps } from "@/components/dashboard/upcoming-follow-ups";
@@ -20,7 +19,7 @@ export default async function DashboardPage() {
     redirect('/login');
   }
 
-  const userName = session.user?.name || session.user?.email || 'Kullanıcı';
+  const userName = session.user?.full_name || session.user?.email || 'Kullanıcı';
 
   return (
     <div className="space-y-6">

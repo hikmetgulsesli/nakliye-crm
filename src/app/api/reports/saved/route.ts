@@ -15,14 +15,19 @@ export async function GET(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || typeof payload.userId !== 'number') {
+    if (!payload || !payload.sub) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = parseInt(payload.sub, 10);
+    if (isNaN(userId)) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const reportType = searchParams.get('reportType') as ReportType | undefined;
 
-    const reports = getSavedReports(payload.userId, reportType);
+    const reports = getSavedReports(userId, reportType);
     return NextResponse.json({ reports });
   } catch (error) {
     console.error('Get saved reports error:', error);
@@ -41,7 +46,12 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || typeof payload.userId !== 'number') {
+    if (!payload || !payload.sub) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = parseInt(payload.sub, 10);
+    if (isNaN(userId)) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -56,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     const saved = saveReportParams(
-      payload.userId,
+      userId,
       reportType as ReportType,
       name,
       params
@@ -80,7 +90,12 @@ export async function DELETE(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
-    if (!payload || typeof payload.userId !== 'number') {
+    if (!payload || !payload.sub) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = parseInt(payload.sub, 10);
+    if (isNaN(userId)) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -94,7 +109,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const deleted = deleteSavedReport(parseInt(id, 10), payload.userId);
+    const deleted = deleteSavedReport(parseInt(id, 10), userId);
 
     if (!deleted) {
       return NextResponse.json(

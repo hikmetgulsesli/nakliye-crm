@@ -1,19 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default withAuth(
-  function middleware(req) {
-    const { pathname } = req.nextUrl;
-    const { token } = req.nextauth;
+// Middleware runs in Edge Runtime - cannot use next-auth
+// We check cookies directly
 
-    // Admin-only routes
-    const adminPaths = ['/users', '/settings', '/reports'];
-    const isAdminPath = pathname.startsWith("/admin") || 
-                        adminPaths.some(path => pathname.startsWith(path));
-    
-    if (isAdminPath && token?.role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
   // Public paths that don't require authentication
   const publicPaths = ['/login', '/api/auth/login', '/api/auth/logout'];
@@ -23,7 +15,10 @@ export default withAuth(
   }
 
   // Check for session cookie
-  if (!session) {
+  const sessionCookie = request.cookies.get('next-auth.session-token') || 
+                        request.cookies.get('__Secure-next-auth.session-token');
+
+  if (!sessionCookie) {
     if (pathname.startsWith('/api/')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/index';
+import { getSession } from '@/lib/auth/session';
 import {
-  getCustomers,
+  getAllCustomers,
   createCustomer,
-} from '@/lib/services/customer';
-import { customerSchema, customerFilterSchema, type CustomerInput } from '@/lib/validators/customer';
+  checkConflicts,
+} from '@/lib/db/customers';
+import type { CreateCustomerInput } from '@/types';
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
 const VALID_SERVICE_TYPES = ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'] as const;
@@ -15,27 +15,15 @@ const VALID_SOURCES = ['Referans', 'Soguk arama', 'Fuar', 'Dijital'] as const;
 const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
+// GET /api/customers - Get all customers
 export async function GET() {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
     if (!session?.user) {
-      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
-    }
-
-    const { searchParams } = new URL(request.url);
-    const rawParams: Record<string, string | undefined> = {};
-    searchParams.forEach((value, key) => {
-      rawParams[key] = value;
-    });
-
-    const validation = customerFilterSchema.safeParse(rawParams);
-    if (!validation.success) {
-      return errorResponse(
-        'VALIDATION_ERROR',
-        'Invalid filter parameters',
-        400,
-        validation.error.issues
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -50,22 +38,23 @@ export async function GET() {
   }
 }
 
+// POST /api/customers - Create a new customer
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getSession();
     if (!session?.user) {
-      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const body = await request.json();
-    const validation = customerSchema.safeParse(body);
 
-    const body = await request.json();
-    
     // Validate required fields
     const validationErrors: string[] = [];
-    
+
     if (!body.company_name?.trim()) {
       validationErrors.push('Firma adı zorunludur');
     }
@@ -105,16 +94,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = validation.data as CustomerInput;
-    const createdBy = session.user.id;
+    // Check for conflicts
+    const conflicts = checkConflicts(
+      body.company_name.trim(),
+      body.phone.trim(),
+      body.email.trim()
+    );
 
-    // Validate assigned_user_id exists
-    const users = getAllUsers();
-    const assignedUser = users.find(u => u.id === body.assigned_user_id);
-    if (!assignedUser) {
+    // If conflicts exist and force is not set, return conflicts
+    if (conflicts.length > 0 && !body.force) {
       return NextResponse.json(
-        { error: 'Invalid assigned user' },
-        { status: 400 }
+        {
+          error: 'Potential conflicts detected',
+          conflicts,
+          requiresConfirmation: true
+        },
+        { status: 409 }
       );
     }
 

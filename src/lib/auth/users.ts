@@ -4,11 +4,6 @@ import type { User } from "@/types/index";
 
 const SALT_ROUNDS = 12;
 
-// Internal type that includes password_hash for auth
-interface UserWithPassword extends User {
-  password_hash: string;
-}
-
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, SALT_ROUNDS);
 }
