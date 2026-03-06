@@ -1,5 +1,5 @@
 import { compare, hash } from "bcryptjs";
-import { getDb } from "@/lib/db/index";
+import pool from "@/db/connection";
 import type { User } from "@/types/index";
 
 const SALT_ROUNDS = 12;
@@ -12,18 +12,20 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return compare(password, hashedPassword);
 }
 
-export function getUserByEmail(email: string): User | null {
-  const db = getDb();
-  const stmt = db.prepare("SELECT * FROM users WHERE email = ? AND is_active = 1");
-  const row = stmt.get(email) as User | undefined;
-  return row ?? null;
+export async function getUserByEmail(email: string): Promise<User | null> {
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1 AND is_active = true",
+    [email]
+  );
+  return result.rows[0] ?? null;
 }
 
-export function getUserById(id: number): User | null {
-  const db = getDb();
-  const stmt = db.prepare("SELECT * FROM users WHERE id = ? AND is_active = 1");
-  const row = stmt.get(id) as User | undefined;
-  return row ?? null;
+export async function getUserById(id: string): Promise<User | null> {
+  const result = await pool.query(
+    "SELECT * FROM users WHERE id = $1 AND is_active = true",
+    [id]
+  );
+  return result.rows[0] ?? null;
 }
 
 export interface CreateUserInput {
@@ -34,22 +36,20 @@ export interface CreateUserInput {
 }
 
 export async function createUser(input: CreateUserInput): Promise<User> {
-  const db = getDb();
   const passwordHash = await hashPassword(input.password);
   
-  const stmt = db.prepare(`
-    INSERT INTO users (email, password_hash, full_name, role)
-    VALUES (?, ?, ?, ?)
-  `);
+  const result = await pool.query(
+    `INSERT INTO users (email, password_hash, full_name, role)
+     VALUES ($1, $2, $3, $4)
+     RETURNING *`,
+    [input.email, passwordHash, input.fullName, input.role ?? "user"]
+  );
   
-  const result = stmt.run(input.email, passwordHash, input.fullName, input.role ?? "user");
-  
-  const user = getUserById(Number(result.lastInsertRowid));
-  if (!user) {
+  if (result.rows.length === 0) {
     throw new Error("Failed to create user");
   }
   
-  return user;
+  return result.rows[0];
 }
 
 export function validatePassword(password: string): { valid: boolean; message?: string } {

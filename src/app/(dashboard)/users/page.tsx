@@ -34,6 +34,7 @@ import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User, UserRole } from '@/types';
+import { createUserSchema, updateUserSchema } from '@/lib/validation';
 import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginatedUsers {
@@ -91,18 +92,30 @@ export default function UsersPage() {
   const validateForm = () => {
     const errors: Record<string, string> = {};
     
-    if (!formData.full_name || formData.full_name.length < 2) {
-      errors.full_name = 'Ad soyad en az 2 karakter olmalıdır';
-    }
-    
-    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'Geçerli bir e-posta adresi giriniz';
-    }
-    
-    if (!editOpen && (!formData.password || formData.password.length < 8)) {
-      errors.password = 'Şifre en az 8 karakter olmalıdır';
-    } else if (!editOpen && !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
-      errors.password = 'Şifre en az bir özel karakter içermelidir';
+    if (editOpen) {
+      // Use update schema for edit mode
+      const result = updateUserSchema.safeParse({
+        full_name: formData.full_name,
+        email: formData.email,
+        role: formData.role,
+      });
+      
+      if (!result.success) {
+        result.error.issues.forEach((issue) => {
+          const field = issue.path[0] as string;
+          errors[field] = issue.message;
+        });
+      }
+    } else {
+      // Use create schema for create mode
+      const result = createUserSchema.safeParse(formData);
+      
+      if (!result.success) {
+        result.error.issues.forEach((issue) => {
+          const field = issue.path[0] as string;
+          errors[field] = issue.message;
+        });
+      }
     }
 
     setFormErrors(errors);

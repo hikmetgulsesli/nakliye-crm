@@ -2,9 +2,11 @@ import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 import { User } from '@/types';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || 'default-secret-change-in-production'
-);
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET environment variable is required');
+}
+
+const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
 // Hash password
 export async function hashPassword(password: string): Promise<string> {

@@ -33,7 +33,13 @@ async function initDatabase() {
 
     if (adminResult.rows.length === 0) {
       // Create default admin user
-      const passwordHash = await hashPassword('Admin123!');
+      const adminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+      if (!adminPassword) {
+        console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set');
+        process.exit(1);
+      }
+      
+      const passwordHash = await hashPassword(adminPassword);
       
       await pool.query(
         `INSERT INTO users (email, password_hash, full_name, role, is_active)
@@ -43,7 +49,7 @@ async function initDatabase() {
 
       console.log('Default admin user created:');
       console.log('Email: admin@nakliye.com');
-      console.log('Password: Admin123!');
+      console.log('Password: <set via DEFAULT_ADMIN_PASSWORD env var>');
     } else {
       console.log('Admin user already exists');
     }

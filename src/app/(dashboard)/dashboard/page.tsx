@@ -2,10 +2,15 @@ import { Metadata } from "next";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import { UserMetricsCards } from "@/components/dashboard/user-metrics-cards";
+import { QuickActions } from "@/components/dashboard/quick-actions";
+import { UpcomingFollowUps } from "@/components/dashboard/upcoming-follow-ups";
+import { RecentActivityFeed } from "@/components/dashboard/recent-activity-feed";
+import { AlertWidgets } from "@/components/alerts/alert-widgets";
 
 export const metadata: Metadata = {
   title: "Dashboard | Nakliye CRM",
-  description: "CRM Dashboard",
+  description: "Kullanıcı Dashboard - Kişisel metrikler ve aktiviteler",
 };
 
 export default async function DashboardPage() {
@@ -15,51 +20,33 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const userName = session.user?.name || session.user?.email || 'Kullanıcı';
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
-        <h1 className="font-heading text-3xl font-bold text-text">
-          Hoş Geldiniz, {session.user?.name}
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          Hoş Geldiniz, {userName}
         </h1>
-        <p className="text-text-muted mt-1">
-          Uluslararası nakliye CRM sistemine başarıyla giriş yaptınız.
+        <p className="text-gray-500 mt-1">
+          Bugün neler yapmak istersiniz?
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-border bg-surface-elevated p-6">
-          <div className="text-sm font-medium text-text-muted">Toplam Müşteri</div>
-          <div className="mt-2 text-3xl font-bold text-primary">0</div>
-        </div>
-        <div className="rounded-xl border border-border bg-surface-elevated p-6">
-          <div className="text-sm font-medium text-text-muted">Aktif Teklif</div>
-          <div className="mt-2 text-3xl font-bold text-accent">0</div>
-        </div>
-        <div className="rounded-xl border border-border bg-surface-elevated p-6">
-          <div className="text-sm font-medium text-text-muted">Bu Ay Görüşme</div>
-          <div className="mt-2 text-3xl font-bold text-success">0</div>
-        </div>
-        <div className="rounded-xl border border-border bg-surface-elevated p-6">
-          <div className="text-sm font-medium text-text-muted">Kazanma Oranı</div>
-          <div className="mt-2 text-3xl font-bold text-info">0%</div>
-        </div>
-      </div>
+      {/* Alert Widgets */}
+      <AlertWidgets autoRefresh={true} refreshInterval={60000} />
 
-      <div className="rounded-xl border border-border bg-surface-elevated p-6">
-        <h2 className="font-heading text-lg font-semibold text-text">Son Aktiviteler</h2>
-        <p className="text-text-muted mt-2">Henüz aktivite kaydı bulunmuyor.</p>
-      </div>
+      {/* Quick Actions */}
+      <QuickActions />
 
-      <div className="rounded-xl border border-border bg-surface-elevated p-6">
-        <h3 className="font-heading font-medium text-text mb-4">Sistem Durumu</h3>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-success"></span>
-          <span className="text-sm text-text-muted">Veritabanı bağlantısı aktif</span>
-        </div>
-        <div className="flex items-center gap-2 mt-2">
-          <span className="w-2 h-2 rounded-full bg-success"></span>
-          <span className="text-sm text-text-muted">Kimlik doğrulama sistemi çalışıyor</span>
-        </div>
+      {/* Personal Metrics */}
+      <UserMetricsCards autoRefresh={true} refreshInterval={60000} />
+
+      {/* Two Column Layout: Follow-ups & Activity */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <UpcomingFollowUps limit={5} autoRefresh={true} refreshInterval={60000} />
+        <RecentActivityFeed limit={10} autoRefresh={true} refreshInterval={60000} />
       </div>
     </div>
   );

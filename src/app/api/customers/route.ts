@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
 import {
   getCustomers,
   createCustomer,
@@ -19,6 +21,12 @@ function successResponse(data: unknown, meta?: Record<string, unknown>) {
 // GET /api/customers - List customers with filters
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
     const { searchParams } = new URL(request.url);
     const rawParams: Record<string, string | undefined> = {};
     searchParams.forEach((value, key) => {
@@ -53,6 +61,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // POST /api/customers - Create a new customer
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
     const body = await request.json();
     const validation = customerSchema.safeParse(body);
 
@@ -66,7 +80,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const data = validation.data as CustomerInput;
-    const createdBy = null; // TODO: Get from auth session
+    const createdBy = session.user.id;
 
     const customer = await createCustomer(data, createdBy);
     return successResponse(customer);

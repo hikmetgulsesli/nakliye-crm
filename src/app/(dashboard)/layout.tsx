@@ -1,6 +1,6 @@
-import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { verifyToken } from '@/lib/auth/utils';
+import { authOptions } from '@/lib/auth/index';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
 import { Breadcrumb } from '@/components/layout/breadcrumb';
@@ -11,16 +11,9 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get('auth-token')?.value;
+  const session = await getServerSession(authOptions);
 
-  if (!token) {
-    redirect('/login');
-  }
-
-  const payload = await verifyToken(token);
-
-  if (!payload) {
+  if (!session?.user) {
     redirect('/login');
   }
 
@@ -29,17 +22,17 @@ export default async function DashboardLayout({
       {/* Sidebar - hidden on mobile */}
       <div className="hidden lg:block w-64 flex-shrink-0">
         <Sidebar 
-          userRole={payload.role as UserRole} 
-          userName={payload.full_name} 
+          userRole={session.user.role as UserRole} 
+          userName={session.user.name ?? ''} 
         />
       </div>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header 
-          userRole={payload.role as UserRole}
-          userName={payload.full_name}
-          userEmail={payload.email}
+          userRole={session.user.role as UserRole}
+          userName={session.user.name ?? ''}
+          userEmail={session.user.email ?? ''}
         />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
           <Breadcrumb />

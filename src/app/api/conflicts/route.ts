@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
 import { findConflicts, forceCreateCustomer } from '@/lib/services/customer';
 import { conflictCheckSchema, customerSchema, type CustomerInput } from '@/lib/validators/customer';
 
@@ -46,6 +48,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // POST /api/conflicts/force-create - Force create a customer despite conflicts (admin only)
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // Check admin role
+    const session = await getServerSession(authOptions);
+    if (!session?.user || session.user.role !== 'admin') {
+      return errorResponse('FORBIDDEN', 'Admin access required', 403);
+    }
+
     const body = await request.json();
     const { force, ...customerData } = body;
 
@@ -68,7 +76,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const data = validation.data as CustomerInput;
-    const createdBy = null; // TODO: Get from auth session
+    const createdBy = session.user.id;
 
     const customer = await forceCreateCustomer(data, createdBy);
     return NextResponse.json({ data: customer });

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/index';
 import {
   getCustomerById,
   updateCustomer,
@@ -20,10 +22,16 @@ function successResponse(data: unknown) {
 // GET /api/customers/[id] - Get a single customer
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
-    const { id } = await params;
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    const { id } = params;
     const customerId = parseInt(id, 10);
 
     if (isNaN(customerId)) {
@@ -46,10 +54,16 @@ export async function GET(
 // PATCH /api/customers/[id] - Update a customer
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
-    const { id } = await params;
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    const { id } = params;
     const customerId = parseInt(id, 10);
 
     if (isNaN(customerId)) {
@@ -69,7 +83,7 @@ export async function PATCH(
     }
 
     const data = validation.data as CustomerUpdateInput;
-    const updatedBy = null; // TODO: Get from auth session
+    const updatedBy = session.user.id;
 
     const customer = await updateCustomer(customerId, data, updatedBy);
 
@@ -84,20 +98,31 @@ export async function PATCH(
   }
 }
 
-// DELETE /api/customers/[id] - Soft delete a customer
+// DELETE /api/customers/[id] - Soft delete a customer (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
-    const { id } = await params;
+    // Check admin role
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return errorResponse('UNAUTHORIZED', 'Authentication required', 401);
+    }
+
+    // Only admin can delete customers
+    if (session.user.role !== 'admin') {
+      return errorResponse('FORBIDDEN', 'Admin access required', 403);
+    }
+
+    const { id } = params;
     const customerId = parseInt(id, 10);
 
     if (isNaN(customerId)) {
       return errorResponse('INVALID_ID', 'Invalid customer ID', 400);
     }
 
-    const deletedBy = null; // TODO: Get from auth session
+    const deletedBy = session.user.id;
     const customer = await deleteCustomer(customerId, deletedBy);
 
     if (!customer) {
