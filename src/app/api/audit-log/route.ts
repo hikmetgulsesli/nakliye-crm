@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getAuditLogsByRecord, getAuditLogsByCustomer, getRecentAuditLogs } from '@/lib/db/audit-log';
 import { getSession } from '@/lib/auth/session';
-import type { AuditRecordType } from '@/types/index';
 
 const querySchema = z.object({
   record_type: z.enum(['customer', 'quotation', 'activity', 'user'] as const).optional(),
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest) {
       logs = getAuditLogsByCustomer(customer_id);
     } else if (record_type && record_id) {
       // Get logs for a specific record
-      logs = getAuditLogsByRecord(record_type as AuditRecordType, record_id);
+      logs = getAuditLogsByRecord(record_type, record_id);
     } else {
       // Get recent logs
       logs = getRecentAuditLogs(limit);

@@ -128,6 +128,44 @@ export function getAuditLogs(options: {
   return rows.map(mapRowToAuditLogWithUser);
 }
 
+export function getAuditLogsByCustomer(customerId: string): AuditLogWithUser[] {
+  const database = getDb();
+  const stmt = database.prepare(`
+    SELECT 
+      al.*,
+      u.full_name as user_name
+    FROM audit_log al
+    LEFT JOIN users u ON al.user_id = u.id
+    WHERE al.record_id = ? 
+       OR al.metadata LIKE ?
+       OR al.metadata LIKE ?
+       OR al.metadata LIKE ?
+    ORDER BY al.created_at DESC
+  `);
+  const rows = stmt.all(
+    customerId,
+    `%"customer_id":"${customerId}"%`,
+    `%"customer_id": "${customerId}"%`,
+    `%"id":"${customerId}"%`
+  ) as Record<string, unknown>[];
+  return rows.map(mapRowToAuditLogWithUser);
+}
+
+export function getRecentAuditLogs(limit: number = 50): AuditLogWithUser[] {
+  const database = getDb();
+  const stmt = database.prepare(`
+    SELECT 
+      al.*,
+      u.full_name as user_name
+    FROM audit_log al
+    LEFT JOIN users u ON al.user_id = u.id
+    ORDER BY al.created_at DESC
+    LIMIT ?
+  `);
+  const rows = stmt.all(limit) as Record<string, unknown>[];
+  return rows.map(mapRowToAuditLogWithUser);
+}
+
 export function buildChangesObject(
   oldData: Record<string, unknown>,
   newData: Record<string, unknown>
