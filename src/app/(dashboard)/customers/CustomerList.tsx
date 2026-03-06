@@ -8,6 +8,22 @@ import { DataTable, type Column } from "@/components/ui/data-table";
 import { Pagination } from "@/components/ui/pagination";
 import { StatusBadge, PotentialBadge } from "@/components/ui/badges";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
   Search,
   Filter,
   Download,
@@ -81,6 +97,11 @@ export default function CustomerListPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [showFilters, setShowFilters] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
+
+  // Delete confirmation dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [customerToDelete, setCustomerToDelete] = React.useState<Customer | null>(null);
+  const [deleteError, setDeleteError] = React.useState<string | null>(null);
 
   // Pagination state
   const [page, setPage] = React.useState(1);
@@ -157,8 +178,8 @@ export default function CustomerListPage() {
     if (transportMode) params.set("transport_mode", transportMode);
 
     const newUrl = params.toString() ? `?${params.toString()}` : "";
-    window.history.replaceState({}, "", newUrl);
-  }, [page, pageSize, debouncedSearch, status, potential, source, transportMode]);
+    router.replace(newUrl, { scroll: false });
+  }, [page, pageSize, debouncedSearch, status, potential, source, transportMode, router]);
 
   // Fetch customers
   const fetchCustomers = React.useCallback(async () => {
@@ -248,13 +269,17 @@ export default function CustomerListPage() {
     link.click();
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Bu müşteriyi silmek istediğinize emin misiniz?")) {
-      return;
-    }
+  const handleDeleteClick = (customer: Customer) => {
+    setCustomerToDelete(customer);
+    setDeleteError(null);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!customerToDelete) return;
 
     try {
-      const response = await fetch(`/api/customers/${id}`, {
+      const response = await fetch(`/api/customers/${customerToDelete.id}`, {
         method: "DELETE",
       });
 
@@ -263,9 +288,11 @@ export default function CustomerListPage() {
         throw new Error(errorData.error?.message || "Silme işlemi başarısız oldu");
       }
 
+      setDeleteDialogOpen(false);
+      setCustomerToDelete(null);
       fetchCustomers();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Bir hata oluştu");
+      setDeleteError(err instanceof Error ? err.message : "Bir hata oluştu");
     }
   };
 
@@ -354,7 +381,7 @@ export default function CustomerListPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => handleDelete(row.id)}
+              onClick={() => handleDeleteClick(row)}
               aria-label="Sil"
               className="text-destructive hover:text-destructive"
             >
@@ -433,60 +460,64 @@ export default function CustomerListPage() {
         <div className="rounded-lg border bg-card p-4">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Durum</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {statusOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <Label htmlFor="status-filter">Durum</Label>
+              <Select value={status} onValueChange={setStatus}>
+                <SelectTrigger id="status-filter" className="w-full">
+                  <SelectValue placeholder="Tümü" />
+                </SelectTrigger>
+                <SelectContent>
+                  {statusOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Potansiyel</label>
-              <select
-                value={potential}
-                onChange={(e) => setPotential(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {potentialOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <Label htmlFor="potential-filter">Potansiyel</Label>
+              <Select value={potential} onValueChange={setPotential}>
+                <SelectTrigger id="potential-filter" className="w-full">
+                  <SelectValue placeholder="Tümü" />
+                </SelectTrigger>
+                <SelectContent>
+                  {potentialOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Kaynak</label>
-              <select
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {sourceOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <Label htmlFor="source-filter">Kaynak</Label>
+              <Select value={source} onValueChange={setSource}>
+                <SelectTrigger id="source-filter" className="w-full">
+                  <SelectValue placeholder="Tümü" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sourceOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Taşıma Modu</label>
-              <select
-                value={transportMode}
-                onChange={(e) => setTransportMode(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {transportModeOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <Label htmlFor="transport-mode-filter">Taşıma Modu</Label>
+              <Select value={transportMode} onValueChange={setTransportMode}>
+                <SelectTrigger id="transport-mode-filter" className="w-full">
+                  <SelectValue placeholder="Tümü" />
+                </SelectTrigger>
+                <SelectContent>
+                  {transportModeOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -526,6 +557,32 @@ export default function CustomerListPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Müşteri Silme Onayı</DialogTitle>
+            <DialogDescription>
+              <strong>{customerToDelete?.company_name}</strong> firmasını silmek istediğinize emin misiniz?
+              Bu işlem geri alınamaz.
+            </DialogDescription>
+          </DialogHeader>
+          {deleteError && (
+            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              {deleteError}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              İptal
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm}>
+              Sil
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

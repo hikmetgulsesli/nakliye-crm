@@ -1,22 +1,22 @@
-import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth/session';
 
-export const metadata: Metadata = {
-  title: 'Teklifler | Nakliye CRM',
-  description: 'Teklif yönetimi',
-};
+export default async function QuotationsPage() {
+  const session = await getSession();
 
-export default function QuotationsPage() {
+  if (!session) {
+    redirect('/login');
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Teklifler</h1>
-        <p className="text-muted-foreground">
-          Nakliye tekliflerini yönetin
-        </p>
+        <h1 className="text-2xl font-bold text-slate-900">Teklifler</h1>
+        <p className="text-slate-600">Teklif yönetimi ve takibi</p>
       </div>
       
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <p className="text-muted-foreground">Teklif modülü yakında kullanıma sunulacak.</p>
+      <div className="rounded-lg border bg-white p-12 shadow-sm text-center">
+        <p className="text-slate-500">Teklif modülü yakında eklenecek</p>
       </div>
     </div>
   );

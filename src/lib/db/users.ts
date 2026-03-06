@@ -1,21 +1,54 @@
-import type { User, UpdateUserInput } from '@/types';
+import type { User, CreateUserInput, UpdateUserInput, UserRole } from '@/types';
 import DatabaseConstructor from 'better-sqlite3';
+import bcrypt from 'bcryptjs';
 
+// Lazy initialization of database
 let db: import('better-sqlite3').Database | null = null;
 
 function getDb() {
   if (!db) {
     const dbPath = process.env.DATABASE_PATH || './data/crm.db';
     db = new DatabaseConstructor(dbPath);
+    
+    // Initialize users table
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        role TEXT NOT NULL CHECK (role IN ('admin', 'user')),
+        is_active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `);
   }
   return db;
 }
 
-export function getAllUsers(): User[] {
+export function createUser(input: CreateUserInput): User {
   const database = getDb();
-  const stmt = database.prepare('SELECT * FROM users WHERE is_active = 1 ORDER BY full_name ASC');
-  const rows = stmt.all() as Record<string, unknown>[];
-  return rows.map(mapRowToUser);
+  const id = crypto.randomUUID();
+  const passwordHash = bcrypt.hashSync(input.password, 10);
+  const now = new Date().toISOString();
+
+  const stmt = database.prepare(`
+    INSERT INTO users (id, email, password_hash, full_name, role, is_active, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  stmt.run(id, input.email, passwordHash, input.full_name, input.role, 1, now, now);
+
+  return {
+    id,
+    email: input.email,
+    full_name: input.full_name,
+    role: input.role,
+    is_active: true,
+    created_at: now,
+    updated_at: now,
+  };
 }
 
 export function getUserById(id: string): User | null {
@@ -25,10 +58,24 @@ export function getUserById(id: string): User | null {
   return row ? mapRowToUser(row) : null;
 }
 
+export function getUserByEmail(email: string): User | null {
+  const database = getDb();
+  const stmt = database.prepare('SELECT * FROM users WHERE email = ? AND is_active = 1');
+  const row = stmt.get(email) as Record<string, unknown> | undefined;
+  return row ? mapRowToUser(row) : null;
+}
+
+export function getAllUsers(): User[] {
+  const database = getDb();
+  const stmt = database.prepare('SELECT * FROM users ORDER BY created_at DESC');
+  const rows = stmt.all() as Record<string, unknown>[];
+  return rows.map(mapRowToUser);
+}
+
 export function updateUser(id: string, input: UpdateUserInput): User | null {
   const database = getDb();
   const sets: string[] = [];
-  const values: (string | boolean | number)[] = [];
+  const values: (string | number)[] = [];
 
   if (input.full_name !== undefined) {
     sets.push('full_name = ?');
@@ -55,12 +102,60 @@ export function updateUser(id: string, input: UpdateUserInput): User | null {
   return getUserById(id);
 }
 
+export function deleteUser(id: string): boolean {
+  const database = getDb();
+  const stmt = database.prepare('UPDATE users SET is_active = 0, updated_at = ? WHERE id = ?');
+  const result = stmt.run(new Date().toISOString(), id);
+  return result.changes > 0;
+}
+
+export function validatePassword(user: User, password: string): boolean {
+  const database = getDb();
+  const stmt = database.prepare('SELECT password_hash FROM users WHERE id = ?');
+  const row = stmt.get(user.id) as { password_hash: string } | undefined;
+  if (!row) return false;
+  return bcrypt.compareSync(password, row.password_hash);
+}
+
+export function seedInitialAdmin(): void {
+  const existing = getUserByEmail('admin@nakliye.com');
+  if (!existing) {
+    // Use environment variable for initial admin password or generate a random one
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+    if (!adminPassword) {
+      // Generate a random password and log it (only during first initialization)
+      const randomPassword = crypto.randomUUID().slice(0, 12) + '!' + Math.floor(Math.random() * 100);
+      createUser({
+        email: 'admin@nakliye.com',
+        password: randomPassword,
+        full_name: 'System Admin',
+        role: 'admin',
+      });
+      console.log('=================================================================');
+      console.log('INITIAL ADMIN USER CREATED');
+      console.log('Email: admin@nakliye.com');
+      console.log('Password:', randomPassword);
+      console.log('=================================================================');
+      console.log('IMPORTANT: Please change this password after first login.');
+      console.log('Set INITIAL_ADMIN_PASSWORD env var to use a fixed password.');
+      console.log('=================================================================');
+    } else {
+      createUser({
+        email: 'admin@nakliye.com',
+        password: adminPassword,
+        full_name: 'System Admin',
+        role: 'admin',
+      });
+    }
+  }
+}
+
 function mapRowToUser(row: Record<string, unknown>): User {
   return {
     id: row.id as string,
     email: row.email as string,
     full_name: row.full_name as string,
-    role: row.role as User['role'],
+    role: row.role as UserRole,
     is_active: Boolean(row.is_active),
     created_at: row.created_at as string,
     updated_at: row.updated_at as string,
