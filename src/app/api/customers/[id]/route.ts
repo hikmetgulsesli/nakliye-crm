@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
-import { getCustomerById, updateCustomer, deleteCustomer, getCustomerByIdWithUser, checkConflicts } from '@/lib/db/customers';
-import { getAllUsers } from '@/lib/db/users';
+import {
+  getCustomerById,
+  getCustomerByIdWithUser,
+  updateCustomer,
+  deleteCustomer,
+  checkConflicts,
+} from '@/lib/db/customers';
 import type { UpdateCustomerInput } from '@/types';
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
@@ -12,20 +17,24 @@ const VALID_SOURCES = ['Referans', 'Soguk arama', 'Fuar', 'Dijital'] as const;
 const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
-interface RouteParams {
-  params: Promise<{ id: string }>;
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+// GET /api/customers/[id] - Get a single customer
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
+    // Check authentication
     const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
-    const { id } = await params;
+    const { id } = params;
     const customer = getCustomerByIdWithUser(id);
-    
+
     if (!customer) {
       return NextResponse.json(
         { error: 'Customer not found' },
@@ -43,16 +52,20 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+// PUT /api/customers/[id] - Update a customer
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { id } = params;
     const existingCustomer = getCustomerById(id);
-    
+
     if (!existingCustomer) {
       return NextResponse.json(
         { error: 'Customer not found' },
@@ -61,36 +74,24 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const body = await request.json();
-    
+
     // Check for conflicts if company_name, phone, or email is being changed
     const companyName = body.company_name !== undefined ? body.company_name : existingCustomer.company_name;
     const phone = body.phone !== undefined ? body.phone : existingCustomer.phone;
     const email = body.email !== undefined ? body.email : existingCustomer.email;
-    
+
     const conflicts = checkConflicts(companyName, phone, email, id);
-    
+
     // If conflicts exist and force is not set, return conflicts
     if (conflicts.length > 0 && !body.force) {
       return NextResponse.json(
-        { 
+        {
           error: 'Potential conflicts detected',
           conflicts,
           requiresConfirmation: true
         },
         { status: 409 }
       );
-    }
-
-    // Validate assigned_user_id if provided
-    if (body.assigned_user_id) {
-      const users = getAllUsers();
-      const assignedUser = users.find(u => u.id === body.assigned_user_id);
-      if (!assignedUser) {
-        return NextResponse.json(
-          { error: 'Invalid assigned user' },
-          { status: 400 }
-        );
-      }
     }
 
     const input: UpdateCustomerInput = {};
@@ -163,14 +164,22 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+// DELETE /api/customers/[id] - Delete a customer (admin only)
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
+    // Check admin role
     const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
-    // Only admins can delete customers
+    // Only admin can delete customers
     if (session.user.role !== 'admin') {
       return NextResponse.json(
         { error: 'Forbidden - Admin access required' },
@@ -178,9 +187,9 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const { id } = await params;
+    const { id } = params;
     const existingCustomer = getCustomerById(id);
-    
+
     if (!existingCustomer) {
       return NextResponse.json(
         { error: 'Customer not found' },

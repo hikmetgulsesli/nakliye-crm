@@ -1,231 +1,335 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { RevisionChange } from '@/types';
+import { describe, it, expect, beforeEach, beforeAll } from 'vitest';
+import DatabaseConstructor from 'better-sqlite3';
+import * as quotationRevisions from '../quotation-revisions';
+import * as quotations from '../quotations';
 
-// Mock better-sqlite3
-const mockDb = {
-  prepare: vi.fn(),
-  exec: vi.fn(),
-};
+// Set up test database
+process.env.DATABASE_PATH = ':memory:';
 
-const mockStmt = {
-  run: vi.fn(),
-  get: vi.fn(),
-  all: vi.fn(),
-};
+const TEST_USER_ID = 'test-user-id';
+const TEST_CUSTOMER_ID = 'test-customer-id';
 
-vi.mock('better-sqlite3', () => ({
-  default: vi.fn(() => mockDb),
-}));
+describe('QuotationRevisions DB', () => {
+  let db: import('better-sqlite3').Database;
 
-describe('Quotation Revisions DB', () => {
+  beforeAll(() => {
+    // Initialize database
+    db = new DatabaseConstructor(':memory:');
+    
+    // Create users table
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'user',
+        is_active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `);
+
+    // Create customers table
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS customers (
+        id TEXT PRIMARY KEY,
+        company_name TEXT NOT NULL,
+        contact_name TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        email TEXT NOT NULL,
+        address TEXT,
+        transport_modes TEXT NOT NULL,
+        service_types TEXT NOT NULL,
+        incoterms TEXT NOT NULL,
+        direction TEXT NOT NULL,
+        origin_countries TEXT NOT NULL,
+        destination_countries TEXT NOT NULL,
+        source TEXT NOT NULL,
+        potential TEXT NOT NULL,
+        status TEXT NOT NULL,
+        assigned_user_id TEXT NOT NULL,
+        last_contact_date TEXT,
+        last_quote_date TEXT,
+        notes TEXT,
+        created_by TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `);
+
+    // Create quotations table
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS quotations (
+        id TEXT PRIMARY KEY,
+        quote_no TEXT NOT NULL UNIQUE,
+        customer_id TEXT NOT NULL,
+        quote_date TEXT NOT NULL,
+        valid_until TEXT,
+        transport_mode TEXT NOT NULL,
+        service_type TEXT NOT NULL,
+        origin_country TEXT NOT NULL,
+        destination_country TEXT NOT NULL,
+        pol TEXT,
+        pod TEXT,
+        incoterm TEXT NOT NULL,
+        price REAL,
+        currency TEXT,
+        price_note TEXT,
+        status TEXT NOT NULL DEFAULT 'Bekliyor',
+        loss_reason TEXT,
+        assigned_user_id TEXT NOT NULL,
+        revision_count INTEGER NOT NULL DEFAULT 0,
+        created_by TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        deleted_at TEXT
+      )
+    `);
+
+    // Insert test user
+    db.exec(`
+      INSERT INTO users (id, email, password_hash, full_name, role, is_active, created_at, updated_at)
+      VALUES ('${TEST_USER_ID}', 'test@example.com', 'hash', 'Test User', 'user', 1, datetime('now'), datetime('now'))
+    `);
+  });
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockDb.prepare.mockReturnValue(mockStmt);
+    // Reset tables
+    db.exec('DELETE FROM quotation_revisions');
+    db.exec('DELETE FROM quotations');
+    db.exec('DELETE FROM customers');
+    
+    // Insert test customer
+    db.exec(`
+      INSERT INTO customers (
+        id, company_name, contact_name, phone, email, address,
+        transport_modes, service_types, incoterms, direction,
+        origin_countries, destination_countries, source, potential,
+        status, assigned_user_id, last_contact_date, last_quote_date,
+        notes, created_by, created_at, updated_at
+      ) VALUES (
+        '${TEST_CUSTOMER_ID}', 'Test Company', 'John Doe', '5551234567', 'test@company.com', NULL,
+        '["Deniz"]', '["FCL"]', '["FOB"]', '["Ihracat"]',
+        '["Turkiye"]', '["Almanya"]', 'Dijital', 'Orta',
+        'Aktif', '${TEST_USER_ID}', NULL, NULL,
+        NULL, '${TEST_USER_ID}', datetime('now'), datetime('now')
+      )
+    `);
   });
 
   describe('createRevision', () => {
-    it('should create a revision record', async () => {
-      mockStmt.run.mockReturnValue({ changes: 1 });
-      
-      const { createRevision } = await import('../quotation-revisions');
-      
-      const changes: RevisionChange[] = [
-        { field: 'price', old_value: 1000, new_value: 1500 },
+    it('should create a revision with field changes', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
+        transport_mode: 'Deniz',
+        service_type: 'FCL',
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
+        incoterm: 'FOB',
+        status: 'Bekliyor',
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
+
+      const changes = [
         { field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' },
+        { field: 'price', old_value: null, new_value: 5000 },
       ];
-      
-      const result = createRevision('quote-1', 1, changes, 'user-1');
-      
-      expect(result).toMatchObject({
-        quotation_id: 'quote-1',
-        revision_no: 1,
-        changed_fields: changes,
-        revised_by: 'user-1',
-      });
-      expect(result.id).toBeDefined();
-      expect(result.revised_at).toBeDefined();
+
+      const revision = quotationRevisions.createRevision(quotation.id, changes, TEST_USER_ID);
+
+      expect(revision.id).toBeDefined();
+      expect(revision.quotation_id).toBe(quotation.id);
+      expect(revision.revision_no).toBe(1);
+      expect(revision.changed_fields).toEqual(changes);
+      expect(revision.revised_by).toBe(TEST_USER_ID);
+      expect(revision.revised_at).toBeDefined();
     });
 
-    it('should store changes as JSON string', async () => {
-      mockStmt.run.mockReturnValue({ changes: 1 });
-      
-      const { createRevision } = await import('../quotation-revisions');
-      
-      const changes: RevisionChange[] = [
-        { field: 'price', old_value: 1000, new_value: 1500 },
-      ];
-      
-      createRevision('quote-1', 1, changes, 'user-1');
-      
-      const runCall = mockStmt.run.mock.calls[0];
-      const storedChanges = JSON.parse(runCall[3]);
-      expect(storedChanges).toEqual(changes);
+    it('should auto-increment revision numbers', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
+        transport_mode: 'Deniz',
+        service_type: 'FCL',
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
+        incoterm: 'FOB',
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
+
+      const changes1 = [{ field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' }];
+      const changes2 = [{ field: 'price', old_value: null, new_value: 5000 }];
+
+      const revision1 = quotationRevisions.createRevision(quotation.id, changes1, TEST_USER_ID);
+      const revision2 = quotationRevisions.createRevision(quotation.id, changes2, TEST_USER_ID);
+
+      expect(revision1.revision_no).toBe(1);
+      expect(revision2.revision_no).toBe(2);
     });
   });
 
   describe('getRevisionsByQuotationId', () => {
-    it('should return all revisions for a quotation', async () => {
-      mockStmt.all.mockReturnValue([
-        {
-          id: 'rev-2',
-          quotation_id: 'quote-1',
-          revision_no: 2,
-          changed_fields: JSON.stringify([{ field: 'price', old_value: 1200, new_value: 1300 }]),
-          revised_by: 'user-1',
-          revised_at: '2026-03-06T02:00:00Z',
-          revised_by_name: 'John Doe',
-        },
-        {
-          id: 'rev-1',
-          quotation_id: 'quote-1',
-          revision_no: 1,
-          changed_fields: JSON.stringify([{ field: 'price', old_value: 1000, new_value: 1200 }]),
-          revised_by: 'user-1',
-          revised_at: '2026-03-06T01:00:00Z',
-          revised_by_name: 'John Doe',
-        },
-      ]);
-      
-      const { getRevisionsByQuotationId } = await import('../quotation-revisions');
-      
-      const result = getRevisionsByQuotationId('quote-1');
-      
-      expect(result).toHaveLength(2);
-      expect(result[0].revision_no).toBe(2);
-      expect(result[1].revision_no).toBe(1);
-      expect(result[0].revised_by_user.full_name).toBe('John Doe');
+    it('should return all revisions for a quotation', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
+        transport_mode: 'Deniz',
+        service_type: 'FCL',
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
+        incoterm: 'FOB',
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
+
+      const changes1 = [{ field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' }];
+      const changes2 = [{ field: 'price', old_value: null, new_value: 5000 }];
+
+      quotationRevisions.createRevision(quotation.id, changes1, TEST_USER_ID);
+      quotationRevisions.createRevision(quotation.id, changes2, TEST_USER_ID);
+
+      const revisions = quotationRevisions.getRevisionsByQuotationId(quotation.id);
+
+      expect(revisions).toHaveLength(2);
+      expect(revisions[0]?.revision_no).toBe(1);
+      expect(revisions[1]?.revision_no).toBe(2);
     });
 
-    it('should return empty array when no revisions exist', async () => {
-      mockStmt.all.mockReturnValue([]);
-      
-      const { getRevisionsByQuotationId } = await import('../quotation-revisions');
-      
-      const result = getRevisionsByQuotationId('quote-1');
-      
-      expect(result).toEqual([]);
-    });
-  });
+    it('should include user info in revisions', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
+        transport_mode: 'Deniz',
+        service_type: 'FCL',
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
+        incoterm: 'FOB',
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
 
-  describe('getNextRevisionNumber', () => {
-    it('should return 1 for first revision', async () => {
-      mockStmt.get.mockReturnValue({ max_revision: null });
-      
-      const { getNextRevisionNumber } = await import('../quotation-revisions');
-      
-      const result = getNextRevisionNumber('quote-1');
-      
-      expect(result).toBe(1);
+      const changes = [{ field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' }];
+      quotationRevisions.createRevision(quotation.id, changes, TEST_USER_ID);
+
+      const revisions = quotationRevisions.getRevisionsByQuotationId(quotation.id);
+
+      expect(revisions[0]?.revised_by_user).toBeDefined();
+      expect(revisions[0]?.revised_by_user.full_name).toBe('Test User');
     });
 
-    it('should return next sequential number', async () => {
-      mockStmt.get.mockReturnValue({ max_revision: 5 });
-      
-      const { getNextRevisionNumber } = await import('../quotation-revisions');
-      
-      const result = getNextRevisionNumber('quote-1');
-      
-      expect(result).toBe(6);
+    it('should return empty array for quotation with no revisions', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
+        transport_mode: 'Deniz',
+        service_type: 'FCL',
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
+        incoterm: 'FOB',
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
+
+      const revisions = quotationRevisions.getRevisionsByQuotationId(quotation.id);
+      expect(revisions).toEqual([]);
     });
   });
 
-  describe('computeChanges', () => {
-    it('should detect changes between old and new data', async () => {
-      const { computeChanges } = await import('../quotation-revisions');
-      
+  describe('calculateDiff', () => {
+    it('should detect changed fields', () => {
       const oldData = {
-        price: 1000,
         status: 'Bekliyor',
-        transport_mode: 'Deniz',
+        price: null,
+        currency: null,
       };
-      
+
       const newData = {
-        price: 1500,
         status: 'Kazanildi',
-        transport_mode: 'Deniz',
+        price: 5000,
+        currency: 'USD',
       };
-      
-      const changes = computeChanges(oldData, newData);
-      
-      expect(changes).toHaveLength(2);
-      expect(changes).toContainEqual({ field: 'price', old_value: 1000, new_value: 1500 });
+
+      const changes = quotationRevisions.calculateDiff(oldData, newData);
+
+      expect(changes).toHaveLength(3);
       expect(changes).toContainEqual({ field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' });
+      expect(changes).toContainEqual({ field: 'price', old_value: null, new_value: 5000 });
+      expect(changes).toContainEqual({ field: 'currency', old_value: null, new_value: 'USD' });
     });
 
-    it('should not include unchanged fields', async () => {
-      const { computeChanges } = await import('../quotation-revisions');
-      
+    it('should not include unchanged fields', () => {
       const oldData = {
-        price: 1000,
-        transport_mode: 'Deniz',
+        status: 'Bekliyor',
+        price: 5000,
       };
-      
+
       const newData = {
-        price: 1000,
-        transport_mode: 'Deniz',
+        status: 'Bekliyor',
+        price: 5000,
       };
-      
-      const changes = computeChanges(oldData, newData);
-      
+
+      const changes = quotationRevisions.calculateDiff(oldData, newData);
       expect(changes).toHaveLength(0);
     });
 
-    it('should handle null/undefined values correctly', async () => {
-      const { computeChanges } = await import('../quotation-revisions');
-      
+    it('should handle complex values', () => {
       const oldData = {
-        price: 1000,
-        loss_reason: null,
+        tags: ['a', 'b'],
+        metadata: { key: 'value' },
       };
-      
+
       const newData = {
-        price: 1000,
-        loss_reason: 'Fiyat',
+        tags: ['a', 'b', 'c'],
+        metadata: { key: 'new_value' },
       };
-      
-      const changes = computeChanges(oldData, newData);
-      
-      expect(changes).toHaveLength(1);
-      expect(changes[0]).toEqual({ 
-        field: 'loss_reason', 
-        old_value: null, 
-        new_value: 'Fiyat' 
-      });
+
+      const changes = quotationRevisions.calculateDiff(oldData, newData);
+
+      expect(changes).toHaveLength(2);
+      expect(changes).toContainEqual({ field: 'tags', old_value: ['a', 'b'], new_value: ['a', 'b', 'c'] });
+      expect(changes).toContainEqual({ field: 'metadata', old_value: { key: 'value' }, new_value: { key: 'new_value' } });
     });
 
-    it('should track all defined fields', async () => {
-      const { computeChanges } = await import('../quotation-revisions');
-      
+    it('should handle undefined values as null', () => {
       const oldData = {
-        customer_id: 'cust-1',
-        quote_date: '2026-03-01',
-        valid_until: '2026-03-15',
+        price: undefined,
+      };
+
+      const newData = {
+        price: 5000,
+      };
+
+      const changes = quotationRevisions.calculateDiff(oldData, newData);
+
+      expect(changes).toHaveLength(1);
+      expect(changes[0]).toEqual({ field: 'price', old_value: null, new_value: 5000 });
+    });
+  });
+
+  describe('deleteRevisionsByQuotationId', () => {
+    it('should delete all revisions for a quotation', () => {
+      const quotation = quotations.createQuotation({
+        customer_id: TEST_CUSTOMER_ID,
+        quote_date: '2026-03-06',
         transport_mode: 'Deniz',
         service_type: 'FCL',
-        origin_country: 'Turkey',
-        destination_country: 'Germany',
-        pol: null,
-        pod: null,
+        origin_country: 'Turkiye',
+        destination_country: 'Almanya',
         incoterm: 'FOB',
-        price: 1000,
-        currency: 'USD',
-        price_note: null,
-        status: 'Bekliyor',
-        loss_reason: null,
-        assigned_user_id: 'user-1',
-      };
-      
-      const newData = {
-        ...oldData,
-        price: 1200,
-        valid_until: '2026-03-20',
-      };
-      
-      const changes = computeChanges(oldData, newData);
-      
-      expect(changes).toHaveLength(2);
-      expect(changes.map(c => c.field)).toContain('price');
-      expect(changes.map(c => c.field)).toContain('valid_until');
+        assigned_user_id: TEST_USER_ID,
+      }, TEST_USER_ID);
+
+      const changes1 = [{ field: 'status', old_value: 'Bekliyor', new_value: 'Kazanildi' }];
+      const changes2 = [{ field: 'price', old_value: null, new_value: 5000 }];
+
+      quotationRevisions.createRevision(quotation.id, changes1, TEST_USER_ID);
+      quotationRevisions.createRevision(quotation.id, changes2, TEST_USER_ID);
+
+      const deletedCount = quotationRevisions.deleteRevisionsByQuotationId(quotation.id);
+
+      expect(deletedCount).toBe(2);
+
+      const remaining = quotationRevisions.getRevisionsByQuotationId(quotation.id);
+      expect(remaining).toHaveLength(0);
     });
   });
 });

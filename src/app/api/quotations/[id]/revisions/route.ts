@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
-import { getRevisionsByQuotationId } from '@/lib/db/quotation-revisions';
 import { getQuotationById } from '@/lib/db/quotations';
+import { getRevisionsByQuotationId } from '@/lib/db/quotation-revisions';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: Request, { params }: RouteParams) {
   try {
     const session = await getSession();
     if (!session) {
@@ -15,9 +15,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    
-    // Verify quotation exists
-    const quotation = getQuotationById(id);
+
+    // Check if quotation exists
+    const quotation = getQuotationById(id, true); // Include deleted
     if (!quotation) {
       return NextResponse.json(
         { error: 'Quotation not found' },

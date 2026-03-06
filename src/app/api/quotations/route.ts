@@ -2,19 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
 import { 
   createQuotation, 
-  getAllQuotations,
-  updateCustomerLastQuoteDate
+  getQuotations,
+  getQuotationByIdWithCustomer 
 } from '@/lib/db/quotations';
-import { getAllUsers } from '@/lib/db/users';
-import { getAllCustomers } from '@/lib/db/customers';
-import type { CreateQuotationInput } from '@/types';
+import { updateCustomerLastQuoteDate } from '@/lib/db/customers';
+import type { CreateQuotationInput, QuoteStatus, LossReason, Currency } from '@/types';
 
-const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
-const VALID_SERVICE_TYPES = ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'] as const;
-const VALID_INCOTERMS = ['FOB', 'EXW', 'FCA', 'DAP', 'CIF', 'CFR', 'DDP'] as const;
-const VALID_STATUSES = ['Bekliyor', 'Kazanildi', 'Kaybedildi'] as const;
-const VALID_LOSS_REASONS = ['Fiyat', 'Rakip', 'Gecikmeli donus', 'Diger'] as const;
-const VALID_CURRENCIES = ['USD', 'EUR', 'TRY'] as const;
+const VALID_STATUSES: QuoteStatus[] = ['Bekliyor', 'Kazanildi', 'Kaybedildi'];
+const VALID_LOSS_REASONS: LossReason[] = ['Fiyat', 'Rakip', 'Gecikmeli donus', 'Diger'];
+const VALID_CURRENCIES: Currency[] = ['USD', 'EUR', 'TRY'];
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,21 +21,26 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     
+    // Parse filters
     const filters = {
-      status: searchParams.get('status') as typeof VALID_STATUSES[number] | undefined,
+      status: searchParams.get('status') as QuoteStatus | undefined,
       customer_id: searchParams.get('customer_id') || undefined,
       assigned_user_id: searchParams.get('assigned_user_id') || undefined,
       date_from: searchParams.get('date_from') || undefined,
       date_to: searchParams.get('date_to') || undefined,
       search: searchParams.get('search') || undefined,
+      include_deleted: searchParams.get('include_deleted') === 'true',
     };
 
-    // Remove undefined values
-    const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([, v]) => v !== undefined)
-    );
+    // Validate status if provided
+    if (filters.status && !VALID_STATUSES.includes(filters.status)) {
+      return NextResponse.json(
+        { error: 'Invalid status parameter' },
+        { status: 400 }
+      );
+    }
 
-    const quotations = getAllQuotations(cleanFilters);
+    const quotations = getQuotations(filters);
     return NextResponse.json({ quotations });
   } catch (error) {
     console.error('Error fetching quotations:', error);
@@ -60,44 +61,55 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // Validate required fields
-    const validationErrors: string[] = [];
+    const validationErrors: Array<{ field: string; message: string }> = [];
     
     if (!body.customer_id?.trim()) {
-      validationErrors.push('Müşteri seçimi zorunludur');
+      validationErrors.push({ field: 'customer_id', message: 'Müşteri zorunludur' });
     }
     if (!body.quote_date?.trim()) {
-      validationErrors.push('Teklif tarihi zorunludur');
+      validationErrors.push({ field: 'quote_date', message: 'Teklif tarihi zorunludur' });
+    } else if (!isValidDate(body.quote_date)) {
+      validationErrors.push({ field: 'quote_date', message: 'Geçerli bir tarih giriniz' });
     }
-    if (!body.transport_mode) {
-      validationErrors.push('Taşıma modu zorunludur');
+    if (!body.transport_mode?.trim()) {
+      validationErrors.push({ field: 'transport_mode', message: 'Taşıma modu zorunludur' });
     }
-    if (!body.service_type) {
-      validationErrors.push('Servis tipi zorunludur');
+    if (!body.service_type?.trim()) {
+      validationErrors.push({ field: 'service_type', message: 'Servis tipi zorunludur' });
     }
     if (!body.origin_country?.trim()) {
-      validationErrors.push('Çıkış ülkesi zorunludur');
+      validationErrors.push({ field: 'origin_country', message: 'Çıkış ülkesi zorunludur' });
     }
     if (!body.destination_country?.trim()) {
-      validationErrors.push('Varış ülkesi zorunludur');
+      validationErrors.push({ field: 'destination_country', message: 'Varış ülkesi zorunludur' });
     }
-    if (!body.incoterm) {
-      validationErrors.push('Satış şekli (incoterm) zorunludur');
+    if (!body.incoterm?.trim()) {
+      validationErrors.push({ field: 'incoterm', message: 'Incoterm zorunludur' });
     }
-    if (body.price === undefined || body.price === null) {
-      validationErrors.push('Fiyat zorunludur');
-    } else if (isNaN(body.price) || body.price < 0) {
-      validationErrors.push('Geçerli bir fiyat giriniz');
-    }
-    if (!body.currency) {
-      validationErrors.push('Para birimi zorunludur');
-    }
-    if (!body.assigned_user_id) {
-      validationErrors.push('Atanan temsilci zorunludur');
+    if (!body.assigned_user_id?.trim()) {
+      validationErrors.push({ field: 'assigned_user_id', message: 'Atanan temsilci zorunludur' });
     }
 
-    // Validate status and loss_reason relationship
-    if (body.status === 'Kaybedildi' && !body.loss_reason) {
-      validationErrors.push('Kaybedilme nedeni seçilmelidir');
+    // Validate optional fields if provided
+    if (body.status && !VALID_STATUSES.includes(body.status)) {
+      validationErrors.push({ field: 'status', message: 'Geçersiz durum değeri' });
+    }
+    if (body.loss_reason && !VALID_LOSS_REASONS.includes(body.loss_reason)) {
+      validationErrors.push({ field: 'loss_reason', message: 'Geçersiz kaybetme nedeni' });
+    }
+    if (body.currency && !VALID_CURRENCIES.includes(body.currency)) {
+      validationErrors.push({ field: 'currency', message: 'Geçersiz para birimi' });
+    }
+    if (body.price !== undefined && body.price !== null) {
+      if (typeof body.price !== 'number' || body.price < 0) {
+        validationErrors.push({ field: 'price', message: 'Fiyat pozitif bir sayı olmalıdır' });
+      }
+      if (!body.currency) {
+        validationErrors.push({ field: 'currency', message: 'Fiyat girildiğinde para birimi zorunludur' });
+      }
+    }
+    if (body.validity_date && !isValidDate(body.validity_date)) {
+      validationErrors.push({ field: 'validity_date', message: 'Geçerli bir tarih giriniz' });
     }
 
     if (validationErrors.length > 0) {
@@ -107,63 +119,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate customer exists
-    const customers = getAllCustomers();
-    const customer = customers.find(c => c.id === body.customer_id);
-    if (!customer) {
-      return NextResponse.json(
-        { error: 'Invalid customer' },
-        { status: 400 }
-      );
-    }
-
-    // Validate assigned_user_id exists
-    const users = getAllUsers();
-    const assignedUser = users.find(u => u.id === body.assigned_user_id);
-    if (!assignedUser) {
-      return NextResponse.json(
-        { error: 'Invalid assigned user' },
-        { status: 400 }
-      );
-    }
-
     const input: CreateQuotationInput = {
       customer_id: body.customer_id.trim(),
       quote_date: body.quote_date.trim(),
-      valid_until: body.valid_until?.trim() || null,
-      transport_mode: VALID_TRANSPORT_MODES.includes(body.transport_mode) 
-        ? body.transport_mode 
-        : 'Deniz',
-      service_type: VALID_SERVICE_TYPES.includes(body.service_type)
-        ? body.service_type
-        : 'FCL',
+      validity_date: body.validity_date?.trim() || null,
+      transport_mode: body.transport_mode.trim(),
+      service_type: body.service_type.trim(),
       origin_country: body.origin_country.trim(),
       destination_country: body.destination_country.trim(),
       pol: body.pol?.trim() || null,
       pod: body.pod?.trim() || null,
-      incoterm: VALID_INCOTERMS.includes(body.incoterm)
-        ? body.incoterm
-        : 'FOB',
-      price: Number(body.price),
-      currency: VALID_CURRENCIES.includes(body.currency)
-        ? body.currency
-        : 'USD',
+      incoterm: body.incoterm.trim(),
+      price: body.price ?? null,
+      currency: body.currency || null,
       price_note: body.price_note?.trim() || null,
-      status: VALID_STATUSES.includes(body.status)
-        ? body.status
-        : 'Bekliyor',
-      loss_reason: body.loss_reason && VALID_LOSS_REASONS.includes(body.loss_reason)
-        ? body.loss_reason
-        : null,
-      assigned_user_id: body.assigned_user_id,
+      status: body.status || 'Bekliyor',
+      loss_reason: body.loss_reason || null,
+      assigned_user_id: body.assigned_user_id.trim(),
     };
 
     const quotation = createQuotation(input, session.user.id);
-    
-    // Update customer's last_quote_date
-    updateCustomerLastQuoteDate(quotation.customer_id);
 
-    return NextResponse.json({ quotation }, { status: 201 });
+    // Auto-update customer's last_quote_date
+    try {
+      updateCustomerLastQuoteDate(quotation.customer_id, quotation.quote_date);
+    } catch (err) {
+      // Log but don't fail the request
+      console.error('Failed to update customer last_quote_date:', err);
+    }
+
+    // Return with customer info
+    const quotationWithCustomer = getQuotationByIdWithCustomer(quotation.id);
+
+    return NextResponse.json({ quotation: quotationWithCustomer }, { status: 201 });
   } catch (error) {
     console.error('Error creating quotation:', error);
     return NextResponse.json(
@@ -171,4 +159,9 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+function isValidDate(dateString: string): boolean {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
 }

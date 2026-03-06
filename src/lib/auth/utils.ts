@@ -4,11 +4,8 @@ if (!process.env.NEXTAUTH_SECRET) {
   throw new Error('NEXTAUTH_SECRET environment variable is required');
 }
 
-const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-
-// Hash password
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 12);
+function getJwtSecret(): Uint8Array {
+  return new TextEncoder().encode(process.env.NEXTAUTH_SECRET!);
 }
 
 export interface TokenPayload {

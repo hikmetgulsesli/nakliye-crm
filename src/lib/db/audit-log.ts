@@ -1,5 +1,5 @@
-import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditRecordType, AuditAction } from '@/types/index';
 import DatabaseConstructor from 'better-sqlite3';
+import type { AuditLog, CreateAuditLogInput, AuditLogWithUser } from '@/types/index.js';
 
 let db: import('better-sqlite3').Database | null = null;
 
@@ -30,9 +30,9 @@ function initializeAuditLogTable() {
   `);
 
   database.exec(`
-    CREATE INDEX IF NOT EXISTS idx_audit_record ON audit_log(record_type, record_id);
-    CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_log(user_id);
-    CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at);
+    CREATE INDEX IF NOT EXISTS idx_audit_log_user ON audit_log(user_id);
+    CREATE INDEX IF NOT EXISTS idx_audit_log_record ON audit_log(record_type, record_id);
+    CREATE INDEX IF NOT EXISTS idx_audit_log_created ON audit_log(created_at);
   `);
 }
 
@@ -43,7 +43,8 @@ export function createAuditLog(input: CreateAuditLogInput): AuditLog {
 
   const stmt = database.prepare(`
     INSERT INTO audit_log (
-      id, user_id, record_type, record_id, action, changes, metadata, created_at
+      id, user_id, record_type, record_id, action,
+      changes, metadata, created_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
@@ -64,37 +65,13 @@ export function createAuditLog(input: CreateAuditLogInput): AuditLog {
     record_type: input.record_type,
     record_id: input.record_id,
     action: input.action,
-    changes: input.changes || null,
-    metadata: input.metadata || null,
+    changes: input.changes ?? null,
+    metadata: input.metadata ?? null,
     created_at: now,
   };
 }
 
-export function getAuditLogById(id: string): AuditLog | null {
-  const database = getDb();
-  const stmt = database.prepare('SELECT * FROM audit_log WHERE id = ?');
-  const row = stmt.get(id) as Record<string, unknown> | undefined;
-  return row ? mapRowToAuditLog(row) : null;
-}
-
-export function getAuditLogByIdWithUser(id: string): AuditLogWithUser | null {
-  const database = getDb();
-  const stmt = database.prepare(`
-    SELECT 
-      al.*,
-      u.full_name as user_name
-    FROM audit_log al
-    LEFT JOIN users u ON al.user_id = u.id
-    WHERE al.id = ?
-  `);
-  const row = stmt.get(id) as Record<string, unknown> | undefined;
-  return row ? mapRowToAuditLogWithUser(row) : null;
-}
-
-export function getAuditLogsByRecord(
-  recordType: AuditRecordType,
-  recordId: string
-): AuditLogWithUser[] {
+export function getAuditLogsByRecord(recordType: string, recordId: string): AuditLogWithUser[] {
   const database = getDb();
   const stmt = database.prepare(`
     SELECT 
@@ -109,6 +86,48 @@ export function getAuditLogsByRecord(
   return rows.map(mapRowToAuditLogWithUser);
 }
 
+export function getAuditLogs(options: {
+  limit?: number;
+  record_type?: string;
+  record_id?: string;
+  customer_id?: string;
+} = {}): AuditLogWithUser[] {
+  const database = getDb();
+  const { limit = 50, record_type, record_id, customer_id } = options;
+  
+  let query = `
+    SELECT 
+      al.*,
+      u.full_name as user_name
+    FROM audit_log al
+    LEFT JOIN users u ON al.user_id = u.id
+    WHERE 1=1
+  `;
+  const params: (string | number)[] = [];
+  
+  if (record_type) {
+    query += ` AND al.record_type = ?`;
+    params.push(record_type);
+  }
+  
+  if (record_id) {
+    query += ` AND al.record_id = ?`;
+    params.push(record_id);
+  }
+  
+  if (customer_id) {
+    query += ` AND (al.metadata LIKE ? OR al.record_id = ?)`;
+    params.push(`%"customer_id":"${customer_id}"%`, customer_id);
+  }
+  
+  query += ` ORDER BY al.created_at DESC LIMIT ?`;
+  params.push(limit);
+  
+  const stmt = database.prepare(query);
+  const rows = stmt.all(...params) as Record<string, unknown>[];
+  return rows.map(mapRowToAuditLogWithUser);
+}
+
 export function getAuditLogsByCustomer(customerId: string): AuditLogWithUser[] {
   const database = getDb();
   const stmt = database.prepare(`
@@ -117,13 +136,18 @@ export function getAuditLogsByCustomer(customerId: string): AuditLogWithUser[] {
       u.full_name as user_name
     FROM audit_log al
     LEFT JOIN users u ON al.user_id = u.id
-    WHERE (
-      (al.record_type = 'customer' AND al.record_id = ?)
-      OR (al.changes LIKE ?)
-    )
+    WHERE al.record_id = ? 
+       OR al.metadata LIKE ?
+       OR al.metadata LIKE ?
+       OR al.metadata LIKE ?
     ORDER BY al.created_at DESC
   `);
-  const rows = stmt.all(customerId, `%${customerId}%`) as Record<string, unknown>[];
+  const rows = stmt.all(
+    customerId,
+    `%"customer_id":"${customerId}"%`,
+    `%"customer_id": "${customerId}"%`,
+    `%"id":"${customerId}"%`
+  ) as Record<string, unknown>[];
   return rows.map(mapRowToAuditLogWithUser);
 }
 
@@ -142,51 +166,18 @@ export function getRecentAuditLogs(limit: number = 50): AuditLogWithUser[] {
   return rows.map(mapRowToAuditLogWithUser);
 }
 
-export function getAuditLogsByUser(userId: string, limit: number = 50): AuditLogWithUser[] {
-  const database = getDb();
-  const stmt = database.prepare(`
-    SELECT 
-      al.*,
-      u.full_name as user_name
-    FROM audit_log al
-    LEFT JOIN users u ON al.user_id = u.id
-    WHERE al.user_id = ?
-    ORDER BY al.created_at DESC
-    LIMIT ?
-  `);
-  const rows = stmt.all(userId, limit) as Record<string, unknown>[];
-  return rows.map(mapRowToAuditLogWithUser);
-}
-
-export function getAuditLogsByAction(
-  action: AuditAction,
-  limit: number = 50
-): AuditLogWithUser[] {
-  const database = getDb();
-  const stmt = database.prepare(`
-    SELECT 
-      al.*,
-      u.full_name as user_name
-    FROM audit_log al
-    LEFT JOIN users u ON al.user_id = u.id
-    WHERE al.action = ?
-    ORDER BY al.created_at DESC
-    LIMIT ?
-  `);
-  const rows = stmt.all(action, limit) as Record<string, unknown>[];
-  return rows.map(mapRowToAuditLogWithUser);
-}
-
-export function buildChangesObject<T extends Record<string, unknown>>(
-  oldData: T,
-  newData: Partial<T>
+export function buildChangesObject(
+  oldData: Record<string, unknown>,
+  newData: Record<string, unknown>
 ): Record<string, { old: unknown; new: unknown }> {
   const changes: Record<string, { old: unknown; new: unknown }> = {};
   
-  for (const [key, newValue] of Object.entries(newData)) {
-    const oldValue = oldData[key];
-    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
-      changes[key] = { old: oldValue, new: newValue };
+  for (const key of Object.keys(newData)) {
+    if (oldData[key] !== newData[key]) {
+      changes[key] = {
+        old: oldData[key],
+        new: newData[key],
+      };
     }
   }
   
@@ -197,9 +188,9 @@ function mapRowToAuditLog(row: Record<string, unknown>): AuditLog {
   return {
     id: row.id as string,
     user_id: row.user_id as string,
-    record_type: row.record_type as AuditRecordType,
+    record_type: row.record_type as string,
     record_id: row.record_id as string,
-    action: row.action as AuditAction,
+    action: row.action as string,
     changes: row.changes ? JSON.parse(row.changes as string) : null,
     metadata: row.metadata ? JSON.parse(row.metadata as string) : null,
     created_at: row.created_at as string,

@@ -1,5 +1,28 @@
+=== US-003: Customer API with conflict detection and fuzzy search ===
+COMPLETED: 2026-03-06T01:40:00+03:00
+FILES CHANGED:
+- src/app/api/customers/route.ts (GET, POST endpoints)
+- src/app/api/customers/[id]/route.ts (GET, PATCH, DELETE endpoints)
+- src/app/api/conflicts/route.ts (conflict detection, force create)
+- src/app/api/audit-logs/route.ts (audit log retrieval)
+- src/lib/services/customer.ts (customer service with CRUD, fuzzy search, conflicts)
+- src/lib/validators/customer.ts (Zod schemas)
+- src/lib/audit.ts (audit logging service)
+- src/db/connection.ts (PostgreSQL connection)
+- src/db/migrations/001_initial_schema.sql (database schema)
+- __tests__/customers.test.ts (21 test cases)
+
+KEY DECISIONS:
+- Used PostgreSQL pg_trgm extension for fuzzy string matching
+- Implemented confidence scores for conflict detection (fuzzy match % for company name, 100% for exact phone/email)
+- Soft delete using deleted_at timestamp instead of hard delete
+- Audit logging tracks all changes with field-level diffs
+- API follows REST conventions with consistent error response format
+
+DEPENDENCIES ADDED: pg (PostgreSQL driver)
+
 === US-004: Customer list page with data table and filters ===
-COMPLETED: 2026-03-06T02:02:00+03:00
+COMPLETED: 2026-03-06T01:57:00+03:00
 FILES CHANGED:
 - src/app/(dashboard)/customers/CustomerList.tsx (customer list page component)
 - src/app/(dashboard)/customers/page.tsx (page wrapper)
@@ -29,5 +52,3 @@ KEY DECISIONS:
 DEPENDENCIES ADDED: vitest, @testing-library/react, @testing-library/jest-dom, jsdom, @vitejs/plugin-react
 
 TESTS ADDED: 38 tests total (6 test files)
-
-PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/5

@@ -7,6 +7,8 @@ interface SavedReportsProps {
 }
 
 export function SavedReports({ onLoadReport }: SavedReportsProps) {
+  void onLoadReport; // Reserved for future use
+  
   return (
     <Card>
       <CardHeader>

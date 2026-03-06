@@ -1,4 +1,4 @@
-import type { Activity, CreateActivityInput, UpdateActivityInput, ActivityWithUser } from '@/types/index';
+import type { Activity, CreateActivityInput, UpdateActivityInput, ActivityWithUser } from '@/types/index.js';
 import DatabaseConstructor from 'better-sqlite3';
 
 let db: import('better-sqlite3').Database | null = null;
@@ -71,10 +71,10 @@ export function createActivity(input: CreateActivityInput, createdBy: string): A
     customer_id: input.customer_id,
     type: input.type,
     date: input.date,
-    duration: input.duration || null,
+    duration: input.duration ?? null,
     notes: input.notes,
     outcome: input.outcome,
-    next_action_date: input.next_action_date || null,
+    next_action_date: input.next_action_date ?? null,
     created_by: createdBy,
     created_at: now,
     updated_at: now,
@@ -184,7 +184,7 @@ export function updateActivity(id: string, input: UpdateActivityInput): Activity
   }
   if (input.duration !== undefined) {
     sets.push('duration = ?');
-    values.push(input.duration || null);
+    values.push(input.duration ?? null);
   }
   if (input.notes !== undefined) {
     sets.push('notes = ?');
@@ -196,7 +196,7 @@ export function updateActivity(id: string, input: UpdateActivityInput): Activity
   }
   if (input.next_action_date !== undefined) {
     sets.push('next_action_date = ?');
-    values.push(input.next_action_date || null);
+    values.push(input.next_action_date ?? null);
   }
 
   if (sets.length === 0) return getActivityById(id);
@@ -220,12 +220,13 @@ export function deleteActivity(id: string): boolean {
 
 export function updateCustomerLastContactDate(customerId: string): void {
   const database = getDb();
+  const now = new Date().toISOString();
   const stmt = database.prepare(`
     UPDATE customers 
-    SET last_contact_date = ?
+    SET last_contact_date = ?, updated_at = ?
     WHERE id = ?
   `);
-  stmt.run(new Date().toISOString(), customerId);
+  stmt.run(now, now, customerId);
 }
 
 function mapRowToActivity(row: Record<string, unknown>): Activity {

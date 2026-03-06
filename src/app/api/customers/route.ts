@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
-import { createCustomer, getAllCustomers, checkConflicts } from '@/lib/db/customers';
-import { getAllUsers } from '@/lib/db/users';
+import {
+  getAllCustomers,
+  createCustomer,
+  checkConflicts,
+} from '@/lib/db/customers';
 import type { CreateCustomerInput } from '@/types';
 
 const VALID_TRANSPORT_MODES = ['Deniz', 'Hava', 'Kara', 'Kombine'] as const;
@@ -12,11 +15,16 @@ const VALID_SOURCES = ['Referans', 'Soguk arama', 'Fuar', 'Dijital'] as const;
 const VALID_POTENTIALS = ['Dusuk', 'Orta', 'Yuksek'] as const;
 const VALID_STATUSES = ['Aktif', 'Pasif', 'Soguk'] as const;
 
+// GET /api/customers - Get all customers
 export async function GET() {
   try {
+    // Check authentication
     const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const customers = getAllCustomers();
@@ -30,18 +38,23 @@ export async function GET() {
   }
 }
 
+// POST /api/customers - Create a new customer
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
     const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const body = await request.json();
-    
+
     // Validate required fields
     const validationErrors: string[] = [];
-    
+
     if (!body.company_name?.trim()) {
       validationErrors.push('Firma adı zorunludur');
     }
@@ -82,27 +95,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for conflicts
-    const conflicts = checkConflicts(body.company_name, body.phone, body.email);
-    
+    const conflicts = checkConflicts(
+      body.company_name.trim(),
+      body.phone.trim(),
+      body.email.trim()
+    );
+
     // If conflicts exist and force is not set, return conflicts
     if (conflicts.length > 0 && !body.force) {
       return NextResponse.json(
-        { 
+        {
           error: 'Potential conflicts detected',
           conflicts,
           requiresConfirmation: true
         },
         { status: 409 }
-      );
-    }
-
-    // Validate assigned_user_id exists
-    const users = getAllUsers();
-    const assignedUser = users.find(u => u.id === body.assigned_user_id);
-    if (!assignedUser) {
-      return NextResponse.json(
-        { error: 'Invalid assigned user' },
-        { status: 400 }
       );
     }
 

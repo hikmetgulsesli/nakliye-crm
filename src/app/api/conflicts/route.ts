@@ -76,7 +76,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const data = validation.data as CustomerInput;
-    const createdBy = session.user.id;
+    const createdBy = parseInt(session.user.id, 10) || null;
 
     const customer = await forceCreateCustomer(data, createdBy);
     return NextResponse.json({ data: customer });

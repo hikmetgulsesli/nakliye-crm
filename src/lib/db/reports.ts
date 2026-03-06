@@ -436,6 +436,137 @@ export function deleteSavedReport(id: number, userId: number): boolean {
   return result.changes > 0;
 }
 
+// Admin Dashboard Functions
+export async function getAdminDashboardMetrics(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      COUNT(*) as totalQuotations,
+      COALESCE(SUM(price), 0) as totalValue,
+      SUM(CASE WHEN status = 'won' THEN 1 ELSE 0 END) as wonCount,
+      SUM(CASE WHEN status = 'lost' THEN 1 ELSE 0 END) as lostCount,
+      SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pendingCount
+    FROM quotations
+    WHERE quote_date BETWEEN ? AND ?
+  `);
+
+  return stmt.get(startDate, endDate) as {
+    totalQuotations: number;
+    totalValue: number;
+    wonCount: number;
+    lostCount: number;
+    pendingCount: number;
+  };
+}
+
+export async function getAdminPersonnelPerformance(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      u.id,
+      u.full_name as name,
+      COUNT(q.id) as quotations,
+      COALESCE(SUM(q.price), 0) as value,
+      SUM(CASE WHEN q.status = 'won' THEN 1 ELSE 0 END) as won,
+      SUM(CASE WHEN q.status = 'lost' THEN 1 ELSE 0 END) as lost
+    FROM users u
+    LEFT JOIN quotations q ON u.id = q.assigned_user_id 
+      AND q.quote_date BETWEEN ? AND ?
+    WHERE u.is_active = 1
+    GROUP BY u.id, u.full_name
+    ORDER BY quotations DESC
+  `);
+
+  return stmt.all(startDate, endDate) as {
+    id: number;
+    name: string;
+    quotations: number;
+    value: number;
+    won: number;
+    lost: number;
+  }[];
+}
+
+export async function getAdminOriginCountries(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      origin_country as country,
+      COUNT(*) as count
+    FROM quotations
+    WHERE quote_date BETWEEN ? AND ?
+      AND origin_country IS NOT NULL
+    GROUP BY origin_country
+    ORDER BY count DESC
+    LIMIT 10
+  `);
+
+  return stmt.all(startDate, endDate) as { country: string; count: number }[];
+}
+
+export async function getAdminDestinationCountries(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      destination_country as country,
+      COUNT(*) as count
+    FROM quotations
+    WHERE quote_date BETWEEN ? AND ?
+      AND destination_country IS NOT NULL
+    GROUP BY destination_country
+    ORDER BY count DESC
+    LIMIT 10
+  `);
+
+  return stmt.all(startDate, endDate) as { country: string; count: number }[];
+}
+
+export async function getAdminModeDistribution(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      transport_mode as mode,
+      COUNT(*) as count
+    FROM quotations
+    WHERE quote_date BETWEEN ? AND ?
+      AND transport_mode IS NOT NULL
+    GROUP BY transport_mode
+    ORDER BY count DESC
+  `);
+
+  return stmt.all(startDate, endDate) as { mode: string; count: number }[];
+}
+
+export async function getAdminLossReasons(startDate: string, endDate: string) {
+  const database = getDb();
+
+  const stmt = database.prepare(`
+    SELECT 
+      loss_reason as reason,
+      COUNT(*) as count
+    FROM quotations
+    WHERE quote_date BETWEEN ? AND ?
+      AND status = 'lost'
+      AND loss_reason IS NOT NULL
+    GROUP BY loss_reason
+    ORDER BY count DESC
+  `);
+
+  const rows = stmt.all(startDate, endDate) as { reason: string; count: number }[];
+  const total = rows.reduce((sum, row) => sum + row.count, 0) || 1;
+
+  return rows.map(row => ({
+    reason: row.reason,
+    count: row.count,
+    percentage: Math.round((row.count / total) * 100 * 100) / 100,
+  }));
+}
+
 // Initialize saved_reports table
 export function initializeReportsTable(): void {
   const database = getDb();
