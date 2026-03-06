@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
+=======
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap');
+
+>>>>>>> origin/feature/crm-core-modules
 @layer base {
   :root {
     /* Design Tokens from Stitch */
@@ -20,10 +25,11 @@
 
     /* Shadcn Theme Variables */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
+<<<<<<< HEAD
     --popover-foreground: 0 0% 3.9%;
     --primary: 201 96% 32%;
     --primary-foreground: 0 0% 98%;
@@ -72,6 +78,24 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
+=======
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+>>>>>>> origin/feature/crm-core-modules
 }
 
 @layer base {
@@ -80,6 +104,7 @@
   }
   body {
     @apply bg-background text-foreground;
+<<<<<<< HEAD
     font-family: var(--font-body);
   }
   h1, h2, h3, h4, h5, h6 {
@@ -90,5 +115,81 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+=======
+    font-family: 'Work Sans', system-ui, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-in {
+    animation: animateIn 0.2s ease-out;
+  }
+  .animate-out {
+    animation: animateOut 0.2s ease-in;
+  }
+  .fade-in-0 {
+    opacity: 0;
+  }
+  .fade-out-0 {
+    opacity: 1;
+  }
+  .zoom-in-95 {
+    transform: scale(0.95);
+  }
+  .zoom-out-95 {
+    transform: scale(1);
+  }
+  .slide-in-from-top-2 {
+    transform: translateY(-0.5rem);
+  }
+  .slide-out-to-top-2 {
+    transform: translateY(0);
+  }
+  .slide-in-from-bottom-2 {
+    transform: translateY(0.5rem);
+  }
+  .slide-out-to-bottom-2 {
+    transform: translateY(0);
+  }
+  
+  [data-state="open"] > .animate-in,
+  [data-state="open"].animate-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  [data-state="closed"] > .animate-out,
+  [data-state="closed"].animate-out {
+    animation: none;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes animateIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes animateOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+>>>>>>> origin/feature/crm-core-modules
   }
 }

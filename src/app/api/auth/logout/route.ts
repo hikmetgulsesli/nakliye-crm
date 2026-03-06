@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { NextResponse } from "next/server";
 
 // POST /api/auth/logout - Logout user
@@ -28,4 +29,12 @@ export async function GET() {
   });
 
   return response;
+=======
+import { NextResponse } from 'next/server';
+import { clearSessionCookie } from '@/lib/auth/session';
+
+export async function POST() {
+  clearSessionCookie();
+  return NextResponse.json({ success: true });
+>>>>>>> origin/feature/crm-core-modules
 }

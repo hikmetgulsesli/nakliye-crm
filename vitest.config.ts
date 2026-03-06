@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";
+=======
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+>>>>>>> origin/feature/crm-core-modules
 
 export default defineConfig({
   plugins: [react()],
   test: {
+<<<<<<< HEAD
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
@@ -22,6 +29,15 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+=======
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./vitest.setup.ts'],
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+>>>>>>> origin/feature/crm-core-modules
     },
   },
 });

@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 'use client';
 
+=======
+import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth/session';
+import { getAllUsers } from '@/lib/db/users';
+import { UsersTable } from '@/components/users/users-table';
+
+<<<<<<< HEAD
+export default async function UsersPage() {
+  const session = await getSession();
+=======
+>>>>>>> origin/feature/crm-core-modules
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -36,6 +48,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User, UserRole } from '@/types';
 import { createUserSchema, updateUserSchema } from '@/lib/validation';
 import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+<<<<<<< HEAD
 
 interface PaginatedUsers {
   data: User[];
@@ -68,6 +81,21 @@ export default function UsersPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
+=======
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+
+  if (!session) {
+    redirect('/login');
+  }
+
+  if (session.user.role !== 'admin') {
+    redirect('/dashboard');
+  }
+
+<<<<<<< HEAD
+  const users = getAllUsers();
+=======
+>>>>>>> origin/feature/crm-core-modules
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -241,6 +269,7 @@ export default function UsersPage() {
     setSelectedUser(user);
     setDeleteOpen(true);
   };
+<<<<<<< HEAD
 
   return (
     <div className="space-y-6">
@@ -524,6 +553,20 @@ export default function UsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+=======
+>>>>>>> 0c55e58 (feat: US-014 - User dashboard with personal metrics)
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Kullanıcı Yönetimi</h1>
+        <p className="text-slate-600">
+          Sistem kullanıcılarını oluşturun, düzenleyin ve yönetin
+        </p>
+      </div>
+
+      <UsersTable initialUsers={users} />
+>>>>>>> origin/feature/crm-core-modules
     </div>
   );
 }

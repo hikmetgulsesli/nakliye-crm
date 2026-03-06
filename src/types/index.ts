@@ -1,13 +1,20 @@
+<<<<<<< HEAD
 // ============================================
 // Nakliye CRM Type Definitions
 // ============================================
 
 export type UserRole = "admin" | "user";
+=======
+export type UserRole = 'admin' | 'user';
+>>>>>>> origin/feature/crm-core-modules
 
 export interface User {
   id: string;
   email: string;
+<<<<<<< HEAD
   password_hash?: string;
+=======
+>>>>>>> origin/feature/crm-core-modules
   full_name: string;
   role: UserRole;
   is_active: boolean;
@@ -15,6 +22,7 @@ export interface User {
   updated_at: string;
 }
 
+<<<<<<< HEAD
 // Create user input
 export interface CreateUserInput {
   email: string;
@@ -28,10 +36,22 @@ export interface UpdateUserInput {
   email?: string;
   full_name?: string;
   password?: string;
+=======
+export interface CreateUserInput {
+  email: string;
+  password: string;
+  full_name: string;
+  role: UserRole;
+}
+
+export interface UpdateUserInput {
+  full_name?: string;
+>>>>>>> origin/feature/crm-core-modules
   role?: UserRole;
   is_active?: boolean;
 }
 
+<<<<<<< HEAD
 // Pagination parameters
 export interface PaginationParams {
   page: number;
@@ -72,10 +92,55 @@ export interface Customer {
   last_quote_date: string | null;
   notes: string | null;
   created_by: number;
+=======
+export interface Session {
+  user: User;
+  expires: string;
+}
+
+export interface NavItem {
+  label: string;
+  href: string;
+  icon: string;
+  roles?: UserRole[];
+}
+
+// Customer Types
+export type TransportMode = 'Deniz' | 'Hava' | 'Kara' | 'Kombine';
+export type ServiceType = 'FCL' | 'LCL' | 'Parsiyel' | 'Komple' | 'Bulk' | 'RoRo';
+export type Incoterm = 'FOB' | 'EXW' | 'FCA' | 'DAP' | 'CIF' | 'CFR' | 'DDP';
+export type Direction = 'Ithalat' | 'Ihracat';
+export type CustomerSource = 'Referans' | 'Soguk arama' | 'Fuar' | 'Dijital';
+export type Potential = 'Dusuk' | 'Orta' | 'Yuksek';
+export type CustomerStatus = 'Aktif' | 'Pasif' | 'Soguk';
+
+export interface Customer {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  address: string | null;
+  transport_modes: TransportMode[];
+  service_types: ServiceType[];
+  incoterms: Incoterm[];
+  direction: Direction[];
+  origin_countries: string[];
+  destination_countries: string[];
+  source: CustomerSource;
+  potential: Potential;
+  status: CustomerStatus;
+  assigned_user_id: string;
+  last_contact_date: string | null;
+  last_quote_date: string | null;
+  notes: string | null;
+  created_by: string;
+>>>>>>> origin/feature/crm-core-modules
   created_at: string;
   updated_at: string;
 }
 
+<<<<<<< HEAD
 export type QuotationStatus = "pending" | "won" | "lost";
 export type LossReason = "price" | "competitor" | "delayed" | "other";
 export type Currency = "USD" | "EUR" | "TRY";
@@ -136,12 +201,62 @@ export interface LookupValue {
   category: string;
   value: string;
   label: string;
+=======
+export interface CustomerWithUser extends Customer {
+  assigned_user: {
+    id: string;
+    full_name: string;
+  };
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateCustomerInput {
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  address?: string;
+  transport_modes: TransportMode[];
+  service_types: ServiceType[];
+  incoterms: Incoterm[];
+  direction: Direction[];
+  origin_countries: string[];
+  destination_countries: string[];
+  source: CustomerSource;
+  potential: Potential;
+  status: CustomerStatus;
+  assigned_user_id: string;
+  notes?: string;
+}
+
+export type UpdateCustomerInput = Partial<CreateCustomerInput>;
+
+export interface CustomerConflict {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  phone: string;
+  email: string;
+  matched_field: 'company_name' | 'phone' | 'email';
+  match_score: number;
+}
+
+// Lookup Values Types
+export interface LookupValue {
+  id: string;
+  category: string;
+  value: string;
+>>>>>>> origin/feature/crm-core-modules
   is_active: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;
 }
 
+<<<<<<< HEAD
 export type AuditAction = "create" | "update" | "delete" | "force_create";
 
 export interface AuditLog {
@@ -175,6 +290,127 @@ export interface NavItem {
 export interface BreadcrumbItem {
   label: string;
   href?: string;
+=======
+export type LookupCategory =
+  | 'transport_mode'
+  | 'service_type'
+  | 'incoterm'
+  | 'customer_source'
+  | 'customer_potential'
+  | 'customer_status'
+  | 'quote_status'
+  | 'loss_reason'
+  | 'currency'
+  | 'country'
+  | 'port';
+
+// Re-export quotation types
+export * from './quotations.js';
+
+// Activity Types
+export type ActivityType = 'Telefon' | 'E-posta' | 'Yuz Yuze' | 'Video Gorusme';
+export type ActivityOutcome = 'Olumlu' | 'Notr' | 'Olumsuz' | 'Teklif Istendi';
+
+export interface Activity {
+  id: string;
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ActivityWithUser extends Activity {
+  created_by_user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateActivityInput {
+  customer_id: string;
+  type: ActivityType;
+  date: string;
+  duration?: number | null;
+  notes: string;
+  outcome: ActivityOutcome;
+  next_action_date?: string | null;
+}
+
+export type UpdateActivityInput = Partial<CreateActivityInput>;
+
+// Audit Log Types
+export interface AuditLog {
+  id: string;
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface AuditLogWithUser extends AuditLog {
+  user: {
+    id: string;
+    full_name: string;
+  };
+}
+
+export interface CreateAuditLogInput {
+  user_id: string;
+  record_type: string;
+  record_id: string;
+  action: string;
+  changes?: Record<string, { old: unknown; new: unknown }> | null;
+  metadata?: Record<string, unknown>;
+}
+
+// Transfer System Types
+export type TransferScope = 'all' | 'active' | 'open_quotes';
+
+export interface TransferPreview {
+  source_user_name: string;
+  target_user_name: string;
+  customers_count: number;
+  quotations_count: number;
+}
+
+export interface BulkTransferResult {
+  success: boolean;
+  transferred_customers: number;
+  transferred_quotations: number;
+  deactivated_user?: boolean;
+  errors?: string[];
+}
+
+// Dashboard Types
+export interface LossReasonAnalysis {
+  reason: string;
+  count: number;
+  percentage: number;
+}
+
+export interface SingleTransferInput {
+  customer_id: string;
+  from_user_id: string;
+  to_user_id: string;
+  reason: string;
+  cascade_to_open_quotes: boolean;
+}
+
+export interface BulkTransferInput {
+  from_user_id: string;
+  to_user_id: string;
+  scope: TransferScope;
+  deactivate_source: boolean;
+>>>>>>> origin/feature/crm-core-modules
 }
 
 // ============================================
@@ -236,6 +472,7 @@ export interface AlertCounts {
   total: number;
 }
 
+<<<<<<< HEAD
 export interface Alert {
   id: string;
   type: AlertType;
@@ -252,6 +489,8 @@ export interface Alert {
   updated_at: string;
 }
 
+=======
+>>>>>>> origin/feature/crm-core-modules
 // ============================================
 // Report Types
 // ============================================

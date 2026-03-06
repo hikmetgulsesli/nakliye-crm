@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client"
 
 import * as React from "react"
@@ -14,6 +15,21 @@ const SheetTrigger = DialogPrimitive.Trigger
 const SheetClose = DialogPrimitive.Close
 
 const SheetPortal = DialogPrimitive.Portal
+=======
+import * as React from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const Sheet = DialogPrimitive.Root;
+
+const SheetTrigger = DialogPrimitive.Trigger;
+
+const SheetClose = DialogPrimitive.Close;
+
+const SheetPortal = DialogPrimitive.Portal;
+>>>>>>> origin/feature/crm-core-modules
 
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -21,12 +37,17 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     className={cn(
+<<<<<<< HEAD
       "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+=======
+      'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+>>>>>>> origin/feature/crm-core-modules
       className
     )}
     {...props}
     ref={ref}
   />
+<<<<<<< HEAD
 ))
 SheetOverlay.displayName = DialogPrimitive.Overlay.displayName
 
@@ -48,6 +69,29 @@ const sheetVariants = cva(
     },
   }
 )
+=======
+));
+SheetOverlay.displayName = DialogPrimitive.Overlay.displayName;
+
+const sheetVariants = cva(
+  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+  {
+    variants: {
+      side: {
+        top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+        bottom:
+          'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+        right:
+          'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+      },
+    },
+    defaultVariants: {
+      side: 'right',
+    },
+  }
+);
+>>>>>>> origin/feature/crm-core-modules
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
@@ -56,7 +100,11 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   SheetContentProps
+<<<<<<< HEAD
 >(({ side = "right", className, children, ...props }, ref) => (
+=======
+>(({ side = 'right', className, children, ...props }, ref) => (
+>>>>>>> origin/feature/crm-core-modules
   <SheetPortal>
     <SheetOverlay />
     <DialogPrimitive.Content
@@ -71,8 +119,13 @@ const SheetContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </SheetPortal>
+<<<<<<< HEAD
 ))
 SheetContent.displayName = DialogPrimitive.Content.displayName
+=======
+));
+SheetContent.displayName = DialogPrimitive.Content.displayName;
+>>>>>>> origin/feature/crm-core-modules
 
 const SheetHeader = ({
   className,
@@ -80,13 +133,22 @@ const SheetHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
+<<<<<<< HEAD
       "flex flex-col space-y-2 text-center sm:text-left",
+=======
+      'flex flex-col space-y-2 text-center sm:text-left',
+>>>>>>> origin/feature/crm-core-modules
       className
     )}
     {...props}
   />
+<<<<<<< HEAD
 )
 SheetHeader.displayName = "SheetHeader"
+=======
+);
+SheetHeader.displayName = 'SheetHeader';
+>>>>>>> origin/feature/crm-core-modules
 
 const SheetFooter = ({
   className,
@@ -94,13 +156,22 @@ const SheetFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
+<<<<<<< HEAD
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+=======
+      'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
+>>>>>>> origin/feature/crm-core-modules
       className
     )}
     {...props}
   />
+<<<<<<< HEAD
 )
 SheetFooter.displayName = "SheetFooter"
+=======
+);
+SheetFooter.displayName = 'SheetFooter';
+>>>>>>> origin/feature/crm-core-modules
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -108,11 +179,19 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
+<<<<<<< HEAD
     className={cn("text-lg font-semibold text-foreground", className)}
     {...props}
   />
 ))
 SheetTitle.displayName = DialogPrimitive.Title.displayName
+=======
+    className={cn('text-lg font-semibold text-foreground', className)}
+    {...props}
+  />
+));
+SheetTitle.displayName = DialogPrimitive.Title.displayName;
+>>>>>>> origin/feature/crm-core-modules
 
 const SheetDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
@@ -120,11 +199,19 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
+<<<<<<< HEAD
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ))
 SheetDescription.displayName = DialogPrimitive.Description.displayName
+=======
+    className={cn('text-sm text-muted-foreground', className)}
+    {...props}
+  />
+));
+SheetDescription.displayName = DialogPrimitive.Description.displayName;
+>>>>>>> origin/feature/crm-core-modules
 
 export {
   Sheet,
@@ -137,4 +224,8 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> origin/feature/crm-core-modules

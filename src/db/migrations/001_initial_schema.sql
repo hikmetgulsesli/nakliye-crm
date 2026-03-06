@@ -30,11 +30,19 @@ CREATE TABLE IF NOT EXISTS customers (
   source VARCHAR(100),
   potential VARCHAR(50) CHECK (potential IN ('Dusuk', 'Orta', 'Yuksek')),
   status VARCHAR(50) DEFAULT 'Aktif' CHECK (status IN ('Aktif', 'Pasif', 'Soguk')),
+<<<<<<< HEAD
   assigned_user_id INTEGER REFERENCES users(id),
   last_contact_date DATE,
   last_quote_date DATE,
   notes TEXT,
   created_by INTEGER REFERENCES users(id),
+=======
+  assigned_user_id UUID REFERENCES users(id),
+  last_contact_date DATE,
+  last_quote_date DATE,
+  notes TEXT,
+  created_by UUID REFERENCES users(id),
+>>>>>>> origin/feature/crm-core-modules
   deleted_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -70,9 +78,15 @@ CREATE TABLE IF NOT EXISTS quotations (
   price_note TEXT,
   status VARCHAR(50) DEFAULT 'Bekliyor' CHECK (status IN ('Bekliyor', 'Kazanildi', 'Kaybedildi')),
   loss_reason VARCHAR(100),
+<<<<<<< HEAD
   assigned_user_id INTEGER REFERENCES users(id),
   revision_count INTEGER DEFAULT 0,
   created_by INTEGER REFERENCES users(id),
+=======
+  assigned_user_id UUID REFERENCES users(id),
+  revision_count INTEGER DEFAULT 0,
+  created_by UUID REFERENCES users(id),
+>>>>>>> origin/feature/crm-core-modules
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -83,7 +97,11 @@ CREATE TABLE IF NOT EXISTS quotation_revisions (
   quotation_id INTEGER REFERENCES quotations(id) ON DELETE CASCADE,
   revision_no INTEGER NOT NULL,
   changed_fields JSONB NOT NULL,
+<<<<<<< HEAD
   revised_by INTEGER REFERENCES users(id),
+=======
+  revised_by UUID REFERENCES users(id),
+>>>>>>> origin/feature/crm-core-modules
   revised_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -97,7 +115,11 @@ CREATE TABLE IF NOT EXISTS activities (
   notes TEXT,
   outcome VARCHAR(50) CHECK (outcome IN ('Olumlu', 'Notr', 'Olumsuz', 'Teklif Istendi')),
   next_action_date DATE,
+<<<<<<< HEAD
   created_by INTEGER REFERENCES users(id),
+=======
+  created_by UUID REFERENCES users(id),
+>>>>>>> origin/feature/crm-core-modules
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -116,7 +138,11 @@ CREATE TABLE IF NOT EXISTS lookup_values (
 -- Audit log table
 CREATE TABLE IF NOT EXISTS audit_log (
   id SERIAL PRIMARY KEY,
+<<<<<<< HEAD
   user_id INTEGER REFERENCES users(id),
+=======
+  user_id UUID REFERENCES users(id),
+>>>>>>> origin/feature/crm-core-modules
   record_type VARCHAR(50) NOT NULL,
   record_id INTEGER NOT NULL,
   action VARCHAR(50) NOT NULL,

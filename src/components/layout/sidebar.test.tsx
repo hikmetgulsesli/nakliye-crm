@@ -52,6 +52,10 @@ describe('MobileSidebar', () => {
   it('renders hamburger menu button', () => {
     render(<MobileSidebar userRole="admin" userName="Test User" />);
     
+<<<<<<< HEAD
     expect(screen.getByText('Menüyü Aç')).toBeInTheDocument();
+=======
+    expect(screen.getByLabelText('Menüyü Aç')).toBeInTheDocument();
+>>>>>>> origin/feature/crm-core-modules
   });
 });

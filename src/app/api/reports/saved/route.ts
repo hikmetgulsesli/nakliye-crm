@@ -15,14 +15,22 @@ export async function GET(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
+<<<<<<< HEAD
     if (!payload || !payload.sub) {
+=======
+    if (!payload || typeof payload.userId !== 'number') {
+>>>>>>> origin/feature/crm-core-modules
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const reportType = searchParams.get('reportType') as ReportType | undefined;
 
+<<<<<<< HEAD
     const reports = getSavedReports(parseInt(payload.sub, 10), reportType);
+=======
+    const reports = getSavedReports(payload.userId, reportType);
+>>>>>>> origin/feature/crm-core-modules
     return NextResponse.json({ reports });
   } catch (error) {
     console.error('Get saved reports error:', error);
@@ -41,7 +49,11 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
+<<<<<<< HEAD
     if (!payload || !payload.sub) {
+=======
+    if (!payload || typeof payload.userId !== 'number') {
+>>>>>>> origin/feature/crm-core-modules
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -56,7 +68,11 @@ export async function POST(request: NextRequest) {
     }
 
     const saved = saveReportParams(
+<<<<<<< HEAD
       parseInt(payload.sub, 10),
+=======
+      payload.userId,
+>>>>>>> origin/feature/crm-core-modules
       reportType as ReportType,
       name,
       params
@@ -80,7 +96,11 @@ export async function DELETE(request: NextRequest) {
     }
 
     const payload = await verifyToken(token);
+<<<<<<< HEAD
     if (!payload || !payload.sub) {
+=======
+    if (!payload || typeof payload.userId !== 'number') {
+>>>>>>> origin/feature/crm-core-modules
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -94,7 +114,11 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+<<<<<<< HEAD
     const deleted = deleteSavedReport(parseInt(id, 10), parseInt(payload.sub, 10));
+=======
+    const deleted = deleteSavedReport(parseInt(id, 10), payload.userId);
+>>>>>>> origin/feature/crm-core-modules
 
     if (!deleted) {
       return NextResponse.json(

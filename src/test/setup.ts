@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
@@ -33,3 +34,6 @@ vi.mock("next-auth/react", () => ({
   })),
   getSession: vi.fn(),
 }));
+=======
+import '@testing-library/jest-dom';
+>>>>>>> origin/feature/crm-core-modules
