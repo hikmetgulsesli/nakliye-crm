@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createActivity, getActivitiesByCustomer, updateActivity, deleteActivity, updateCustomerLastContactDate } from '@/lib/db/activities.js';
-import { createAuditLog, buildChangesObject } from '@/lib/db/audit-log.js';
-import { getSession } from '@/lib/auth/session.js';
+import { createActivity, getActivitiesByCustomer, updateActivity, deleteActivity, updateCustomerLastContactDate } from '@/lib/db/activities';
+import { createAuditLog, buildChangesObject } from '@/lib/db/audit-log';
+import { getSession } from '@/lib/auth/session';
 
 const createActivitySchema = z.object({
   customer_id: z.string().min(1, 'Müşteri seçimi zorunludur'),
@@ -57,14 +57,20 @@ export async function POST(request: NextRequest) {
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Validasyon hatası',
-            details: validation.error.errors.map(e => ({ field: e.path.join('.'), message: e.message })),
+            details: validation.error.issues.map(e => ({ field: e.path.join('.'), message: e.message })),
           },
         },
         { status: 400 }
       );
     }
 
-    const activity = createActivity(validation.data, session.user.id);
+    // Convert null values to undefined for type compatibility
+    const activityData = {
+      ...validation.data,
+      duration: validation.data.duration ?? undefined,
+      next_action_date: validation.data.next_action_date ?? undefined,
+    };
+    const activity = createActivity(activityData, session.user.id);
     
     // Update customer's last contact date
     updateCustomerLastContactDate(validation.data.customer_id);
@@ -111,7 +117,7 @@ export async function PUT(request: NextRequest) {
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Validasyon hatası',
-            details: validation.error.errors.map(e => ({ field: e.path.join('.'), message: e.message })),
+            details: validation.error.issues.map(e => ({ field: e.path.join('.'), message: e.message })),
           },
         },
         { status: 400 }
@@ -119,19 +125,25 @@ export async function PUT(request: NextRequest) {
     }
 
     // Get old activity for audit log
-    const { getActivityById } = await import('@/lib/db/activities.js');
+    const { getActivityById } = await import('@/lib/db/activities');
     const oldActivity = getActivityById(id);
     if (!oldActivity) {
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Aktivite bulunamadı' } }, { status: 404 });
     }
 
-    const activity = updateActivity(id, validation.data);
+    // Convert null values to undefined for type compatibility
+    const updateData = {
+      ...validation.data,
+      duration: validation.data.duration ?? undefined,
+      next_action_date: validation.data.next_action_date ?? undefined,
+    };
+    const activity = updateActivity(id, updateData);
     if (!activity) {
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Aktivite bulunamadı' } }, { status: 404 });
     }
 
     // Create audit log with changes
-    const changes = buildChangesObject(oldActivity as Record<string, unknown>, validation.data as Record<string, unknown>);
+    const changes = buildChangesObject(oldActivity as unknown as Record<string, unknown>, updateData as unknown as Record<string, unknown>);
     if (Object.keys(changes).length > 0) {
       createAuditLog({
         user_id: session.user.id,
@@ -175,7 +187,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Get activity before deletion for audit log
-    const { getActivityById } = await import('@/lib/db/activities.js');
+    const { getActivityById } = await import('@/lib/db/activities');
     const activity = getActivityById(id);
     if (!activity) {
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Aktivite bulunamadı' } }, { status: 404 });

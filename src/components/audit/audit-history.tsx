@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { UserPlus, Edit, Trash2, ArrowRightLeft, AlertTriangle, Clock, ChevronDown, ChevronUp } from 'lucide-react';
-import type { AuditLogWithUser, AuditAction } from '@/types/index.js';
+import type { AuditLogWithUser, AuditAction } from '@/types/index';
 
 interface AuditHistoryProps {
   logs: AuditLogWithUser[];

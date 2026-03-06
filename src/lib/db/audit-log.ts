@@ -1,4 +1,4 @@
-import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditRecordType, AuditAction } from '@/types/index.js';
+import type { AuditLog, CreateAuditLogInput, AuditLogWithUser, AuditRecordType, AuditAction } from '@/types/index';
 import DatabaseConstructor from 'better-sqlite3';
 
 let db: import('better-sqlite3').Database | null = null;

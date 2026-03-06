@@ -2,14 +2,14 @@
 
 import * as React from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Edit, Phone, Mail, MapPin, Calendar, User, Building2, Package, Globe, TrendingUp, Activity, Plus, FileText, History, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, Edit, Phone, Mail, MapPin, Calendar, User, TrendingUp, Activity, Plus, FileText, History, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge, PotentialBadge } from '@/components/ui/badges';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ActivityTimeline } from '@/components/activities/activity-timeline';
 import { ActivityForm } from '@/components/activities/activity-form';
 import { AuditHistory } from '@/components/audit/audit-history';
-import type { CustomerWithUser, ActivityWithUser, AuditLogWithUser, CreateActivityInput } from '@/types/index.js';
+import type { CustomerWithUser, ActivityWithUser, AuditLogWithUser, CreateActivityInput } from '@/types/index';
 
 export default function CustomerDetailPage() {
   const router = useRouter();

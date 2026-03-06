@@ -1,4 +1,4 @@
-import type { Activity, CreateActivityInput, UpdateActivityInput, ActivityWithUser } from '@/types/index.js';
+import type { Activity, CreateActivityInput, UpdateActivityInput, ActivityWithUser } from '@/types/index';
 import DatabaseConstructor from 'better-sqlite3';
 
 let db: import('better-sqlite3').Database | null = null;

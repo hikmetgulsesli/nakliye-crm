@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ActivityTimeline } from '../activity-timeline';
-import type { ActivityWithUser } from '@/types/index.js';
+import type { ActivityWithUser } from '@/types/index';
 
 const mockActivities: ActivityWithUser[] = [
   {

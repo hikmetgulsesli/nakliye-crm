@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { Potential, CustomerStatus } from '@/types/index.js';
+import type { Potential, CustomerStatus } from '@/types/index';
 
 interface StatusBadgeProps {
   status: CustomerStatus;

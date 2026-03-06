@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getAuditLogsByRecord, getAuditLogsByCustomer, getRecentAuditLogs } from '@/lib/db/audit-log.js';
-import { getSession } from '@/lib/auth/session.js';
-import type { AuditRecordType } from '@/types/index.js';
+import { getAuditLogsByRecord, getAuditLogsByCustomer, getRecentAuditLogs } from '@/lib/db/audit-log';
+import { getSession } from '@/lib/auth/session';
+import type { AuditRecordType } from '@/types/index';
 
 const querySchema = z.object({
   record_type: z.enum(['customer', 'quotation', 'activity', 'user'] as const).optional(),
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Geçersiz sorgu parametreleri',
-            details: validation.error.errors.map(e => ({ field: e.path.join('.'), message: e.message })),
+            details: validation.error.issues.map(e => ({ field: e.path.join('.'), message: e.message })),
           },
         },
         { status: 400 }

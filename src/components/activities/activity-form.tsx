@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Phone, Mail, Users, Video, Calendar, Clock, FileText, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { ActivityType, ActivityOutcome, CreateActivityInput } from '@/types/index.js';
+import type { ActivityType, ActivityOutcome, CreateActivityInput } from '@/types/index';
 
 const activityTypes: { value: ActivityType; label: string; icon: typeof Phone }[] = [
   { value: 'Telefon', label: 'Telefon', icon: Phone },
@@ -66,6 +66,8 @@ export function ActivityForm({ customerId, onSubmit, onCancel, loading }: Activi
     onSubmit({
       customer_id: customerId,
       ...data,
+      duration: data.duration ?? undefined,
+      next_action_date: data.next_action_date ?? undefined,
     });
   };
 

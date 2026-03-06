@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 interface TabsProps {
-  defaultValue: string;
+  defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface TabsProps {
 }
 
 const TabsContext = React.createContext<{
-  value: string;
+  value: string | undefined;
   onValueChange: (value: string) => void;
 } | null>(null);
 

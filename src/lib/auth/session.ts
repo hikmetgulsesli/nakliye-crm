@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
-import type { User, Session } from '@/types/index.js';
+import type { User, Session } from '@/types/index';
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'nakliye-crm-secret-key-min-32-chars-long'
@@ -38,7 +38,7 @@ export async function getSession(): Promise<Session | null> {
   if (!payload) return null;
 
   // Fetch user from database
-  const { getUserById } = await import('@/lib/db/users.js');
+  const { getUserById } = await import('@/lib/db/users');
   const user = getUserById(payload.userId);
   
   if (!user) return null;

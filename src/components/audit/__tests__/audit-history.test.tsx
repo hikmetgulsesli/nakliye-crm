@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AuditHistory } from '../audit-history';
-import type { AuditLogWithUser } from '@/types/index.js';
+import type { AuditLogWithUser } from '@/types/index';
 
 const mockLogs: AuditLogWithUser[] = [
   {

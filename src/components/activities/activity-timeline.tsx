@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Phone, Mail, Users, Video, Clock, Calendar, FileText, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OutcomeBadge, ActivityTypeBadge } from '@/components/ui/badges';
-import type { ActivityWithUser } from '@/types/index.js';
+import type { ActivityWithUser } from '@/types/index';
 
 interface ActivityTimelineProps {
   activities: ActivityWithUser[];

@@ -1,4 +1,4 @@
-import type { User, CreateUserInput, UpdateUserInput } from '@/types/index.js';
+import type { User, CreateUserInput, UpdateUserInput } from '@/types/index';
 import DatabaseConstructor from 'better-sqlite3';
 import bcrypt from 'bcryptjs';
 
