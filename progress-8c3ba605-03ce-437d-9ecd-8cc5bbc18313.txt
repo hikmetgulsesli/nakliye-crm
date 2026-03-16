@@ -137,3 +137,44 @@ TEST RESULTS:
   - Build: successful
 
 PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/3
+
+=== US-013: User Management + Dynamic Lists UI ===
+COMPLETED: 2026-03-17T00:15:00+03:00
+FILES CHANGED:
+  - app/api/users/route.ts (NEW - GET list with filters, POST create)
+  - app/api/users/[id]/route.ts (NEW - PATCH update, DELETE toggle status)
+  - app/admin/users/page.tsx (NEW - User management page)
+  - app/admin/layout.tsx (UPDATED - Added Users navigation link)
+  - components/admin/UserTable.tsx (NEW - User list table component)
+  - components/admin/AddUserModal.tsx (NEW - Modal for adding users)
+  - components/admin/EditUserModal.tsx (NEW - Modal for editing users)
+  - lib/hooks/useUsers.ts (NEW - React hook for users API)
+  - __tests__/api/users.test.ts (NEW - API tests for user management)
+  - jest.setup.ts (FIXED - Updated for Node.js 18+ native fetch)
+
+KEY DECISIONS:
+  - Implemented full User CRUD API with role-based access control
+  - Search and filter support (by name, email, role, status)
+  - Soft delete via isActive flag (preserves history)
+  - Audit logging for all user operations (CREATE, UPDATE, ACTIVATE, DEACTIVATE)
+  - Prevent self-deactivation (admin cannot deactivate own account)
+  - Password hashing with bcrypt (10 rounds)
+  - User Management UI matches Stitch design (de58fd5e4c494c18858696a2c6a3a936)
+  - Dynamic List Management already implemented in US-004 (screens c45bd124, 723c13f2)
+  - Realistic demo content with Turkish names (Elif Yılmaz, Ahmet Kaya, etc.)
+
+ACCEPTANCE CRITERIA MET:
+  - [x] User CRUD works correctly (Create, Read, Update, Deactivate/Activate)
+  - [x] Lookup values manage properly (implemented in US-004)
+  - [x] Deactivation preserves history (isActive flag, not deleted)
+  - [x] Typecheck passes
+  - [x] Build passes
+  - [x] All tests passing (71 tests)
+
+TEST RESULTS:
+  - All tests: 71 passed
+  - Lint: clean (0 errors)
+  - Typecheck: passed
+  - Build: successful
+
+PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/4
