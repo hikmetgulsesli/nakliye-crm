@@ -1,34 +1,8 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { UserRole } from "@prisma/client";
 
 async function createTestUsers() {
-  // Ensure roles exist
-  let adminRole = await prisma.role.findUnique({
-    where: { name: "Admin" },
-  });
-
-  if (!adminRole) {
-    adminRole = await prisma.role.create({
-      data: {
-        name: "Admin",
-        description: "System Administrator",
-      },
-    });
-  }
-
-  let userRole = await prisma.role.findUnique({
-    where: { name: "User" },
-  });
-
-  if (!userRole) {
-    userRole = await prisma.role.create({
-      data: {
-        name: "User",
-        description: "Standard User",
-      },
-    });
-  }
-
   // Create admin user if not exists
   const adminEmail = "admin@globalship.com";
   const existingAdmin = await prisma.user.findUnique({
@@ -40,10 +14,11 @@ async function createTestUsers() {
     await prisma.user.create({
       data: {
         email: adminEmail,
-        name: "Ahmet Yılmaz",
-        password: hashedPassword,
-        roleId: adminRole.id,
-        status: "Active",
+        firstName: "Ahmet",
+        lastName: "Yılmaz",
+        passwordHash: hashedPassword,
+        role: UserRole.ADMIN,
+        isActive: true,
       },
     });
     console.log("Created admin user: admin@globalship.com");
@@ -60,10 +35,11 @@ async function createTestUsers() {
     await prisma.user.create({
       data: {
         email: userEmail,
-        name: "Elif Yılmaz",
-        password: hashedPassword,
-        roleId: userRole.id,
-        status: "Active",
+        firstName: "Elif",
+        lastName: "Yılmaz",
+        passwordHash: hashedPassword,
+        role: UserRole.SALES_REP,
+        isActive: true,
       },
     });
     console.log("Created user: elif@reelforge.com");
@@ -80,10 +56,11 @@ async function createTestUsers() {
     await prisma.user.create({
       data: {
         email: user2Email,
-        name: "Mehmet Kaya",
-        password: hashedPassword,
-        roleId: userRole.id,
-        status: "Active",
+        firstName: "Mehmet",
+        lastName: "Kaya",
+        passwordHash: hashedPassword,
+        role: UserRole.SALES_REP,
+        isActive: true,
       },
     });
     console.log("Created user: mehmet@globalship.com");

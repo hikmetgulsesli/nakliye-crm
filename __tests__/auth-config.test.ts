@@ -1,10 +1,5 @@
 import { describe, it, expect } from "@jest/globals";
 
-// Mock @auth/prisma-adapter before importing authOptions
-jest.mock("@auth/prisma-adapter", () => ({
-  PrismaAdapter: jest.fn(() => ({} as unknown)),
-}));
-
 // Mock prisma
 jest.mock("@/lib/prisma", () => ({
   prisma: {},
@@ -13,7 +8,6 @@ jest.mock("@/lib/prisma", () => ({
 import { authOptions } from "@/lib/auth";
 import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { AdapterUser } from "next-auth/adapters";
 
 describe("Auth Configuration", () => {
   it("should have credentials provider configured", () => {
@@ -25,12 +19,13 @@ describe("Auth Configuration", () => {
     expect(credentialsProvider).toBeDefined();
   });
 
-  it("should have 8 hour session maxAge", () => {
-    expect(authOptions.session?.maxAge).toBe(8 * 60 * 60); // 8 hours
+  it("should have default 30 day session maxAge (adjusted by rememberMe)", () => {
+    // Default is 30 days, but actual session duration depends on rememberMe
+    expect(authOptions.session?.maxAge).toBe(30 * 24 * 60 * 60);
   });
 
-  it("should have 8 hour JWT maxAge", () => {
-    expect(authOptions.jwt?.maxAge).toBe(8 * 60 * 60); // 8 hours
+  it("should have default 30 day JWT maxAge (adjusted by rememberMe)", () => {
+    expect(authOptions.jwt?.maxAge).toBe(30 * 24 * 60 * 60);
   });
 
   it("should have custom login page", () => {
@@ -42,8 +37,9 @@ describe("Auth Configuration", () => {
     expect(authOptions.session?.strategy).toBe("jwt");
   });
 
-  it("should have Prisma adapter configured", () => {
-    expect(authOptions.adapter).toBeDefined();
+  // PrismaAdapter is not needed for credentials-only flow
+  it("should NOT have Prisma adapter (credentials-only flow)", () => {
+    expect(authOptions.adapter).toBeUndefined();
   });
 
   describe("JWT Callback", () => {
@@ -72,6 +68,36 @@ describe("Auth Configuration", () => {
       expect(result.id).toBe("user-123");
       expect(result.role).toBe("ADMIN");
     });
+
+    it("should adjust maxAge based on rememberMe", async () => {
+      const jwtCallback = authOptions.callbacks?.jwt;
+      
+      // Test with rememberMe = true
+      const tokenWithRemember: JWT = { rememberMe: true };
+      const resultRemember = await jwtCallback!({
+        token: tokenWithRemember,
+        user: null,
+        account: null,
+        profile: undefined,
+        trigger: "signIn",
+        isNewUser: false,
+        session: undefined,
+      });
+      expect(resultRemember.maxAge).toBe(30 * 24 * 60 * 60); // 30 days
+
+      // Test with rememberMe = false
+      const tokenWithoutRemember: JWT = { rememberMe: false };
+      const resultNoRemember = await jwtCallback!({
+        token: tokenWithoutRemember,
+        user: null,
+        account: null,
+        profile: undefined,
+        trigger: "signIn",
+        isNewUser: false,
+        session: undefined,
+      });
+      expect(resultNoRemember.maxAge).toBe(8 * 60 * 60); // 8 hours
+    });
   });
 
   describe("Session Callback", () => {
@@ -88,6 +114,7 @@ describe("Auth Configuration", () => {
           image?: string | null;
         };
         expires: string;
+        rememberMe?: boolean;
       }
 
       const mockSession: SessionWithRole = {
@@ -98,18 +125,20 @@ describe("Auth Configuration", () => {
       const mockToken: JWT = {
         id: "user-123",
         role: "ADMIN",
+        rememberMe: true,
       };
 
       const result = (await sessionCallback!({
         session: mockSession,
         token: mockToken,
-        user: undefined as unknown as AdapterUser,
+        user: undefined as unknown as User,
         newSession: undefined,
         trigger: "update",
       })) as SessionWithRole;
 
       expect(result.user.id).toBe("user-123");
       expect(result.user.role).toBe("ADMIN");
+      expect(result.rememberMe).toBe(true);
     });
   });
 });

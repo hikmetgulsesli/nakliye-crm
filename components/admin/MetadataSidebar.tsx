@@ -63,14 +63,11 @@ export function MetadataSidebar({ selectedCategory, onSelectCategory }: Metadata
             <div className="text-sm text-slate-400 py-2">Loading...</div>
           ) : (
             allCategories.map((category) => (
-              <a
+              <button
                 key={category}
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onSelectCategory(category);
-                }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                type="button"
+                onClick={() => onSelectCategory(category)}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   selectedCategory === category
                     ? 'bg-primary/10 text-primary'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
@@ -80,35 +77,9 @@ export function MetadataSidebar({ selectedCategory, onSelectCategory }: Metadata
                   {ICONS[category] || 'label'}
                 </span>
                 {formatLabel(category)}
-              </a>
+              </button>
             ))
           )}
-        </nav>
-
-        <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3 mt-8 font-display">
-          Geography
-        </h3>
-        <nav className="space-y-1">
-          {['port', 'country'].map((category) => (
-            <a
-              key={category}
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onSelectCategory(category);
-              }}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                {ICONS[category]}
-              </span>
-              {formatLabel(category)}
-            </a>
-          ))}
         </nav>
       </div>
     </aside>
