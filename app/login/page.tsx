@@ -201,7 +201,7 @@ function LoginForm() {
             <p>
               Don&apos;t have an account?{" "}
               <a
-                href="#"
+                href="mailto:admin@globalship.com"
                 className="font-medium text-primary hover:text-primary/80"
               >
                 Contact Admin
