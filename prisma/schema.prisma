@@ -25,14 +25,24 @@ enum CustomerStatus {
   BLACKLISTED
 }
 
-// Quotation Status
+// Quotation Status (PRD: pending/won/lost workflow)
 enum QuotationStatus {
-  DRAFT
-  SENT
-  ACCEPTED
-  REJECTED
-  EXPIRED
-  CANCELLED
+  DRAFT       // Initial state
+  SENT        // Sent to customer (bekliyor)
+  PENDING     // Awaiting response (bekliyor)
+  WON         // Kazanıldı
+  LOST        // Kaybedildi
+  EXPIRED     // Süresi dolmuş
+  CANCELLED   // İptal edilmiş
+}
+
+// Loss Reasons for lost quotations
+enum LossReason {
+  PRICE
+  COMPETITOR
+  DELAYED_RESPONSE
+  NO_BUDGET
+  OTHER
 }
 
 // Activity Types
@@ -94,6 +104,7 @@ model User {
   quotations    Quotation[]
   activities    Activity[]
   auditLogs     AuditLog[]
+  quoteRevisions QuotationRevision[]
 
   @@map("users")
 }
@@ -117,6 +128,9 @@ model Customer {
   notes               String?
   createdAt           DateTime       @default(now()) @map("created_at")
   updatedAt           DateTime       @updatedAt @map("updated_at")
+
+  // CRM tracking
+  lastQuoteDate       DateTime?      @map("last_quote_date")
 
   // Relations
   assignedTo          User?          @relation(fields: [assignedToId], references: [id])
@@ -160,6 +174,10 @@ model Quotation {
   validUntil          DateTime?       @map("valid_until")
   estimatedTransitDays Int?           @map("estimated_transit_days")
   
+  // Status workflow
+  lossReason          LossReason?     @map("loss_reason")
+  revisionCount       Int             @default(0) @map("revision_count")
+
   // Internal
   internalNotes       String?         @map("internal_notes")
   createdAt           DateTime        @default(now()) @map("created_at")
@@ -169,8 +187,26 @@ model Quotation {
   customer            Customer        @relation(fields: [customerId], references: [id])
   createdBy           User            @relation(fields: [createdById], references: [id])
   activities          Activity[]
+  revisions           QuotationRevision[]
 
   @@map("quotations")
+}
+
+// Quotation Revision History
+model QuotationRevision {
+  id                  String          @id @default(uuid())
+  quotationId         String          @map("quotation_id")
+  revisionNumber      Int             @map("revision_number")
+  changedFields       Json            @map("changed_fields")
+  revisedById         String          @map("revised_by_id")
+  revisedAt           DateTime        @default(now()) @map("revised_at")
+
+  // Relations
+  quotation           Quotation       @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  revisedBy           User            @relation(fields: [revisedById], references: [id])
+
+  @@index([quotationId])
+  @@map("quotation_revisions")
 }
 
 // Activities Table (CRM Activity Feed)
