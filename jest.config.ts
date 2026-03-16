@@ -15,6 +15,9 @@ const config: Config = {
       },
     }],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(?:@auth/prisma-adapter|bcryptjs|@auth/core)/)',
+  ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   collectCoverageFrom: [

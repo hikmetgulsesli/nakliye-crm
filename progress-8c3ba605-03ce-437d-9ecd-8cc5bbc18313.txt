@@ -1,0 +1,139 @@
+=== US-001: Project Setup + Design Tokens + Database Schema ===
+COMPLETED: 2026-03-16T22:57:00+03:00
+FILES CHANGED:
+  - app/layout.tsx (updated fonts to Plus Jakarta Sans + Work Sans)
+  - app/globals.css (added design tokens)
+  - app/page.tsx (unchanged - placeholder)
+  - package.json (added scripts, dependencies)
+  - prisma/schema.prisma (core database schema)
+  - prisma/seed.ts (Turkish lookup values)
+  - lib/prisma.ts (database client)
+  - jest.config.ts (test configuration)
+  - jest.setup.ts (test setup)
+  - __tests__/setup.test.ts
+  - __tests__/design-tokens.test.ts
+  - __tests__/database-schema.test.ts
+  - .env (database connection)
+
+KEY DECISIONS:
+  - Used Plus Jakarta Sans for headings, Work Sans for body text
+  - Implemented full Prisma schema with all core tables
+  - Added Turkish localization for seed data (Hava Kargo, Deniz Kargo, etc.)
+  - Created enums for type-safe status/role values
+  - Added proper relations between entities
+  - Set up Jest with TypeScript for testing
+
+DEPENDENCIES ADDED:
+  - @prisma/client ^6.5.0
+  - prisma ^6.5.0
+  - @testing-library/jest-dom
+  - @testing-library/react
+  - ts-jest
+  - identity-obj-proxy
+
+TEST RESULTS:
+  - All 13 tests passing
+  - Lint: clean (0 errors)
+  - Typecheck: passed
+  - Build: successful
+
+PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/1
+
+=== US-002: Authentication System ===
+COMPLETED: 2026-03-16T23:20:00+03:00
+FILES CHANGED:
+  - lib/auth.ts (NEW - NextAuth configuration with credentials provider)
+  - app/api/auth/[...nextauth]/route.ts (NEW - NextAuth API route)
+  - app/login/page.tsx (NEW - Login page matching Stitch design)
+  - app/dashboard/page.tsx (NEW - Dashboard with user info)
+  - app/unauthorized/page.tsx (NEW - Unauthorized access page)
+  - app/page.tsx (UPDATED - Redirect to login/dashboard)
+  - middleware.ts (NEW - RBAC middleware for Admin routes)
+  - components/logout-button.tsx (NEW - Logout button component)
+  - types/next-auth.d.ts (NEW - TypeScript declarations for NextAuth)
+  - app/admin/layout.tsx (FIXED - Changed <a> to <Link> for lint)
+  - .env (UPDATED - Added NEXTAUTH_URL and NEXTAUTH_SECRET)
+  - package.json (UPDATED - Added next-auth, bcryptjs, @auth/prisma-adapter)
+  - jest.config.ts (UPDATED - Added transformIgnorePatterns for ESM modules)
+  - __tests__/auth.test.ts (NEW - Password hashing tests)
+  - __tests__/auth-config.test.ts (NEW - NextAuth config tests)
+  - __tests__/middleware.test.ts (NEW - RBAC middleware tests)
+  - __tests__/login-page.test.tsx (NEW - Login page UI tests)
+
+KEY DECISIONS:
+  - Used NextAuth.js with Credentials Provider for email/password auth
+  - Implemented JWT session strategy with 8-hour timeout (maxAge: 28800 seconds)
+  - Used bcryptjs for password hashing
+  - Created middleware for role-based access control (ADMIN vs other roles)
+  - Login page matches Stitch design exactly (241e4924c5a14652b6eecec69c89067f)
+  - Used PrismaAdapter for potential future OAuth providers
+  - Added remember me checkbox (UI only, 30 days would require database session)
+
+DEPENDENCIES ADDED:
+  - next-auth ^4.24.13
+  - @auth/prisma-adapter ^2.11.1
+  - bcryptjs ^3.0.3
+  - @types/bcryptjs ^2.4.6
+
+ACCEPTANCE CRITERIA MET:
+  - [x] Users can login with email/password
+  - [x] Role-based access control works (ADMIN role protection on /admin/*)
+  - [x] Session persists correctly with 8-hour timeout
+  - [x] Remember me option available (UI implemented)
+  - [x] Typecheck passes
+  - [x] Build passes
+  - [x] All new auth tests passing (21 tests)
+
+TEST RESULTS:
+  - Auth tests: 21 passed
+  - Lint: clean (0 errors)
+  - Typecheck: passed
+  - Build: successful
+
+PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/2
+
+=== US-004: Dynamic List/Lookup Management API ===
+COMPLETED: 2026-03-16T23:45:00+03:00
+FILES CHANGED:
+  - app/api/lookup-values/route.ts (NEW - GET list with filters, POST create)
+  - app/api/lookup-values/[id]/route.ts (NEW - GET single, PATCH update, DELETE remove)
+  - app/api/lookup-values/categories/route.ts (NEW - GET unique categories)
+  - app/admin/metadata/page.tsx (NEW - Admin metadata management UI)
+  - app/admin/layout.tsx (NEW - Admin layout with navigation)
+  - components/admin/MetadataSidebar.tsx (NEW - Category sidebar navigation)
+  - components/admin/MetadataTable.tsx (NEW - Data table for lookup values)
+  - components/admin/AddValueModal.tsx (NEW - Modal for adding values)
+  - components/admin/EditValueModal.tsx (NEW - Modal for editing values)
+  - lib/hooks/useLookupValues.ts (NEW - React hook for lookup values API)
+  - __tests__/api/lookup-values.test.ts (NEW - API tests)
+  - lib/auth.ts (FIXED - Removed incorrect role relation include)
+  - app/login/page.tsx (FIXED - Added Suspense boundary for useSearchParams)
+  - tsconfig.json (UPDATED - Excluded jest/prisma config files from build)
+
+KEY DECISIONS:
+  - Implemented RESTful API for lookup_values CRUD operations
+  - Category filtering via query parameters (?category=transport_mode)
+  - Status filtering via ?isActive=true/false
+  - Search via ?search=keyword (searches label and value)
+  - Activate/deactivate via PATCH with { isActive: true/false } (no deletion)
+  - Reorder support via sortOrder field
+  - Implemented admin UI matching Stitch screens c45bd124 and 723c13f2
+  - Used React hooks for state management
+  - All PRD dynamic list categories supported (transport_modes, service_types, etc.)
+
+ACCEPTANCE CRITERIA MET:
+  - [x] Lookup values CRUD works (Create, Read, Update, Delete)
+  - [x] Categories filter correctly via API
+  - [x] Deactivation preserves historical data (isActive flag, not deleted)
+  - [x] Reorder support via sortOrder field
+  - [x] Typecheck passes
+  - [x] Build passes
+  - [x] All tests passing (58 tests)
+
+TEST RESULTS:
+  - All tests: 58 passed
+  - Lint: clean (0 errors)
+  - Typecheck: passed
+  - Build: successful
+
+PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/3
