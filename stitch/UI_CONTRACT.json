@@ -1,0 +1,5809 @@
+[
+  {
+    "screenId": "241e4924c5a14652b6eecec69c89067f",
+    "screenTitle": "Shipping CRM Login",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Forgot password?",
+        "href": "#",
+        "line": 60
+      },
+      {
+        "type": "link",
+        "label": "Contact Admin",
+        "href": "#",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "visibility_off",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "Sign In",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: lock]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility_off]",
+        "line": 68
+      },
+      {
+        "type": "input",
+        "label": "Enter your email",
+        "inputType": "email",
+        "placeholder": "Enter your email",
+        "line": 53
+      },
+      {
+        "type": "input",
+        "label": "Enter your password",
+        "inputType": "password",
+        "placeholder": "Enter your password",
+        "line": 66
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 74
+      },
+      {
+        "type": "form",
+        "label": "form",
+        "line": 45
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Forgot password?",
+        "href": "#",
+        "line": 60
+      },
+      {
+        "type": "link",
+        "label": "Contact Admin",
+        "href": "#",
+        "line": 86
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "visibility_off",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "Sign In",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: lock]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility_off]",
+        "line": 68
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Enter your email",
+        "inputType": "email",
+        "placeholder": "Enter your email",
+        "line": 53
+      },
+      {
+        "type": "input",
+        "label": "Enter your password",
+        "inputType": "password",
+        "placeholder": "Enter your password",
+        "line": 66
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 74
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 12,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "4763908df96d414c8687681f3b001f7d",
+    "screenTitle": "Shipping CRM Customer List",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\n                Dashboard",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "groups\n                Customers",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "sailing\n                Shipments",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "description\n                Quotes",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\n                Reports",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "settings\n                Settings",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "add\n                Add Customer",
+        "line": 90
+      },
+      {
+        "type": "button",
+        "label": "Status\n                            expand_more",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "Potential\n                            expand_more",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Transport Mode\n                            expand_more",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "filter_alt_off\n                            Clear",
+        "line": 119
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 331
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 334
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 335
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 336
+      },
+      {
+        "type": "button",
+        "label": "9",
+        "line": 338
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 339
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 39
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: groups]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 117
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_alt_off]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 153
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 189
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 225
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 261
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 297
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 332
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 340
+      },
+      {
+        "type": "input",
+        "label": "Search by company, contact, or email...",
+        "inputType": "text",
+        "placeholder": "Search by company, contact, or email...",
+        "line": 103
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\n                Dashboard",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "link",
+        "label": "groups\n                Customers",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "sailing\n                Shipments",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "description\n                Quotes",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "bar_chart\n                Reports",
+        "href": "#",
+        "line": 63
+      },
+      {
+        "type": "link",
+        "label": "settings\n                Settings",
+        "href": "#",
+        "line": 67
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add\n                Add Customer",
+        "line": 90
+      },
+      {
+        "type": "button",
+        "label": "Status\n                            expand_more",
+        "line": 107
+      },
+      {
+        "type": "button",
+        "label": "Potential\n                            expand_more",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Transport Mode\n                            expand_more",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "filter_alt_off\n                            Clear",
+        "line": 119
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 331
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 334
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 335
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 336
+      },
+      {
+        "type": "button",
+        "label": "9",
+        "line": 338
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 339
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 39
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: groups]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 117
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_alt_off]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 153
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 189
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 225
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 261
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 297
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 332
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 340
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search by company, contact, or email...",
+        "inputType": "text",
+        "placeholder": "Search by company, contact, or email...",
+        "line": 103
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 38,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "c232266a8be44f8586f18e399605f368",
+    "screenTitle": "Add/Edit Customer Form",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 65
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 66
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 68
+      },
+      {
+        "type": "link",
+        "label": "arrow_back",
+        "href": "#",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "View Existing Record",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "Dismiss",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 288
+      },
+      {
+        "type": "button",
+        "label": "save\n                        Save Customer",
+        "line": 291
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: corporate_fare]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 152
+      },
+      {
+        "type": "button",
+        "label": "[icon: train]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: location_on]",
+        "line": 215
+      },
+      {
+        "type": "button",
+        "label": "[icon: flag]",
+        "line": 224
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 234
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 292
+      },
+      {
+        "type": "input",
+        "label": "Search",
+        "inputType": "text",
+        "placeholder": "Search",
+        "line": 59
+      },
+      {
+        "type": "input",
+        "label": "Enter company name",
+        "inputType": "text",
+        "placeholder": "Enter company name",
+        "line": 111
+      },
+      {
+        "type": "input",
+        "label": "Enter primary contact name",
+        "inputType": "text",
+        "placeholder": "Enter primary contact name",
+        "line": 115
+      },
+      {
+        "type": "input",
+        "label": "+1 (555) 000-0000",
+        "inputType": "tel",
+        "placeholder": "+1 (555) 000-0000",
+        "line": 119
+      },
+      {
+        "type": "input",
+        "label": "contact@company.com",
+        "inputType": "email",
+        "placeholder": "contact@company.com",
+        "line": 123
+      },
+      {
+        "type": "input",
+        "label": "Street address, City, State/Province, ZIP/Postal Code",
+        "inputType": "text",
+        "placeholder": "Street address, City, State/Province, ZIP/Postal Code",
+        "line": 127
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 143
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 147
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 151
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 155
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 165
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 172
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 182
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 193
+      },
+      {
+        "type": "input",
+        "label": "e.g., China, Germany, USA",
+        "inputType": "text",
+        "placeholder": "e.g., China, Germany, USA",
+        "line": 217
+      },
+      {
+        "type": "input",
+        "label": "e.g., USA, UK, Australia",
+        "inputType": "text",
+        "placeholder": "e.g., USA, UK, Australia",
+        "line": 226
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 240
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 251
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 261
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 269
+      },
+      {
+        "type": "input",
+        "label": "Add any specific requirements, pain points, or historical context here...",
+        "inputType": "textarea",
+        "placeholder": "Add any specific requirements, pain points, or historical context here...",
+        "line": 279
+      },
+      {
+        "type": "form",
+        "label": "form",
+        "line": 101
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 65
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 66
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 68
+      },
+      {
+        "type": "link",
+        "label": "arrow_back",
+        "href": "#",
+        "line": 78
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "View Existing Record",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "Dismiss",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 288
+      },
+      {
+        "type": "button",
+        "label": "save\n                        Save Customer",
+        "line": 291
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_back]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: corporate_fare]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 152
+      },
+      {
+        "type": "button",
+        "label": "[icon: train]",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: location_on]",
+        "line": 215
+      },
+      {
+        "type": "button",
+        "label": "[icon: flag]",
+        "line": 224
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 234
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 292
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search",
+        "inputType": "text",
+        "placeholder": "Search",
+        "line": 59
+      },
+      {
+        "type": "input",
+        "label": "Enter company name",
+        "inputType": "text",
+        "placeholder": "Enter company name",
+        "line": 111
+      },
+      {
+        "type": "input",
+        "label": "Enter primary contact name",
+        "inputType": "text",
+        "placeholder": "Enter primary contact name",
+        "line": 115
+      },
+      {
+        "type": "input",
+        "label": "+1 (555) 000-0000",
+        "inputType": "tel",
+        "placeholder": "+1 (555) 000-0000",
+        "line": 119
+      },
+      {
+        "type": "input",
+        "label": "contact@company.com",
+        "inputType": "email",
+        "placeholder": "contact@company.com",
+        "line": 123
+      },
+      {
+        "type": "input",
+        "label": "Street address, City, State/Province, ZIP/Postal Code",
+        "inputType": "text",
+        "placeholder": "Street address, City, State/Province, ZIP/Postal Code",
+        "line": 127
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 143
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 147
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 151
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 155
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 165
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 172
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 182
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 193
+      },
+      {
+        "type": "input",
+        "label": "e.g., China, Germany, USA",
+        "inputType": "text",
+        "placeholder": "e.g., China, Germany, USA",
+        "line": 217
+      },
+      {
+        "type": "input",
+        "label": "e.g., USA, UK, Australia",
+        "inputType": "text",
+        "placeholder": "e.g., USA, UK, Australia",
+        "line": 226
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 240
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 251
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 261
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 269
+      },
+      {
+        "type": "input",
+        "label": "Add any specific requirements, pain points, or historical context here...",
+        "inputType": "textarea",
+        "placeholder": "Add any specific requirements, pain points, or historical context here...",
+        "line": 279
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 46,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "49d6b7d1501d43e88c6054a4a2b98e28",
+    "screenTitle": "Customer Detail Overview",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 41
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 44
+      },
+      {
+        "type": "link",
+        "label": "Overview",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "Quotations\n                                12",
+        "href": "#",
+        "line": 82
+      },
+      {
+        "type": "link",
+        "label": "Activities",
+        "href": "#",
+        "line": 86
+      },
+      {
+        "type": "link",
+        "label": "History",
+        "href": "#",
+        "line": 89
+      },
+      {
+        "type": "link",
+        "label": "s.jenkins@globallogistics.com",
+        "href": "mailto:s.jenkins@globallogistics.com",
+        "line": 110
+      },
+      {
+        "type": "button",
+        "label": "edit\nEdit Details",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "add_box\n                            New Quotation",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "event_note\n                            Log Activity",
+        "line": 206
+      },
+      {
+        "type": "button",
+        "label": "swap_horiz\n                            Transfer Rep",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: work]",
+        "line": 172
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_box]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_note]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 211
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 229
+      },
+      {
+        "type": "input",
+        "label": "Search customers...",
+        "inputType": "text",
+        "placeholder": "Search customers...",
+        "line": 53
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 41
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 44
+      },
+      {
+        "type": "link",
+        "label": "Overview",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "Quotations\n                                12",
+        "href": "#",
+        "line": 82
+      },
+      {
+        "type": "link",
+        "label": "Activities",
+        "href": "#",
+        "line": 86
+      },
+      {
+        "type": "link",
+        "label": "History",
+        "href": "#",
+        "line": 89
+      },
+      {
+        "type": "link",
+        "label": "s.jenkins@globallogistics.com",
+        "href": "mailto:s.jenkins@globallogistics.com",
+        "line": 110
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "edit\nEdit Details",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "add_box\n                            New Quotation",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "event_note\n                            Log Activity",
+        "line": 206
+      },
+      {
+        "type": "button",
+        "label": "swap_horiz\n                            Transfer Rep",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: work]",
+        "line": 172
+      },
+      {
+        "type": "button",
+        "label": "[icon: add_box]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_note]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: swap_horiz]",
+        "line": 211
+      },
+      {
+        "type": "button",
+        "label": "[icon: call]",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 229
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search customers...",
+        "inputType": "text",
+        "placeholder": "Search customers...",
+        "line": 53
+      }
+    ],
+    "hardcodedData": [
+      "Jane Doe"
+    ],
+    "totalInteractive": 28,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "6e0164c36bb34b3ab7499b465e1e6dde",
+    "screenTitle": "Shipping CRM Quotation List",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "description\nQuotations",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nShipments",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "group\nCustomers",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nInvoices",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "analytics\nReports",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "settings\nSettings",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "Q-1001",
+        "href": "#",
+        "line": 163
+      },
+      {
+        "type": "link",
+        "label": "Q-1002",
+        "href": "#",
+        "line": 202
+      },
+      {
+        "type": "link",
+        "label": "Q-1003",
+        "href": "#",
+        "line": 241
+      },
+      {
+        "type": "link",
+        "label": "Q-1004",
+        "href": "#",
+        "line": 280
+      },
+      {
+        "type": "link",
+        "label": "Q-1005",
+        "href": "#",
+        "line": 319
+      },
+      {
+        "type": "button",
+        "label": "menu",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "add\n                    Create Quotation",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "calendar_month\n                        Date Range",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "tune",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 233
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 311
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 350
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 362
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 365
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 366
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 367
+      },
+      {
+        "type": "button",
+        "label": "9",
+        "line": 369
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 370
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 34
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 43
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: menu]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: tune]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 171
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 234
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 257
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 288
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 312
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 327
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 335
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 351
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 363
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 371
+      },
+      {
+        "type": "input",
+        "label": "Search quotes, customers...",
+        "inputType": "text",
+        "placeholder": "Search quotes, customers...",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 114
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 124
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "dashboard\nDashboard",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "description\nQuotations",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nShipments",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "group\nCustomers",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nInvoices",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "analytics\nReports",
+        "href": "#",
+        "line": 62
+      },
+      {
+        "type": "link",
+        "label": "settings\nSettings",
+        "href": "#",
+        "line": 67
+      },
+      {
+        "type": "link",
+        "label": "Q-1001",
+        "href": "#",
+        "line": 163
+      },
+      {
+        "type": "link",
+        "label": "Q-1002",
+        "href": "#",
+        "line": 202
+      },
+      {
+        "type": "link",
+        "label": "Q-1003",
+        "href": "#",
+        "line": 241
+      },
+      {
+        "type": "link",
+        "label": "Q-1004",
+        "href": "#",
+        "line": 280
+      },
+      {
+        "type": "link",
+        "label": "Q-1005",
+        "href": "#",
+        "line": 319
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "menu",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "add\n                    Create Quotation",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "calendar_month\n                        Date Range",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "tune",
+        "line": 136
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 233
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 311
+      },
+      {
+        "type": "button",
+        "label": "more_vert",
+        "line": 350
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 362
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 365
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 366
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 367
+      },
+      {
+        "type": "button",
+        "label": "9",
+        "line": 369
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 370
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 34
+      },
+      {
+        "type": "button",
+        "label": "[icon: dashboard]",
+        "line": 43
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 51
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 55
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 59
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: settings]",
+        "line": 68
+      },
+      {
+        "type": "button",
+        "label": "[icon: menu]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 121
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 133
+      },
+      {
+        "type": "button",
+        "label": "[icon: tune]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 171
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 234
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 257
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 288
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 312
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 327
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 335
+      },
+      {
+        "type": "button",
+        "label": "[icon: more_vert]",
+        "line": 351
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 363
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 371
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search quotes, customers...",
+        "inputType": "text",
+        "placeholder": "Search quotes, customers...",
+        "line": 110
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 114
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 124
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 64,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "e2734a46b7ac435b9532cfcbb2665dc1",
+    "screenTitle": "Create New Quotation Form",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "save\n            Save Quote",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 151
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 158
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 165
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: assignment_ind]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 250
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 80
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 101
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 107
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 121
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 130
+      },
+      {
+        "type": "input",
+        "label": "Enter POL",
+        "inputType": "text",
+        "placeholder": "Enter POL",
+        "line": 139
+      },
+      {
+        "type": "input",
+        "label": "Enter POD",
+        "inputType": "text",
+        "placeholder": "Enter POD",
+        "line": 143
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 149
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 156
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 163
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 173
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 181
+      },
+      {
+        "type": "input",
+        "label": "0.00",
+        "inputType": "number",
+        "placeholder": "0.00",
+        "line": 201
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 202
+      },
+      {
+        "type": "input",
+        "label": "Add any additional pricing notes or conditions here...",
+        "inputType": "textarea",
+        "placeholder": "Add any additional pricing notes or conditions here...",
+        "line": 211
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 224
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 232
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 50
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 53
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "save\n            Save Quote",
+        "line": 249
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 94
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 115
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 151
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 158
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 165
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "[icon: assignment_ind]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: save]",
+        "line": 250
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 80
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 101
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 107
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 121
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 130
+      },
+      {
+        "type": "input",
+        "label": "Enter POL",
+        "inputType": "text",
+        "placeholder": "Enter POL",
+        "line": 139
+      },
+      {
+        "type": "input",
+        "label": "Enter POD",
+        "inputType": "text",
+        "placeholder": "Enter POD",
+        "line": 143
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 149
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 156
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 163
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 173
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 181
+      },
+      {
+        "type": "input",
+        "label": "0.00",
+        "inputType": "number",
+        "placeholder": "0.00",
+        "line": 201
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 202
+      },
+      {
+        "type": "input",
+        "label": "Add any additional pricing notes or conditions here...",
+        "inputType": "textarea",
+        "placeholder": "Add any additional pricing notes or conditions here...",
+        "line": 211
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 224
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 232
+      }
+    ],
+    "hardcodedData": [
+      "Jane Doe",
+      "John Smith",
+      "Alice Johnson"
+    ],
+    "totalInteractive": 35,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "5688cf7ee6444b958c9961fd61ec2aa8",
+    "screenTitle": "Quotation Detail & Revisions",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "button",
+        "label": "Create New",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "edit\nEdit",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "mail\nCreate Email",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "update\nRevise",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 43
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: update]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: business]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 106
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_land]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: manage_history]",
+        "line": 155
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 173
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 188
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 203
+      },
+      {
+        "type": "input",
+        "label": "Search...",
+        "inputType": "text",
+        "placeholder": "Search...",
+        "line": 45
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 54
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "Create New",
+        "line": 56
+      },
+      {
+        "type": "button",
+        "label": "edit\nEdit",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "mail\nCreate Email",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "update\nRevise",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 43
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 75
+      },
+      {
+        "type": "button",
+        "label": "[icon: mail]",
+        "line": 79
+      },
+      {
+        "type": "button",
+        "label": "[icon: update]",
+        "line": 83
+      },
+      {
+        "type": "button",
+        "label": "[icon: info]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: business]",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 106
+      },
+      {
+        "type": "button",
+        "label": "[icon: route]",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_takeoff]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight_land]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: manage_history]",
+        "line": 155
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 173
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 188
+      },
+      {
+        "type": "button",
+        "label": "[icon: person]",
+        "line": 203
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search...",
+        "inputType": "text",
+        "placeholder": "Search...",
+        "line": 45
+      }
+    ],
+    "hardcodedData": [
+      "Jane Doe"
+    ],
+    "totalInteractive": 26,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "968f9d5204484849be12be631df111cf",
+    "screenTitle": "Log Activity Modal",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "button",
+        "label": "close",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "Save Activity",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 53
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 87
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 46
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "time",
+        "inputType": "time",
+        "line": 62
+      },
+      {
+        "type": "input",
+        "label": "e.g. 30",
+        "inputType": "number",
+        "placeholder": "e.g. 30",
+        "line": 67
+      },
+      {
+        "type": "input",
+        "label": "Enter detailed notes about the interaction...",
+        "inputType": "textarea",
+        "placeholder": "Enter detailed notes about the interaction...",
+        "line": 73
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 80
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 92
+      }
+    ],
+    "navigation": [],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "close",
+        "line": 36
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 98
+      },
+      {
+        "type": "button",
+        "label": "Save Activity",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 53
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 87
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 46
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "time",
+        "inputType": "time",
+        "line": 62
+      },
+      {
+        "type": "input",
+        "label": "e.g. 30",
+        "inputType": "number",
+        "placeholder": "e.g. 30",
+        "line": 67
+      },
+      {
+        "type": "input",
+        "label": "Enter detailed notes about the interaction...",
+        "inputType": "textarea",
+        "placeholder": "Enter detailed notes about the interaction...",
+        "line": 73
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 80
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 92
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 13,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "a373d63e0e4b4c319cbd5c3bde88b380",
+    "screenTitle": "Analytics & Reports Selection",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 40
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 41
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "Last 7 Days",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "Last 30 Days",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "This Quarter",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "YTD",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 162
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 34
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: date_range]",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 154
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 164
+      },
+      {
+        "type": "button",
+        "label": "[icon: pie_chart]",
+        "line": 171
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 181
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 58
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 65
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 81
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 85
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 40
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 41
+      },
+      {
+        "type": "link",
+        "label": "Quotations",
+        "href": "#",
+        "line": 42
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 44
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "Last 7 Days",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "Last 30 Days",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "This Quarter",
+        "line": 73
+      },
+      {
+        "type": "button",
+        "label": "YTD",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 111
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 145
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 162
+      },
+      {
+        "type": "button",
+        "label": "Generate\narrow_forward",
+        "line": 179
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 34
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 57
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_today]",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "[icon: date_range]",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 130
+      },
+      {
+        "type": "button",
+        "label": "[icon: bar_chart]",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 154
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 164
+      },
+      {
+        "type": "button",
+        "label": "[icon: pie_chart]",
+        "line": 171
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_forward]",
+        "line": 181
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 58
+      },
+      {
+        "type": "input",
+        "label": "date",
+        "inputType": "date",
+        "line": 65
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 81
+      },
+      {
+        "type": "input",
+        "label": "checkbox",
+        "inputType": "checkbox",
+        "line": 85
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 31,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "976e1f3923014fdc98fef8f2611c505c",
+    "screenTitle": "Periodic Quotation Report Preview",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 44
+      },
+      {
+        "type": "link",
+        "label": "Quotes",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 47
+      },
+      {
+        "type": "button",
+        "label": "Create Quote",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\nExport PDF",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "table_chart\nExport Excel",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "Status: All\nexpand_more",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "Transport Mode: All\nexpand_more",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "Currency: All\nexpand_more",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                More Filters",
+        "line": 90
+      },
+      {
+        "type": "button",
+        "label": "Prev",
+        "line": 198
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 199
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 201
+      },
+      {
+        "type": "button",
+        "label": "Next",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: table_chart]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 164
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 216
+      },
+      {
+        "type": "button",
+        "label": "[icon: emoji_events]",
+        "line": 242
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 43
+      },
+      {
+        "type": "link",
+        "label": "Reports",
+        "href": "#",
+        "line": 44
+      },
+      {
+        "type": "link",
+        "label": "Quotes",
+        "href": "#",
+        "line": 45
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 46
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 47
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "Create Quote",
+        "line": 50
+      },
+      {
+        "type": "button",
+        "label": "picture_as_pdf\nExport PDF",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "table_chart\nExport Excel",
+        "line": 70
+      },
+      {
+        "type": "button",
+        "label": "Status: All\nexpand_more",
+        "line": 78
+      },
+      {
+        "type": "button",
+        "label": "Transport Mode: All\nexpand_more",
+        "line": 82
+      },
+      {
+        "type": "button",
+        "label": "Currency: All\nexpand_more",
+        "line": 86
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                More Filters",
+        "line": 90
+      },
+      {
+        "type": "button",
+        "label": "Prev",
+        "line": 198
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 199
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 200
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 201
+      },
+      {
+        "type": "button",
+        "label": "Next",
+        "line": 202
+      },
+      {
+        "type": "button",
+        "label": "[icon: sailing]",
+        "line": 37
+      },
+      {
+        "type": "button",
+        "label": "[icon: picture_as_pdf]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: table_chart]",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 91
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 132
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: flight]",
+        "line": 164
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 180
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 216
+      },
+      {
+        "type": "button",
+        "label": "[icon: emoji_events]",
+        "line": 242
+      }
+    ],
+    "inputs": [],
+    "hardcodedData": [],
+    "totalInteractive": 31,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "de58fd5e4c494c18858696a2c6a3a936",
+    "screenTitle": "Admin User Management",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "button",
+        "label": "add\n                Add User",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "Activate",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 182
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 183
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 208
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 209
+      },
+      {
+        "type": "button",
+        "label": "Previous",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "Next",
+        "line": 222
+      },
+      {
+        "type": "input",
+        "label": "Search users by name or email...",
+        "inputType": "text",
+        "placeholder": "Search users by name or email...",
+        "line": 54
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 59
+      }
+    ],
+    "navigation": [],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add\n                Add User",
+        "line": 44
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 102
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 103
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 128
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 156
+      },
+      {
+        "type": "button",
+        "label": "Activate",
+        "line": 157
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 182
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 183
+      },
+      {
+        "type": "button",
+        "label": "Edit",
+        "line": 208
+      },
+      {
+        "type": "button",
+        "label": "Deactivate",
+        "line": 209
+      },
+      {
+        "type": "button",
+        "label": "Previous",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "Next",
+        "line": 222
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search users by name or email...",
+        "inputType": "text",
+        "placeholder": "Search users by name or email...",
+        "line": 54
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 59
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 15,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "e777ffc03b9c43788c896a8ef98ce046",
+    "screenTitle": "Representative Record Transfer",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "button",
+        "label": "visibility\nPreview Impact",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "check_circle\n                Confirm Transfer",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_search]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_add]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 118
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 138
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 46
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 76
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 83
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 90
+      }
+    ],
+    "navigation": [],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "visibility\nPreview Impact",
+        "line": 100
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "check_circle\n                Confirm Transfer",
+        "line": 137
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_search]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 52
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_add]",
+        "line": 60
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 67
+      },
+      {
+        "type": "button",
+        "label": "[icon: visibility]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: analytics]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 113
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 118
+      },
+      {
+        "type": "button",
+        "label": "[icon: history]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 129
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 138
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 46
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 61
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 76
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 83
+      },
+      {
+        "type": "input",
+        "label": "radio",
+        "inputType": "radio",
+        "line": 90
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 19,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "c45bd12408d0439fb24901bec83a47a1",
+    "screenTitle": "Dynamic List Management",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "Contacts",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "directions_boat\n                            Transport Mode",
+        "href": "#",
+        "line": 76
+      },
+      {
+        "type": "link",
+        "label": "design_services\n                            Service Type",
+        "href": "#",
+        "line": 80
+      },
+      {
+        "type": "link",
+        "label": "description\n                            Incoterm",
+        "href": "#",
+        "line": 84
+      },
+      {
+        "type": "link",
+        "label": "source\n                            Source",
+        "href": "#",
+        "line": 88
+      },
+      {
+        "type": "link",
+        "label": "group\n                            Customer Status",
+        "href": "#",
+        "line": 92
+      },
+      {
+        "type": "link",
+        "label": "trending_up\n                            Potential",
+        "href": "#",
+        "line": 96
+      },
+      {
+        "type": "link",
+        "label": "request_quote\n                            Quotation Status",
+        "href": "#",
+        "line": 100
+      },
+      {
+        "type": "link",
+        "label": "money_off\n                            Loss Reason",
+        "href": "#",
+        "line": 104
+      },
+      {
+        "type": "link",
+        "label": "payments\n                            Currency",
+        "href": "#",
+        "line": 108
+      },
+      {
+        "type": "link",
+        "label": "anchor\n                            Ports",
+        "href": "#",
+        "line": 115
+      },
+      {
+        "type": "link",
+        "label": "public\n                            Countries",
+        "href": "#",
+        "line": 119
+      },
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "account_circle",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "add\n                                Add New Value",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                                    Filter",
+        "line": 149
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 191
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 217
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 243
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 295
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 298
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 338
+      },
+      {
+        "type": "button",
+        "label": "Save Changes",
+        "line": 341
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 41
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: account_circle]",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 77
+      },
+      {
+        "type": "button",
+        "label": "[icon: design_services]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: source]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: money_off]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: anchor]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 192
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 229
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 244
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 247
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 255
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 270
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 281
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 299
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 320
+      },
+      {
+        "type": "input",
+        "label": "Search...",
+        "inputType": "text",
+        "placeholder": "Search...",
+        "line": 50
+      },
+      {
+        "type": "input",
+        "label": "Search transport modes...",
+        "inputType": "text",
+        "placeholder": "Search transport modes...",
+        "line": 146
+      },
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 332
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "Contacts",
+        "href": "#",
+        "line": 57
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 58
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 59
+      },
+      {
+        "type": "link",
+        "label": "directions_boat\n                            Transport Mode",
+        "href": "#",
+        "line": 76
+      },
+      {
+        "type": "link",
+        "label": "design_services\n                            Service Type",
+        "href": "#",
+        "line": 80
+      },
+      {
+        "type": "link",
+        "label": "description\n                            Incoterm",
+        "href": "#",
+        "line": 84
+      },
+      {
+        "type": "link",
+        "label": "source\n                            Source",
+        "href": "#",
+        "line": 88
+      },
+      {
+        "type": "link",
+        "label": "group\n                            Customer Status",
+        "href": "#",
+        "line": 92
+      },
+      {
+        "type": "link",
+        "label": "trending_up\n                            Potential",
+        "href": "#",
+        "line": 96
+      },
+      {
+        "type": "link",
+        "label": "request_quote\n                            Quotation Status",
+        "href": "#",
+        "line": 100
+      },
+      {
+        "type": "link",
+        "label": "money_off\n                            Loss Reason",
+        "href": "#",
+        "line": 104
+      },
+      {
+        "type": "link",
+        "label": "payments\n                            Currency",
+        "href": "#",
+        "line": 108
+      },
+      {
+        "type": "link",
+        "label": "anchor\n                            Ports",
+        "href": "#",
+        "line": 115
+      },
+      {
+        "type": "link",
+        "label": "public\n                            Countries",
+        "href": "#",
+        "line": 119
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "notifications",
+        "line": 62
+      },
+      {
+        "type": "button",
+        "label": "account_circle",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "add\n                                Add New Value",
+        "line": 134
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                                    Filter",
+        "line": 149
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 191
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 194
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 217
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 220
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 243
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "block",
+        "line": 272
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 295
+      },
+      {
+        "type": "button",
+        "label": "check_circle",
+        "line": 298
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 338
+      },
+      {
+        "type": "button",
+        "label": "Save Changes",
+        "line": 341
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 41
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 48
+      },
+      {
+        "type": "button",
+        "label": "[icon: notifications]",
+        "line": 63
+      },
+      {
+        "type": "button",
+        "label": "[icon: account_circle]",
+        "line": 66
+      },
+      {
+        "type": "button",
+        "label": "[icon: directions_boat]",
+        "line": 77
+      },
+      {
+        "type": "button",
+        "label": "[icon: design_services]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: description]",
+        "line": 85
+      },
+      {
+        "type": "button",
+        "label": "[icon: source]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: group]",
+        "line": 93
+      },
+      {
+        "type": "button",
+        "label": "[icon: trending_up]",
+        "line": 97
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 101
+      },
+      {
+        "type": "button",
+        "label": "[icon: money_off]",
+        "line": 105
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 109
+      },
+      {
+        "type": "button",
+        "label": "[icon: anchor]",
+        "line": 116
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 120
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 135
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 144
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 150
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 177
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 192
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 218
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 221
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 229
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 244
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 247
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 255
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 270
+      },
+      {
+        "type": "button",
+        "label": "[icon: block]",
+        "line": 273
+      },
+      {
+        "type": "button",
+        "label": "[icon: drag_indicator]",
+        "line": 281
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 296
+      },
+      {
+        "type": "button",
+        "label": "[icon: check_circle]",
+        "line": 299
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 320
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search...",
+        "inputType": "text",
+        "placeholder": "Search...",
+        "line": 50
+      },
+      {
+        "type": "input",
+        "label": "Search transport modes...",
+        "inputType": "text",
+        "placeholder": "Search transport modes...",
+        "line": 146
+      },
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 332
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 68,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "723c13f2a9a04e2db58185ec06407304",
+    "screenTitle": "Admin Metadata Lists, variant 2 of 2",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Clients",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Metadata Lists",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nTransport Mode",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nService Type",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "box\nPackage Type",
+        "href": "#",
+        "line": 83
+      },
+      {
+        "type": "link",
+        "label": "payments\nCurrency",
+        "href": "#",
+        "line": 87
+      },
+      {
+        "type": "link",
+        "label": "checklist\nStatus Codes",
+        "href": "#",
+        "line": 91
+      },
+      {
+        "type": "link",
+        "label": "public\nRegions",
+        "href": "#",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "add",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                        Filter",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "add\n                        Add New Value",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 166
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 186
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 189
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 206
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 209
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 226
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 229
+      },
+      {
+        "type": "button",
+        "label": "close",
+        "line": 245
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 285
+      },
+      {
+        "type": "button",
+        "label": "Save Changes",
+        "line": 286
+      },
+      {
+        "type": "button",
+        "label": "[icon: dataset]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: box]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: checklist]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 118
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 127
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_downward]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_upward]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 167
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 170
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 187
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 190
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 227
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 230
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 253
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 277
+      },
+      {
+        "type": "input",
+        "label": "Search values...",
+        "inputType": "text",
+        "placeholder": "Search values...",
+        "line": 119
+      },
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 263
+      },
+      {
+        "type": "input",
+        "label": "number",
+        "inputType": "number",
+        "line": 268
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 273
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 51
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Clients",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Metadata Lists",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "local_shipping\nTransport Mode",
+        "href": "#",
+        "line": 75
+      },
+      {
+        "type": "link",
+        "label": "inventory_2\nService Type",
+        "href": "#",
+        "line": 79
+      },
+      {
+        "type": "link",
+        "label": "box\nPackage Type",
+        "href": "#",
+        "line": 83
+      },
+      {
+        "type": "link",
+        "label": "payments\nCurrency",
+        "href": "#",
+        "line": 87
+      },
+      {
+        "type": "link",
+        "label": "checklist\nStatus Codes",
+        "href": "#",
+        "line": 91
+      },
+      {
+        "type": "link",
+        "label": "public\nRegions",
+        "href": "#",
+        "line": 95
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "add",
+        "line": 71
+      },
+      {
+        "type": "button",
+        "label": "filter_list\n                        Filter",
+        "line": 122
+      },
+      {
+        "type": "button",
+        "label": "add\n                        Add New Value",
+        "line": 126
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 166
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 169
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 186
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 189
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 206
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 209
+      },
+      {
+        "type": "button",
+        "label": "edit",
+        "line": 226
+      },
+      {
+        "type": "button",
+        "label": "delete",
+        "line": 229
+      },
+      {
+        "type": "button",
+        "label": "close",
+        "line": 245
+      },
+      {
+        "type": "button",
+        "label": "Cancel",
+        "line": 285
+      },
+      {
+        "type": "button",
+        "label": "Save Changes",
+        "line": 286
+      },
+      {
+        "type": "button",
+        "label": "[icon: dataset]",
+        "line": 45
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 72
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 76
+      },
+      {
+        "type": "button",
+        "label": "[icon: inventory_2]",
+        "line": 80
+      },
+      {
+        "type": "button",
+        "label": "[icon: box]",
+        "line": 84
+      },
+      {
+        "type": "button",
+        "label": "[icon: payments]",
+        "line": 88
+      },
+      {
+        "type": "button",
+        "label": "[icon: checklist]",
+        "line": 92
+      },
+      {
+        "type": "button",
+        "label": "[icon: public]",
+        "line": 96
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 108
+      },
+      {
+        "type": "button",
+        "label": "[icon: search]",
+        "line": 118
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 123
+      },
+      {
+        "type": "button",
+        "label": "[icon: add]",
+        "line": 127
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_downward]",
+        "line": 141
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_upward]",
+        "line": 147
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 167
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 170
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 187
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 190
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 207
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 210
+      },
+      {
+        "type": "button",
+        "label": "[icon: edit]",
+        "line": 227
+      },
+      {
+        "type": "button",
+        "label": "[icon: delete]",
+        "line": 230
+      },
+      {
+        "type": "button",
+        "label": "[icon: close]",
+        "line": 246
+      },
+      {
+        "type": "button",
+        "label": "[icon: warning]",
+        "line": 253
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 277
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search values...",
+        "inputType": "text",
+        "placeholder": "Search values...",
+        "line": 119
+      },
+      {
+        "type": "input",
+        "label": "text",
+        "inputType": "text",
+        "line": 263
+      },
+      {
+        "type": "input",
+        "label": "number",
+        "inputType": "number",
+        "line": 268
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 273
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 54,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  },
+  {
+    "screenId": "5f408d6896724c119b3bbcc041951763",
+    "screenTitle": "System Audit Logs",
+    "deviceType": "DESKTOP",
+    "elements": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Audit Logs",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "Q-12345",
+        "href": "#",
+        "line": 145
+      },
+      {
+        "type": "link",
+        "label": "C-98765",
+        "href": "#",
+        "line": 200
+      },
+      {
+        "type": "link",
+        "label": "A-45612",
+        "href": "#",
+        "line": 233
+      },
+      {
+        "type": "link",
+        "label": "S-78901",
+        "href": "#",
+        "line": 266
+      },
+      {
+        "type": "button",
+        "label": "download\nExport CSV",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "Clear Filters",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 301
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 304
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 305
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 306
+      },
+      {
+        "type": "button",
+        "label": "25",
+        "line": 308
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 309
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_search]",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 140
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 160
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 166
+      },
+      {
+        "type": "button",
+        "label": "[icon: corporate_fare]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_note]",
+        "line": 228
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 236
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 261
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 281
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 302
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 310
+      },
+      {
+        "type": "input",
+        "label": "Search users...",
+        "inputType": "text",
+        "placeholder": "Search users...",
+        "line": 75
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 82
+      },
+      {
+        "type": "input",
+        "label": "Oct 20, 2023 - Oct 27, 2023",
+        "inputType": "text",
+        "placeholder": "Oct 20, 2023 - Oct 27, 2023",
+        "line": 96
+      }
+    ],
+    "navigation": [
+      {
+        "type": "link",
+        "label": "Dashboard",
+        "href": "#",
+        "line": 52
+      },
+      {
+        "type": "link",
+        "label": "Shipments",
+        "href": "#",
+        "line": 53
+      },
+      {
+        "type": "link",
+        "label": "Customers",
+        "href": "#",
+        "line": 54
+      },
+      {
+        "type": "link",
+        "label": "Audit Logs",
+        "href": "#",
+        "line": 55
+      },
+      {
+        "type": "link",
+        "label": "Settings",
+        "href": "#",
+        "line": 56
+      },
+      {
+        "type": "link",
+        "label": "Q-12345",
+        "href": "#",
+        "line": 145
+      },
+      {
+        "type": "link",
+        "label": "C-98765",
+        "href": "#",
+        "line": 200
+      },
+      {
+        "type": "link",
+        "label": "A-45612",
+        "href": "#",
+        "line": 233
+      },
+      {
+        "type": "link",
+        "label": "S-78901",
+        "href": "#",
+        "line": 266
+      }
+    ],
+    "buttons": [
+      {
+        "type": "button",
+        "label": "download\nExport CSV",
+        "line": 64
+      },
+      {
+        "type": "button",
+        "label": "Clear Filters",
+        "line": 99
+      },
+      {
+        "type": "button",
+        "label": "chevron_left",
+        "line": 301
+      },
+      {
+        "type": "button",
+        "label": "1",
+        "line": 304
+      },
+      {
+        "type": "button",
+        "label": "2",
+        "line": 305
+      },
+      {
+        "type": "button",
+        "label": "3",
+        "line": 306
+      },
+      {
+        "type": "button",
+        "label": "25",
+        "line": 308
+      },
+      {
+        "type": "button",
+        "label": "chevron_right",
+        "line": 309
+      },
+      {
+        "type": "button",
+        "label": "[icon: download]",
+        "line": 65
+      },
+      {
+        "type": "button",
+        "label": "[icon: person_search]",
+        "line": 74
+      },
+      {
+        "type": "button",
+        "label": "[icon: filter_list]",
+        "line": 81
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 89
+      },
+      {
+        "type": "button",
+        "label": "[icon: calendar_month]",
+        "line": 95
+      },
+      {
+        "type": "button",
+        "label": "[icon: request_quote]",
+        "line": 140
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 148
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 160
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 166
+      },
+      {
+        "type": "button",
+        "label": "[icon: corporate_fare]",
+        "line": 195
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 203
+      },
+      {
+        "type": "button",
+        "label": "[icon: event_note]",
+        "line": 228
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 236
+      },
+      {
+        "type": "button",
+        "label": "[icon: local_shipping]",
+        "line": 261
+      },
+      {
+        "type": "button",
+        "label": "[icon: expand_more]",
+        "line": 269
+      },
+      {
+        "type": "button",
+        "label": "[icon: arrow_right_alt]",
+        "line": 281
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_left]",
+        "line": 302
+      },
+      {
+        "type": "button",
+        "label": "[icon: chevron_right]",
+        "line": 310
+      }
+    ],
+    "inputs": [
+      {
+        "type": "input",
+        "label": "Search users...",
+        "inputType": "text",
+        "placeholder": "Search users...",
+        "line": 75
+      },
+      {
+        "type": "input",
+        "label": "select",
+        "inputType": "select",
+        "line": 82
+      },
+      {
+        "type": "input",
+        "label": "Oct 20, 2023 - Oct 27, 2023",
+        "inputType": "text",
+        "placeholder": "Oct 20, 2023 - Oct 27, 2023",
+        "line": 96
+      }
+    ],
+    "hardcodedData": [],
+    "totalInteractive": 38,
+    "requiresRouter": false,
+    "requiresDragDrop": false
+  }
+]
