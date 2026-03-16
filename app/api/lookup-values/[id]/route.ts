@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 // Validation schema for updating lookup values
 const updateLookupValueSchema = z.object({
@@ -9,6 +11,12 @@ const updateLookupValueSchema = z.object({
   sortOrder: z.number().int().optional(),
   isActive: z.boolean().optional(),
 });
+
+// Helper function to check if user is admin
+async function requireAdmin(): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.role === 'ADMIN';
+}
 
 // GET /api/lookup-values/[id] - Get a single lookup value
 export async function GET(
@@ -45,6 +53,15 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check if user is admin
+    const isAdmin = await requireAdmin();
+    if (!isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin access required' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
     
@@ -92,6 +109,15 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check if user is admin
+    const isAdmin = await requireAdmin();
+    if (!isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin access required' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     
     // Check if lookup value exists

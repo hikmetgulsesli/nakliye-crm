@@ -61,7 +61,10 @@ export const authOptions: NextAuthOptions = {
       
       // Handle session update (e.g., extending session)
       if (trigger === "update" && session) {
-        token.maxAge = session.maxAge;
+        // Keep the rememberMe state if present
+        if (session.rememberMe !== undefined) {
+          token.rememberMe = session.rememberMe;
+        }
       }
       
       return token;
@@ -70,6 +73,8 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        // Store rememberMe in session for UI access
+        (session as any).rememberMe = token.rememberMe;
       }
       return session;
     },

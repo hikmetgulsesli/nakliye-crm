@@ -133,20 +133,12 @@ function LoginForm() {
 
             {/* Password Field */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-                >
-                  Password
-                </label>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                >
-                  Forgot password?
-                </a>
-              </div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+              >
+                Password
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <Lock className="w-5 h-5" />
@@ -164,6 +156,7 @@ function LoginForm() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                 >
                   {showPassword ? (
