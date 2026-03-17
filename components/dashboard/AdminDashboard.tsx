@@ -1,6 +1,7 @@
 "use client";
 
 import { TrendingUp, Users, FileText, Percent } from "lucide-react";
+import { getTransportModeLabel } from "@/lib/utils/formatters";
 
 interface PersonnelPerformance {
   id: string;
@@ -194,17 +195,6 @@ interface TransportModeDistributionProps {
 }
 
 export function TransportModeDistribution({ stats }: TransportModeDistributionProps) {
-  const getModeLabel = (mode: string) => {
-    const labels: Record<string, string> = {
-      AIR: "Hava",
-      SEA: "Deniz",
-      ROAD: "Kara",
-      RAIL: "Demiryolu",
-      MULTIMODAL: "Multimodal",
-    };
-    return labels[mode] || mode;
-  };
-
   const getModeColor = (mode: string) => {
     const colors: Record<string, string> = {
       AIR: "bg-sky-500",
@@ -232,7 +222,7 @@ export function TransportModeDistribution({ stats }: TransportModeDistributionPr
             {stats.map((stat) => (
               <div key={stat.mode} className="flex items-center gap-4">
                 <div className="w-24 text-sm font-medium text-slate-900 dark:text-white">
-                  {getModeLabel(stat.mode)}
+                  {getTransportModeLabel(stat.mode)}
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between text-xs">
