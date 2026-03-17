@@ -5,6 +5,8 @@
  */
 import { prisma } from '@/lib/prisma';
 
+const TEST_CATEGORIES = ['transport_mode', 'service_type', 'test_category'];
+
 // Skip all tests in this file as they require a running Next.js server
 // These are integration tests that should be run separately
 describe.skip('Lookup Values API', () => {

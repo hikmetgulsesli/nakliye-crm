@@ -44,6 +44,12 @@ export default function AdminLayout({
               Contacts
             </Link>
             <Link 
+              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              href="/admin/audit-logs"
+            >
+              Audit Logs
+            </Link>
+            <Link 
               className="text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" 
               href="/admin/metadata"
             >

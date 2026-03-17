@@ -38,3 +38,39 @@ TEST RESULTS:
   - Build: successful
 
 PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/1
+
+=== US-015: Audit Log Viewer UI ===
+COMPLETED: 2026-03-17T01:50:00Z
+
+FILES CHANGED:
+- app/admin/audit-logs/page.tsx (new - Audit Logs page with dynamic rendering)
+- app/admin/layout.tsx (updated - added Audit Logs navigation link)
+- app/api/audit-logs/route.ts (new - Audit logs API with filtering)
+- components/admin/AuditLogsClient.tsx (new - Audit logs UI component)
+- __tests__/api/audit-logs.test.ts (new - API tests)
+- __tests__/api/lookup-values.test.ts (fixed TEST_CATEGORIES const)
+- __tests__/auth-config.test.ts (fixed type errors)
+
+KEY DECISIONS:
+1. Implemented Audit Log Viewer matching Stitch design (screen 5f408d6896724c119b3bbcc041951763)
+2. Created API with filtering by user, action type, entity type, and date range
+3. Implemented CSV export functionality for audit logs
+4. Added field-level diff display with expandable row details
+5. Used force-dynamic to prevent prerendering issues with useSession
+6. Added Admin-only access control at API and page levels
+7. Implemented pagination with server-side filtering
+8. Fixed existing test type errors to ensure clean build
+
+DEPENDENCIES ADDED:
+- date-fns (for date formatting)
+
+PR_URL: https://github.com/hikmetgulsesli/nakliye-crm/pull/15
+BRANCH: 8c3ba605-US-015
+
+TEST RESULTS:
+- All 9 test suites passed
+- 45 tests passed
+- 14 tests skipped (integration tests)
+- Typecheck passes
+- Lint passes
+- Build successful
