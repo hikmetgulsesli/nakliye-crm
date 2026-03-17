@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { generateQuoteNumber } from "@/lib/quote-number";
+import { prisma } from "@/lib/prisma.js";
+import { authOptions } from "@/lib/auth.js";
+import { generateQuoteNumber } from "@/lib/quote-number.js";
 
 // Validation schema for creating a quotation
 const createQuotationSchema = z.object({
@@ -203,6 +203,7 @@ export async function POST(request: NextRequest) {
           estimatedTransitDays: data.estimatedTransitDays,
           internalNotes: data.internalNotes,
           status: "DRAFT",
+          revisionCount: 0,
         },
         include: {
           customer: {

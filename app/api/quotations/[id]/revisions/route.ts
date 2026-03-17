@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma.js";
+import { authOptions } from "@/lib/auth.js";
 
 // GET /api/quotations/[id]/revisions - Get revision history for a quotation
 export async function GET(
@@ -32,12 +32,26 @@ export async function GET(
       );
     }
 
-    // QuotationRevision model not yet implemented - return empty
+    // Get revisions with user info
+    const revisions = await prisma.quotationRevision.findMany({
+      where: { quotationId: id },
+      include: {
+        revisedBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+      orderBy: { revisionNumber: "desc" },
+    });
+
     return NextResponse.json({
       data: {
         quotationId: id,
         quoteNumber: quotation.quoteNumber,
-        revisions: [],
+        revisions,
       },
     });
   } catch (error) {

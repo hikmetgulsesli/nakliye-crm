@@ -4,7 +4,9 @@ const config: Config = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'jsdom',
   moduleNameMapper: {
+    '^@/(.*)\\.js$': '<rootDir>/$1',
     '^@/(.*)$': '<rootDir>/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   transform: {

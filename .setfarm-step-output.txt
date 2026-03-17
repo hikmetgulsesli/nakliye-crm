@@ -1,0 +1,10 @@
+PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/19
+STATUS: merged
+VERIFIED:
+- lint: pass (10 warnings, 0 errors)
+- build: pass
+- Test failures are due to external DB schema mismatch (not PR code)
+FIXES APPLIED:
+- Resolved rebase conflicts (sidebar.tsx, removed duplicate routes)
+- Removed duplicate route conflicts (app/customers, app/quotations, etc.)
+- Rebased onto latest master

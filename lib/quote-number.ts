@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import { prisma } from "./prisma.js";
 
 /**
  * Generate a unique quote number in format TKF-YYYY-XXXX
