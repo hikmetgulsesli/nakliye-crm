@@ -1,16 +1,26 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Admin - Metadata Lists',
-  description: 'Manage system dropdowns and lookup values',
-};
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    return pathname === path || pathname?.startsWith(`${path}/`);
+  };
+
+  const navLinkClass = (path: string) => {
+    const active = isActive(path);
+    return active
+      ? "text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1"
+      : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors";
+  };
+
   return (
     <div className="h-screen flex flex-col">
       {/* Admin Header */}
@@ -26,34 +36,22 @@ export default function AdminLayout({
         <div className="flex flex-1 justify-end gap-8">
           <nav className="hidden lg:flex items-center gap-9">
             <Link 
-              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="/"
-            >
-              Dashboard
-            </Link>
-            <Link 
-              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="#"
-            >
-              Shipments
-            </Link>
-            <Link 
-              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="#"
-            >
-              Contacts
-            </Link>
-            <Link 
-              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              className={navLinkClass("/admin/users")}
               href="/admin/users"
             >
-              Users
+              Kullanıcılar
             </Link>
             <Link 
-              className="text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" 
+              className={navLinkClass("/admin/metadata")}
               href="/admin/metadata"
             >
               Metadata Lists
+            </Link>
+            <Link 
+              className={navLinkClass("/admin/audit-logs")}
+              href="/admin/audit-logs"
+            >
+              Denetim Kayıtları
             </Link>
           </nav>
           <div className="flex gap-2">
