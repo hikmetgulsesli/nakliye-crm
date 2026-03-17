@@ -2,6 +2,44 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+// Whitelist of allowed fields per report type
+const ALLOWED_FIELDS: Record<string, string[]> = {
+  "periodic-quotation": ["id", "quoteNumber", "customerName", "transportMode", "origin", "destination", "totalCost", "currency", "status", "createdAt", "createdBy"],
+  "personnel-performance": ["userId", "name", "email", "role", "totalQuotes", "wonQuotes", "lostQuotes", "winRate", "totalValue", "wonValue", "activities"],
+  "won-lost-analysis": ["id", "quoteNumber", "customerName", "transportMode", "origin", "destination", "totalCost", "currency", "status", "createdAt", "createdBy"],
+  "country-mode-volume": ["country", "count", "value"],
+  "loss-reason": ["id", "label", "count", "value", "percentage"],
+};
+
+function sanitizeExportData(data: unknown, reportType: string): Record<string, unknown> {
+  if (!data || typeof data !== "object") {
+    return {};
+  }
+
+  const dataObj = data as Record<string, unknown>;
+  const allowedFields = ALLOWED_FIELDS[reportType] || [];
+  const sanitized: Record<string, unknown> = {};
+
+  for (const key of allowedFields) {
+    if (key in dataObj) {
+      sanitized[key] = dataObj[key];
+    }
+  }
+
+  return sanitized;
+}
+
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return String(text).replace(/[&<>"']/g, (m) => map[m]);
+}
+
 export type ExportFormat = "pdf" | "excel";
 
 export async function POST(request: NextRequest) {
@@ -29,12 +67,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate data fields to prevent injection
+    const sanitizedData = sanitizeExportData(data, reportType);
+
     const timestamp = new Date().toISOString().split("T")[0];
     const defaultFilename = `${reportType}-${timestamp}`;
     const finalFilename = filename || defaultFilename;
 
-    if (format === "csv") {
-      const csv = generateCSV(data, reportType);
+    if (format === "excel") {
+      const csv = generateCSV(sanitizedData, reportType);
       return new NextResponse(csv, {
         headers: {
           "Content-Type": "text/csv; charset=utf-8",
@@ -43,18 +84,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    if (format === "excel") {
-      const csv = generateCSV(data, reportType);
-      return new NextResponse(csv, {
-        headers: {
-          "Content-Type": "application/vnd.ms-excel; charset=utf-8",
-          "Content-Disposition": `attachment; filename="${finalFilename}.xls"`,
-        },
-      });
-    }
-
     if (format === "pdf") {
-      const html = generatePDFHTML(data, reportType);
+      const html = generatePDFHTML(sanitizedData, reportType);
       return new NextResponse(html, {
         headers: {
           "Content-Type": "text/html; charset=utf-8",
@@ -173,13 +204,13 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (q) => `
               <tr>
-                <td>${q.quoteNumber}</td>
-                <td>${q.customerName}</td>
-                <td>${q.transportMode}</td>
-                <td>${q.origin}</td>
-                <td>${q.destination}</td>
-                <td>${q.totalCost} ${q.currency}</td>
-                <td>${q.status}</td>
+                <td>${escapeHtml(String(q.quoteNumber || ''))}</td>
+                <td>${escapeHtml(String(q.customerName || ''))}</td>
+                <td>${escapeHtml(String(q.transportMode || ''))}</td>
+                <td>${escapeHtml(String(q.origin || ''))}</td>
+                <td>${escapeHtml(String(q.destination || ''))}</td>
+                <td>${Number(q.totalCost || 0).toLocaleString('tr-TR')} ${escapeHtml(String(q.currency || ''))}</td>
+                <td>${escapeHtml(String(q.status || ''))}</td>
               </tr>
             `
               )
@@ -219,14 +250,14 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (p) => `
               <tr>
-                <td>${p.name}</td>
-                <td>${p.role}</td>
-                <td>${p.totalQuotes}</td>
-                <td>${p.wonQuotes}</td>
-                <td>${p.lostQuotes}</td>
-                <td>${p.winRate}%</td>
-                <td>${p.totalValue}</td>
-                <td>${p.activities}</td>
+                <td>${escapeHtml(String(p.name || ''))}</td>
+                <td>${escapeHtml(String(p.role || ''))}</td>
+                <td>${p.totalQuotes || 0}</td>
+                <td>${p.wonQuotes || 0}</td>
+                <td>${p.lostQuotes || 0}</td>
+                <td>${p.winRate || 0}%</td>
+                <td>${Number(p.totalValue || 0).toLocaleString('tr-TR')}</td>
+                <td>${p.activities || 0}</td>
               </tr>
             `
               )
@@ -255,6 +286,8 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               <th>Teklif No</th>
               <th>Müşteri</th>
               <th>Mod</th>
+              <th>Başlangıç</th>
+              <th>Varış</th>
               <th>Tutar</th>
               <th>Durum</th>
             </tr>
@@ -264,11 +297,13 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (q) => `
               <tr>
-                <td>${q.quoteNumber}</td>
-                <td>${q.customerName}</td>
-                <td>${q.transportMode}</td>
-                <td>${q.totalCost} ${q.currency}</td>
-                <td>${q.status}</td>
+                <td>${escapeHtml(String(q.quoteNumber || ''))}</td>
+                <td>${escapeHtml(String(q.customerName || ''))}</td>
+                <td>${escapeHtml(String(q.transportMode || ''))}</td>
+                <td>${escapeHtml(String(q.origin || ''))}</td>
+                <td>${escapeHtml(String(q.destination || ''))}</td>
+                <td>${Number(q.totalCost || 0).toLocaleString('tr-TR')} ${escapeHtml(String(q.currency || ''))}</td>
+                <td>${escapeHtml(String(q.status || ''))}</td>
               </tr>
             `
               )
@@ -305,9 +340,9 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (c) => `
               <tr>
-                <td>${c.country}</td>
-                <td>${c.count}</td>
-                <td>${c.value}</td>
+                <td>${escapeHtml(String(c.country || ''))}</td>
+                <td>${c.count || 0}</td>
+                <td>${Number(c.value || 0).toLocaleString('tr-TR')}</td>
               </tr>
             `
               )
@@ -328,9 +363,9 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (c) => `
               <tr>
-                <td>${c.country}</td>
-                <td>${c.count}</td>
-                <td>${c.value}</td>
+                <td>${escapeHtml(String(c.country || ''))}</td>
+                <td>${c.count || 0}</td>
+                <td>${Number(c.value || 0).toLocaleString('tr-TR')}</td>
               </tr>
             `
               )
@@ -348,8 +383,8 @@ function generatePDFHTML(data: unknown, reportType: string): string {
         <h2>Özet</h2>
         <table>
           <tr><td>Toplam Kayıp:</td><td>${summary?.totalLostQuotes || 0}</td></tr>
-          <tr><td>Toplam Kayıp Değer:</td><td>${summary?.totalLostValue || 0}</td></tr>
-          <tr><td>Ortalama Kayıp Değer:</td><td>${summary?.averageLostValue || 0}</td></tr>
+          <tr><td>Toplam Kayıp Değer:</td><td>${Number(summary?.totalLostValue || 0).toLocaleString('tr-TR')}</td></tr>
+          <tr><td>Ortalama Kayıp Değer:</td><td>${Number(summary?.averageLostValue || 0).toLocaleString('tr-TR')}</td></tr>
         </table>
         <h2>Kaybedilme Nedenleri</h2>
         <table>
@@ -366,10 +401,10 @@ function generatePDFHTML(data: unknown, reportType: string): string {
               .map(
                 (r) => `
               <tr>
-                <td>${r.label}</td>
-                <td>${r.count}</td>
-                <td>${r.value}</td>
-                <td>${r.percentage}%</td>
+                <td>${escapeHtml(String(r.label || ''))}</td>
+                <td>${r.count || 0}</td>
+                <td>${Number(r.value || 0).toLocaleString('tr-TR')}</td>
+                <td>${r.percentage || 0}%</td>
               </tr>
             `
               )
@@ -384,11 +419,14 @@ function generatePDFHTML(data: unknown, reportType: string): string {
       content = "<p>Rapor verisi bulunamadı.</p>";
   }
 
+  // Escape the title as well
+  const safeTitle = escapeHtml(String(reportType));
+
   return `<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>${reportType} Raporu</title>
+  <title>${safeTitle} Raporu</title>
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -434,7 +472,7 @@ function generatePDFHTML(data: unknown, reportType: string): string {
   </style>
 </head>
 <body>
-  <h1>${reportType} Raporu</h1>
+  <h1>${safeTitle} Raporu</h1>
   <p class="period">Dönem: ${formatDate(period.startDate)} - ${formatDate(
     period.endDate
   )}</p>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Prisma, TransportMode } from "@prisma/client";
+import { Prisma, TransportMode, QuotationStatus } from "@prisma/client";
 
 export type ReportType = 
   | "periodic-quotation" 
@@ -18,6 +18,29 @@ export interface ReportFilters {
   transportMode?: string;
   currency?: string;
   assignedToId?: string;
+}
+
+// Validate filter values
+const VALID_STATUSES = ["DRAFT", "SENT", "ACCEPTED", "REJECTED", "EXPIRED", "CANCELLED"];
+const VALID_TRANSPORT_MODES = ["AIR", "SEA", "ROAD", "RAIL", "MULTIMODAL"];
+const VALID_CURRENCIES = ["USD", "EUR", "TRY", "GBP", "CNY"];
+
+function isValidStatus(status: string): boolean {
+  return VALID_STATUSES.includes(status);
+}
+
+function isValidTransportMode(mode: string): boolean {
+  return VALID_TRANSPORT_MODES.includes(mode);
+}
+
+function isValidCurrency(currency: string): boolean {
+  return VALID_CURRENCIES.includes(currency);
+}
+
+function parseDateEndOfDay(dateStr: string): Date {
+  const date = new Date(dateStr);
+  date.setHours(23, 59, 59, 999);
+  return date;
 }
 
 export async function GET(request: NextRequest) {
@@ -62,9 +85,9 @@ export async function GET(request: NextRequest) {
     const filters: ReportFilters = {
       startDate,
       endDate,
-      status,
-      transportMode,
-      currency,
+      status: isValidStatus(status || "") ? status : undefined,
+      transportMode: isValidTransportMode(transportMode || "") ? transportMode : undefined,
+      currency: isValidCurrency(currency || "") ? currency : undefined,
       assignedToId,
     };
 
@@ -109,7 +132,7 @@ async function generatePeriodicQuotationReport(filters: ReportFilters) {
   const whereClause: Prisma.QuotationWhereInput = {
     createdAt: {
       gte: new Date(startDate),
-      lte: new Date(endDate),
+      lte: parseDateEndOfDay(endDate),
     },
   };
 
@@ -285,7 +308,7 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
   const whereClause: Prisma.QuotationWhereInput = {
     createdAt: {
       gte: new Date(startDate),
-      lte: new Date(endDate),
+      lte: parseDateEndOfDay(endDate),
     },
     status: {
       in: ["ACCEPTED", "REJECTED"],
@@ -377,6 +400,8 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
       quoteNumber: q.quoteNumber,
       customerName: q.customer.companyName,
       transportMode: q.transportMode,
+      origin: `${q.originCity}, ${q.originCountry}`,
+      destination: `${q.destinationCity}, ${q.destinationCountry}`,
       totalCost: Number(q.totalCost) || 0,
       currency: q.currency,
       status: q.status,
@@ -392,7 +417,7 @@ async function generateCountryModeVolumeReport(filters: ReportFilters) {
   const whereClause: Prisma.QuotationWhereInput = {
     createdAt: {
       gte: new Date(startDate),
-      lte: new Date(endDate),
+      lte: parseDateEndOfDay(endDate),
     },
   };
 
@@ -505,7 +530,7 @@ async function generateLossReasonReport(filters: ReportFilters) {
   const whereClause: Prisma.QuotationWhereInput = {
     createdAt: {
       gte: new Date(startDate),
-      lte: new Date(endDate),
+      lte: parseDateEndOfDay(endDate),
     },
     status: "REJECTED",
   };

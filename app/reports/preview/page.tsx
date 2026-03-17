@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { tr } from "date-fns/locale";
 import {
@@ -90,6 +90,7 @@ const transportModeLabels: Record<string, string> = {
 
 function ReportPreviewContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const reportType = searchParams.get("type") as ReportType;
   const startDate = searchParams.get("startDate") || "";
   const endDate = searchParams.get("endDate") || "";
@@ -112,7 +113,13 @@ function ReportPreviewContent() {
     }
 
     fetchReportData();
-  }, [reportType, startDate, endDate, status, transportMode, currency]);
+  }, [reportType, startDate, endDate]);
+
+  const updateFilter = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(key, value);
+    router.replace(`/reports/preview?${params.toString()}`);
+  };
 
   const fetchReportData = async () => {
     try {
@@ -614,7 +621,25 @@ function ReportPreviewContent() {
     );
   }
 
-  const totalPages = getTotalPages();
+  const getTotalItems = () => {
+    if (!data) return 0;
+    switch (reportType) {
+      case "periodic-quotation":
+      case "won-lost-analysis":
+        return data.quotations?.length || 0;
+      case "personnel-performance":
+        return data.personnel?.length || 0;
+      case "country-mode-volume":
+        return data.byOriginCountry?.length || 0;
+      case "loss-reason":
+        return data.lossReasons?.length || 0;
+      default:
+        return 0;
+    }
+  };
+
+  const totalItems = getTotalItems();
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div className="flex-1 flex flex-col items-center py-8 px-4 sm:px-8 lg:px-12 w-full max-w-[1400px] mx-auto overflow-hidden">
@@ -653,7 +678,7 @@ function ReportPreviewContent() {
 
       {/* Filters */}
       <div className="w-full flex gap-3 mb-6 flex-wrap">
-        <Select value={status} onValueChange={() => {}}>
+        <Select value={status} onValueChange={(value) => { updateFilter("status", value); setCurrentPage(1); }}>
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Durum: Tümü" />
           </SelectTrigger>
@@ -666,7 +691,7 @@ function ReportPreviewContent() {
           </SelectContent>
         </Select>
 
-        <Select value={transportMode} onValueChange={() => {}}>
+        <Select value={transportMode} onValueChange={(value) => { updateFilter("transportMode", value); setCurrentPage(1); }}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Taşıma Modu: Tümü" />
           </SelectTrigger>
@@ -679,7 +704,7 @@ function ReportPreviewContent() {
           </SelectContent>
         </Select>
 
-        <Select value={currency} onValueChange={() => {}}>
+        <Select value={currency} onValueChange={(value) => { updateFilter("currency", value); setCurrentPage(1); }}>
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Para Birimi: Tümü" />
           </SelectTrigger>
@@ -710,7 +735,7 @@ function ReportPreviewContent() {
           <div className="bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between">
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {(currentPage - 1) * itemsPerPage + 1} -{" "}
-              {Math.min(currentPage * itemsPerPage, data.quotations?.length || 0)}{" "}
+              {Math.min(currentPage * itemsPerPage, totalItems)}{" "}
               arası gösteriliyor
             </p>
             <div className="flex gap-1">
