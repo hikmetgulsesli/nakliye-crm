@@ -37,21 +37,21 @@ export default function AdminLayout({
           <nav className="hidden lg:flex items-center gap-9">
             <Link 
               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="/"
+              href="/dashboard"
             >
               Dashboard
             </Link>
             <Link 
               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="#"
+              href="/customers"
             >
-              Shipments
+              Customers
             </Link>
             <Link 
               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
-              href="#"
+              href="/quotations"
             >
-              Contacts
+              Quotations
             </Link>
             <Link 
               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
