@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSession } from "next-auth/react";
 import {
   Download,
   Search,
@@ -10,11 +9,9 @@ import {
   ChevronRight,
   User,
   Calendar,
-  ArrowRight,
   FileText,
   Building,
   Activity,
-  Package,
   Settings,
   LogIn,
   LogOut,
@@ -95,7 +92,6 @@ const entityTypeIcons: Record<string, React.ReactNode> = {
 };
 
 export function AuditLogsClient() {
-  const { data: session } = useSession();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [meta, setMeta] = useState<PaginationMeta>({
     page: 1,
@@ -125,7 +121,12 @@ export function AuditLogsClient() {
       if (action) params.set("action", action);
       if (entityType) params.set("entityType", entityType);
       if (startDate) params.set("startDate", new Date(startDate).toISOString());
-      if (endDate) params.set("endDate", new Date(endDate).toISOString());
+      if (endDate) {
+        // Send end of day timestamp to include the entire end day
+        const endOfDay = new Date(endDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        params.set("endDate", endOfDay.toISOString());
+      }
 
       const response = await fetch(`/api/audit-logs?${params.toString()}`);
       const data = await response.json();
@@ -169,7 +170,7 @@ export function AuditLogsClient() {
         : "-",
     ]);
 
-    const csv = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))].join("\n");
 
     const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -218,7 +219,10 @@ export function AuditLogsClient() {
               type="text"
               placeholder="Kullanıcı, işlem veya kayıt ara..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setMeta((prev) => ({ ...prev, page: 1 }));
+              }}
               className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
@@ -226,7 +230,10 @@ export function AuditLogsClient() {
           {/* Action Filter */}
           <select
             value={action}
-            onChange={(e) => setAction(e.target.value)}
+            onChange={(e) => {
+              setAction(e.target.value);
+              setMeta((prev) => ({ ...prev, page: 1 }));
+            }}
             className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
           >
             <option value="">Tüm İşlemler</option>
@@ -241,7 +248,10 @@ export function AuditLogsClient() {
           {/* Entity Type Filter */}
           <select
             value={entityType}
-            onChange={(e) => setEntityType(e.target.value)}
+            onChange={(e) => {
+              setEntityType(e.target.value);
+              setMeta((prev) => ({ ...prev, page: 1 }));
+            }}
             className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
           >
             <option value="">Tüm Kayıt Tipleri</option>
@@ -256,7 +266,10 @@ export function AuditLogsClient() {
           <input
             type="date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={(e) => {
+              setStartDate(e.target.value);
+              setMeta((prev) => ({ ...prev, page: 1 }));
+            }}
             className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
             placeholder="Başlangıç"
           />
@@ -264,7 +277,10 @@ export function AuditLogsClient() {
           <input
             type="date"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            onChange={(e) => {
+              setEndDate(e.target.value);
+              setMeta((prev) => ({ ...prev, page: 1 }));
+            }}
             className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
             placeholder="Bitiş"
           />

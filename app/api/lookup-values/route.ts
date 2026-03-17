@@ -15,12 +15,6 @@ const lookupValueSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-// Helper function to check if user is admin
-async function requireAdmin(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  return session?.user?.role === 'ADMIN';
-}
-
 // GET /api/lookup-values - List all lookup values with optional filtering
 export async function GET(request: NextRequest) {
   try {

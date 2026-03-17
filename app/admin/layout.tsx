@@ -35,12 +35,7 @@ export default function AdminLayout({
         </div>
         <div className="flex flex-1 justify-end gap-8">
           <nav className="hidden lg:flex items-center gap-9">
-            <Link 
-              className={navLinkClass("/admin/users")}
-              href="/admin/users"
-            >
-              Kullanıcılar
-            </Link>
+            {/* Kullanıcılar sayfası henüz mevcut değil - US-014'te eklenecek */}
             <Link 
               className={navLinkClass("/admin/metadata")}
               href="/admin/metadata"
