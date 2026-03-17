@@ -1,40 +1,19 @@
-=== US-001: Project Setup + Design Tokens + Database Schema ===
-COMPLETED: 2026-03-16T22:57:00+03:00
-FILES CHANGED:
-  - app/layout.tsx (updated fonts to Plus Jakarta Sans + Work Sans)
-  - app/globals.css (added design tokens)
-  - app/page.tsx (unchanged - placeholder)
-  - package.json (added scripts, dependencies)
-  - prisma/schema.prisma (core database schema)
-  - prisma/seed.ts (Turkish lookup values)
-  - lib/prisma.ts (database client)
-  - jest.config.ts (test configuration)
-  - jest.setup.ts (test setup)
-  - __tests__/setup.test.ts
-  - __tests__/design-tokens.test.ts
-  - __tests__/database-schema.test.ts
-  - .env (database connection)
-
+=== US-011: Dashboard System ===
+COMPLETED: 2026-03-17T03:55:00+03:00
+FILES CHANGED: 
+  - lib/dashboard.ts (new)
+  - app/api/dashboard/route.ts (new)
+  - components/dashboard/stat-card.tsx (new)
+  - components/dashboard/dashboard-widget.tsx (new)
+  - components/dashboard/user-dashboard.tsx (new)
+  - components/dashboard/admin-dashboard.tsx (new)
+  - app/dashboard/page.tsx (updated)
+  - prisma/schema.prisma (updated - added lossReason field)
+  - package-lock.json (updated)
 KEY DECISIONS:
-  - Used Plus Jakarta Sans for headings, Work Sans for body text
-  - Implemented full Prisma schema with all core tables
-  - Added Turkish localization for seed data (Hava Kargo, Deniz Kargo, etc.)
-  - Created enums for type-safe status/role values
-  - Added proper relations between entities
-  - Set up Jest with TypeScript for testing
-
-DEPENDENCIES ADDED:
-  - @prisma/client ^6.5.0
-  - prisma ^6.5.0
-  - @testing-library/jest-dom
-  - @testing-library/react
-  - ts-jest
-  - identity-obj-proxy
-
-TEST RESULTS:
-  - All 13 tests passing
-  - Lint: clean (0 errors)
-  - Typecheck: passed
-  - Build: successful
-
-PR: https://github.com/hikmetgulsesli/nakliye-crm/pull/1
+  - Implemented role-based dashboard rendering (User vs Admin)
+  - Used client-side data fetching for dashboard widgets to enable real-time updates
+  - Created reusable StatCard and DashboardWidget components for consistency
+  - Dashboard metrics calculate correctly with date range helpers
+  - Personnel performance table sorts by quotes given descending
+DEPENDENCIES ADDED: None
