@@ -76,7 +76,7 @@ describe("Auth Configuration", () => {
       const tokenWithRemember: JWT = { rememberMe: true };
       const resultRemember = await jwtCallback!({
         token: tokenWithRemember,
-        user: null,
+        user: undefined as unknown as User,
         account: null,
         profile: undefined,
         trigger: "signIn",
@@ -89,7 +89,7 @@ describe("Auth Configuration", () => {
       const tokenWithoutRemember: JWT = { rememberMe: false };
       const resultNoRemember = await jwtCallback!({
         token: tokenWithoutRemember,
-        user: null,
+        user: undefined as unknown as User,
         account: null,
         profile: undefined,
         trigger: "signIn",
@@ -131,7 +131,7 @@ describe("Auth Configuration", () => {
       const result = (await sessionCallback!({
         session: mockSession,
         token: mockToken,
-        user: undefined as unknown as User,
+        user: { id: "user-123", email: "test@example.com", emailVerified: new Date() },
         newSession: undefined,
         trigger: "update",
       })) as SessionWithRole;

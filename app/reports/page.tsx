@@ -1,263 +1,171 @@
-"use client";
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth";
+import { DashboardLayout } from "@/components/dashboard-layout";
+import Link from "next/link";
+import { ArrowLeft, BarChart3, FileText, Users, TrendingUp, Globe } from "lucide-react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { format, subDays, startOfQuarter, startOfYear } from "date-fns";
-import {
-  CalendarDays,
-  Users,
-  BarChart3,
-  Globe,
-  PieChart,
-  Calendar,
-  ArrowRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+export default async function ReportsPage() {
+  const session = await getServerSession(authOptions);
 
-interface ReportCard {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
+  if (!session) {
+    redirect("/login");
+  }
 
-const reports: ReportCard[] = [
-  {
-    id: "periodic-quotation",
-    title: "Dönemsel Teklif Raporu",
-    description:
-      "Zaman bazlı teklif hacimleri ve başarı oranlarını analiz edin.",
-    icon: <CalendarDays className="w-7 h-7" />,
-  },
-  {
-    id: "personnel-performance",
-    title: "Personel Performans Raporu",
-    description:
-      "Satış temsilcisi metrikleri, dönüşüm oranları ve ekip performansını takip edin.",
-    icon: <Users className="w-7 h-7" />,
-  },
-  {
-    id: "won-lost-analysis",
-    title: "Kazanılan/Kaybedilen Analizi",
-    description:
-      "Başarılı sevkiyatların kaybedilen fırsatlarla karşılaştırmalı detaylı analizi.",
-    icon: <BarChart3 className="w-7 h-7" />,
-  },
-  {
-    id: "country-mode-volume",
-    title: "Ülke/Mod Hacim Raporu",
-    description:
-      "Varış ülkesi ve taşıma moduna göre sevkiyat hacimlerinin analizi.",
-    icon: <Globe className="w-7 h-7" />,
-  },
-  {
-    id: "loss-reason",
-    title: "Kaybetme Nedeni Analizi",
-    description:
-      "Kaybedilen fırsatların nedenleri ve gelecekteki strateji geliştirme.",
-    icon: <PieChart className="w-7 h-7" />,
-  },
-];
-
-export default function ReportsPage() {
-  const router = useRouter();
-  const [fromDate, setFromDate] = useState<string>(
-    format(subDays(new Date(), 30), "yyyy-MM-dd")
-  );
-  const [toDate, setToDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
-  const [includeDrafts, setIncludeDrafts] = useState(true);
-  const [onlyHighValue, setOnlyHighValue] = useState(false);
-  const [isGenerating, setIsGenerating] = useState<string | null>(null);
-
-  const handleQuickSelect = (days: number) => {
-    setFromDate(format(subDays(new Date(), days), "yyyy-MM-dd"));
-    setToDate(format(new Date(), "yyyy-MM-dd"));
-  };
-
-  const handleQuarterSelect = () => {
-    setFromDate(format(startOfQuarter(new Date()), "yyyy-MM-dd"));
-    setToDate(format(new Date(), "yyyy-MM-dd"));
-  };
-
-  const handleYearSelect = () => {
-    setFromDate(format(startOfYear(new Date()), "yyyy-MM-dd"));
-    setToDate(format(new Date(), "yyyy-MM-dd"));
-  };
-
-  const handleGenerateReport = async (reportId: string) => {
-    setIsGenerating(reportId);
-
-    const params = new URLSearchParams({
-      type: reportId,
-      startDate: fromDate,
-      endDate: toDate,
-    });
-
-    if (onlyHighValue) {
-      params.append("minValue", "10000");
-    }
-
-    router.push(`/reports/preview?${params.toString()}`);
-  };
+  const isAdmin = session.user.role === "ADMIN";
 
   return (
-    <div className="flex min-h-screen bg-[var(--color-background-light)] dark:bg-[var(--color-background-dark)]">
-      {/* Sidebar */}
-      <aside className="w-full md:w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col gap-6 overflow-y-auto shrink-0">
-        <div>
-          <h3 className="font-bold text-lg mb-4">Tarih Aralığı</h3>
-          <div className="space-y-4">
-            <div className="flex flex-col gap-1">
-              <Label className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                Başlangıç
-              </Label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <Input
-                  type="date"
-                  value={fromDate}
-                  onChange={(e) => setFromDate(e.target.value)}
-                  className="pl-10 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Label className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                Bitiş
-              </Label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <Input
-                  type="date"
-                  value={toDate}
-                  onChange={(e) => setToDate(e.target.value)}
-                  className="pl-10 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700"
-                />
-              </div>
-            </div>
+    <DashboardLayout
+      user={{
+        name: session.user.name || "",
+        email: session.user.email || "",
+        role: session.user.role,
+      }}
+      title="Reports"
+    >
+      <div className="space-y-6">
+        {/* Back Link */}
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Link>
 
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-              <h4 className="text-sm font-bold mb-3">Hızlı Seçim</h4>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleQuickSelect(7)}
-                  className="text-xs"
-                >
-                  Son 7 Gün
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleQuickSelect(30)}
-                  className="text-xs"
-                >
-                  Son 30 Gün
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleQuarterSelect}
-                  className="text-xs"
-                >
-                  Bu Çeyrek
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleYearSelect}
-                  className="text-xs"
-                >
-                  YTD
-                </Button>
-              </div>
-            </div>
+        {/* Reports Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ReportCard
+            title="Periodic Quotation Report"
+            description="View all quotations for a specific time period with filters"
+            icon={FileText}
+            href="/reports/quotations"
+            color="blue"
+          />
+          <ReportCard
+            title="Personnel Performance"
+            description="Track team performance and individual metrics"
+            icon={Users}
+            href="/reports/performance"
+            color="green"
+            adminOnly
+            isAdmin={isAdmin}
+          />
+          <ReportCard
+            title="Win/Loss Analysis"
+            description="Analyze won and lost quotations with reasons"
+            icon={TrendingUp}
+            href="/reports/winloss"
+            color="purple"
+            adminOnly
+            isAdmin={isAdmin}
+          />
+          <ReportCard
+            title="Geographic Distribution"
+            description="View quotation distribution by countries and routes"
+            icon={Globe}
+            href="/reports/geographic"
+            color="amber"
+            adminOnly
+            isAdmin={isAdmin}
+          />
+        </div>
 
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-              <h4 className="text-sm font-bold mb-3">Filtreler</h4>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="include-drafts"
-                    checked={includeDrafts}
-                    onCheckedChange={(checked) =>
-                      setIncludeDrafts(checked as boolean)
-                    }
-                  />
-                  <Label htmlFor="include-drafts" className="text-sm">
-                    Taslakları Dahil Et
-                  </Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="high-value"
-                    checked={onlyHighValue}
-                    onCheckedChange={(checked) =>
-                      setOnlyHighValue(checked as boolean)
-                    }
-                  />
-                  <Label htmlFor="high-value" className="text-sm">
-                    Sadece Yüksek Değer (10k+)
-                  </Label>
-                </div>
-              </div>
+        {/* Coming Soon */}
+        {!isAdmin && (
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="w-5 h-5 text-slate-400" />
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Additional reports are available for administrators. Contact your admin for access.
+              </p>
             </div>
           </div>
-        </div>
-      </aside>
+        )}
+      </div>
+    </DashboardLayout>
+  );
+}
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-[32px] font-bold leading-tight mb-2">Raporlar</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm max-w-2xl">
-              Nakliye operasyonlarınız için yönetici raporları seçin ve
-              oluşturun. Veriler yan tarafta seçilen tarih aralığına göre
-              üretilir.
+interface ReportCardProps {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  href: string;
+  color: "blue" | "green" | "purple" | "amber";
+  adminOnly?: boolean;
+  isAdmin?: boolean;
+}
+
+function ReportCard({
+  title,
+  description,
+  icon: Icon,
+  href,
+  color,
+  adminOnly,
+  isAdmin,
+}: ReportCardProps) {
+  const colorClasses = {
+    blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800",
+    green:
+      "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800",
+    purple:
+      "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
+    amber:
+      "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
+  };
+
+  if (adminOnly && !isAdmin) {
+    return (
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 p-6 opacity-60">
+        <div className="flex items-start gap-4">
+          <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
+            <Icon className="w-6 h-6" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-slate-900 dark:text-white">
+                {title}
+              </h3>
+              <span className="px-2 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs rounded-full">
+                Admin
+              </span>
+            </div>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              {description}
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {reports.map((report, index) => (
-              <div
-                key={report.id}
-                className={`bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col hover:shadow-md transition-shadow ${
-                  index === 4 ? "md:col-span-2 lg:col-span-1" : ""
-                }`}
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="size-12 rounded-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center shrink-0">
-                    {report.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold leading-tight mb-1">
-                      {report.title}
-                    </h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                      {report.description}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                  <Button
-                    onClick={() => handleGenerateReport(report.id)}
-                    disabled={isGenerating === report.id}
-                    className="flex items-center gap-2 h-9 px-4 bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
-                  >
-                    <span>Oluştur</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 dark:hover:border-primary/50 transition-colors group block"
+    >
+      <div className="flex items-start gap-4">
+        <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
+          <Icon className="w-6 h-6" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+              {title}
+            </h3>
+            {adminOnly && (
+              <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                Admin
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            {description}
+          </p>
+        </div>
+      </div>
+    </Link>
   );
 }

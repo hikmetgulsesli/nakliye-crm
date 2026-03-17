@@ -1,18 +1,5 @@
 STATUS: done
-STORY_BRANCH: 8c3ba605-US-001
-PR_URL: https://github.com/hikmetgulsesli/nakliye-crm/pull/1
-CHANGES: 
-- Updated layout.tsx with Plus Jakarta Sans and Work Sans fonts
-- Updated globals.css with design tokens (colors, fonts, borders)
-- Added Prisma schema with core tables: users, customers, quotations, activities, lookup_values, audit_log
-- Added seed.ts with Turkish lookup values (transport modes, incoterms, package types, cargo types)
-- Created lib/prisma.ts for database client
-- Added Jest configuration and test setup
-TESTS:
-- setup.test.ts: Basic project setup verification (3 tests)
-- design-tokens.test.ts: Design token definitions (5 tests)
-- database-schema.test.ts: Database schema model verification (5 tests)
-- All 13 tests passing
-- Lint: clean (0 errors)
-- Typecheck: passed
-- Build: successful
+STORY_BRANCH: 8c3ba605-03ce-437d-9ecd-8cc5bbc18313-US-011
+PR_URL: https://github.com/hikmetgulsesli/nakliye-crm/pull/12
+CHANGES: Implemented Dashboard System with User Dashboard (personal metrics, upcoming follow-ups, customers to call, pending quotes, recent activities) and Admin Dashboard (team metrics, personnel performance table, origin/destination country charts, mode distribution, loss reason analysis)
+TESTS: All 51 tests pass, lint clean, build successful
