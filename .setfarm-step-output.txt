@@ -1,5 +1,0 @@
-STATUS: done
-STORY_BRANCH: 8c3ba605-03ce-437d-9ecd-8cc5bbc18313-US-011
-PR_URL: https://github.com/hikmetgulsesli/nakliye-crm/pull/12
-CHANGES: Implemented Dashboard System with User Dashboard (personal metrics, upcoming follow-ups, customers to call, pending quotes, recent activities) and Admin Dashboard (team metrics, personnel performance table, origin/destination country charts, mode distribution, loss reason analysis)
-TESTS: All 51 tests pass, lint clean, build successful
