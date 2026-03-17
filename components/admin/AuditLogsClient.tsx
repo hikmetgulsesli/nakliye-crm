@@ -1,18 +1,28 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { format, endOfDay } from 'date-fns';
-
-// Types
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatarUrl: string | null;
-}
+import { useState, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Download,
+  Search,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  User,
+  Calendar,
+  ArrowRight,
+  FileText,
+  Building,
+  Activity,
+  Package,
+  Settings,
+  LogIn,
+  LogOut,
+  Plus,
+  Edit,
+  Trash2,
+  RefreshCw,
+} from "lucide-react";
 
 interface AuditLog {
   id: string;
@@ -23,596 +33,425 @@ interface AuditLog {
   oldValues: Record<string, unknown> | null;
   newValues: Record<string, unknown> | null;
   ipAddress: string | null;
+  userAgent: string | null;
   createdAt: string;
-  user: User | null;
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+  } | null;
 }
 
-interface Pagination {
+interface PaginationMeta {
   page: number;
   limit: number;
   total: number;
   totalPages: number;
 }
 
+const actionLabels: Record<string, string> = {
+  CREATE: "Oluşturma",
+  UPDATE: "Güncelleme",
+  DELETE: "Silme",
+  TRANSFER: "Devir",
+  LOGIN: "Giriş",
+  LOGOUT: "Çıkış",
+};
+
+const actionIcons: Record<string, React.ReactNode> = {
+  CREATE: <Plus className="w-4 h-4" />,
+  UPDATE: <Edit className="w-4 h-4" />,
+  DELETE: <Trash2 className="w-4 h-4" />,
+  TRANSFER: <RefreshCw className="w-4 h-4" />,
+  LOGIN: <LogIn className="w-4 h-4" />,
+  LOGOUT: <LogOut className="w-4 h-4" />,
+};
+
 const actionColors: Record<string, string> = {
-  CREATE: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50',
-  UPDATE: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50',
-  DELETE: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50',
-  TRANSFER: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50',
-  LOGIN: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
-  LOGOUT: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
+  CREATE: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  UPDATE: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  DELETE: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  TRANSFER: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  LOGIN: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  LOGOUT: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400",
 };
 
-const entityIcons: Record<string, string> = {
-  customer: 'corporate_fare',
-  quotation: 'request_quote',
-  activity: 'event_note',
-  shipment: 'local_shipping',
-  user: 'person',
-  lookup_value: 'list',
+const entityTypeLabels: Record<string, string> = {
+  customer: "Müşteri",
+  quotation: "Teklif",
+  activity: "Aktivite",
+  user: "Kullanıcı",
+  lookup_value: "Liste Değeri",
 };
 
-// Escape CSV cell value according to RFC 4180
-function escapeCSVValue(value: string): string {
-  if (value.includes('"') || value.includes('\n') || value.includes('\r')) {
-    return '"' + value.replace(/"/g, '""') + '"';
-  }
-  return '"' + value + '"';
-}
+const entityTypeIcons: Record<string, React.ReactNode> = {
+  customer: <Building className="w-4 h-4" />,
+  quotation: <FileText className="w-4 h-4" />,
+  activity: <Activity className="w-4 h-4" />,
+  user: <User className="w-4 h-4" />,
+  lookup_value: <Settings className="w-4 h-4" />,
+};
 
 export function AuditLogsClient() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  
+  const { data: session } = useSession();
   const [logs, setLogs] = useState<AuditLog[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
+  const [meta, setMeta] = useState<PaginationMeta>({
     page: 1,
-    limit: 10,
+    limit: 20,
     total: 0,
     totalPages: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  
+  const [error, setError] = useState<string | null>(null);
+
   // Filters
-  const [userSearch, setUserSearch] = useState('');
-  const [actionFilter, setActionFilter] = useState('all');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
+  const [search, setSearch] = useState("");
+  const [action, setAction] = useState("");
+  const [entityType, setEntityType] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  // Validate and clamp pagination params
-  const getValidPage = (p: number): number => Math.max(1, isNaN(p) ? 1 : p);
-  const getValidLimit = (l: number): number => Math.min(100, Math.max(1, isNaN(l) ? 10 : l));
-
-  // Fetch logs - useCallback with stable dependencies
-  const fetchLogs = useCallback(async (fetchPage: number, fetchLimit: number) => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
+    setError(null);
+
     try {
       const params = new URLSearchParams();
-      params.set('page', getValidPage(fetchPage).toString());
-      params.set('limit', getValidLimit(fetchLimit).toString());
-      
-      if (actionFilter !== 'all') {
-        params.set('action', actionFilter);
-      }
-      if (dateFrom) {
-        params.set('dateFrom', dateFrom);
-      }
-      // For dateTo, include time to make the filter inclusive (end of day)
-      if (dateTo) {
-        params.set('dateTo', endOfDay(new Date(dateTo)).toISOString());
-      }
-      // Add user search for server-side filtering
-      if (userSearch.trim()) {
-        params.set('userSearch', userSearch.trim());
-      }
+      params.set("page", meta.page.toString());
+      params.set("limit", meta.limit.toString());
+      if (search) params.set("search", search);
+      if (action) params.set("action", action);
+      if (entityType) params.set("entityType", entityType);
+      if (startDate) params.set("startDate", new Date(startDate).toISOString());
+      if (endDate) params.set("endDate", new Date(endDate).toISOString());
 
       const response = await fetch(`/api/audit-logs?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch audit logs');
-      }
-      
       const data = await response.json();
-      
-      setLogs(data.logs);
-      setPagination(data.pagination);
-    } catch (error) {
-      console.error('Error fetching audit logs:', error);
+
+      if (!response.ok) {
+        throw new Error(data.error?.message || "Kayıtlar alınırken bir hata oluştu");
+      }
+
+      setLogs(data.data);
+      setMeta(data.meta);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
     }
-  }, [actionFilter, dateFrom, dateTo, userSearch]);
+  }, [meta.page, meta.limit, search, action, entityType, startDate, endDate]);
 
-  // Initial fetch and when pagination changes (but not userSearch to avoid excessive calls)
   useEffect(() => {
-    if (status === 'authenticated') {
-      const userRole = (session?.user as { role?: string })?.role;
-      if (userRole !== 'ADMIN') {
-        router.push('/unauthorized');
-        return;
-      }
-      fetchLogs(pagination.page, pagination.limit);
-    }
-  }, [status, session, router, pagination.page, pagination.limit, fetchLogs]);
+    fetchLogs();
+  }, [fetchLogs]);
 
-  // Separate effect for userSearch to avoid refetching on every keystroke
-  useEffect(() => {
-    if (status === 'authenticated' && loading === false) {
-      const userRole = (session?.user as { role?: string })?.role;
-      if (userRole === 'ADMIN') {
-        // Reset to page 1 and fetch when userSearch changes
-        setPagination(prev => ({ ...prev, page: 1 }));
-        fetchLogs(1, pagination.limit);
-      }
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= meta.totalPages) {
+      setMeta((prev) => ({ ...prev, page: newPage }));
     }
-  }, [userSearch]);
-
-  // Clear filters
-  const clearFilters = () => {
-    setUserSearch('');
-    setActionFilter('all');
-    setDateFrom('');
-    setDateTo('');
-    setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  // Export to CSV with proper escaping
-  const exportCSV = () => {
-    const headers = ['Timestamp', 'User', 'Email', 'Action', 'Entity Type', 'Entity ID', 'Changes'];
-    const rows = logs.map(log => {
-      const userName = log.user ? `${log.user.firstName} ${log.user.lastName}` : 'System';
-      const changes = log.newValues 
-        ? Object.keys(log.newValues).join(', ') 
-        : 'N/A';
-      return [
-        format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss'),
-        userName,
-        log.user?.email || 'N/A',
-        log.action,
-        log.entityType,
-        log.entityId || 'N/A',
-        changes,
-      ];
-    });
+  const handleExport = () => {
+    // Convert logs to CSV
+    const headers = ["Tarih", "Kullanıcı", "İşlem", "Kayıt Tipi", "Kayıt ID", "Değişiklikler"];
+    const rows = logs.map((log) => [
+      new Date(log.createdAt).toLocaleString("tr-TR"),
+      log.user ? `${log.user.firstName} ${log.user.lastName}` : "Sistem",
+      actionLabels[log.action] || log.action,
+      entityTypeLabels[log.entityType] || log.entityType,
+      log.entityId || "-",
+      log.action === "UPDATE" && log.oldValues
+        ? Object.entries(log.oldValues as Record<string, { old: unknown; new: unknown }>)
+            .map(([key, value]) => `${key}: ${value.old} → ${value.new}`)
+            .join("; ")
+        : "-",
+    ]);
 
-    const csvContent = [
-      headers.map(h => escapeCSVValue(h)).join(','),
-      ...rows.map(row => row.map(cell => escapeCSVValue(cell)).join(',')),
-    ].join('\r\n');
+    const csv = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(","))].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `audit-logs-${format(new Date(), 'yyyy-MM-dd')}.csv`;
-    document.body.appendChild(link);
+    link.download = `denetim-kayitlari-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
-    document.body.removeChild(link);
-    
-    // Revoke object URL to prevent memory leak
-    setTimeout(() => {
-      URL.revokeObjectURL(link.href);
-    }, 100);
   };
 
-  // Toggle row expansion using functional update to avoid stale closure
-  const toggleRow = (id: string) => {
-    setExpandedRow(prev => prev === id ? null : id);
+  const clearFilters = () => {
+    setSearch("");
+    setAction("");
+    setEntityType("");
+    setStartDate("");
+    setEndDate("");
+    setMeta((prev) => ({ ...prev, page: 1 }));
   };
 
-  // Get field changes for display
-  const getFieldChanges = (log: AuditLog) => {
-    if (!log.oldValues && !log.newValues) return null;
-    
-    const oldFields = log.oldValues || {};
-    const newFields = log.newValues || {};
-    const allFieldKeys = new Set([...Object.keys(oldFields), ...Object.keys(newFields)]);
-    
-    return Array.from(allFieldKeys).map(key => ({
-      field: key,
-      oldValue: oldFields[key] !== undefined ? String(oldFields[key]) : null,
-      newValue: newFields[key] !== undefined ? String(newFields[key]) : null,
-    }));
-  };
-
-  // Check if log has diff to display - explicit boolean return
-  const hasDiff = (log: AuditLog): boolean => {
-    return !!log.oldValues || !!log.newValues;
-  };
-
-  // Render pagination buttons with sliding window around current page
-  const renderPaginationButtons = () => {
-    const buttons: React.ReactNode[] = [];
-    const totalPages = pagination.totalPages;
-    const currentPage = pagination.page;
-    
-    if (totalPages <= 7) {
-      // Show all pages
-      for (let i = 1; i <= totalPages; i++) {
-        buttons.push(
-          <button
-            key={i}
-            onClick={() => setPagination(prev => ({ ...prev, page: i }))}
-            className={`flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-              i === currentPage
-                ? 'bg-primary text-white'
-                : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100'
-            }`}
-            style={i === currentPage ? { backgroundColor: 'var(--color-primary, #1258e2)' } : {}}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      // Sliding window around current page
-      let start = Math.max(1, currentPage - 2);
-      let end = Math.min(totalPages, currentPage + 2);
-      
-      // Adjust window if at edges
-      if (currentPage <= 3) {
-        start = 1;
-        end = 5;
-      } else if (currentPage >= totalPages - 2) {
-        start = totalPages - 4;
-        end = totalPages;
-      }
-      
-      // First page
-      if (start > 1) {
-        buttons.push(
-          <button
-            key={1}
-            onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
-            className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium transition-colors"
-          >
-            1
-          </button>
-        );
-        if (start > 2) {
-          buttons.push(<span key="ellipsis1" className="flex size-8 items-center justify-center text-slate-400">...</span>);
-        }
-      }
-      
-      // Window pages
-      for (let i = start; i <= end; i++) {
-        buttons.push(
-          <button
-            key={i}
-            onClick={() => setPagination(prev => ({ ...prev, page: i }))}
-            className={`flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-              i === currentPage
-                ? 'bg-primary text-white'
-                : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100'
-            }`}
-            style={i === currentPage ? { backgroundColor: 'var(--color-primary, #1258e2)' } : {}}
-          >
-            {i}
-          </button>
-        );
-      }
-      
-      // Last page
-      if (end < totalPages) {
-        if (end < totalPages - 1) {
-          buttons.push(<span key="ellipsis2" className="flex size-8 items-center justify-center text-slate-400">...</span>);
-        }
-        buttons.push(
-          <button
-            key={totalPages}
-            onClick={() => setPagination(prev => ({ ...prev, page: totalPages }))}
-            className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium transition-colors"
-          >
-            {totalPages}
-          </button>
-        );
-      }
+  const formatChanges = (log: AuditLog): string => {
+    if (log.action === "UPDATE" && log.oldValues) {
+      const changes = log.oldValues as Record<string, { old: unknown; new: unknown }>;
+      return Object.entries(changes)
+        .map(([key, value]) => {
+          const fieldName = key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
+          return `${fieldName}: ${value.old} → ${value.new}`;
+        })
+        .join(", ");
     }
-    
-    return buttons;
+    if (log.action === "CREATE" && log.newValues) {
+      return "Yeni kayıt oluşturuldu";
+    }
+    if (log.action === "DELETE") {
+      return "Kayıt silindi";
+    }
+    return "-";
   };
-
-  if (status === 'loading') {
-    return <div className="p-10">Loading...</div>;
-  }
 
   return (
-    <main className="flex-1 px-10 py-8 flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 font-display">
-          Audit Logs
-        </h1>
-        <button
-          onClick={exportCSV}
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg h-10 px-5 bg-primary hover:bg-primary/90 transition-colors text-white text-sm font-medium shadow-sm"
-          style={{ backgroundColor: 'var(--color-primary, #1258e2)' }}
-        >
-          <span className="material-symbols-outlined text-[20px]">download</span>
-          <span>Export CSV</span>
-        </button>
-      </div>
-
+    <div className="h-full flex flex-col">
       {/* Filters */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm">
-        <div className="flex flex-wrap gap-4 items-end">
-          {/* User Search */}
-          <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              User
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[20px]">
-                person_search
-              </span>
-              <input
-                type="text"
-                value={userSearch}
-                onChange={(e) => setUserSearch(e.target.value)}
-                placeholder="Search users..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all"
-                style={{ '--tw-ring-color': 'var(--color-primary, #1258e2)' } as React.CSSProperties}
-              />
-            </div>
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Search */}
+          <div className="relative flex-1 min-w-[200px] max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Kullanıcı, işlem veya kayıt ara..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
+            />
           </div>
 
           {/* Action Filter */}
-          <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Operation Type
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[20px]">
-                filter_list
-              </span>
-              <select
-                value={actionFilter}
-                onChange={(e) => setActionFilter(e.target.value)}
-                className="w-full h-10 pl-10 pr-10 appearance-none rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100 transition-all cursor-pointer"
-                style={{ '--tw-ring-color': 'var(--color-primary, #1258e2)' } as React.CSSProperties}
-              >
-                <option value="all">All Operations</option>
-                <option value="create">Create</option>
-                <option value="update">Update</option>
-                <option value="delete">Delete</option>
-                <option value="transfer">Transfer</option>
-                <option value="login">Login</option>
-                <option value="logout">Logout</option>
-              </select>
-              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[20px] pointer-events-none">
-                expand_more
-              </span>
-            </div>
-          </div>
+          <select
+            value={action}
+            onChange={(e) => setAction(e.target.value)}
+            className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="">Tüm İşlemler</option>
+            <option value="CREATE">Oluşturma</option>
+            <option value="UPDATE">Güncelleme</option>
+            <option value="DELETE">Silme</option>
+            <option value="TRANSFER">Devir</option>
+            <option value="LOGIN">Giriş</option>
+            <option value="LOGOUT">Çıkış</option>
+          </select>
 
-          {/* Date From */}
-          <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Date From
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[20px]">
-                calendar_month
-              </span>
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100 transition-all cursor-pointer"
-                style={{ '--tw-ring-color': 'var(--color-primary, #1258e2)' } as React.CSSProperties}
-              />
-            </div>
-          </div>
+          {/* Entity Type Filter */}
+          <select
+            value={entityType}
+            onChange={(e) => setEntityType(e.target.value)}
+            className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="">Tüm Kayıt Tipleri</option>
+            <option value="customer">Müşteri</option>
+            <option value="quotation">Teklif</option>
+            <option value="activity">Aktivite</option>
+            <option value="user">Kullanıcı</option>
+            <option value="lookup_value">Liste Değeri</option>
+          </select>
 
-          {/* Date To */}
-          <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Date To
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[20px]">
-                calendar_month
-              </span>
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-slate-100 transition-all cursor-pointer"
-                style={{ '--tw-ring-color': 'var(--color-primary, #1258e2)' } as React.CSSProperties}
-              />
-            </div>
-          </div>
+          {/* Date Range */}
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
+            placeholder="Başlangıç"
+          />
+          <span className="text-slate-400">-</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-primary"
+            placeholder="Bitiş"
+          />
 
           {/* Clear Filters */}
           <button
             onClick={clearFilters}
-            className="h-10 px-4 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100 transition-colors flex items-center justify-center font-medium text-sm"
+            className="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
           >
-            Clear Filters
+            Filtreleri Temizle
+          </button>
+
+          {/* Export */}
+          <button
+            onClick={handleExport}
+            disabled={logs.length === 0}
+            className="ml-auto px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            CSV Export
           </button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-[180px]">
-                  Timestamp
-                </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-[150px]">
-                  Operation
-                </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-[200px]">
-                  Record Type
-                </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-[150px]">
-                  Record ID
-                </th>
-                <th className="px-6 py-4 w-[60px]"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
-                    Loading audit logs...
-                  </td>
-                </tr>
-              ) : logs.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
-                    No audit logs found
-                  </td>
-                </tr>
-              ) : (
-                logs.map((log) => (
-                  <tbody key={log.id}>
-                    <tr
-                      onClick={() => hasDiff(log) && toggleRow(log.id)}
-                      className={`hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors ${hasDiff(log) ? 'cursor-pointer group' : ''}`}
-                    >
-                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                        <div className="font-medium text-slate-900 dark:text-slate-100">
-                          {format(new Date(log.createdAt), 'yyyy-MM-dd')}
-                        </div>
-                        <div className="text-xs mt-0.5">
-                          {format(new Date(log.createdAt), 'hh:mm:ss a')}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm font-medium">
-                            {log.user ? (
-                              <>
-                                {log.user.firstName[0]}{log.user.lastName[0]}
-                              </>
-                            ) : (
-                              <span className="material-symbols-outlined text-[16px]">computer</span>
-                            )}
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                              {log.user ? `${log.user.firstName} ${log.user.lastName}` : 'System'}
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {log.user?.email || 'N/A'}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${actionColors[log.action] || actionColors.UPDATE}`}>
-                          {log.action.charAt(0) + log.action.slice(1).toLowerCase()}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-900 dark:text-slate-100">
-                        <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[18px] text-slate-400 dark:text-slate-500">
-                            {entityIcons[log.entityType] || 'description'}
-                          </span>
-                          <span className="capitalize">{log.entityType.replace('_', ' ')}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">
-                        {log.entityId ? (
-                          <span className="hover:text-primary transition-colors hover:underline cursor-pointer">
-                            {log.entityId.slice(0, 8)}...
-                          </span>
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        {hasDiff(log) && (
-                          <span className={`material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors text-[20px] ${expandedRow === log.id ? 'rotate-180' : ''}`}>
-                            expand_more
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                    {/* Expanded Row - Field Changes */}
-                    {expandedRow === log.id && hasDiff(log) && (
-                      <tr className="bg-slate-50 dark:bg-slate-900 border-b-0">
-                        <td colSpan={6} className="px-6 py-4">
-                          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4 shadow-sm">
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                              Field Changes
-                            </h4>
-                            <div className="flex flex-col gap-2">
-                              {getFieldChanges(log)?.map((change) => (
-                                <div key={change.field} className="flex items-center gap-4 text-sm">
-                                  <span className="text-slate-500 dark:text-slate-400 w-[120px] font-medium capitalize">
-                                    {change.field.replace(/_/g, ' ')}
-                                  </span>
-                                  {change.oldValue !== null ? (
-                                    <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 line-through decoration-red-500/50">
-                                      {change.oldValue}
-                                    </span>
-                                  ) : (
-                                    <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-400 italic">
-                                      null
-                                    </span>
-                                  )}
-                                  <span className="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500">
-                                    arrow_right_alt
-                                  </span>
-                                  {change.newValue !== null ? (
-                                    <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 font-medium">
-                                      {change.newValue}
-                                    </span>
-                                  ) : (
-                                    <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-400 italic">
-                                      null
-                                    </span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination */}
-        {!loading && logs.length > 0 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
-            <div className="text-sm text-slate-500 dark:text-slate-400">
-              Showing <span className="font-medium text-slate-900 dark:text-slate-100">{logs.length}</span> of{' '}
-              <span className="font-medium text-slate-900 dark:text-slate-100">{pagination.total}</span> results
-            </div>
-            <div className="flex items-center gap-1">
+      <div className="flex-1 overflow-auto">
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <p className="text-red-500 dark:text-red-400">{error}</p>
               <button
-                onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-                disabled={pagination.page <= 1}
-                className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={fetchLogs}
+                className="mt-2 px-4 py-2 text-sm text-primary hover:underline"
               >
-                <span className="material-symbols-outlined text-[18px]">chevron_left</span>
-              </button>
-              
-              {renderPaginationButtons()}
-              
-              <button
-                onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                disabled={pagination.page >= pagination.totalPages}
-                className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                Tekrar Dene
               </button>
             </div>
           </div>
+        ) : logs.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center text-slate-500 dark:text-slate-400">
+              <Filter className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p>Denetim kaydı bulunamadı</p>
+              <p className="text-sm mt-1">Filtreleri değiştirmeyi deneyin</p>
+            </div>
+          </div>
+        ) : (
+          <table className="w-full">
+            <thead className="bg-slate-50 dark:bg-slate-800 sticky top-0">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Tarih
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Kullanıcı
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  İşlem
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Kayıt
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Değişiklikler
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+              {logs.map((log) => (
+                <tr
+                  key={log.id}
+                  className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                >
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                      <Calendar className="w-4 h-4 text-slate-400" />
+                      {new Date(log.createdAt).toLocaleString("tr-TR")}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {log.user ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-medium">
+                          {log.user.firstName[0]}{log.user.lastName[0]}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                            {log.user.firstName} {log.user.lastName}
+                          </p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{log.user.email}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-sm text-slate-500 dark:text-slate-400">Sistem</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                        actionColors[log.action]
+                      }`}
+                    >
+                      {actionIcons[log.action]}
+                      {actionLabels[log.action] || log.action}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-400">{entityTypeIcons[log.entityType]}</span>
+                      <span className="text-sm text-slate-700 dark:text-slate-300">
+                        {entityTypeLabels[log.entityType] || log.entityType}
+                      </span>
+                      {log.entityId && (
+                        <span className="text-xs text-slate-400 font-mono">
+                          {log.entityId.slice(0, 8)}...
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md truncate">
+                      {formatChanges(log)}
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
-    </main>
+
+      {/* Pagination */}
+      {meta.totalPages > 0 && (
+        <div className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+          <div className="text-sm text-slate-500 dark:text-slate-400">
+            Toplam {meta.total} kayıttan {(meta.page - 1) * meta.limit + 1} -{" "}
+            {Math.min(meta.page * meta.limit, meta.total)} arası gösteriliyor
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(meta.page - 1)}
+              disabled={meta.page === 1}
+              className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            {Array.from({ length: Math.min(5, meta.totalPages) }, (_, i) => {
+              const pageNum = i + 1;
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                    meta.page === pageNum
+                      ? "bg-primary text-white"
+                      : "border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+            {meta.totalPages > 5 && (
+              <>
+                <span className="text-slate-400">...</span>
+                <button
+                  onClick={() => handlePageChange(meta.totalPages)}
+                  className="w-8 h-8 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors"
+                >
+                  {meta.totalPages}
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => handlePageChange(meta.page + 1)}
+              disabled={meta.page === meta.totalPages}
+              className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

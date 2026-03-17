@@ -55,8 +55,6 @@ export async function GET(
             id: true,
             quoteNumber: true,
             status: true,
-            totalCost: true,
-            currency: true,
             createdAt: true,
           },
           orderBy: { createdAt: "desc" },
