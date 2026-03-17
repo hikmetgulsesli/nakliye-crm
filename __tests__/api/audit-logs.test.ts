@@ -17,7 +17,6 @@ describe("Audit Log System", () => {
   beforeAll(async () => {
     // Clean up any existing test data
     await prisma.auditLog.deleteMany({});
-    await prisma.quotationRevision.deleteMany({});
     await prisma.quotation.deleteMany({});
     await prisma.customer.deleteMany({ where: { email: { contains: "test-audit" } } });
     await prisma.user.deleteMany({ where: { email: { contains: "test-audit" } } });
@@ -59,7 +58,6 @@ describe("Audit Log System", () => {
   afterAll(async () => {
     // Clean up
     await prisma.auditLog.deleteMany({});
-    await prisma.quotationRevision.deleteMany({});
     await prisma.quotation.deleteMany({});
     await prisma.customer.deleteMany({ where: { id: testCustomer?.id } });
     await prisma.user.deleteMany({ where: { id: { in: [adminUser?.id, salesRep?.id] } } });
