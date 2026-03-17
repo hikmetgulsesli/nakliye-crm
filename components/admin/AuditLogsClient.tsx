@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { format } from 'date-fns';
+import { format, endOfDay } from 'date-fns';
 
 // Types
 interface User {
@@ -52,6 +52,14 @@ const entityIcons: Record<string, string> = {
   lookup_value: 'list',
 };
 
+// Escape CSV cell value according to RFC 4180
+function escapeCSVValue(value: string): string {
+  if (value.includes('"') || value.includes('\n') || value.includes('\r')) {
+    return '"' + value.replace(/"/g, '""') + '"';
+  }
+  return '"' + value + '"';
+}
+
 export function AuditLogsClient() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -72,13 +80,17 @@ export function AuditLogsClient() {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
 
-  // Fetch logs
-  const fetchLogs = useCallback(async () => {
+  // Validate and clamp pagination params
+  const getValidPage = (p: number): number => Math.max(1, isNaN(p) ? 1 : p);
+  const getValidLimit = (l: number): number => Math.min(100, Math.max(1, isNaN(l) ? 10 : l));
+
+  // Fetch logs - useCallback with stable dependencies
+  const fetchLogs = useCallback(async (fetchPage: number, fetchLimit: number) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.set('page', pagination.page.toString());
-      params.set('limit', pagination.limit.toString());
+      params.set('page', getValidPage(fetchPage).toString());
+      params.set('limit', getValidLimit(fetchLimit).toString());
       
       if (actionFilter !== 'all') {
         params.set('action', actionFilter);
@@ -86,8 +98,13 @@ export function AuditLogsClient() {
       if (dateFrom) {
         params.set('dateFrom', dateFrom);
       }
+      // For dateTo, include time to make the filter inclusive (end of day)
       if (dateTo) {
-        params.set('dateTo', dateTo);
+        params.set('dateTo', endOfDay(new Date(dateTo)).toISOString());
+      }
+      // Add user search for server-side filtering
+      if (userSearch.trim()) {
+        params.set('userSearch', userSearch.trim());
       }
 
       const response = await fetch(`/api/audit-logs?${params.toString()}`);
@@ -97,29 +114,16 @@ export function AuditLogsClient() {
       
       const data = await response.json();
       
-      // Filter by user search locally (for better UX)
-      let filteredLogs = data.logs;
-      if (userSearch.trim()) {
-        const searchLower = userSearch.toLowerCase();
-        filteredLogs = data.logs.filter((log: AuditLog) => {
-          if (!log.user) return false;
-          return (
-            log.user.firstName.toLowerCase().includes(searchLower) ||
-            log.user.lastName.toLowerCase().includes(searchLower) ||
-            log.user.email.toLowerCase().includes(searchLower)
-          );
-        });
-      }
-      
-      setLogs(filteredLogs);
+      setLogs(data.logs);
       setPagination(data.pagination);
     } catch (error) {
       console.error('Error fetching audit logs:', error);
     } finally {
       setLoading(false);
     }
-  }, [pagination.page, pagination.limit, actionFilter, dateFrom, dateTo, userSearch]);
+  }, [actionFilter, dateFrom, dateTo, userSearch]);
 
+  // Initial fetch and when pagination changes (but not userSearch to avoid excessive calls)
   useEffect(() => {
     if (status === 'authenticated') {
       const userRole = (session?.user as { role?: string })?.role;
@@ -127,9 +131,21 @@ export function AuditLogsClient() {
         router.push('/unauthorized');
         return;
       }
-      fetchLogs();
+      fetchLogs(pagination.page, pagination.limit);
     }
-  }, [status, session, router, fetchLogs]);
+  }, [status, session, router, pagination.page, pagination.limit, fetchLogs]);
+
+  // Separate effect for userSearch to avoid refetching on every keystroke
+  useEffect(() => {
+    if (status === 'authenticated' && loading === false) {
+      const userRole = (session?.user as { role?: string })?.role;
+      if (userRole === 'ADMIN') {
+        // Reset to page 1 and fetch when userSearch changes
+        setPagination(prev => ({ ...prev, page: 1 }));
+        fetchLogs(1, pagination.limit);
+      }
+    }
+  }, [userSearch]);
 
   // Clear filters
   const clearFilters = () => {
@@ -140,7 +156,7 @@ export function AuditLogsClient() {
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  // Export to CSV
+  // Export to CSV with proper escaping
   const exportCSV = () => {
     const headers = ['Timestamp', 'User', 'Email', 'Action', 'Entity Type', 'Entity ID', 'Changes'];
     const rows = logs.map(log => {
@@ -160,9 +176,9 @@ export function AuditLogsClient() {
     });
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
-    ].join('\n');
+      headers.map(h => escapeCSVValue(h)).join(','),
+      ...rows.map(row => row.map(cell => escapeCSVValue(cell)).join(',')),
+    ].join('\r\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
@@ -171,11 +187,16 @@ export function AuditLogsClient() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Revoke object URL to prevent memory leak
+    setTimeout(() => {
+      URL.revokeObjectURL(link.href);
+    }, 100);
   };
 
-  // Toggle row expansion
+  // Toggle row expansion using functional update to avoid stale closure
   const toggleRow = (id: string) => {
-    setExpandedRow(expandedRow === id ? null : id);
+    setExpandedRow(prev => prev === id ? null : id);
   };
 
   // Get field changes for display
@@ -193,9 +214,101 @@ export function AuditLogsClient() {
     }));
   };
 
-  // Check if log has diff to display
-  const hasDiff = (log: AuditLog) => {
-    return log.oldValues || log.newValues;
+  // Check if log has diff to display - explicit boolean return
+  const hasDiff = (log: AuditLog): boolean => {
+    return !!log.oldValues || !!log.newValues;
+  };
+
+  // Render pagination buttons with sliding window around current page
+  const renderPaginationButtons = () => {
+    const buttons: React.ReactNode[] = [];
+    const totalPages = pagination.totalPages;
+    const currentPage = pagination.page;
+    
+    if (totalPages <= 7) {
+      // Show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        buttons.push(
+          <button
+            key={i}
+            onClick={() => setPagination(prev => ({ ...prev, page: i }))}
+            className={`flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
+              i === currentPage
+                ? 'bg-primary text-white'
+                : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100'
+            }`}
+            style={i === currentPage ? { backgroundColor: 'var(--color-primary, #1258e2)' } : {}}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      // Sliding window around current page
+      let start = Math.max(1, currentPage - 2);
+      let end = Math.min(totalPages, currentPage + 2);
+      
+      // Adjust window if at edges
+      if (currentPage <= 3) {
+        start = 1;
+        end = 5;
+      } else if (currentPage >= totalPages - 2) {
+        start = totalPages - 4;
+        end = totalPages;
+      }
+      
+      // First page
+      if (start > 1) {
+        buttons.push(
+          <button
+            key={1}
+            onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
+            className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium transition-colors"
+          >
+            1
+          </button>
+        );
+        if (start > 2) {
+          buttons.push(<span key="ellipsis1" className="flex size-8 items-center justify-center text-slate-400">...</span>);
+        }
+      }
+      
+      // Window pages
+      for (let i = start; i <= end; i++) {
+        buttons.push(
+          <button
+            key={i}
+            onClick={() => setPagination(prev => ({ ...prev, page: i }))}
+            className={`flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
+              i === currentPage
+                ? 'bg-primary text-white'
+                : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100'
+            }`}
+            style={i === currentPage ? { backgroundColor: 'var(--color-primary, #1258e2)' } : {}}
+          >
+            {i}
+          </button>
+        );
+      }
+      
+      // Last page
+      if (end < totalPages) {
+        if (end < totalPages - 1) {
+          buttons.push(<span key="ellipsis2" className="flex size-8 items-center justify-center text-slate-400">...</span>);
+        }
+        buttons.push(
+          <button
+            key={totalPages}
+            onClick={() => setPagination(prev => ({ ...prev, page: totalPages }))}
+            className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium transition-colors"
+          >
+            {totalPages}
+          </button>
+        );
+      }
+    }
+    
+    return buttons;
   };
 
   if (status === 'loading') {
@@ -358,9 +471,8 @@ export function AuditLogsClient() {
                 </tr>
               ) : (
                 logs.map((log) => (
-                  <>
+                  <tbody key={log.id}>
                     <tr
-                      key={log.id}
                       onClick={() => hasDiff(log) && toggleRow(log.id)}
                       className={`hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors ${hasDiff(log) ? 'cursor-pointer group' : ''}`}
                     >
@@ -388,7 +500,7 @@ export function AuditLogsClient() {
                               {log.user ? `${log.user.firstName} ${log.user.lastName}` : 'System'}
                             </div>
                             <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {log.user?.email || 'system@nakliye-crm.com'}
+                              {log.user?.email || 'N/A'}
                             </div>
                           </div>
                         </div>
@@ -432,8 +544,8 @@ export function AuditLogsClient() {
                               Field Changes
                             </h4>
                             <div className="flex flex-col gap-2">
-                              {getFieldChanges(log)?.map((change, idx) => (
-                                <div key={idx} className="flex items-center gap-4 text-sm">
+                              {getFieldChanges(log)?.map((change) => (
+                                <div key={change.field} className="flex items-center gap-4 text-sm">
                                   <span className="text-slate-500 dark:text-slate-400 w-[120px] font-medium capitalize">
                                     {change.field.replace(/_/g, ' ')}
                                   </span>
@@ -465,7 +577,7 @@ export function AuditLogsClient() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </tbody>
                 ))
               )}
             </tbody>
@@ -488,36 +600,7 @@ export function AuditLogsClient() {
                 <span className="material-symbols-outlined text-[18px]">chevron_left</span>
               </button>
               
-              {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-                const pageNum = i + 1;
-                const isActive = pageNum === pagination.page;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setPagination(prev => ({ ...prev, page: pageNum }))}
-                    className={`flex size-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-primary text-white'
-                        : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100'
-                    }`}
-                    style={isActive ? { backgroundColor: 'var(--color-primary, #1258e2)' } : {}}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-              
-              {pagination.totalPages > 5 && (
-                <>
-                  <span className="flex size-8 items-center justify-center text-slate-400">...</span>
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: pagination.totalPages }))}
-                    className="flex size-8 items-center justify-center rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium transition-colors"
-                  >
-                    {pagination.totalPages}
-                  </button>
-                </>
-              )}
+              {renderPaginationButtons()}
               
               <button
                 onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
