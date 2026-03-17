@@ -65,18 +65,6 @@ export async function GET(
             lastName: true,
           },
         },
-        revisions: {
-          orderBy: { revisionNumber: "desc" },
-          include: {
-            revisedBy: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-              },
-            },
-          },
-        },
       },
     });
 
@@ -199,11 +187,19 @@ export async function PATCH(
       });
     }
 
-    // Update quotation and create revision in a transaction
+    // Update quotation and create audit log in a transaction
     const updatedQuotation = await prisma.$transaction(async (tx) => {
-      // Increment revision count
-      const newRevisionCount = existingQuotation.revisionCount + 1;
-      updateData.revisionCount = newRevisionCount;
+      // Create audit log
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: "UPDATE",
+          entityType: "quotation",
+          entityId: id,
+          oldValues: changedFields as Prisma.InputJsonValue,
+          newValues: updateData as Prisma.InputJsonValue,
+        },
+      });
 
       // Update the quotation
       const quotation = await tx.quotation.update({
@@ -224,28 +220,6 @@ export async function PATCH(
               lastName: true,
             },
           },
-        },
-      });
-
-      // Create revision record
-      await tx.quotationRevision.create({
-        data: {
-          quotationId: id,
-          revisionNumber: newRevisionCount,
-          changedFields: changedFields as Prisma.InputJsonValue,
-          revisedById: session.user.id,
-        },
-      });
-
-      // Create audit log
-      await tx.auditLog.create({
-        data: {
-          userId: session.user.id,
-          action: "UPDATE",
-          entityType: "quotation",
-          entityId: id,
-          oldValues: changedFields as Prisma.InputJsonValue,
-          newValues: updateData as Prisma.InputJsonValue,
         },
       });
 
@@ -303,7 +277,7 @@ export async function DELETE(
         },
       });
 
-      // Delete the quotation (revisions will be cascade deleted)
+      // Delete the quotation
       await tx.quotation.delete({
         where: { id },
       });

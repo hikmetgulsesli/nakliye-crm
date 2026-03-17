@@ -203,7 +203,6 @@ export async function POST(request: NextRequest) {
           estimatedTransitDays: data.estimatedTransitDays,
           internalNotes: data.internalNotes,
           status: "DRAFT",
-          revisionCount: 0,
         },
         include: {
           customer: {

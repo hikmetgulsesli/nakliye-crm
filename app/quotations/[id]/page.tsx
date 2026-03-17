@@ -17,7 +17,6 @@ import {
   ArrowRight,
   User,
   Calendar,
-  History,
 } from "lucide-react";
 
 async function getQuotation(id: string) {
@@ -35,14 +34,6 @@ async function getQuotation(id: string) {
       },
       createdBy: {
         select: { firstName: true, lastName: true },
-      },
-      revisions: {
-        orderBy: { revisionNumber: "desc" },
-        include: {
-          revisedBy: {
-            select: { firstName: true, lastName: true },
-          },
-        },
       },
     },
   });
@@ -93,13 +84,6 @@ export default async function QuotationDetailPage({
           >
             <Edit className="w-4 h-4" />
             Edit
-          </Link>
-          <Link
-            href={`/quotations/${id}/revise`}
-            className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-sm font-medium"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Revise
           </Link>
         </div>
       }
@@ -226,11 +210,6 @@ export default async function QuotationDetailPage({
                     </span>
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Rev {quotation.revisionCount}
-                  </p>
-                </div>
               </div>
               {quotation.internalNotes && (
                 <div className="mt-4">
@@ -243,43 +222,6 @@ export default async function QuotationDetailPage({
                 </div>
               )}
             </section>
-
-            {/* Revision History */}
-            {quotation.revisions.length > 0 && (
-              <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                  <History className="w-5 h-5 text-primary" />
-                  Revision History
-                </h3>
-                <div className="space-y-4">
-                  {quotation.revisions.map((revision) => (
-                    <div
-                      key={revision.id}
-                      className="flex items-start gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium flex-shrink-0">
-                        R{revision.revisionNumber}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-slate-900 dark:text-white">
-                          Revision {revision.revisionNumber}
-                        </p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          By {revision.revisedBy.firstName}{" "}
-                          {revision.revisedBy.lastName} •{" "}
-                          {new Date(revision.createdAt).toLocaleDateString()}
-                        </p>
-                        {revision.changeSummary && (
-                          <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">
-                            {revision.changeSummary}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
           </div>
 
           {/* Sidebar */}

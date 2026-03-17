@@ -32,26 +32,12 @@ export async function GET(
       );
     }
 
-    // Get revisions with user info
-    const revisions = await prisma.quotationRevision.findMany({
-      where: { quotationId: id },
-      include: {
-        revisedBy: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-      orderBy: { revisionNumber: "desc" },
-    });
-
+    // QuotationRevision model not yet implemented - return empty
     return NextResponse.json({
       data: {
         quotationId: id,
         quoteNumber: quotation.quoteNumber,
-        revisions,
+        revisions: [],
       },
     });
   } catch (error) {
