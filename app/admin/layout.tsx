@@ -35,7 +35,30 @@ export default function AdminLayout({
         </div>
         <div className="flex flex-1 justify-end gap-8">
           <nav className="hidden lg:flex items-center gap-9">
-            {/* Kullanıcılar sayfası henüz mevcut değil - US-014'te eklenecek */}
+            <Link 
+              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              href="/"
+            >
+              Dashboard
+            </Link>
+            <Link 
+              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              href="#"
+            >
+              Shipments
+            </Link>
+            <Link 
+              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              href="#"
+            >
+              Contacts
+            </Link>
+            <Link 
+              className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" 
+              href="/admin/users"
+            >
+              Users
+            </Link>
             <Link 
               className={navLinkClass("/admin/metadata")}
               href="/admin/metadata"
