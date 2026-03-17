@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
   Save, 
-  X, 
   Calendar, 
   Plane, 
   Ship, 
@@ -14,12 +13,10 @@ import {
   User,
   Route,
   DollarSign,
-  FileText,
   Container,
   Bell,
   ChevronDown,
   UserCircle,
-  Building2
 } from 'lucide-react';
 
 interface Customer {
@@ -67,8 +64,6 @@ export default function NewQuotationPage() {
   const router = useRouter();
   
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   
@@ -90,6 +85,19 @@ export default function NewQuotationPage() {
     assignedTo: '',
   });
 
+  const fetchCustomers = useCallback(async () => {
+    try {
+      const response = await fetch('/api/customers?limit=1000');
+      const result = await response.json();
+      
+      if (result.success) {
+        setCustomers(result.data);
+      }
+    } catch {
+      console.error('Failed to fetch customers');
+    }
+  }, []);
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
@@ -98,36 +106,11 @@ export default function NewQuotationPage() {
     
     if (status === 'authenticated') {
       fetchCustomers();
-      fetchUsers();
       if (session?.user?.id) {
         setFormData(prev => ({ ...prev, assignedTo: session.user.id }));
       }
     }
-  }, [status, router, session?.user?.id]);
-
-  const fetchCustomers = async () => {
-    try {
-      const response = await fetch('/api/customers?limit=1000');
-      const result = await response.json();
-      
-      if (result.success) {
-        setCustomers(result.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch customers:', err);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      // For now, we'll use a simple approach - in production this should be an API call
-      setUsers([
-        { id: session?.user?.id || '1', firstName: session?.user?.name?.split(' ')[0] || 'Current', lastName: session?.user?.name?.split(' ')[1] || 'User' },
-      ]);
-    } catch (err) {
-      console.error('Failed to fetch users:', err);
-    }
-  };
+  }, [status, router, session?.user?.id, fetchCustomers]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -176,7 +159,7 @@ export default function NewQuotationPage() {
       } else {
         setError(result.error || 'Failed to create quotation');
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred while creating the quotation');
     } finally {
       setSaving(false);

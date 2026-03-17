@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import { 
   Plus, 
   Search, 
-  Filter, 
   ChevronLeft, 
   ChevronRight,
   Plane,
@@ -151,18 +150,7 @@ export default function QuotationListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-    
-    if (status === 'authenticated') {
-      fetchQuotations();
-    }
-  }, [status, router, pagination.page, search, statusFilter, transportModeFilter]);
-
-  const fetchQuotations = async () => {
+  const fetchQuotations = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -184,25 +172,23 @@ export default function QuotationListPage() {
       } else {
         setError(result.error || 'Failed to fetch quotations');
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred while fetching quotations');
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, search, statusFilter, transportModeFilter]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPagination(prev => ({ ...prev, page: 1 }));
-    fetchQuotations();
-  };
-
-  const clearFilters = () => {
-    setSearch('');
-    setStatusFilter('');
-    setTransportModeFilter('');
-    setPagination(prev => ({ ...prev, page: 1 }));
-  };
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+    
+    if (status === 'authenticated') {
+      fetchQuotations();
+    }
+  }, [status, router, fetchQuotations]);
 
   const formatCurrency = (amount: number | null, currency: string) => {
     if (amount === null) return '-';
@@ -383,6 +369,19 @@ export default function QuotationListPage() {
               >
                 <SlidersHorizontal className="w-5 h-5" />
               </button>
+              {hasFilters && (
+                <button
+                  onClick={() => {
+                    setSearch('');
+                    setStatusFilter('');
+                    setTransportModeFilter('');
+                    setPagination(prev => ({ ...prev, page: 1 }));
+                  }}
+                  className="text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
