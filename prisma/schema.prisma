@@ -118,6 +118,10 @@ model Customer {
   createdAt           DateTime       @default(now()) @map("created_at")
   updatedAt           DateTime       @updatedAt @map("updated_at")
 
+  // Tracking fields
+  lastContactDate     DateTime?      @map("last_contact_date")
+  lastQuoteDate       DateTime?      @map("last_quote_date")
+
   // Relations
   assignedTo          User?          @relation(fields: [assignedToId], references: [id])
   quotations          Quotation[]
