@@ -13,6 +13,12 @@ const updateLookupValueSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
+// Helper function to check if user is admin
+async function requireAdmin(): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.role === 'ADMIN';
+}
+
 // GET /api/lookup-values/[id] - Get a single lookup value
 export async function GET(
   request: NextRequest,
@@ -76,35 +82,28 @@ export async function PATCH(
       );
     }
     
-    // Build update data and track changes
-    const updateData: { label?: string; description?: string | null; sortOrder?: number; isActive?: boolean } = {};
+    // Track changes
     const changedFields: Record<string, { old: unknown; new: unknown }> = {};
-
+    
     if (validatedData.label !== undefined && validatedData.label !== existing.label) {
       changedFields.label = { old: existing.label, new: validatedData.label };
-      updateData.label = validatedData.label;
     }
     if (validatedData.description !== undefined && validatedData.description !== existing.description) {
       changedFields.description = { old: existing.description, new: validatedData.description };
-      updateData.description = validatedData.description;
     }
     if (validatedData.sortOrder !== undefined && validatedData.sortOrder !== existing.sortOrder) {
       changedFields.sortOrder = { old: existing.sortOrder, new: validatedData.sortOrder };
-      updateData.sortOrder = validatedData.sortOrder;
     }
     if (validatedData.isActive !== undefined && validatedData.isActive !== existing.isActive) {
       changedFields.isActive = { old: existing.isActive, new: validatedData.isActive };
-      updateData.isActive = validatedData.isActive;
     }
     
     // Update lookup value and create audit log in a transaction
     const lookupValue = await prisma.$transaction(async (tx) => {
-      const updated = Object.keys(updateData).length > 0
-        ? await tx.lookupValue.update({
-            where: { id },
-            data: updateData,
-          })
-        : existing;
+      const updated = await tx.lookupValue.update({
+        where: { id },
+        data: validatedData,
+      });
 
       // Create audit log if there are changes
       if (Object.keys(changedFields).length > 0) {
@@ -115,7 +114,7 @@ export async function PATCH(
             entityType: 'lookup_value',
             entityId: id,
             oldValues: changedFields as Prisma.InputJsonValue,
-            newValues: updateData as Prisma.InputJsonValue,
+            newValues: validatedData as unknown as Prisma.InputJsonValue,
           },
         });
       }

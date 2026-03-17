@@ -13,24 +13,24 @@ const querySchema = z.object({
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
   search: z.string().optional(),
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.string().transform(Number).default(() => 1),
+  limit: z.string().transform(Number).default(() => 20),
   sortBy: z.enum(["createdAt", "action", "entityType"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });
 
+// Helper function to check if user is admin
+async function requireAdmin(): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.role === "ADMIN";
+}
+
 // GET /api/audit-logs - List audit logs with filters (Admin only)
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated and admin
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
-        { status: 401 }
-      );
-    }
-    if (session.user.role !== "ADMIN") {
+    // Check if user is admin
+    const isAdmin = await requireAdmin();
+    if (!isAdmin) {
       return NextResponse.json(
         { error: { code: "FORBIDDEN", message: "Bu işlem için admin yetkisi gereklidir" } },
         { status: 403 }
@@ -89,14 +89,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (params.startDate || params.endDate) {
-      const createdAtFilter: { gte?: Date; lte?: Date } = {};
+      where.createdAt = {};
       if (params.startDate) {
-        createdAtFilter.gte = new Date(params.startDate);
+        (where.createdAt as Record<string, Date>).gte = new Date(params.startDate);
       }
       if (params.endDate) {
-        createdAtFilter.lte = new Date(params.endDate);
+        (where.createdAt as Record<string, Date>).lte = new Date(params.endDate);
       }
-      where.createdAt = createdAtFilter;
     }
 
     if (params.search) {
