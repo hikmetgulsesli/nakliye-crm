@@ -23,11 +23,14 @@ export async function GET(req: NextRequest) {
     const weekStart = new Date(today);
     weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Start of week (Sunday)
     const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6); // End of week (Saturday)
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    weekEnd.setHours(23, 59, 59, 999); // End of day to include all records
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    monthEnd.setHours(23, 59, 59, 999); // End of day to include all records
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+    lastMonthEnd.setHours(23, 59, 59, 999); // End of day to include all records
     const fourteenDaysAgo = new Date(now);
     fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
     const sevenDaysAgo = new Date(now);
@@ -136,8 +139,8 @@ async function calculateUserMetrics(
   // Monthly win rate
   const monthlyWinRate = monthlyQuotes > 0 ? Math.round((monthlyWon / monthlyQuotes) * 100) : 0;
 
-  // Customers contacted this month (via activities)
-  const contactedCustomers = await prisma.activity.count({
+  // Customers contacted this month (via activities) - count distinct customers
+  const contactedCustomersResult = await prisma.activity.findMany({
     where: {
       userId: userId,
       createdAt: {
@@ -146,7 +149,12 @@ async function calculateUserMetrics(
       },
       customerId: { not: null },
     },
+    select: {
+      customerId: true,
+    },
+    distinct: ["customerId"],
   });
+  const contactedCustomers = contactedCustomersResult.length;
 
   return {
     weeklyQuotes,
@@ -168,6 +176,7 @@ async function calculateUserWidgets(
   const { today, fourteenDaysAgo, sevenDaysAgo } = dates;
   const threeDaysFromNow = new Date(today);
   threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+  threeDaysFromNow.setHours(23, 59, 59, 999); // End of day to include full 3-day horizon
 
   // Upcoming follow-ups (next 3 days)
   const upcomingFollowUps = await prisma.activity.findMany({
