@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { prisma } from "@/lib/prisma.js";
-import { authOptions } from "@/lib/auth.js";
+import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
 
 // GET /api/quotations/[id]/revisions - Get revision history for a quotation
 export async function GET(

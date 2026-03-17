@@ -161,7 +161,7 @@ export async function getUserDashboardData(userId: string): Promise<UserDashboar
     prisma.quotation.count({
       where: {
         createdById: userId,
-        status: QuotationStatus.ACCEPTED,
+        status: QuotationStatus.WON,
         createdAt: { gte: ranges.startOfMonth },
       },
     }),
@@ -341,19 +341,19 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     }),
     prisma.quotation.count({
       where: {
-        status: QuotationStatus.ACCEPTED,
+        status: QuotationStatus.WON,
         createdAt: { gte: ranges.startOfWeek },
       },
     }),
     prisma.quotation.count({
       where: {
-        status: QuotationStatus.ACCEPTED,
+        status: QuotationStatus.WON,
         createdAt: { gte: ranges.startOfMonth },
       },
     }),
     prisma.quotation.count({
       where: {
-        status: QuotationStatus.ACCEPTED,
+        status: QuotationStatus.WON,
         createdAt: { gte: ranges.startOfLastMonth, lte: ranges.endOfLastMonth },
       },
     }),
@@ -380,7 +380,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
         prisma.quotation.count({
           where: {
             createdById: user.id,
-            status: QuotationStatus.ACCEPTED,
+            status: QuotationStatus.WON,
             createdAt: { gte: ranges.startOfMonth },
           },
         }),
@@ -437,7 +437,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       const won = await prisma.quotation.count({
         where: {
           transportMode: stat.transportMode,
-          status: QuotationStatus.ACCEPTED,
+          status: QuotationStatus.WON,
           createdAt: { gte: ranges.startOfMonth },
         },
       });
@@ -453,7 +453,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
   const lossReasonRaw = await prisma.$queryRaw<Array<{ loss_reason: string | null; _count: bigint }>>`
     SELECT loss_reason, COUNT(*) as _count 
     FROM quotations 
-    WHERE status = 'REJECTED' 
+    WHERE status = 'LOST' 
     AND created_at >= ${ranges.startOfMonth}
     GROUP BY loss_reason
   `;

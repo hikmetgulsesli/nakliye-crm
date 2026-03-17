@@ -125,7 +125,7 @@ async function calculateUserMetrics(
   const monthlyWon = await prisma.quotation.count({
     where: {
       createdById: userId,
-      status: "ACCEPTED",
+      status: "WON",
       createdAt: {
         gte: monthStart,
         lte: monthEnd,
@@ -356,7 +356,7 @@ async function calculateAdminMetrics(dates: {
 
   const monthlyWonTotal = await prisma.quotation.count({
     where: {
-      status: "ACCEPTED",
+      status: "WON",
       createdAt: {
         gte: monthStart,
         lte: monthEnd,
@@ -407,7 +407,7 @@ async function calculateAdminMetrics(dates: {
       const wonCount = await prisma.quotation.count({
         where: {
           createdById: user.id,
-          status: "ACCEPTED",
+          status: "WON",
           createdAt: {
             gte: monthStart,
             lte: monthEnd,
@@ -500,7 +500,7 @@ async function calculateAdminMetrics(dates: {
       const wonCount = await prisma.quotation.count({
         where: {
           transportMode: mode.transportMode,
-          status: "ACCEPTED",
+          status: "WON",
           createdAt: {
             gte: monthStart,
           },
@@ -519,7 +519,7 @@ async function calculateAdminMetrics(dates: {
   // Loss reason analysis (using activities where quote was rejected)
   const rejectedQuotes = await prisma.quotation.findMany({
     where: {
-      status: "REJECTED",
+      status: "LOST",
       createdAt: {
         gte: monthStart,
       },

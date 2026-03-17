@@ -131,6 +131,7 @@ model Customer {
 
   // CRM tracking
   lastQuoteDate       DateTime?      @map("last_quote_date")
+  lastContactDate     DateTime?      @map("last_contact_date")
 
   // Relations
   assignedTo          User?          @relation(fields: [assignedToId], references: [id])

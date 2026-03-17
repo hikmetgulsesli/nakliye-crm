@@ -21,7 +21,7 @@ export interface ReportFilters {
 }
 
 // Validate filter values
-const VALID_STATUSES = ["DRAFT", "SENT", "ACCEPTED", "REJECTED", "EXPIRED", "CANCELLED"];
+const VALID_STATUSES = ["DRAFT", "SENT", "WON", "LOST", "EXPIRED", "CANCELLED"];
 const VALID_TRANSPORT_MODES = ["AIR", "SEA", "ROAD", "RAIL", "MULTIMODAL"];
 const VALID_CURRENCIES = ["USD", "EUR", "TRY", "GBP", "CNY"];
 
@@ -173,8 +173,8 @@ async function generatePeriodicQuotationReport(filters: ReportFilters) {
   });
 
   const totalQuotes = quotations.length;
-  const wonQuotes = quotations.filter((q) => q.status === "ACCEPTED").length;
-  const lostQuotes = quotations.filter((q) => q.status === "REJECTED").length;
+  const wonQuotes = quotations.filter((q) => q.status === "WON").length;
+  const lostQuotes = quotations.filter((q) => q.status === "LOST").length;
   const pendingQuotes = quotations.filter(
     (q) => q.status === "DRAFT" || q.status === "SENT"
   ).length;
@@ -244,8 +244,8 @@ async function generatePersonnelPerformanceReport(filters: ReportFilters) {
       });
 
       const totalQuotes = quotations.length;
-      const wonQuotes = quotations.filter((q) => q.status === "ACCEPTED").length;
-      const lostQuotes = quotations.filter((q) => q.status === "REJECTED").length;
+      const wonQuotes = quotations.filter((q) => q.status === "WON").length;
+      const lostQuotes = quotations.filter((q) => q.status === "LOST").length;
 
       const totalValue = quotations.reduce(
         (sum, q) => sum + (Number(q.totalCost) || 0),
@@ -253,7 +253,7 @@ async function generatePersonnelPerformanceReport(filters: ReportFilters) {
       );
 
       const wonValue = quotations
-        .filter((q) => q.status === "ACCEPTED")
+        .filter((q) => q.status === "WON")
         .reduce((sum, q) => sum + (Number(q.totalCost) || 0), 0);
 
       const activities = await prisma.activity.count({
@@ -311,7 +311,7 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
       lte: parseDateEndOfDay(endDate),
     },
     status: {
-      in: ["ACCEPTED", "REJECTED"],
+      in: ["WON", "LOST"],
     },
   };
 
@@ -343,8 +343,8 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
     },
   });
 
-  const wonQuotes = quotations.filter((q) => q.status === "ACCEPTED");
-  const lostQuotes = quotations.filter((q) => q.status === "REJECTED");
+  const wonQuotes = quotations.filter((q) => q.status === "WON");
+  const lostQuotes = quotations.filter((q) => q.status === "LOST");
 
   const byTransportMode: Record<string, { won: number; lost: number }> = {};
   quotations.forEach((q) => {
@@ -352,7 +352,7 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
     if (!byTransportMode[mode]) {
       byTransportMode[mode] = { won: 0, lost: 0 };
     }
-    if (q.status === "ACCEPTED") {
+    if (q.status === "WON") {
       byTransportMode[mode].won++;
     } else {
       byTransportMode[mode].lost++;
@@ -365,7 +365,7 @@ async function generateWonLostAnalysisReport(filters: ReportFilters) {
     if (!byMonth[month]) {
       byMonth[month] = { won: 0, lost: 0 };
     }
-    if (q.status === "ACCEPTED") {
+    if (q.status === "WON") {
       byMonth[month].won++;
     } else {
       byMonth[month].lost++;
@@ -532,7 +532,7 @@ async function generateLossReasonReport(filters: ReportFilters) {
       gte: new Date(startDate),
       lte: parseDateEndOfDay(endDate),
     },
-    status: "REJECTED",
+    status: "LOST",
   };
 
   if (transportMode) {
