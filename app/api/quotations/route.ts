@@ -1,122 +1,91 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { z } from "zod";
+import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
+import { generateQuoteNumber } from "@/lib/quote-number";
 
 // Validation schema for creating a quotation
 const createQuotationSchema = z.object({
-  customerId: z.string().uuid(),
-  originCity: z.string().min(1).max(100),
-  originCountry: z.string().min(1).max(100),
-  destinationCity: z.string().min(1).max(100),
-  destinationCountry: z.string().min(1).max(100),
-  transportMode: z.enum(['AIR', 'SEA', 'ROAD', 'RAIL', 'MULTIMODAL']),
-  serviceType: z.string().optional(),
-  incoterm: z.enum(['EXW', 'FCA', 'FAS', 'FOB', 'CFR', 'CIF', 'CPT', 'CIP', 'DAP', 'DPU', 'DDP']).optional(),
-  freightCost: z.number().positive().optional(),
-  originCharges: z.number().optional(),
-  destinationCharges: z.number().optional(),
-  insuranceCost: z.number().optional(),
-  totalCost: z.number().optional(),
-  currency: z.string().length(3).default('USD'),
-  validUntil: z.string().optional(),
-  internalNotes: z.string().optional(),
+  customerId: z.string().uuid("Geçerli bir müşteri ID'si giriniz"),
+  originCity: z.string().min(1, "Çıkış şehri zorunludur"),
+  originCountry: z.string().min(1, "Çıkış ülkesi zorunludur"),
+  destinationCity: z.string().min(1, "Varış şehri zorunludur"),
+  destinationCountry: z.string().min(1, "Varış ülkesi zorunludur"),
+  transportMode: z.enum(["AIR", "SEA", "ROAD", "RAIL", "MULTIMODAL"]),
+  incoterm: z.enum(["EXW", "FCA", "FAS", "FOB", "CFR", "CIF", "CPT", "CIP", "DAP", "DPU", "DDP"]).optional(),
   cargoDescription: z.string().optional(),
-  weightKg: z.number().optional(),
-  volumeM3: z.number().optional(),
-  packagesCount: z.number().optional(),
-  estimatedTransitDays: z.number().optional(),
+  weightKg: z.number().positive().optional(),
+  volumeM3: z.number().positive().optional(),
+  packagesCount: z.number().int().positive().optional(),
+  freightCost: z.number().positive().optional(),
+  originCharges: z.number().positive().optional(),
+  destinationCharges: z.number().positive().optional(),
+  insuranceCost: z.number().positive().optional(),
+  totalCost: z.number().positive().optional(),
+  currency: z.string().default("USD"),
+  validUntil: z.string().datetime().optional(),
+  estimatedTransitDays: z.number().int().positive().optional(),
+  internalNotes: z.string().optional(),
 });
 
-// Helper function to generate quote number
-async function generateQuoteNumber(): Promise<string> {
-  const year = new Date().getFullYear();
-  const prefix = `TKF-${year}-`;
-  
-  // Get the last quotation number for this year
-  const lastQuotation = await prisma.quotation.findFirst({
-    where: {
-      quoteNumber: { startsWith: prefix },
-    },
-    orderBy: { quoteNumber: 'desc' },
-  });
-  
-  let nextNumber = 1;
-  if (lastQuotation) {
-    const lastNumber = parseInt(lastQuotation.quoteNumber.replace(prefix, ''));
-    nextNumber = lastNumber + 1;
-  }
-  
-  return `${prefix}${nextNumber.toString().padStart(4, '0')}`;
-}
-
-// GET /api/quotations - List quotations with filtering
+// GET /api/quotations - List quotations with filters
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    
-    if (!session) {
+    if (!session?.user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
         { status: 401 }
       );
     }
-    
+
     const { searchParams } = new URL(request.url);
-    
-    // Pagination
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const skip = (page - 1) * limit;
-    
-    // Build filter conditions
+
+    // Parse query parameters
+    const status = searchParams.get("status");
+    const customerId = searchParams.get("customerId");
+    const createdById = searchParams.get("createdById");
+    const transportMode = searchParams.get("transportMode");
+    const search = searchParams.get("search");
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "20", 10);
+    const sortBy = searchParams.get("sortBy") || "createdAt";
+    const sortOrder = (searchParams.get("sortOrder") || "desc") as "asc" | "desc";
+
+    // Build where clause
     const where: Record<string, unknown> = {};
-    
-    // Search by quote number or customer name
-    const search = searchParams.get('search');
-    if (search) {
-      where.OR = [
-        { quoteNumber: { contains: search, mode: 'insensitive' } },
-        { customer: { companyName: { contains: search, mode: 'insensitive' } } },
-      ];
-    }
-    
-    // Filter by status
-    const status = searchParams.get('status');
+
     if (status) {
       where.status = status;
     }
-    
-    // Filter by transport mode
-    const transportMode = searchParams.get('transportMode');
-    if (transportMode) {
-      where.transportMode = transportMode;
-    }
-    
-    // Filter by customer ID
-    const customerId = searchParams.get('customerId');
+
     if (customerId) {
       where.customerId = customerId;
     }
-    
-    // Date range filters
-    const dateFrom = searchParams.get('dateFrom');
-    const dateTo = searchParams.get('dateTo');
-    if (dateFrom || dateTo) {
-      where.createdAt = {};
-      if (dateFrom) {
-        (where.createdAt as Record<string, Date>).gte = new Date(dateFrom);
-      }
-      if (dateTo) {
-        (where.createdAt as Record<string, Date>).lte = new Date(dateTo);
-      }
+
+    if (createdById) {
+      where.createdById = createdById;
     }
-    
+
+    if (transportMode) {
+      where.transportMode = transportMode;
+    }
+
+    if (search) {
+      where.OR = [
+        { quoteNumber: { contains: search, mode: "insensitive" } },
+        { customer: { companyName: { contains: search, mode: "insensitive" } } },
+        { originCity: { contains: search, mode: "insensitive" } },
+        { destinationCity: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
     // Get total count
     const total = await prisma.quotation.count({ where });
-    
-    // Get quotations with related data
+
+    // Get quotations with pagination
     const quotations = await prisma.quotation.findMany({
       where,
       include: {
@@ -135,15 +104,14 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      orderBy: { createdAt: 'desc' },
-      skip,
+      orderBy: { [sortBy]: sortOrder },
+      skip: (page - 1) * limit,
       take: limit,
     });
-    
+
     return NextResponse.json({
-      success: true,
       data: quotations,
-      pagination: {
+      meta: {
         page,
         limit,
         total,
@@ -151,9 +119,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching quotations:', error);
+    console.error("Error fetching quotations:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch quotations' },
+      { error: { code: "INTERNAL_ERROR", message: "Teklifler alınırken bir hata oluştu" } },
       { status: 500 }
     );
   }
@@ -163,91 +131,123 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    
-    if (!session || !session.user) {
+    if (!session?.user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
         { status: 401 }
       );
     }
-    
-    const body = await request.json();
-    
-    // Validate input
-    const validatedData = createQuotationSchema.parse(body);
-    
-    // Generate quote number
-    const quoteNumber = await generateQuoteNumber();
-    
-    // Calculate total cost if not provided
-    let totalCost = validatedData.totalCost;
-    if (!totalCost && validatedData.freightCost) {
-      totalCost = 
-        (validatedData.freightCost || 0) +
-        (validatedData.originCharges || 0) +
-        (validatedData.destinationCharges || 0) +
-        (validatedData.insuranceCost || 0);
-    }
-    
-    // Create quotation
-    const quotation = await prisma.quotation.create({
-      data: {
-        quoteNumber,
-        customerId: validatedData.customerId,
-        createdById: session.user.id,
-        originCity: validatedData.originCity,
-        originCountry: validatedData.originCountry,
-        destinationCity: validatedData.destinationCity,
-        destinationCountry: validatedData.destinationCountry,
-        transportMode: validatedData.transportMode,
-        incoterm: validatedData.incoterm,
-        freightCost: validatedData.freightCost,
-        originCharges: validatedData.originCharges,
-        destinationCharges: validatedData.destinationCharges,
-        insuranceCost: validatedData.insuranceCost,
-        totalCost: totalCost,
-        currency: validatedData.currency,
-        validUntil: validatedData.validUntil ? new Date(validatedData.validUntil) : null,
-        internalNotes: validatedData.internalNotes,
-        cargoDescription: validatedData.cargoDescription,
-        weightKg: validatedData.weightKg,
-        volumeM3: validatedData.volumeM3,
-        packagesCount: validatedData.packagesCount,
-        estimatedTransitDays: validatedData.estimatedTransitDays,
-      },
-      include: {
-        customer: {
-          select: {
-            id: true,
-            companyName: true,
-            contactName: true,
-          },
-        },
-        createdBy: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
 
-    return NextResponse.json(
-      { success: true, data: quotation },
-      { status: 201 }
-    );
-  } catch (error) {
-    if (error instanceof z.ZodError) {
+    const body = await request.json();
+
+    // Validate input
+    const validationResult = createQuotationSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: error.issues },
+        {
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Geçersiz giriş",
+            details: validationResult.error.issues.map((err) => ({
+              field: String(err.path.join(".")),
+              message: err.message,
+            })),
+          },
+        },
         { status: 400 }
       );
     }
-    
-    console.error('Error creating quotation:', error);
+
+    const data = validationResult.data;
+
+    // Verify customer exists
+    const customer = await prisma.customer.findUnique({
+      where: { id: data.customerId },
+    });
+
+    if (!customer) {
+      return NextResponse.json(
+        { error: { code: "NOT_FOUND", message: "Müşteri bulunamadı" } },
+        { status: 404 }
+      );
+    }
+
+    // Generate quote number
+    const quoteNumber = await generateQuoteNumber();
+
+    // Create quotation and update customer lastQuoteDate in a transaction
+    const quotation = await prisma.$transaction(async (tx) => {
+      // Create the quotation
+      const newQuotation = await tx.quotation.create({
+        data: {
+          quoteNumber,
+          customerId: data.customerId,
+          createdById: session.user.id,
+          originCity: data.originCity,
+          originCountry: data.originCountry,
+          destinationCity: data.destinationCity,
+          destinationCountry: data.destinationCountry,
+          transportMode: data.transportMode,
+          incoterm: data.incoterm,
+          cargoDescription: data.cargoDescription,
+          weightKg: data.weightKg ? String(data.weightKg) : null,
+          volumeM3: data.volumeM3 ? String(data.volumeM3) : null,
+          packagesCount: data.packagesCount,
+          freightCost: data.freightCost ? String(data.freightCost) : null,
+          originCharges: data.originCharges ? String(data.originCharges) : null,
+          destinationCharges: data.destinationCharges ? String(data.destinationCharges) : null,
+          insuranceCost: data.insuranceCost ? String(data.insuranceCost) : null,
+          totalCost: data.totalCost ? String(data.totalCost) : null,
+          currency: data.currency,
+          validUntil: data.validUntil ? new Date(data.validUntil) : null,
+          estimatedTransitDays: data.estimatedTransitDays,
+          internalNotes: data.internalNotes,
+          status: "DRAFT",
+          revisionCount: 0,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              companyName: true,
+              contactName: true,
+            },
+          },
+          createdBy: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      });
+
+      // Update customer's lastQuoteDate
+      await tx.customer.update({
+        where: { id: data.customerId },
+        data: { lastQuoteDate: new Date() },
+      });
+
+      // Create audit log
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: "CREATE",
+          entityType: "quotation",
+          entityId: newQuotation.id,
+          newValues: newQuotation as unknown as Prisma.InputJsonValue,
+        },
+      });
+
+      return newQuotation;
+    });
+
+    return NextResponse.json({ data: quotation }, { status: 201 });
+  } catch (error) {
+    console.error("Error creating quotation:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create quotation' },
+      { error: { code: "INTERNAL_ERROR", message: "Teklif oluşturulurken bir hata oluştu" } },
       { status: 500 }
     );
   }

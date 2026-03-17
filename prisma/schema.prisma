@@ -103,11 +103,11 @@ model Customer {
   id                  String         @id @default(uuid())
   companyName         String         @map("company_name")
   contactName         String?        @map("contact_name")
-  email               String         @default("")
-  phone               String?        @map("phone")
-  mobile              String?        @map("mobile")
-  address             String?        @map("address")
-  city                String?        @map("city")
+  email               String
+  phone               String?
+  mobile              String?
+  address             String?
+  city                String?
   country             String         @default("Türkiye")
   postalCode          String?        @map("postal_code")
   taxNumber           String?        @map("tax_number")
@@ -117,6 +117,10 @@ model Customer {
   notes               String?
   createdAt           DateTime       @default(now()) @map("created_at")
   updatedAt           DateTime       @updatedAt @map("updated_at")
+
+  // Tracking fields
+  lastContactDate     DateTime?      @map("last_contact_date")
+  lastQuoteDate       DateTime?      @map("last_quote_date")
 
   // Relations
   assignedTo          User?          @relation(fields: [assignedToId], references: [id])
@@ -162,7 +166,7 @@ model Quotation {
   
   // Internal
   internalNotes       String?         @map("internal_notes")
-  revisionCount       Int             @default(0) @map("revision_count")
+  lossReason          String?         @map("loss_reason")
   createdAt           DateTime        @default(now()) @map("created_at")
   updatedAt           DateTime        @updatedAt @map("updated_at")
 

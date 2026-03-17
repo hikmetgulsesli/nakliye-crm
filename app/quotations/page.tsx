@@ -1,547 +1,254 @@
-'use client';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth";
+import { DashboardLayout } from "@/components/dashboard-layout";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { Plus, Search, Filter, FileText, ArrowRight } from "lucide-react";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { format } from 'date-fns';
-import { 
-  Plus, 
-  Search, 
-  ChevronLeft, 
-  ChevronRight,
-  Plane,
-  Ship,
-  Truck,
-  ArrowRight,
-  MoreVertical,
-  Calendar,
-  Menu,
-  Bell,
-  Anchor,
-  Container,
-  Users,
-  Package,
-  BarChart3,
-  Settings,
-  SlidersHorizontal
-} from 'lucide-react';
+async function getQuotations(
+  search?: string,
+  status?: string,
+  transportMode?: string
+) {
+  const where: Record<string, unknown> = {};
 
-interface Quotation {
-  id: string;
-  quoteNumber: string;
-  status: string;
-  originCity: string;
-  originCountry: string;
-  destinationCity: string;
-  destinationCountry: string;
-  transportMode: string;
-  serviceType?: string;
-  totalCost: number | null;
-  currency: string;
-  validUntil: string | null;
-  createdAt: string;
-  customer: {
-    id: string;
-    companyName: string;
-    contactName: string | null;
-  };
-  createdBy: {
-    id: string;
-    firstName: string;
-    lastName: string;
-  };
-}
-
-interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-const statusColors: Record<string, { bg: string; text: string; border: string }> = {
-  DRAFT: { 
-    bg: 'bg-slate-100 dark:bg-slate-700', 
-    text: 'text-slate-800 dark:text-slate-300',
-    border: 'border-slate-200 dark:border-slate-600'
-  },
-  SENT: { 
-    bg: 'bg-amber-100 dark:bg-amber-900/30', 
-    text: 'text-amber-800 dark:text-amber-300',
-    border: 'border-amber-200 dark:border-amber-800/50'
-  },
-  ACCEPTED: { 
-    bg: 'bg-emerald-100 dark:bg-emerald-900/30', 
-    text: 'text-emerald-800 dark:text-emerald-300',
-    border: 'border-emerald-200 dark:border-emerald-800/50'
-  },
-  REJECTED: { 
-    bg: 'bg-red-100 dark:bg-red-900/30', 
-    text: 'text-red-800 dark:text-red-300',
-    border: 'border-red-200 dark:border-red-800/50'
-  },
-  EXPIRED: { 
-    bg: 'bg-amber-100 dark:bg-amber-900/30', 
-    text: 'text-amber-800 dark:text-amber-300',
-    border: 'border-amber-200 dark:border-amber-800/50'
-  },
-  CANCELLED: { 
-    bg: 'bg-gray-100 dark:bg-gray-700', 
-    text: 'text-gray-800 dark:text-gray-300',
-    border: 'border-gray-200 dark:border-gray-600'
-  },
-};
-
-const statusLabels: Record<string, string> = {
-  DRAFT: 'Draft',
-  SENT: 'Pending',
-  ACCEPTED: 'Accepted',
-  REJECTED: 'Rejected',
-  EXPIRED: 'Expired',
-  CANCELLED: 'Cancelled',
-};
-
-const TransportIcon = ({ mode }: { mode: string }) => {
-  switch (mode) {
-    case 'AIR':
-      return <Plane className="w-4 h-4 text-sky-500" />;
-    case 'SEA':
-      return <Ship className="w-4 h-4 text-blue-500" />;
-    case 'ROAD':
-    case 'RAIL':
-      return <Truck className="w-4 h-4 text-emerald-600" />;
-    default:
-      return <Ship className="w-4 h-4 text-blue-500" />;
+  if (search) {
+    where.OR = [
+      { quoteNumber: { contains: search, mode: "insensitive" } },
+      { customer: { companyName: { contains: search, mode: "insensitive" } } },
+    ];
   }
-};
 
-const TransportLabel = ({ mode }: { mode: string }) => {
-  switch (mode) {
-    case 'AIR':
-      return 'Air';
-    case 'SEA':
-      return 'Sea';
-    case 'ROAD':
-      return 'Land';
-    case 'RAIL':
-      return 'Rail';
-    default:
-      return mode;
+  if (status && status !== "all") {
+    where.status = status;
   }
-};
 
-export default function QuotationListPage() {
-  const sessionData = useSession();
-  const session = sessionData?.data;
-  const status = sessionData?.status ?? 'loading';
-  const router = useRouter();
-  
-  const [quotations, setQuotations] = useState<Quotation[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
+  if (transportMode && transportMode !== "all") {
+    where.transportMode = transportMode;
+  }
+
+  const quotations = await prisma.quotation.findMany({
+    where,
+    include: {
+      customer: {
+        select: { companyName: true, id: true },
+      },
+      createdBy: {
+        select: { firstName: true, lastName: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 50,
   });
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [transportModeFilter, setTransportModeFilter] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  const fetchQuotations = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError('');
-      
-      const params = new URLSearchParams();
-      params.set('page', pagination.page.toString());
-      params.set('limit', pagination.limit.toString());
-      
-      if (search) params.set('search', search);
-      if (statusFilter) params.set('status', statusFilter);
-      if (transportModeFilter) params.set('transportMode', transportModeFilter);
-      
-      const response = await fetch(`/api/quotations?${params.toString()}`);
-      const result = await response.json();
-      
-      if (result.success) {
-        setQuotations(result.data);
-        setPagination(result.pagination);
-      } else {
-        setError(result.error || 'Failed to fetch quotations');
-      }
-    } catch {
-      setError('An error occurred while fetching quotations');
-    } finally {
-      setLoading(false);
-    }
-  }, [pagination.page, pagination.limit, search, statusFilter, transportModeFilter]);
+  return quotations;
+}
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-      return;
-    }
-    
-    if (status === 'authenticated') {
-      fetchQuotations();
-    }
-  }, [status, router, fetchQuotations]);
+async function getLookupValues() {
+  const [statuses, transportModes] = await Promise.all([
+    prisma.lookupValue.findMany({
+      where: { category: "quotation_status", isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.lookupValue.findMany({
+      where: { category: "transport_mode", isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+  ]);
 
-  const formatCurrency = (amount: number | null, currency: string) => {
-    if (amount === null) return '-';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+  return { statuses, transportModes };
+}
 
-  if (status === 'loading') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+export default async function QuotationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    search?: string;
+    status?: string;
+    transportMode?: string;
+  }>;
+}) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/login");
   }
 
-  const hasFilters = search || statusFilter || transportModeFilter;
+  const params = await searchParams;
+  const [quotations, lookups] = await Promise.all([
+    getQuotations(params.search, params.status, params.transportMode),
+    getLookupValues(),
+  ]);
 
   return (
-    <div className="flex h-screen bg-[#f6f6f8] dark:bg-[#101622]">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 hidden md:flex flex-col shrink-0">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
-          <div className="bg-primary/10 dark:bg-primary/20 text-primary p-2 rounded-lg">
-            <Anchor className="w-5 h-5" />
+    <DashboardLayout
+      user={{
+        name: session.user.name || "",
+        email: session.user.email || "",
+        role: session.user.role,
+      }}
+      title="Quotations"
+      actions={
+        <Link
+          href="/quotations/new"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+        >
+          <Plus className="w-4 h-4" />
+          Create Quotation
+        </Link>
+      }
+    >
+      <div className="space-y-6">
+        {/* Search and Filters */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <form action="/quotations" method="GET">
+              <input
+                type="text"
+                name="search"
+                defaultValue={params.search || ""}
+                placeholder="Search by quote number or customer..."
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </form>
           </div>
-          <div>
-            <h1 className="font-bold text-lg leading-tight">Shipping CRM</h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Global Logistics</p>
-          </div>
-        </div>
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          <Link 
-            href="/dashboard" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><Container className="w-5 h-5" /></span>
-            <span className="text-sm font-medium">Dashboard</span>
-          </Link>
-          <Link 
-            href="/quotations" 
-            className="flex items-center gap-3 px-3 py-2 bg-primary/10 dark:bg-primary/20 text-primary rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></span>
-            <span className="text-sm font-medium">Quotations</span>
-          </Link>
-          <Link 
-            href="/shipments" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><Truck className="w-5 h-5" /></span>
-            <span className="text-sm font-medium">Shipments</span>
-          </Link>
-          <Link 
-            href="/customers" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><Users className="w-5 h-5" /></span>
-            <span className="text-sm font-medium">Customers</span>
-          </Link>
-          <Link 
-            href="/invoices" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><Package className="w-5 h-5" /></span>
-            <span className="text-sm font-medium">Invoices</span>
-          </Link>
-          <Link 
-            href="/reports" 
-            className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-          >
-            <span className="text-[20px]"><BarChart3 className="w-5 h-5" /></span>
-            <span className="text-sm font-medium">Reports</span>
-          </Link>
-          <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
-            <Link 
-              href="/settings" 
-              className="flex items-center gap-3 px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-            >
-              <span className="text-[20px]"><Settings className="w-5 h-5" /></span>
-              <span className="text-sm font-medium">Settings</span>
-            </Link>
-          </div>
-        </nav>
-        <div className="p-4 border-t border-slate-200 dark:border-slate-700">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-medium">
-                {session?.user?.name?.charAt(0) || 'U'}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{session?.user?.name || 'User'}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">Sales Manager</p>
-            </div>
+          <div className="flex gap-3">
+            <form action="/quotations" method="GET" className="flex gap-3">
+              <select
+                name="status"
+                defaultValue={params.status || "all"}
+                onChange={(e) => e.target.form?.submit()}
+                className="px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="all">All Status</option>
+                {lookups.statuses.map((s) => (
+                  <option key={s.id} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="transportMode"
+                defaultValue={params.transportMode || "all"}
+                onChange={(e) => e.target.form?.submit()}
+                className="px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="all">All Modes</option>
+                {lookups.transportModes.map((t) => (
+                  <option key={t.id} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+              {(params.search || params.status || params.transportMode) && (
+                <Link
+                  href="/quotations"
+                  className="inline-flex items-center gap-1 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                >
+                  <Filter className="w-4 h-4" />
+                  Clear
+                </Link>
+              )}
+            </form>
           </div>
         </div>
-      </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Header */}
-        <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-          <div className="flex items-center gap-4">
-            <button className="md:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
-              <Menu className="w-6 h-6" />
-            </button>
-            <h2 className="text-xl font-bold tracking-tight">Quotation List</h2>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+        {/* Quotations Grid */}
+        {quotations.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-12 text-center">
+            <FileText className="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600" />
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+              No quotations found
+            </h3>
+            <p className="text-slate-500 dark:text-slate-400 mb-6">
+              Create your first quotation to get started
+            </p>
             <Link
               href="/quotations/new"
-              className="bg-[#1258e2] hover:bg-[#1258e2]/90 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Quotation
             </Link>
           </div>
-        </header>
-
-        {/* Content Body */}
-        <div className="flex-1 overflow-auto p-6 flex flex-col gap-6">
-          {/* Filters */}
-          <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex-1 min-w-[200px] relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search quotes, customers..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-[#1258e2] outline-none transition-all dark:text-white placeholder-slate-400"
-              />
-            </div>
-            <div className="flex flex-wrap gap-3 items-center">
-              <div className="relative">
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="appearance-none pl-3 pr-8 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-[#1258e2] outline-none transition-all"
-                >
-                  <option value="">Status: All</option>
-                  <option value="DRAFT">Draft</option>
-                  <option value="SENT">Pending</option>
-                  <option value="ACCEPTED">Accepted</option>
-                  <option value="REJECTED">Rejected</option>
-                  <option value="EXPIRED">Expired</option>
-                </select>
-                <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 rotate-90 pointer-events-none" />
-              </div>
-              <div className="relative">
-                <select
-                  value={transportModeFilter}
-                  onChange={(e) => setTransportModeFilter(e.target.value)}
-                  className="appearance-none pl-3 pr-8 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-[#1258e2] outline-none transition-all"
-                >
-                  <option value="">Transport: All</option>
-                  <option value="AIR">Air Freight</option>
-                  <option value="SEA">Sea Freight</option>
-                  <option value="ROAD">Land Transport</option>
-                </select>
-                <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 rotate-90 pointer-events-none" />
-              </div>
-              <button className="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                <Calendar className="w-4 h-4" />
-                Date Range
-              </button>
-              <button 
-                className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                title="More Filters"
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {quotations.map((quote) => (
+              <Link
+                key={quote.id}
+                href={`/quotations/${quote.id}`}
+                className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 dark:hover:border-primary/50 transition-colors group"
               >
-                <SlidersHorizontal className="w-5 h-5" />
-              </button>
-              {hasFilters && (
-                <button
-                  onClick={() => {
-                    setSearch('');
-                    setStatusFilter('');
-                    setTransportModeFilter('');
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}
-                  className="text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
-            </div>
-          )}
-
-          {/* Table Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex-1 flex flex-col overflow-hidden">
-            <div className="overflow-x-auto flex-1">
-              <table className="w-full text-left border-collapse min-w-[1000px]">
-                <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    <th className="px-4 py-3 font-medium">Quote No</th>
-                    <th className="px-4 py-3 font-medium">Customer</th>
-                    <th className="px-4 py-3 font-medium">Transport</th>
-                    <th className="px-4 py-3 font-medium">Service</th>
-                    <th className="px-4 py-3 font-medium">Route (Origin → Dest)</th>
-                    <th className="px-4 py-3 font-medium text-right">Price</th>
-                    <th className="px-4 py-3 font-medium text-center">Status</th>
-                    <th className="px-4 py-3 font-medium">Assigned To</th>
-                    <th className="px-4 py-3 font-medium">Date</th>
-                    <th className="px-4 py-3 font-medium text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-700 text-sm">
-                  {loading ? (
-                    <tr>
-                      <td colSpan={10} className="px-4 py-8 text-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1258e2] mx-auto"></div>
-                      </td>
-                    </tr>
-                  ) : quotations.length === 0 ? (
-                    <tr>
-                      <td colSpan={10} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
-                        No quotations found. Create your first quotation to get started.
-                      </td>
-                    </tr>
-                  ) : (
-                    quotations.map((quote) => {
-                      const statusStyle = statusColors[quote.status] || statusColors.DRAFT;
-                      return (
-                        <tr key={quote.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors group">
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <Link 
-                              href={`/quotations/${quote.id}`}
-                              className="font-medium text-[#1258e2] hover:underline"
-                            >
-                              {quote.quoteNumber}
-                            </Link>
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="font-medium text-slate-900 dark:text-slate-100">{quote.customer.companyName}</div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {quote.originCountry?.slice(0, 2).toUpperCase() || 'XX'}-{quote.originCity?.slice(0, 3).toUpperCase() || 'XXX'}
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                              <TransportIcon mode={quote.transportMode} />
-                              <TransportLabel mode={quote.transportMode} />
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-400">
-                            {quote.serviceType || 'FCL'}
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                              <span>{quote.originCity}</span>
-                              <ArrowRight className="w-3 h-3 text-slate-400" />
-                              <span>{quote.destinationCity}</span>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-right font-medium">
-                            {formatCurrency(quote.totalCost, quote.currency).replace('$', '').replace('€', '').replace('£', '')} 
-                            <span className="text-slate-500 text-xs font-normal ml-1">{quote.currency}</span>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-center">
-                            <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium border ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border}`}>
-                              {statusLabels[quote.status] || quote.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-400">
-                            {quote.createdBy.firstName} {quote.createdBy.lastName}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-slate-600 dark:text-slate-400">
-                            {format(new Date(quote.createdAt), 'MMM d, yyyy')}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-center">
-                            <button className="text-slate-400 hover:text-[#1258e2] transition-colors opacity-0 group-hover:opacity-100">
-                              <MoreVertical className="w-5 h-5" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            {pagination.totalPages > 1 && (
-              <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-between">
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Showing <span className="font-medium text-slate-900 dark:text-slate-100">{((pagination.page - 1) * pagination.limit) + 1}</span> to{' '}
-                  <span className="font-medium text-slate-900 dark:text-slate-100">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> of{' '}
-                  <span className="font-medium text-slate-900 dark:text-slate-100">{pagination.total}</span> results
-                </p>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-                    disabled={pagination.page === 1}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-                    const page = i + 1;
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => setPagination(prev => ({ ...prev, page }))}
-                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                          pagination.page === page
-                            ? 'bg-[#1258e2] text-white'
-                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
-                  {pagination.totalPages > 5 && (
-                    <>
-                      <span className="text-slate-400 px-1">...</span>
-                      <button
-                        onClick={() => setPagination(prev => ({ ...prev, page: pagination.totalPages }))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                      >
-                        {pagination.totalPages}
-                      </button>
-                    </>
-                  )}
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                    disabled={pagination.page === pagination.totalPages}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="text-sm font-medium text-primary">
+                      {quote.quoteNumber}
+                    </p>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mt-1 group-hover:text-primary transition-colors">
+                      {quote.customer.companyName}
+                    </h4>
+                  </div>
+                  <QuoteStatusBadge status={quote.status} />
                 </div>
-              </div>
-            )}
+
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 mb-4">
+                  <span className="font-medium">{quote.originCity}</span>
+                  <ArrowRight className="w-4 h-4" />
+                  <span className="font-medium">{quote.destinationCity}</span>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="text-sm">
+                    <span className="text-slate-500 dark:text-slate-400">
+                      {quote.transportMode}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-slate-900 dark:text-white">
+                      {quote.totalCost ? Number(quote.totalCost).toLocaleString() : "0"} {quote.currency}
+                    </p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      {quote.incoterm}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
-      </main>
-    </div>
+        )}
+      </div>
+    </DashboardLayout>
+  );
+}
+
+function QuoteStatusBadge({ status }: { status: string }) {
+  const colors: Record<string, string> = {
+    DRAFT: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
+    SENT: "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300",
+    ACCEPTED: "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300",
+    REJECTED: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300",
+    EXPIRED: "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300",
+    CANCELLED: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
+  };
+
+  const labels: Record<string, string> = {
+    DRAFT: "Draft",
+    SENT: "Sent",
+    ACCEPTED: "Accepted",
+    REJECTED: "Rejected",
+    EXPIRED: "Expired",
+    CANCELLED: "Cancelled",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+        colors[status] || colors.DRAFT
+      }`}
+    >
+      {labels[status] || status}
+    </span>
   );
 }
