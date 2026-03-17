@@ -7,7 +7,6 @@ jest.mock("@/lib/prisma", () => ({
 
 import { authOptions } from "@/lib/auth";
 import { User } from "next-auth";
-import type { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 
 describe("Auth Configuration", () => {
@@ -77,7 +76,7 @@ describe("Auth Configuration", () => {
       const tokenWithRemember: JWT = { rememberMe: true };
       const resultRemember = await jwtCallback!({
         token: tokenWithRemember,
-        user: { id: "user-1", email: "test@test.com" } as User,
+        user: undefined as unknown as User,
         account: null,
         profile: undefined,
         trigger: "signIn",
@@ -90,7 +89,7 @@ describe("Auth Configuration", () => {
       const tokenWithoutRemember: JWT = { rememberMe: false };
       const resultNoRemember = await jwtCallback!({
         token: tokenWithoutRemember,
-        user: { id: "user-1", email: "test@test.com" } as User,
+        user: undefined as unknown as User,
         account: null,
         profile: undefined,
         trigger: "signIn",
@@ -129,16 +128,10 @@ describe("Auth Configuration", () => {
         rememberMe: true,
       };
 
-      const mockAdapterUser: AdapterUser = {
-        id: "user-123",
-        email: "test@example.com",
-        emailVerified: new Date(),
-      };
-
       const result = (await sessionCallback!({
         session: mockSession,
         token: mockToken,
-        user: mockAdapterUser,
+        user: { id: "user-123", email: "test@example.com", emailVerified: new Date() },
         newSession: undefined,
         trigger: "update",
       })) as SessionWithRole;

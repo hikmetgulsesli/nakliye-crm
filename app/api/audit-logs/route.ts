@@ -1,144 +1,155 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { UserRole } from '@prisma/client';
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
 
-// Validate pagination parameters
-function getValidatedPagination(pageParam: string | null, limitParam: string | null): { page: number; limit: number; isValid: boolean } {
-  const page = parseInt(pageParam || '1', 10);
-  const limit = parseInt(limitParam || '10', 10);
-  
-  if (isNaN(page) || page < 1) {
-    return { page: 1, limit: 10, isValid: false };
-  }
-  if (isNaN(limit) || limit < 1 || limit > 100) {
-    return { page, limit: Math.min(100, Math.max(1, limit)), isValid: false };
-  }
-  return { page, limit, isValid: true };
-}
+// Query parameters validation schema
+const querySchema = z.object({
+  userId: z.string().uuid().optional(),
+  action: z.enum(["CREATE", "UPDATE", "DELETE", "TRANSFER", "LOGIN", "LOGOUT"]).optional(),
+  entityType: z.enum(["customer", "quotation", "activity", "user", "lookup_value"]).optional(),
+  entityId: z.string().uuid().optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  search: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  sortBy: z.enum(["createdAt", "action", "entityType"]).default("createdAt"),
+  sortOrder: z.enum(["asc", "desc"]).default("desc"),
+});
 
-// GET /api/audit-logs - Get audit logs with filtering
+// GET /api/audit-logs - List audit logs with filters (Admin only)
 export async function GET(request: NextRequest) {
   try {
+    // Check if user is authenticated and admin
     const session = await getServerSession(authOptions);
-    
-    // Admin-only access
-    if (!session?.user || (session.user as { role?: string }).role !== UserRole.ADMIN) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { status: 401 }
+      );
+    }
+    if (session.user.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: { code: "FORBIDDEN", message: "Bu işlem için admin yetkisi gereklidir" } },
+        { status: 403 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
-    
-    // Parse filters
-    const userId = searchParams.get('userId');
-    const action = searchParams.get('action');
-    const entityType = searchParams.get('entityType');
-    const userSearch = searchParams.get('userSearch');
-    const dateFrom = searchParams.get('dateFrom');
-    const dateTo = searchParams.get('dateTo');
-    const pageParam = searchParams.get('page');
-    const limitParam = searchParams.get('limit');
 
-    // Validate pagination
-    const { page, limit, isValid } = getValidatedPagination(pageParam, limitParam);
-    if (!isValid) {
-      // Still process but with corrected values
-    }
+    // Parse and validate query parameters
+    const validatedParams = querySchema.safeParse({
+      userId: searchParams.get("userId") || undefined,
+      action: searchParams.get("action") || undefined,
+      entityType: searchParams.get("entityType") || undefined,
+      entityId: searchParams.get("entityId") || undefined,
+      startDate: searchParams.get("startDate") || undefined,
+      endDate: searchParams.get("endDate") || undefined,
+      search: searchParams.get("search") || undefined,
+      page: searchParams.get("page") || "1",
+      limit: searchParams.get("limit") || "20",
+      sortBy: searchParams.get("sortBy") || "createdAt",
+      sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
+    });
 
-    // Build where clause
-    const where: {
-      userId?: string;
-      action?: string;
-      entityType?: string;
-      createdAt?: {
-        gte?: Date;
-        lte?: Date;
-      };
-      user?: {
-        OR?: Array<{
-          email?: { contains: string; mode: 'insensitive' };
-          firstName?: { contains: string; mode: 'insensitive' };
-          lastName?: { contains: string; mode: 'insensitive' };
-        }>;
-      };
-    } = {};
-
-    if (userId && userId !== 'all') {
-      where.userId = userId;
-    }
-
-    if (action && action !== 'all') {
-      where.action = action.toUpperCase();
-    }
-
-    if (entityType && entityType !== 'all') {
-      where.entityType = entityType;
-    }
-
-    // Server-side user search
-    if (userSearch && userSearch.trim()) {
-      const searchTerm = userSearch.trim();
-      where.user = {
-        OR: [
-          { email: { contains: searchTerm, mode: 'insensitive' } },
-          { firstName: { contains: searchTerm, mode: 'insensitive' } },
-          { lastName: { contains: searchTerm, mode: 'insensitive' } },
-        ],
-      };
-    }
-
-    if (dateFrom || dateTo) {
-      where.createdAt = {};
-      if (dateFrom) {
-        where.createdAt.gte = new Date(dateFrom);
-      }
-      if (dateTo) {
-        // dateTo is already end of day from client, so just use it directly
-        where.createdAt.lte = new Date(dateTo);
-      }
-    }
-
-    // Calculate skip
-    const skip = (page - 1) * limit;
-
-    // Fetch audit logs with user info
-    const [logs, total] = await Promise.all([
-      prisma.auditLog.findMany({
-        where,
-        include: {
-          user: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-              avatarUrl: true,
-            },
+    if (!validatedParams.success) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Geçersiz sorgu parametreleri",
+            details: validatedParams.error.issues,
           },
         },
-        orderBy: {
-          createdAt: 'desc',
+        { status: 400 }
+      );
+    }
+
+    const params = validatedParams.data;
+
+    // Build where clause
+    const where: Record<string, unknown> = {};
+
+    if (params.userId) {
+      where.userId = params.userId;
+    }
+
+    if (params.action) {
+      where.action = params.action;
+    }
+
+    if (params.entityType) {
+      where.entityType = params.entityType;
+    }
+
+    if (params.entityId) {
+      where.entityId = params.entityId;
+    }
+
+    if (params.startDate || params.endDate) {
+      const createdAtFilter: { gte?: Date; lte?: Date } = {};
+      if (params.startDate) {
+        createdAtFilter.gte = new Date(params.startDate);
+      }
+      if (params.endDate) {
+        createdAtFilter.lte = new Date(params.endDate);
+      }
+      where.createdAt = createdAtFilter;
+    }
+
+    if (params.search) {
+      where.OR = [
+        { action: { contains: params.search, mode: "insensitive" } },
+        { entityType: { contains: params.search, mode: "insensitive" } },
+        {
+          user: {
+            OR: [
+              { firstName: { contains: params.search, mode: "insensitive" } },
+              { lastName: { contains: params.search, mode: "insensitive" } },
+              { email: { contains: params.search, mode: "insensitive" } },
+            ],
+          },
         },
-        skip,
-        take: limit,
-      }),
-      prisma.auditLog.count({ where }),
-    ]);
+      ];
+    }
+
+    // Get total count
+    const total = await prisma.auditLog.count({ where });
+
+    // Get audit logs with pagination
+    const auditLogs = await prisma.auditLog.findMany({
+      where,
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            role: true,
+          },
+        },
+      },
+      orderBy: { [params.sortBy]: params.sortOrder },
+      skip: (params.page - 1) * params.limit,
+      take: params.limit,
+    });
 
     return NextResponse.json({
-      logs,
-      pagination: {
-        page,
-        limit,
+      data: auditLogs,
+      meta: {
+        page: params.page,
+        limit: params.limit,
         total,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / params.limit),
       },
     });
   } catch (error) {
-    console.error('Error fetching audit logs:', error);
+    console.error("Error fetching audit logs:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch audit logs' },
+      { error: { code: "INTERNAL_ERROR", message: "Denetim kayıtları alınırken bir hata oluştu" } },
       { status: 500 }
     );
   }

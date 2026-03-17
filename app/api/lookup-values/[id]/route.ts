@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { authOptions } from '@/lib/auth';
@@ -11,12 +12,6 @@ const updateLookupValueSchema = z.object({
   sortOrder: z.number().int().optional(),
   isActive: z.boolean().optional(),
 });
-
-// Helper function to check if user is admin
-async function requireAdmin(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  return session?.user?.role === 'ADMIN';
-}
 
 // GET /api/lookup-values/[id] - Get a single lookup value
 export async function GET(
@@ -53,9 +48,10 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    
     // Check if user is admin
-    const isAdmin = await requireAdmin();
-    if (!isAdmin) {
+    if (session?.user?.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Unauthorized: Admin access required' },
         { status: 403 }
@@ -80,9 +76,51 @@ export async function PATCH(
       );
     }
     
-    const lookupValue = await prisma.lookupValue.update({
-      where: { id },
-      data: validatedData,
+    // Build update data and track changes
+    const updateData: { label?: string; description?: string | null; sortOrder?: number; isActive?: boolean } = {};
+    const changedFields: Record<string, { old: unknown; new: unknown }> = {};
+
+    if (validatedData.label !== undefined && validatedData.label !== existing.label) {
+      changedFields.label = { old: existing.label, new: validatedData.label };
+      updateData.label = validatedData.label;
+    }
+    if (validatedData.description !== undefined && validatedData.description !== existing.description) {
+      changedFields.description = { old: existing.description, new: validatedData.description };
+      updateData.description = validatedData.description;
+    }
+    if (validatedData.sortOrder !== undefined && validatedData.sortOrder !== existing.sortOrder) {
+      changedFields.sortOrder = { old: existing.sortOrder, new: validatedData.sortOrder };
+      updateData.sortOrder = validatedData.sortOrder;
+    }
+    if (validatedData.isActive !== undefined && validatedData.isActive !== existing.isActive) {
+      changedFields.isActive = { old: existing.isActive, new: validatedData.isActive };
+      updateData.isActive = validatedData.isActive;
+    }
+    
+    // Update lookup value and create audit log in a transaction
+    const lookupValue = await prisma.$transaction(async (tx) => {
+      const updated = Object.keys(updateData).length > 0
+        ? await tx.lookupValue.update({
+            where: { id },
+            data: updateData,
+          })
+        : existing;
+
+      // Create audit log if there are changes
+      if (Object.keys(changedFields).length > 0) {
+        await tx.auditLog.create({
+          data: {
+            userId: session.user.id,
+            action: 'UPDATE',
+            entityType: 'lookup_value',
+            entityId: id,
+            oldValues: changedFields as Prisma.InputJsonValue,
+            newValues: updateData as Prisma.InputJsonValue,
+          },
+        });
+      }
+
+      return updated;
     });
 
     return NextResponse.json({ success: true, data: lookupValue });
@@ -109,9 +147,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    
     // Check if user is admin
-    const isAdmin = await requireAdmin();
-    if (!isAdmin) {
+    if (session?.user?.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Unauthorized: Admin access required' },
         { status: 403 }
@@ -132,8 +171,22 @@ export async function DELETE(
       );
     }
     
-    await prisma.lookupValue.delete({
-      where: { id },
+    // Delete lookup value and create audit log in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Create audit log before deletion
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: 'DELETE',
+          entityType: 'lookup_value',
+          entityId: id,
+          oldValues: existing as unknown as Prisma.InputJsonValue,
+        },
+      });
+
+      await tx.lookupValue.delete({
+        where: { id },
+      });
     });
 
     return NextResponse.json(
