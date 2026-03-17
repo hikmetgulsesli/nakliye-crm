@@ -449,15 +449,18 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     })
   );
 
-  // Get loss reason analysis
-  const lossReasonStats = await prisma.quotation.groupBy({
-    by: ["lossReason"],
-    where: {
-      status: QuotationStatus.REJECTED,
-      createdAt: { gte: ranges.startOfMonth },
-    },
-    _count: { id: true },
-  });
+  // Get loss reason analysis using raw query (lossReason is String, not enum in schema)
+  const lossReasonRaw = await prisma.$queryRaw<Array<{ loss_reason: string | null; _count: bigint }>>`
+    SELECT loss_reason, COUNT(*) as _count 
+    FROM quotations 
+    WHERE status = 'REJECTED' 
+    AND created_at >= ${ranges.startOfMonth}
+    GROUP BY loss_reason
+  `;
+  const lossReasonStats = lossReasonRaw.map(r => ({
+    lossReason: r.loss_reason,
+    _count: { id: Number(r._count) }
+  }));
 
   const totalLosses = lossReasonStats.reduce((sum, r) => sum + r._count.id, 0);
 
