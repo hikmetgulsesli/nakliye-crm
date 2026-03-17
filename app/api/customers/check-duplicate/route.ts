@@ -1,45 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-
-// Helper function for fuzzy string similarity
-function calculateSimilarity(str1: string, str2: string): number {
-  const s1 = str1.toLowerCase().trim()
-  const s2 = str2.toLowerCase().trim()
-  
-  if (s1 === s2) return 100
-  
-  const len1 = s1.length
-  const len2 = s2.length
-  const maxLen = Math.max(len1, len2)
-  
-  if (maxLen === 0) return 100
-  
-  const matrix: number[][] = []
-  
-  for (let i = 0; i <= len1; i++) {
-    matrix[i] = [i]
-  }
-  
-  for (let j = 0; j <= len2; j++) {
-    matrix[0][j] = j
-  }
-  
-  for (let i = 1; i <= len1; i++) {
-    for (let j = 1; j <= len2; j++) {
-      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1
-      matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,
-        matrix[i][j - 1] + 1,
-        matrix[i - 1][j - 1] + cost
-      )
-    }
-  }
-  
-  const distance = matrix[len1][len2]
-  const similarity = ((maxLen - distance) / maxLen) * 100
-  
-  return Math.round(similarity)
-}
+import { Prisma } from '@prisma/client'
+import { calculateSimilarity } from '@/lib/services/customerService'
 
 // GET /api/customers/check-duplicate - Check for potential duplicates
 export async function GET(request: NextRequest) {
@@ -71,54 +33,92 @@ export async function GET(request: NextRequest) {
       matchedFields: string[]
     }> = []
     
-    // Get all customers for comparison
-    const customers = await prisma.customer.findMany({
-      where: excludeId ? { id: { not: excludeId } } : undefined,
-      select: {
-        id: true,
-        companyName: true,
-        email: true,
-        phone: true,
-        status: true,
-        createdAt: true,
-      },
-    })
+    // First, check exact matches on phone and email using DB queries (efficient)
+    const orConditions: Prisma.CustomerWhereInput = {}
     
-    for (const customer of customers) {
-      const matchedFields: string[] = []
-      let maxSimilarity = 0
+    if (email || phone) {
+      orConditions.OR = []
+      if (email) {
+        orConditions.OR.push({ email: { equals: email, mode: 'insensitive' } })
+      }
+      if (phone) {
+        orConditions.OR.push({ phone })
+      }
+      if (excludeId) {
+        orConditions.id = { not: excludeId }
+      }
       
-      // Check company name similarity (80%+ threshold)
-      if (companyName) {
+      const exactMatches = await prisma.customer.findMany({
+        where: orConditions,
+        select: {
+          id: true,
+          companyName: true,
+          email: true,
+          phone: true,
+          status: true,
+          createdAt: true,
+        },
+      })
+      
+      for (const customer of exactMatches) {
+        const matchedFields: string[] = []
+        if (email && customer.email && email.toLowerCase() === customer.email.toLowerCase()) {
+          matchedFields.push('email')
+        }
+        if (phone && customer.phone && phone === customer.phone) {
+          matchedFields.push('phone')
+        }
+        if (matchedFields.length > 0) {
+          duplicates.push({
+            customer,
+            similarity: 100,
+            matchedFields,
+          })
+        }
+      }
+    }
+    
+    // Then, check fuzzy name matching (only if companyName provided)
+    // Use DB contains filter to reduce candidates, then do fuzzy matching in memory
+    if (companyName) {
+      const searchPrefix = companyName.substring(0, 3).toLowerCase()
+      
+      const potentialNameMatches = await prisma.customer.findMany({
+        where: {
+          companyName: {
+            contains: searchPrefix,
+            mode: 'insensitive',
+          },
+          ...(excludeId ? { id: { not: excludeId } } : {}),
+        },
+        select: {
+          id: true,
+          companyName: true,
+          email: true,
+          phone: true,
+          status: true,
+          createdAt: true,
+        },
+        take: 100,
+      })
+      
+      for (const customer of potentialNameMatches) {
         const similarity = calculateSimilarity(companyName, customer.companyName)
         if (similarity >= 80) {
-          matchedFields.push('companyName')
-          maxSimilarity = Math.max(maxSimilarity, similarity)
+          // Check if this customer is already in duplicates
+          const existingIndex = duplicates.findIndex(d => d.customer.id === customer.id)
+          if (existingIndex >= 0) {
+            // Add companyName to matched fields
+            duplicates[existingIndex].matchedFields.push('companyName')
+            duplicates[existingIndex].similarity = 100
+          } else {
+            duplicates.push({
+              customer,
+              similarity,
+              matchedFields: ['companyName'],
+            })
+          }
         }
-      }
-      
-      // Check exact phone match
-      if (phone && customer.phone) {
-        if (phone === customer.phone) {
-          matchedFields.push('phone')
-          maxSimilarity = 100
-        }
-      }
-      
-      // Check exact email match
-      if (email && customer.email) {
-        if (email.toLowerCase() === customer.email.toLowerCase()) {
-          matchedFields.push('email')
-          maxSimilarity = 100
-        }
-      }
-      
-      if (matchedFields.length > 0) {
-        duplicates.push({
-          customer,
-          similarity: maxSimilarity,
-          matchedFields,
-        })
       }
     }
     

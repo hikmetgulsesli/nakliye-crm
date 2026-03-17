@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 // Validation schema for creating/updating lookup values
 const lookupValueSchema = z.object({
@@ -63,6 +66,16 @@ export async function GET(request: NextRequest) {
 // POST /api/lookup-values - Create a new lookup value
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    // Check if user is admin
+    if (session?.user?.role !== 'ADMIN') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin access required' },
+        { status: 403 }
+      );
+    }
+    
     const body = await request.json();
     
     // Validate input
@@ -85,8 +98,24 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const lookupValue = await prisma.lookupValue.create({
-      data: validatedData,
+    // Create lookup value and audit log in a transaction
+    const lookupValue = await prisma.$transaction(async (tx) => {
+      const newValue = await tx.lookupValue.create({
+        data: validatedData,
+      });
+
+      // Create audit log
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: 'CREATE',
+          entityType: 'lookup_value',
+          entityId: newValue.id,
+          newValues: newValue as unknown as Prisma.InputJsonValue,
+        },
+      });
+
+      return newValue;
     });
 
     return NextResponse.json(

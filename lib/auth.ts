@@ -1,11 +1,9 @@
 import { NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as unknown as NextAuthOptions["adapter"],
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -41,27 +39,39 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: `${user.firstName} ${user.lastName}`,
           role: user.role,
+          rememberMe: credentials.rememberMe === "true",
         };
       },
     }),
   ],
   session: {
     strategy: "jwt",
-    maxAge: 8 * 60 * 60, // 8 hours default
+    maxAge: 30 * 24 * 60 * 60, // 30 days default (will be adjusted based on rememberMe)
   },
   jwt: {
-    maxAge: 8 * 60 * 60, // 8 hours default
+    maxAge: 30 * 24 * 60 * 60, // 30 days default
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session: sessionParam }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
       }
       
-      // Handle session update (e.g., extending session)
-      if (trigger === "update" && session) {
-        token.maxAge = session.maxAge;
+      // Handle session update or initial sign in
+      if (trigger === "update" && sessionParam) {
+        if (sessionParam.rememberMe !== undefined) {
+          token.rememberMe = sessionParam.rememberMe;
+        }
+      }
+      
+      // For credentials provider, we need to check the rememberMe from credentials
+      // This is passed during sign in and stored in the token
+      const rememberMe = token.rememberMe as boolean | undefined;
+      
+      // Set maxAge based on rememberMe
+      if (rememberMe !== undefined) {
+        token.maxAge = rememberMe ? 30 * 24 * 60 * 60 : 8 * 60 * 60;
       }
       
       return token;
@@ -70,6 +80,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.rememberMe = token.rememberMe;
       }
       return session;
     },

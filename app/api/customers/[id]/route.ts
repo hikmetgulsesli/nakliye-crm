@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { z } from "zod";
+import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
 
-// Validation schema for updating customers
-const customerUpdateSchema = z.object({
-  companyName: z.string().min(2, 'Company name must be at least 2 characters').optional(),
+// Validation schema for updating a customer
+const updateCustomerSchema = z.object({
+  companyName: z.string().min(1).optional(),
   contactName: z.string().optional().nullable(),
-  email: z.string().email('Invalid email address').optional(),
+  email: z.string().email().optional(),
   phone: z.string().optional().nullable(),
   mobile: z.string().optional().nullable(),
   address: z.string().optional().nullable(),
@@ -15,10 +18,10 @@ const customerUpdateSchema = z.object({
   postalCode: z.string().optional().nullable(),
   taxNumber: z.string().optional().nullable(),
   taxOffice: z.string().optional().nullable(),
-  status: z.enum(['ACTIVE', 'INACTIVE', 'PROSPECT', 'BLACKLISTED']).optional(),
-  assignedToId: z.string().optional().nullable(),
+  status: z.enum(["ACTIVE", "INACTIVE", "PROSPECT", "BLACKLISTED"]).optional(),
+  assignedToId: z.string().uuid().optional().nullable(),
   notes: z.string().optional().nullable(),
-})
+});
 
 // GET /api/customers/[id] - Get a single customer
 export async function GET(
@@ -26,8 +29,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { status: 401 }
+      );
+    }
+
+    const { id } = await params;
+
     const customer = await prisma.customer.findUnique({
       where: { id },
       include: {
@@ -40,8 +51,6 @@ export async function GET(
           },
         },
         quotations: {
-          orderBy: { createdAt: 'desc' },
-          take: 5,
           select: {
             id: true,
             quoteNumber: true,
@@ -50,139 +59,169 @@ export async function GET(
             currency: true,
             createdAt: true,
           },
-        },
-        activities: {
-          orderBy: { createdAt: 'desc' },
-          take: 10,
-          include: {
-            user: {
-              select: {
-                firstName: true,
-                lastName: true,
-              },
-            },
-          },
-        },
-        _count: {
-          select: {
-            quotations: true,
-            activities: true,
-          },
+          orderBy: { createdAt: "desc" },
+          take: 5,
         },
       },
-    })
-    
+    });
+
     if (!customer) {
       return NextResponse.json(
-        { error: 'Customer not found' },
+        { error: { code: "NOT_FOUND", message: "Müşteri bulunamadı" } },
         { status: 404 }
-      )
+      );
     }
-    
-    return NextResponse.json(customer)
+
+    return NextResponse.json({ data: customer });
   } catch (error) {
-    console.error('Error fetching customer:', error)
+    console.error("Error fetching customer:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch customer' },
+      { error: { code: "INTERNAL_ERROR", message: "Müşteri alınırken bir hata oluştu" } },
       { status: 500 }
-    )
+    );
   }
 }
 
-// PUT /api/customers/[id] - Update a customer
-export async function PUT(
+// PATCH /api/customers/[id] - Update a customer
+export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    const body = await request.json()
-    
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { status: 401 }
+      );
+    }
+
+    const { id } = await params;
+    const body = await request.json();
+
+    // Validate input
+    const validationResult = updateCustomerSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Geçersiz giriş",
+            details: validationResult.error.issues.map((err) => ({
+              field: String(err.path.join(".")),
+              message: err.message,
+            })),
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const data = validationResult.data;
+
     // Check if customer exists
     const existingCustomer = await prisma.customer.findUnique({
       where: { id },
-    })
-    
+    });
+
     if (!existingCustomer) {
       return NextResponse.json(
-        { error: 'Customer not found' },
+        { error: { code: "NOT_FOUND", message: "Müşteri bulunamadı" } },
         { status: 404 }
-      )
+      );
     }
-    
-    // Validate input
-    const validatedData = customerUpdateSchema.parse(body)
-    
-    // Check for duplicate email if being updated
-    if (validatedData.email && validatedData.email !== existingCustomer.email) {
-      const emailExists = await prisma.customer.findFirst({
-        where: {
-          email: validatedData.email,
-          id: { not: id },
-        },
-      })
-      
-      if (emailExists) {
+
+    // Check email uniqueness if email is being changed
+    if (data.email && data.email !== existingCustomer.email) {
+      const existingEmail = await prisma.customer.findFirst({
+        where: { email: data.email },
+      });
+      if (existingEmail) {
         return NextResponse.json(
-          { error: 'A customer with this email already exists', field: 'email' },
+          { error: { code: "CONFLICT", message: "Bu e-posta adresiyle kayıtlı bir müşteri zaten var" } },
           { status: 409 }
-        )
+        );
       }
     }
-    
-    // Check for duplicate phone if being updated
-    if (validatedData.phone && validatedData.phone !== existingCustomer.phone) {
-      const phoneExists = await prisma.customer.findFirst({
-        where: {
-          phone: validatedData.phone,
-          id: { not: id },
-        },
-      })
-      
-      if (phoneExists) {
-        return NextResponse.json(
-          { error: 'A customer with this phone number already exists', field: 'phone' },
-          { status: 409 }
-        )
+
+    // Build update data and track changes
+    const updateData: Record<string, unknown> = {};
+    const changedFields: Record<string, { old: unknown; new: unknown }> = {};
+
+    const trackChange = (field: string, oldValue: unknown, newValue: unknown) => {
+      if (oldValue !== newValue) {
+        changedFields[field] = { old: oldValue, new: newValue };
+        updateData[field] = newValue;
       }
+    };
+
+    // Process each field
+    if (data.companyName !== undefined) trackChange("companyName", existingCustomer.companyName, data.companyName);
+    if (data.contactName !== undefined) trackChange("contactName", existingCustomer.contactName, data.contactName);
+    if (data.email !== undefined) trackChange("email", existingCustomer.email, data.email);
+    if (data.phone !== undefined) trackChange("phone", existingCustomer.phone, data.phone);
+    if (data.mobile !== undefined) trackChange("mobile", existingCustomer.mobile, data.mobile);
+    if (data.address !== undefined) trackChange("address", existingCustomer.address, data.address);
+    if (data.city !== undefined) trackChange("city", existingCustomer.city, data.city);
+    if (data.country !== undefined) trackChange("country", existingCustomer.country, data.country);
+    if (data.postalCode !== undefined) trackChange("postalCode", existingCustomer.postalCode, data.postalCode);
+    if (data.taxNumber !== undefined) trackChange("taxNumber", existingCustomer.taxNumber, data.taxNumber);
+    if (data.taxOffice !== undefined) trackChange("taxOffice", existingCustomer.taxOffice, data.taxOffice);
+    if (data.status !== undefined) trackChange("status", existingCustomer.status, data.status);
+    if (data.assignedToId !== undefined) trackChange("assignedToId", existingCustomer.assignedToId, data.assignedToId);
+    if (data.notes !== undefined) trackChange("notes", existingCustomer.notes, data.notes);
+
+    // If no changes, return early
+    if (Object.keys(changedFields).length === 0) {
+      return NextResponse.json({
+        data: await prisma.customer.findUnique({
+          where: { id },
+          include: {
+            assignedTo: { select: { id: true, firstName: true, lastName: true } },
+          },
+        }),
+      });
     }
-    
-    // Update customer
-    const customer = await prisma.customer.update({
-      where: { id },
-      data: validatedData,
-      include: {
-        assignedTo: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
+
+    // Update customer and create audit log in a transaction
+    const updatedCustomer = await prisma.$transaction(async (tx) => {
+      // Update the customer
+      const customer = await tx.customer.update({
+        where: { id },
+        data: updateData,
+        include: {
+          assignedTo: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
           },
         },
-        _count: {
-          select: {
-            quotations: true,
-            activities: true,
-          },
+      });
+
+      // Create audit log
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: "UPDATE",
+          entityType: "customer",
+          entityId: id,
+          oldValues: changedFields as Prisma.InputJsonValue,
+          newValues: updateData as Prisma.InputJsonValue,
         },
-      },
-    })
-    
-    return NextResponse.json(customer)
+      });
+
+      return customer;
+    });
+
+    return NextResponse.json({ data: updatedCustomer });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.issues },
-        { status: 400 }
-      )
-    }
-    
-    console.error('Error updating customer:', error)
+    console.error("Error updating customer:", error);
     return NextResponse.json(
-      { error: 'Failed to update customer' },
+      { error: { code: "INTERNAL_ERROR", message: "Müşteri güncellenirken bir hata oluştu" } },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -192,46 +231,61 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { status: 401 }
+      );
+    }
+
+    // Only admins can delete customers
+    if (session.user.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: { code: "FORBIDDEN", message: "Bu işlem için admin yetkisi gereklidir" } },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await params;
+
     // Check if customer exists
     const existingCustomer = await prisma.customer.findUnique({
       where: { id },
-      include: {
-        _count: {
-          select: {
-            quotations: true,
-          },
-        },
-      },
-    })
-    
+    });
+
     if (!existingCustomer) {
       return NextResponse.json(
-        { error: 'Customer not found' },
+        { error: { code: "NOT_FOUND", message: "Müşteri bulunamadı" } },
         { status: 404 }
-      )
+      );
     }
-    
-    // Prevent deletion if customer has quotations
-    if (existingCustomer._count.quotations > 0) {
-      return NextResponse.json(
-        { error: 'Cannot delete customer with existing quotations' },
-        { status: 409 }
-      )
-    }
-    
-    // Delete customer
-    await prisma.customer.delete({
-      where: { id },
-    })
-    
-    return NextResponse.json({ success: true })
+
+    // Delete customer and create audit log in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Create audit log before deletion
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: "DELETE",
+          entityType: "customer",
+          entityId: id,
+          oldValues: existingCustomer as unknown as Prisma.InputJsonValue,
+        },
+      });
+
+      // Delete the customer
+      await tx.customer.delete({
+        where: { id },
+      });
+    });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting customer:', error)
+    console.error("Error deleting customer:", error);
     return NextResponse.json(
-      { error: 'Failed to delete customer' },
+      { error: { code: "INTERNAL_ERROR", message: "Müşteri silinirken bir hata oluştu" } },
       { status: 500 }
-    )
+    );
   }
 }

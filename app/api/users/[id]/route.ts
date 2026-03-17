@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 // Validation schema for updating a user
@@ -39,17 +40,32 @@ export async function PATCH(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Check email uniqueness if email is being updated
-    if (validatedData.email && validatedData.email !== existingUser.email) {
-      const emailExists = await prisma.user.findUnique({
-        where: { email: validatedData.email },
-      });
-      if (emailExists) {
-        return NextResponse.json(
-          { error: 'Email already in use' },
-          { status: 409 }
-        );
+    // Check email uniqueness if email is being updated (case-insensitive)
+    if (validatedData.email) {
+      const normalizedNewEmail = validatedData.email.toLowerCase()
+      const normalizedOldEmail = existingUser.email.toLowerCase()
+      
+      if (normalizedNewEmail !== normalizedOldEmail) {
+        const emailExists = await prisma.user.findFirst({
+          where: { 
+            email: { equals: normalizedNewEmail, mode: 'insensitive' },
+          },
+        });
+        if (emailExists && emailExists.id !== id) {
+          return NextResponse.json(
+            { error: 'Email already in use' },
+            { status: 409 }
+          );
+        }
       }
+    }
+
+    // Prevent self-deactivation via PATCH (consistent with DELETE)
+    if (validatedData.isActive === false && id === session.user.id) {
+      return NextResponse.json(
+        { error: 'Cannot deactivate your own account' },
+        { status: 400 }
+      );
     }
 
     const user = await prisma.user.update({
@@ -69,14 +85,26 @@ export async function PATCH(
       },
     });
 
-    // Create audit log
+    // Create audit log (exclude sensitive fields)
+    const safeOldValues = {
+      id: existingUser.id,
+      email: existingUser.email,
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
+      role: existingUser.role,
+      phone: existingUser.phone,
+      avatarUrl: existingUser.avatarUrl,
+      isActive: existingUser.isActive,
+      createdAt: existingUser.createdAt,
+      updatedAt: existingUser.updatedAt,
+    }
     await prisma.auditLog.create({
       data: {
         userId: session.user.id,
         action: 'UPDATE',
         entityType: 'user',
         entityId: user.id,
-        oldValues: existingUser,
+        oldValues: safeOldValues,
         newValues: user,
       },
     });
