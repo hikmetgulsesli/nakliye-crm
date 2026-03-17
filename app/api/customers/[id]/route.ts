@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 // Validation schema for updating customers
@@ -113,35 +114,31 @@ export async function PUT(
     // Validate input
     const validatedData = customerUpdateSchema.parse(body)
     
-    // Check for duplicate email if being updated
-    if (validatedData.email && validatedData.email !== existingCustomer.email) {
-      const emailExists = await prisma.customer.findFirst({
-        where: {
-          email: validatedData.email,
-          id: { not: id },
-        },
-      })
+    // Check for duplicate email or phone if being updated - combined query for efficiency
+    if ((validatedData.email && validatedData.email !== existingCustomer.email) || 
+        (validatedData.phone && validatedData.phone !== existingCustomer.phone)) {
+      const orConditions: Prisma.CustomerWhereInput[] = []
       
-      if (emailExists) {
-        return NextResponse.json(
-          { error: 'A customer with this email already exists', field: 'email' },
-          { status: 409 }
-        )
+      if (validatedData.email && validatedData.email !== existingCustomer.email) {
+        orConditions.push({ email: { equals: validatedData.email, mode: 'insensitive' } })
       }
-    }
-    
-    // Check for duplicate phone if being updated
-    if (validatedData.phone && validatedData.phone !== existingCustomer.phone) {
-      const phoneExists = await prisma.customer.findFirst({
+      if (validatedData.phone && validatedData.phone !== existingCustomer.phone) {
+        orConditions.push({ phone: validatedData.phone })
+      }
+      
+      const duplicateCustomer = await prisma.customer.findFirst({
         where: {
-          phone: validatedData.phone,
           id: { not: id },
+          OR: orConditions,
         },
       })
       
-      if (phoneExists) {
+      if (duplicateCustomer) {
+        const field = duplicateCustomer.email?.toLowerCase() === validatedData.email?.toLowerCase()
+          ? 'email'
+          : 'phone'
         return NextResponse.json(
-          { error: 'A customer with this phone number already exists', field: 'phone' },
+          { error: `A customer with this ${field} already exists`, field },
           { status: 409 }
         )
       }

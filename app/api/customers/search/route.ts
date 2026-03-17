@@ -1,46 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-
-// Helper function for fuzzy string similarity (Levenshtein distance based)
-function calculateSimilarity(str1: string, str2: string): number {
-  const s1 = str1.toLowerCase().trim()
-  const s2 = str2.toLowerCase().trim()
-  
-  if (s1 === s2) return 100
-  
-  const len1 = s1.length
-  const len2 = s2.length
-  const maxLen = Math.max(len1, len2)
-  
-  if (maxLen === 0) return 100
-  
-  // Calculate Levenshtein distance
-  const matrix: number[][] = []
-  
-  for (let i = 0; i <= len1; i++) {
-    matrix[i] = [i]
-  }
-  
-  for (let j = 0; j <= len2; j++) {
-    matrix[0][j] = j
-  }
-  
-  for (let i = 1; i <= len1; i++) {
-    for (let j = 1; j <= len2; j++) {
-      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1
-      matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,
-        matrix[i][j - 1] + 1,
-        matrix[i - 1][j - 1] + cost
-      )
-    }
-  }
-  
-  const distance = matrix[len1][len2]
-  const similarity = ((maxLen - distance) / maxLen) * 100
-  
-  return Math.round(similarity)
-}
+import { calculateSimilarity } from '@/lib/services/customerService'
 
 // GET /api/customers/search - Search customers with fuzzy matching
 export async function GET(request: NextRequest) {
@@ -50,7 +10,15 @@ export async function GET(request: NextRequest) {
     const companyName = searchParams.get('companyName')
     const phone = searchParams.get('phone')
     const email = searchParams.get('email')
-    const minSimilarity = parseInt(searchParams.get('minSimilarity') || '80', 10)
+    // Validate and clamp minSimilarity to 0-100 range
+    const rawMinSimilarity = searchParams.get('minSimilarity')
+    let minSimilarity = 80
+    if (rawMinSimilarity) {
+      const parsed = parseInt(rawMinSimilarity, 10)
+      if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
+        minSimilarity = parsed
+      }
+    }
     
     // Must provide at least one search parameter
     if (!companyName && !phone && !email) {
@@ -74,7 +42,17 @@ export async function GET(request: NextRequest) {
     
     // Search by company name (fuzzy match)
     if (companyName) {
+      // Use database contains filter as pre-filter to reduce rows for fuzzy matching
+      // Get first 3 characters for initial filtering (common prefix approach)
+      const searchPrefix = companyName.substring(0, 3).toLowerCase()
+      
       const customers = await prisma.customer.findMany({
+        where: {
+          companyName: {
+            contains: searchPrefix,
+            mode: 'insensitive',
+          },
+        },
         select: {
           id: true,
           companyName: true,
@@ -82,6 +60,8 @@ export async function GET(request: NextRequest) {
           phone: true,
           status: true,
         },
+        // Limit to prevent excessive memory usage
+        take: 100,
       })
       
       for (const customer of customers) {

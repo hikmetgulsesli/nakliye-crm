@@ -32,15 +32,22 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search')
     const status = searchParams.get('status')
     const assignedToId = searchParams.get('assignedToId')
-    const page = parseInt(searchParams.get('page') || '1', 10)
-    const limit = parseInt(searchParams.get('limit') || '20', 10)
+    // Validate pagination parameters
+    const rawPage = searchParams.get('page')
+    const rawLimit = searchParams.get('limit')
+    const page = Math.max(1, parseInt(rawPage || '1', 10))
+    const limit = Math.min(100, Math.max(1, parseInt(rawLimit || '20', 10)))
     const skip = (page - 1) * limit
     
     // Build where clause
     const where: Prisma.CustomerWhereInput = {}
     
+    // Validate status against enum
     if (status) {
-      where.status = status as CustomerStatus
+      const validStatuses: CustomerStatus[] = ['ACTIVE', 'INACTIVE', 'PROSPECT', 'BLACKLISTED']
+      if (validStatuses.includes(status as CustomerStatus)) {
+        where.status = status as CustomerStatus
+      }
     }
     
     if (assignedToId) {
@@ -110,27 +117,27 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validatedData = customerSchema.parse(body)
     
-    // Check for duplicate email
-    const existingEmail = await prisma.customer.findFirst({
-      where: { email: validatedData.email },
-    })
-    
-    if (existingEmail) {
-      return NextResponse.json(
-        { error: 'A customer with this email already exists', field: 'email' },
-        { status: 409 }
-      )
-    }
-    
-    // Check for duplicate phone if provided
-    if (validatedData.phone) {
-      const existingPhone = await prisma.customer.findFirst({
-        where: { phone: validatedData.phone },
+    // Check for duplicate email or phone in a single query
+    if (validatedData.email || validatedData.phone) {
+      const orConditions: Prisma.CustomerWhereInput[] = []
+      
+      if (validatedData.email) {
+        orConditions.push({ email: { equals: validatedData.email, mode: 'insensitive' } })
+      }
+      if (validatedData.phone) {
+        orConditions.push({ phone: validatedData.phone })
+      }
+      
+      const existingCustomer = await prisma.customer.findFirst({
+        where: { OR: orConditions },
       })
       
-      if (existingPhone) {
+      if (existingCustomer) {
+        const field = existingCustomer.email?.toLowerCase() === validatedData.email?.toLowerCase() 
+          ? 'email' 
+          : 'phone'
         return NextResponse.json(
-          { error: 'A customer with this phone number already exists', field: 'phone' },
+          { error: `A customer with this ${field} already exists`, field },
           { status: 409 }
         )
       }

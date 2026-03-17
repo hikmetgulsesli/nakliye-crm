@@ -41,9 +41,12 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    // Filter by role
+    // Filter by role with validation
     if (role && role !== 'all') {
-      where.role = role.toUpperCase() as UserRole;
+      const validRoles: UserRole[] = ['ADMIN', 'SALES_REP', 'SALES_MANAGER', 'OPERATIONS', 'FINANCE', 'VIEWER']
+      if (validRoles.includes(role.toUpperCase() as UserRole)) {
+        where.role = role.toUpperCase() as UserRole;
+      }
     }
 
     // Filter by status
@@ -52,6 +55,11 @@ export async function GET(request: NextRequest) {
     } else if (status === 'inactive') {
       where.isActive = false;
     }
+
+    // Validate pagination parameters
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10)));
+    const skip = (page - 1) * limit;
 
     const users = await prisma.user.findMany({
       where,
@@ -68,6 +76,8 @@ export async function GET(request: NextRequest) {
         lastLoginAt: true,
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
     });
 
     return NextResponse.json(users);
@@ -127,17 +137,21 @@ export async function POST(request: NextRequest) {
         avatarUrl: true,
         isActive: true,
         createdAt: true,
+        lastLoginAt: true,
       },
     });
 
-    // Create audit log
+    // Create audit log (exclude passwordHash)
     await prisma.auditLog.create({
       data: {
         userId: session.user.id,
         action: 'CREATE',
         entityType: 'user',
         entityId: user.id,
-        newValues: user,
+        newValues: {
+          ...user,
+          passwordHash: undefined,
+        },
       },
     });
 
