@@ -1,93 +1,104 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { z } from "zod";
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { CustomerStatus } from '@prisma/client';
 
-// Validation schema for creating a customer
-const createCustomerSchema = z.object({
-  companyName: z.string().min(1, "Firma adı zorunludur"),
-  contactName: z.string().optional(),
-  email: z.string().email("Geçerli bir e-posta adresi giriniz"),
-  phone: z.string().optional(),
-  mobile: z.string().optional(),
-  address: z.string().optional(),
-  city: z.string().optional(),
-  country: z.string().default("Türkiye"),
-  postalCode: z.string().optional(),
-  taxNumber: z.string().optional(),
-  taxOffice: z.string().optional(),
-  status: z.enum(["ACTIVE", "INACTIVE", "PROSPECT", "BLACKLISTED"]).default("PROSPECT"),
-  assignedToId: z.string().uuid().optional(),
-  notes: z.string().optional(),
+// Validation schema for creating/updating customers
+const customerSchema = z.object({
+  companyName: z.string().min(1).max(200),
+  contactName: z.string().max(100).optional().nullable(),
+  email: z.string().email(),
+  phone: z.string().max(50).optional().nullable(),
+  mobile: z.string().max(50).optional().nullable(),
+  address: z.string().max(500).optional().nullable(),
+  city: z.string().max(100).optional().nullable(),
+  country: z.string().max(100).default('Türkiye'),
+  postalCode: z.string().max(20).optional().nullable(),
+  taxNumber: z.string().max(50).optional().nullable(),
+  taxOffice: z.string().max(100).optional().nullable(),
+  status: z.nativeEnum(CustomerStatus).default(CustomerStatus.PROSPECT),
+  assignedToId: z.string().uuid().optional().nullable(),
+  notes: z.string().max(2000).optional().nullable(),
 });
 
-// GET /api/customers - List customers with filters
+// GET /api/customers - List all customers with filtering
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
     const { searchParams } = new URL(request.url);
-
-    // Parse query parameters
-    const status = searchParams.get("status");
-    const assignedToId = searchParams.get("assignedToId");
-    const search = searchParams.get("search");
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = parseInt(searchParams.get("limit") || "20", 10);
-    const sortBy = searchParams.get("sortBy") || "createdAt";
-    const sortOrder = (searchParams.get("sortOrder") || "desc") as "asc" | "desc";
-
-    // Build where clause
+    
+    // Build filter conditions
     const where: Record<string, unknown> = {};
-
+    
+    // Filter by status
+    const status = searchParams.get('status');
     if (status) {
-      where.status = status;
+      where.status = status as CustomerStatus;
     }
-
+    
+    // Filter by assigned user
+    const assignedToId = searchParams.get('assignedToId');
     if (assignedToId) {
       where.assignedToId = assignedToId;
     }
-
+    
+    // Search by company name, contact name, email, or phone
+    const search = searchParams.get('search');
     if (search) {
       where.OR = [
-        { companyName: { contains: search, mode: "insensitive" } },
-        { contactName: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
-        { phone: { contains: search, mode: "insensitive" } },
+        { companyName: { contains: search, mode: 'insensitive' } },
+        { contactName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } },
       ];
     }
 
-    // Get total count
-    const total = await prisma.customer.count({ where });
+    // Pagination
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '20', 10);
+    const skip = (page - 1) * limit;
 
-    // Get customers with pagination
-    const customers = await prisma.customer.findMany({
-      where,
-      include: {
-        assignedTo: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
+    const [customers, total] = await Promise.all([
+      prisma.customer.findMany({
+        where,
+        include: {
+          assignedTo: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+          _count: {
+            select: {
+              quotations: true,
+              activities: true,
+            },
           },
         },
-      },
-      orderBy: { [sortBy]: sortOrder },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+      prisma.customer.count({ where }),
+    ]);
 
     return NextResponse.json({
+      success: true,
       data: customers,
-      meta: {
+      pagination: {
         page,
         limit,
         total,
@@ -95,9 +106,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching customers:", error);
+    console.error('Error fetching customers:', error);
     return NextResponse.json(
-      { error: { code: "INTERNAL_ERROR", message: "Müşteriler alınırken bir hata oluştu" } },
+      { success: false, error: 'Failed to fetch customers' },
       { status: 500 }
     );
   }
@@ -109,27 +120,18 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
     const body = await request.json();
-
+    
     // Validate input
-    const validationResult = createCustomerSchema.safeParse(body);
+    const validationResult = customerSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
-        {
-          error: {
-            code: "VALIDATION_ERROR",
-            message: "Geçersiz giriş",
-            details: validationResult.error.issues.map((err) => ({
-              field: String(err.path.join(".")),
-              message: err.message,
-            })),
-          },
-        },
+        { success: false, error: 'Validation error', details: validationResult.error.format() },
         { status: 400 }
       );
     }
@@ -137,67 +139,55 @@ export async function POST(request: NextRequest) {
     const data = validationResult.data;
 
     // Check for duplicate email
-    const existingEmail = await prisma.customer.findFirst({
+    const existingCustomer = await prisma.customer.findFirst({
       where: { email: data.email },
     });
 
-    if (existingEmail) {
+    if (existingCustomer) {
       return NextResponse.json(
-        { error: { code: "CONFLICT", message: "Bu e-posta adresiyle kayıtlı bir müşteri zaten var" } },
+        { success: false, error: 'A customer with this email already exists' },
         { status: 409 }
       );
     }
 
-    // Create customer and audit log in a transaction
-    const customer = await prisma.$transaction(async (tx) => {
-      // Create the customer
-      const newCustomer = await tx.customer.create({
-        data: {
-          companyName: data.companyName,
-          contactName: data.contactName,
-          email: data.email,
-          phone: data.phone,
-          mobile: data.mobile,
-          address: data.address,
-          city: data.city,
-          country: data.country,
-          postalCode: data.postalCode,
-          taxNumber: data.taxNumber,
-          taxOffice: data.taxOffice,
-          status: data.status,
-          assignedToId: data.assignedToId || session.user.id,
-          notes: data.notes,
-        },
-        include: {
-          assignedTo: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-            },
+    // Create customer
+    const customer = await prisma.customer.create({
+      data: {
+        companyName: data.companyName,
+        contactName: data.contactName,
+        email: data.email,
+        phone: data.phone,
+        mobile: data.mobile,
+        address: data.address,
+        city: data.city,
+        country: data.country,
+        postalCode: data.postalCode,
+        taxNumber: data.taxNumber,
+        taxOffice: data.taxOffice,
+        status: data.status,
+        assignedToId: data.assignedToId,
+        notes: data.notes,
+      },
+      include: {
+        assignedTo: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
           },
         },
-      });
-
-      // Create audit log
-      await tx.auditLog.create({
-        data: {
-          userId: session.user.id,
-          action: "CREATE",
-          entityType: "customer",
-          entityId: newCustomer.id,
-          newValues: newCustomer as unknown as Prisma.InputJsonValue,
-        },
-      });
-
-      return newCustomer;
+      },
     });
 
-    return NextResponse.json({ data: customer }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating customer:", error);
     return NextResponse.json(
-      { error: { code: "INTERNAL_ERROR", message: "Müşteri oluşturulurken bir hata oluştu" } },
+      { success: true, data: customer },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('Error creating customer:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to create customer' },
       { status: 500 }
     );
   }

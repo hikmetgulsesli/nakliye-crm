@@ -1,19 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { z } from "zod";
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma.js";
-import { authOptions } from "@/lib/auth.js";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { QuotationStatus, TransportMode, Incoterm } from '@prisma/client';
 
-// Validation schema for updating a quotation
-const updateQuotationSchema = z.object({
-  originCity: z.string().min(1).optional(),
-  originCountry: z.string().min(1).optional(),
-  destinationCity: z.string().min(1).optional(),
-  destinationCountry: z.string().min(1).optional(),
-  transportMode: z.enum(["AIR", "SEA", "ROAD", "RAIL", "MULTIMODAL"]).optional(),
-  incoterm: z.enum(["EXW", "FCA", "FAS", "FOB", "CFR", "CIF", "CPT", "CIP", "DAP", "DPU", "DDP"]).optional().nullable(),
-  cargoDescription: z.string().optional().nullable(),
+// Validation schema for updating quotations
+const quotationUpdateSchema = z.object({
+  status: z.nativeEnum(QuotationStatus).optional(),
+  originCity: z.string().min(1).max(100).optional(),
+  originCountry: z.string().min(1).max(100).optional(),
+  destinationCity: z.string().min(1).max(100).optional(),
+  destinationCountry: z.string().min(1).max(100).optional(),
+  transportMode: z.nativeEnum(TransportMode).optional(),
+  incoterm: z.nativeEnum(Incoterm).optional().nullable(),
+  cargoDescription: z.string().max(500).optional().nullable(),
   weightKg: z.number().positive().optional().nullable(),
   volumeM3: z.number().positive().optional().nullable(),
   packagesCount: z.number().int().positive().optional().nullable(),
@@ -25,9 +26,7 @@ const updateQuotationSchema = z.object({
   currency: z.string().optional(),
   validUntil: z.string().datetime().optional().nullable(),
   estimatedTransitDays: z.number().int().positive().optional().nullable(),
-  internalNotes: z.string().optional().nullable(),
-  status: z.enum(["DRAFT", "SENT", "PENDING", "WON", "LOST", "EXPIRED", "CANCELLED"]).optional(),
-  lossReason: z.enum(["PRICE", "COMPETITOR", "DELAYED_RESPONSE", "NO_BUDGET", "OTHER"]).optional().nullable(),
+  internalNotes: z.string().max(1000).optional().nullable(),
 });
 
 // GET /api/quotations/[id] - Get a single quotation
@@ -39,7 +38,7 @@ export async function GET(
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
@@ -63,12 +62,12 @@ export async function GET(
             id: true,
             firstName: true,
             lastName: true,
+            email: true,
           },
         },
-        revisions: {
-          orderBy: { revisionNumber: "desc" },
+        activities: {
           include: {
-            revisedBy: {
+            user: {
               select: {
                 id: true,
                 firstName: true,
@@ -76,22 +75,26 @@ export async function GET(
               },
             },
           },
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 20,
         },
       },
     });
 
     if (!quotation) {
       return NextResponse.json(
-        { error: { code: "NOT_FOUND", message: "Teklif bulunamadı" } },
+        { success: false, error: 'Quotation not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ data: quotation });
+    return NextResponse.json({ success: true, data: quotation });
   } catch (error) {
-    console.error("Error fetching quotation:", error);
+    console.error('Error fetching quotation:', error);
     return NextResponse.json(
-      { error: { code: "INTERNAL_ERROR", message: "Teklif alınırken bir hata oluştu" } },
+      { success: false, error: 'Failed to fetch quotation' },
       { status: 500 }
     );
   }
@@ -106,28 +109,19 @@ export async function PATCH(
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
     const { id } = await params;
     const body = await request.json();
-
+    
     // Validate input
-    const validationResult = updateQuotationSchema.safeParse(body);
+    const validationResult = quotationUpdateSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
-        {
-          error: {
-            code: "VALIDATION_ERROR",
-            message: "Geçersiz giriş",
-            details: validationResult.error.issues.map((err) => ({
-              field: String(err.path.join(".")),
-              message: err.message,
-            })),
-          },
-        },
+        { success: false, error: 'Validation error', details: validationResult.error.format() },
         { status: 400 }
       );
     }
@@ -141,122 +135,80 @@ export async function PATCH(
 
     if (!existingQuotation) {
       return NextResponse.json(
-        { error: { code: "NOT_FOUND", message: "Teklif bulunamadı" } },
+        { success: false, error: 'Quotation not found' },
         { status: 404 }
       );
     }
 
     // Build update data
     const updateData: Record<string, unknown> = {};
-    const changedFields: Record<string, { old: unknown; new: unknown }> = {};
-
-    // Helper to track changes
-    const trackChange = (field: string, oldValue: unknown, newValue: unknown) => {
-      if (oldValue !== newValue) {
-        changedFields[field] = { old: oldValue, new: newValue };
-        updateData[field] = newValue;
-      }
-    };
-
-    // Process each field
-    if (data.originCity !== undefined) trackChange("originCity", existingQuotation.originCity, data.originCity);
-    if (data.originCountry !== undefined) trackChange("originCountry", existingQuotation.originCountry, data.originCountry);
-    if (data.destinationCity !== undefined) trackChange("destinationCity", existingQuotation.destinationCity, data.destinationCity);
-    if (data.destinationCountry !== undefined) trackChange("destinationCountry", existingQuotation.destinationCountry, data.destinationCountry);
-    if (data.transportMode !== undefined) trackChange("transportMode", existingQuotation.transportMode, data.transportMode);
-    if (data.incoterm !== undefined) trackChange("incoterm", existingQuotation.incoterm, data.incoterm);
-    if (data.cargoDescription !== undefined) trackChange("cargoDescription", existingQuotation.cargoDescription, data.cargoDescription);
-    if (data.weightKg !== undefined) trackChange("weightKg", existingQuotation.weightKg, data.weightKg);
-    if (data.volumeM3 !== undefined) trackChange("volumeM3", existingQuotation.volumeM3, data.volumeM3);
-    if (data.packagesCount !== undefined) trackChange("packagesCount", existingQuotation.packagesCount, data.packagesCount);
-    if (data.freightCost !== undefined) trackChange("freightCost", existingQuotation.freightCost, data.freightCost);
-    if (data.originCharges !== undefined) trackChange("originCharges", existingQuotation.originCharges, data.originCharges);
-    if (data.destinationCharges !== undefined) trackChange("destinationCharges", existingQuotation.destinationCharges, data.destinationCharges);
-    if (data.insuranceCost !== undefined) trackChange("insuranceCost", existingQuotation.insuranceCost, data.insuranceCost);
-    if (data.totalCost !== undefined) trackChange("totalCost", existingQuotation.totalCost, data.totalCost);
-    if (data.currency !== undefined) trackChange("currency", existingQuotation.currency, data.currency);
+    
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.originCity !== undefined) updateData.originCity = data.originCity;
+    if (data.originCountry !== undefined) updateData.originCountry = data.originCountry;
+    if (data.destinationCity !== undefined) updateData.destinationCity = data.destinationCity;
+    if (data.destinationCountry !== undefined) updateData.destinationCountry = data.destinationCountry;
+    if (data.transportMode !== undefined) updateData.transportMode = data.transportMode;
+    if (data.incoterm !== undefined) updateData.incoterm = data.incoterm;
+    if (data.cargoDescription !== undefined) updateData.cargoDescription = data.cargoDescription;
+    if (data.weightKg !== undefined) {
+      updateData.weightKg = data.weightKg ? BigInt(data.weightKg * 100) / BigInt(100) : null;
+    }
+    if (data.volumeM3 !== undefined) {
+      updateData.volumeM3 = data.volumeM3 ? BigInt(data.volumeM3 * 100) / BigInt(100) : null;
+    }
+    if (data.packagesCount !== undefined) updateData.packagesCount = data.packagesCount;
+    if (data.freightCost !== undefined) {
+      updateData.freightCost = data.freightCost ? BigInt(data.freightCost * 100) / BigInt(100) : null;
+    }
+    if (data.originCharges !== undefined) {
+      updateData.originCharges = data.originCharges ? BigInt(data.originCharges * 100) / BigInt(100) : null;
+    }
+    if (data.destinationCharges !== undefined) {
+      updateData.destinationCharges = data.destinationCharges ? BigInt(data.destinationCharges * 100) / BigInt(100) : null;
+    }
+    if (data.insuranceCost !== undefined) {
+      updateData.insuranceCost = data.insuranceCost ? BigInt(data.insuranceCost * 100) / BigInt(100) : null;
+    }
+    if (data.totalCost !== undefined) {
+      updateData.totalCost = data.totalCost ? BigInt(data.totalCost * 100) / BigInt(100) : null;
+    }
+    if (data.currency !== undefined) updateData.currency = data.currency;
     if (data.validUntil !== undefined) {
-      const oldDate = existingQuotation.validUntil?.toISOString() || null;
-      const newDate = data.validUntil ? new Date(data.validUntil).toISOString() : null;
-      trackChange("validUntil", oldDate, newDate);
       updateData.validUntil = data.validUntil ? new Date(data.validUntil) : null;
     }
-    if (data.estimatedTransitDays !== undefined) trackChange("estimatedTransitDays", existingQuotation.estimatedTransitDays, data.estimatedTransitDays);
-    if (data.internalNotes !== undefined) trackChange("internalNotes", existingQuotation.internalNotes, data.internalNotes);
-    if (data.status !== undefined) trackChange("status", existingQuotation.status, data.status);
-    if (data.lossReason !== undefined) trackChange("lossReason", existingQuotation.lossReason, data.lossReason);
-
-    // If no changes, return early
-    if (Object.keys(changedFields).length === 0) {
-      return NextResponse.json({
-        data: await prisma.quotation.findUnique({
-          where: { id },
-          include: {
-            customer: { select: { id: true, companyName: true, contactName: true } },
-            createdBy: { select: { id: true, firstName: true, lastName: true } },
-          },
-        }),
-      });
+    if (data.estimatedTransitDays !== undefined) {
+      updateData.estimatedTransitDays = data.estimatedTransitDays;
     }
+    if (data.internalNotes !== undefined) updateData.internalNotes = data.internalNotes;
 
-    // Update quotation and create revision in a transaction
-    const updatedQuotation = await prisma.$transaction(async (tx) => {
-      // Increment revision count
-      const newRevisionCount = existingQuotation.revisionCount + 1;
-      updateData.revisionCount = newRevisionCount;
-
-      // Update the quotation
-      const quotation = await tx.quotation.update({
-        where: { id },
-        data: updateData,
-        include: {
-          customer: {
-            select: {
-              id: true,
-              companyName: true,
-              contactName: true,
-            },
-          },
-          createdBy: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-            },
+    // Update quotation
+    const quotation = await prisma.quotation.update({
+      where: { id },
+      data: updateData,
+      include: {
+        customer: {
+          select: {
+            id: true,
+            companyName: true,
+            contactName: true,
           },
         },
-      });
-
-      // Create revision record
-      await tx.quotationRevision.create({
-        data: {
-          quotationId: id,
-          revisionNumber: newRevisionCount,
-          changedFields: changedFields as Prisma.InputJsonValue,
-          revisedById: session.user.id,
+        createdBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
         },
-      });
-
-      // Create audit log
-      await tx.auditLog.create({
-        data: {
-          userId: session.user.id,
-          action: "UPDATE",
-          entityType: "quotation",
-          entityId: id,
-          oldValues: changedFields as Prisma.InputJsonValue,
-          newValues: updateData as Prisma.InputJsonValue,
-        },
-      });
-
-      return quotation;
+      },
     });
 
-    return NextResponse.json({ data: updatedQuotation });
+    return NextResponse.json({ success: true, data: quotation });
   } catch (error) {
-    console.error("Error updating quotation:", error);
+    console.error('Error updating quotation:', error);
     return NextResponse.json(
-      { error: { code: "INTERNAL_ERROR", message: "Teklif güncellenirken bir hata oluştu" } },
+      { success: false, error: 'Failed to update quotation' },
       { status: 500 }
     );
   }
@@ -271,8 +223,16 @@ export async function DELETE(
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Giriş yapmanız gerekiyor" } },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    // Only admins can delete quotations
+    if (session.user.role !== 'ADMIN') {
+      return NextResponse.json(
+        { success: false, error: 'Forbidden: Admin access required' },
+        { status: 403 }
       );
     }
 
@@ -285,35 +245,23 @@ export async function DELETE(
 
     if (!existingQuotation) {
       return NextResponse.json(
-        { error: { code: "NOT_FOUND", message: "Teklif bulunamadı" } },
+        { success: false, error: 'Quotation not found' },
         { status: 404 }
       );
     }
 
-    // Delete quotation and create audit log in a transaction
-    await prisma.$transaction(async (tx) => {
-      // Create audit log before deletion
-      await tx.auditLog.create({
-        data: {
-          userId: session.user.id,
-          action: "DELETE",
-          entityType: "quotation",
-          entityId: id,
-          oldValues: existingQuotation as unknown as Prisma.InputJsonValue,
-        },
-      });
-
-      // Delete the quotation (revisions will be cascade deleted)
-      await tx.quotation.delete({
-        where: { id },
-      });
+    // Delete quotation
+    await prisma.quotation.delete({
+      where: { id },
     });
 
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error) {
-    console.error("Error deleting quotation:", error);
     return NextResponse.json(
-      { error: { code: "INTERNAL_ERROR", message: "Teklif silinirken bir hata oluştu" } },
+      { success: true, message: 'Quotation deleted successfully' }
+    );
+  } catch (error) {
+    console.error('Error deleting quotation:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to delete quotation' },
       { status: 500 }
     );
   }
