@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Pagination } from '@/components/ui';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { QuotationTable } from '@/components/quotations/QuotationTable';
 import { QuotationFilters } from '@/components/quotations/QuotationFilters';
@@ -99,17 +100,32 @@ export default function QuoteListPage() {
         users={users}
       />
 
-      <QuotationTable data={quotations} loading={loading} />
-
-      {/* Pagination */}
-      <div className="mt-4">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          totalItems={total}
-          onPageChange={setPage}
+      {!loading && quotations.length === 0 ? (
+        <EmptyState
+          icon="description"
+          title="Henuz teklif olusturulmamis"
+          description="Ilk teklifinizi olusturarak baslayabilirsiniz."
+          action={
+            <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
+              Yeni Teklif Olustur
+            </Button>
+          }
         />
-      </div>
+      ) : (
+        <>
+          <QuotationTable data={quotations} loading={loading} />
+
+          {/* Pagination */}
+          <div className="mt-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

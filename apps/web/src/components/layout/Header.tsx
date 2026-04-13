@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useNotificationStore } from '@/stores/notificationStore';
@@ -12,6 +13,9 @@ export default function Header({ title }: HeaderProps) {
   const { user } = useAuthStore();
   const { unreadCount, fetch: fetchNotifications } = useNotificationStore();
   const [notifOpen, setNotifOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetchNotifications();
@@ -23,6 +27,53 @@ export default function Header({ title }: HeaderProps) {
 
   const closeNotif = useCallback(() => {
     setNotifOpen(false);
+  }, []);
+
+  const executeSearch = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      if (trimmed) {
+        navigate(`/musteriler?search=${encodeURIComponent(trimmed)}`);
+      }
+    },
+    [navigate],
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setSearchQuery(value);
+
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+
+      debounceRef.current = setTimeout(() => {
+        executeSearch(value);
+      }, 300);
+    },
+    [executeSearch],
+  );
+
+  const handleSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        if (debounceRef.current) {
+          clearTimeout(debounceRef.current);
+        }
+        executeSearch(searchQuery);
+      }
+    },
+    [executeSearch, searchQuery],
+  );
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -40,6 +91,9 @@ export default function Header({ title }: HeaderProps) {
           <input
             type="text"
             placeholder="Musteri, teklif veya sevkiyat ara..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
             className="w-96 rounded-full bg-slate-100 py-2.5 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>

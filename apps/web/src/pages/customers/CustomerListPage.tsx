@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Pagination } from '@/components/ui';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CustomerTable } from '@/components/customers/CustomerTable';
 import { CustomerFilters } from '@/components/customers/CustomerFilters';
@@ -100,17 +101,32 @@ export default function CustomerListPage() {
         users={users}
       />
 
-      <CustomerTable data={customers} loading={loading} />
-
-      {/* Pagination */}
-      <div className="mt-4">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          totalItems={total}
-          onPageChange={setPage}
+      {!loading && customers.length === 0 ? (
+        <EmptyState
+          icon="group"
+          title="Henuz musteri eklenmemis"
+          description="Ilk musterinizi ekleyerek baslayabilirsiniz."
+          action={
+            <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
+              Yeni Musteri Ekle
+            </Button>
+          }
         />
-      </div>
+      ) : (
+        <>
+          <CustomerTable data={customers} loading={loading} />
+
+          {/* Pagination */}
+          <div className="mt-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
