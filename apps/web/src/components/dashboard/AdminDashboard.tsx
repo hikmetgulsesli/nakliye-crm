@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui';
@@ -7,133 +7,115 @@ import { TeamPerformanceTable } from './TeamPerformanceTable';
 import { CountryDensityChart } from './CountryDensityChart';
 import { TransportModeChart } from './TransportModeChart';
 import { LossReasonsChart } from './LossReasonsChart';
-
-// --- Mock Data ---
+import { dashboardService, type AdminDashboardData } from '@/services/dashboard.service';
 
 const PERIOD_TABS = [
   { key: 'this_week', label: 'Bu Hafta' },
   { key: 'this_month', label: 'Bu Ay' },
   { key: 'last_month', label: 'Gecen Ay' },
-  { key: 'custom', label: 'Ozel Aralik' },
 ];
 
-const MOCK_KPIS = [
-  {
-    icon: 'description',
-    iconColor: 'blue',
-    label: 'Verilen Teklif (Bu Ay)',
-    value: 156,
-    trend: { value: '+14%', positive: true },
-  },
-  {
-    icon: 'check_circle',
-    iconColor: 'emerald',
-    label: 'Kazanilan',
-    value: 64,
-    trend: { value: '+8%', positive: true },
-  },
-  {
-    icon: 'track_changes',
-    iconColor: 'purple',
-    label: 'Kazanma Orani',
-    value: '%41',
-  },
-  {
-    icon: 'groups',
-    iconColor: 'slate',
-    label: 'Aktif Musteri',
-    value: 234,
-    trend: { value: 'Stabil', positive: true },
-  },
-  {
-    icon: 'star',
-    iconColor: 'amber',
-    label: 'Yuksek Potansiyel',
-    value: 28,
-    trend: { value: '+12', positive: true },
-  },
-];
+function KPISkeletons() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse"
+        >
+          <div className="flex items-start justify-between">
+            <div className="size-12 rounded-xl bg-slate-200" />
+            <div className="h-5 w-12 rounded-full bg-slate-100" />
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-24 rounded bg-slate-200" />
+            <div className="h-8 w-16 rounded bg-slate-200" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-const MOCK_TEAM: Array<{
-  id: string;
-  name: string;
-  avatarUrl?: string | null;
-  quoteCount: number;
-  wonCount: number;
-  winRate: number;
-  contactedCustomers: number;
-  lastActivity: string;
-  isTopPerformer?: boolean;
-}> = [
-  {
-    id: '1',
-    name: 'Ahmet Yilmaz',
-    quoteCount: 45,
-    wonCount: 28,
-    winRate: 62,
-    contactedCustomers: 120,
-    lastActivity: '2 saat once',
-    isTopPerformer: true,
-  },
-  {
-    id: '2',
-    name: 'Ayse Demir',
-    quoteCount: 38,
-    wonCount: 22,
-    winRate: 58,
-    contactedCustomers: 95,
-    lastActivity: '4 saat once',
-  },
-  {
-    id: '3',
-    name: 'Mehmet Kaya',
-    quoteCount: 25,
-    wonCount: 12,
-    winRate: 48,
-    contactedCustomers: 70,
-    lastActivity: 'Dun',
-  },
-  {
-    id: '4',
-    name: 'Fatma Celik',
-    quoteCount: 17,
-    wonCount: 6,
-    winRate: 35,
-    contactedCustomers: 50,
-    lastActivity: '2 gun once',
-  },
-];
+function TableSkeleton() {
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-pulse">
+      <div className="px-6 py-5 border-b border-slate-200">
+        <div className="h-5 w-64 rounded bg-slate-200" />
+      </div>
+      <div className="bg-slate-50 h-12" />
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 px-6 py-4 border-t border-slate-100">
+          <div className="size-8 rounded-full bg-slate-200" />
+          <div className="h-4 bg-slate-200 rounded w-28" />
+          <div className="h-4 bg-slate-200 rounded w-12" />
+          <div className="h-4 bg-slate-200 rounded w-12" />
+          <div className="h-4 bg-slate-200 rounded w-24" />
+          <div className="h-4 bg-slate-200 rounded w-16" />
+          <div className="h-4 bg-slate-200 rounded w-20" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
-const MOCK_ORIGIN_COUNTRIES = [
-  { country: 'Cin', flag: '\uD83C\uDDE8\uD83C\uDDF3', percentage: 42, count: 452 },
-  { country: 'Almanya', flag: '\uD83C\uDDE9\uD83C\uDDEA', percentage: 28, count: 215 },
-  { country: 'ABD', flag: '\uD83C\uDDFA\uD83C\uDDF8', percentage: 18, count: 148 },
-  { country: 'Ingiltere', flag: '\uD83C\uDDEC\uD83C\uDDE7', percentage: 12, count: 96 },
-];
-
-const MOCK_DESTINATION_COUNTRIES = [
-  { country: 'ABD', flag: '\uD83C\uDDFA\uD83C\uDDF8', percentage: 38, count: 385 },
-  { country: 'BAE', flag: '\uD83C\uDDE6\uD83C\uDDEA', percentage: 22, count: 192 },
-  { country: 'Fransa', flag: '\uD83C\uDDEB\uD83C\uDDF7', percentage: 20, count: 164 },
-  { country: 'Rusya', flag: '\uD83C\uDDF7\uD83C\uDDFA', percentage: 14, count: 112 },
-];
-
-const MOCK_TRANSPORT_MODES = [
-  { mode: 'Deniz', percentage: 50, color: 'blue' },
-  { mode: 'Kara', percentage: 25, color: 'emerald' },
-  { mode: 'Hava', percentage: 15, color: 'amber' },
-  { mode: 'Kombine', percentage: 10, color: 'purple' },
-];
-
-const MOCK_LOSS_REASONS = [
-  { reason: 'Fiyat', percentage: 45, count: 32 },
-  { reason: 'Rakip', percentage: 30, count: 21 },
-  { reason: 'Termin', percentage: 25, count: 18 },
-];
+function ChartsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+        <div className="h-5 w-40 rounded bg-slate-200 mb-6" />
+        <div className="space-y-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="h-4 w-8 rounded bg-slate-200" />
+              <div className="h-4 flex-1 rounded bg-slate-100" />
+              <div className="h-4 w-12 rounded bg-slate-200" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-8">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+          <div className="h-5 w-36 rounded bg-slate-200 mb-6" />
+          <div className="h-32 rounded bg-slate-100" />
+        </div>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+          <div className="h-5 w-36 rounded bg-slate-200 mb-6" />
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-6 rounded bg-slate-100" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function AdminDashboard() {
   const [activePeriod, setActivePeriod] = useState('this_month');
+  const [data, setData] = useState<AdminDashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await dashboardService.getAdminDashboard(activePeriod);
+      setData(result);
+    } catch (err) {
+      console.error('Admin dashboard fetch error:', err);
+      setError('Dashboard verileri yuklenirken bir hata olustu.');
+    } finally {
+      setLoading(false);
+    }
+  }, [activePeriod]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="space-y-8">
@@ -161,37 +143,61 @@ export function AdminDashboard() {
         </Button>
       </div>
 
-      {/* KPI Cards - 5 columns */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {MOCK_KPIS.map((kpi, i) => (
-          <KPICard
-            key={i}
-            icon={kpi.icon}
-            iconColor={kpi.iconColor}
-            label={kpi.label}
-            value={kpi.value}
-            trend={kpi.trend}
-          />
-        ))}
-      </div>
-
-      {/* Team Performance Table */}
-      <TeamPerformanceTable data={MOCK_TEAM} />
-
-      {/* Bottom Row: 2 column grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left: Country Density */}
-        <CountryDensityChart
-          originCountries={MOCK_ORIGIN_COUNTRIES}
-          destinationCountries={MOCK_DESTINATION_COUNTRIES}
-        />
-
-        {/* Right: Transport Mode + Loss Reasons stacked */}
-        <div className="flex flex-col gap-8">
-          <TransportModeChart data={MOCK_TRANSPORT_MODES} />
-          <LossReasonsChart data={MOCK_LOSS_REASONS} />
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+          <p className="text-red-700 font-medium mb-3">{error}</p>
+          <Button variant="secondary" onClick={fetchData}>
+            Tekrar Dene
+          </Button>
         </div>
-      </div>
+      )}
+
+      {/* Loading State */}
+      {loading && !error && (
+        <>
+          <KPISkeletons />
+          <TableSkeleton />
+          <ChartsSkeleton />
+        </>
+      )}
+
+      {/* Data State */}
+      {!loading && !error && data && (
+        <>
+          {/* KPI Cards - 5 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {data.kpis.map((kpi, i) => (
+              <KPICard
+                key={i}
+                icon={kpi.icon}
+                iconColor={kpi.iconColor}
+                label={kpi.label}
+                value={kpi.value}
+                trend={kpi.trend}
+              />
+            ))}
+          </div>
+
+          {/* Team Performance Table */}
+          <TeamPerformanceTable data={data.teamPerformance} />
+
+          {/* Bottom Row: 2 column grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left: Country Density */}
+            <CountryDensityChart
+              originCountries={data.originCountries}
+              destinationCountries={data.destinationCountries}
+            />
+
+            {/* Right: Transport Mode + Loss Reasons stacked */}
+            <div className="flex flex-col gap-8">
+              <TransportModeChart data={data.transportModes} />
+              <LossReasonsChart data={data.lossReasons} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

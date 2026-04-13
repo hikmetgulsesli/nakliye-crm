@@ -1,138 +1,106 @@
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/stores/authStore';
+import { Button } from '@/components/ui';
 import { KPICard } from '@/components/shared/KPICard';
 import { AlertWidgets } from './AlertWidgets';
 import { FollowUpWidget } from './FollowUpWidget';
 import { RecentActivitiesWidget } from './RecentActivitiesWidget';
+import { dashboardService, type UserDashboardData } from '@/services/dashboard.service';
 
-// --- Mock Data ---
+function KPISkeletons() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse"
+        >
+          <div className="flex items-start justify-between">
+            <div className="size-12 rounded-xl bg-slate-200" />
+            <div className="h-5 w-12 rounded-full bg-slate-100" />
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-28 rounded bg-slate-200" />
+            <div className="h-8 w-14 rounded bg-slate-200" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-const MOCK_KPIS = [
-  {
-    icon: 'assignment',
-    iconColor: 'blue',
-    label: 'Bu Haftaki Teklifler',
-    value: 24,
-    trend: { value: '+5%', positive: true },
-  },
-  {
-    icon: 'receipt_long',
-    iconColor: 'indigo',
-    label: 'Bu Ay Teklifler',
-    value: 87,
-    trend: { value: '+12%', positive: true },
-  },
-  {
-    icon: 'emoji_events',
-    iconColor: 'emerald',
-    label: 'Kazanilan Teklifler',
-    value: 34,
-    trend: { value: '+55%', positive: true },
-  },
-  {
-    icon: 'handshake',
-    iconColor: 'purple',
-    label: 'Gorusulen Musteri',
-    value: 52,
-    trend: { value: '+8%', positive: true },
-  },
-];
+function AlertsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 animate-pulse"
+        >
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-slate-200" />
+            <div className="space-y-2 flex-1">
+              <div className="h-3 w-20 rounded bg-slate-200" />
+              <div className="h-6 w-8 rounded bg-slate-200" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-const MOCK_ALERTS = [
-  {
-    id: '1',
-    type: 'uncalled' as const,
-    count: 8,
-    description: '14 gundur aranmadi',
-  },
-  {
-    id: '2',
-    type: 'pending' as const,
-    count: 5,
-    description: '7+ gun donus bekliyor',
-  },
-  {
-    id: '3',
-    type: 'expired' as const,
-    count: 3,
-    description: 'Suresi dolan teklifler',
-  },
-  {
-    id: '4',
-    type: 'highPotential' as const,
-    count: 12,
-    description: 'Yuksek potansiyelli musteriler',
-  },
-];
-
-const MOCK_FOLLOW_UPS = [
-  {
-    id: '1',
-    customerName: 'ABC Lojistik A.S.',
-    date: 'Bugun, 14:00',
-    type: 'call' as const,
-    note: 'Yeni depo projesi icin verilen teklifin durumu gorusulecek.',
-  },
-  {
-    id: '2',
-    customerName: 'Kaya Nakliyat',
-    date: 'Yarin, 10:30',
-    type: 'email' as const,
-    note: 'Sozlesme taslagi iletilecek.',
-  },
-  {
-    id: '3',
-    customerName: 'Demir Global',
-    date: '12 Eki, 15:00',
-    type: 'meeting' as const,
-    note: 'Yuz yuze tanisma ve ilk analiz toplantisi.',
-  },
-  {
-    id: '4',
-    customerName: 'Yildiz Kargo',
-    date: '14 Eki, 09:00',
-    type: 'call' as const,
-    note: 'Fiyat guncellemesi hakkinda bilgilendirme.',
-  },
-];
-
-const MOCK_ACTIVITIES = [
-  {
-    id: '1',
-    date: '2 saat once',
-    customerName: 'Yildiz Kargo',
-    type: 'Kazanildi',
-    note: '#TK-2023-042 numarali teklif onaylandi.',
-    representative: 'Ahmet Yilmaz',
-  },
-  {
-    id: '2',
-    date: 'Dun, 16:45',
-    customerName: 'Marmara Lojistik',
-    type: 'Teklif',
-    note: 'Deniz yolu tasimacilik teklifi iletildi.',
-    representative: 'Ahmet Yilmaz',
-  },
-  {
-    id: '3',
-    date: 'Dun, 11:20',
-    customerName: 'Celik A.S.',
-    type: 'Not',
-    note: 'Butce gorusmeleri haftaya ertelendi.',
-    representative: 'Ahmet Yilmaz',
-  },
-  {
-    id: '4',
-    date: '2 gun once',
-    customerName: 'Boran Nakliyat',
-    type: 'Arama',
-    note: 'Musteri yeni teklif talep etti.',
-    representative: 'Ahmet Yilmaz',
-  },
-];
+function ContentSkeleton() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+        <div className="h-5 w-40 rounded bg-slate-200 mb-6" />
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-4 py-4 border-b border-slate-100">
+            <div className="h-4 w-20 rounded bg-slate-200" />
+            <div className="h-4 w-28 rounded bg-slate-200" />
+            <div className="h-4 flex-1 rounded bg-slate-100" />
+          </div>
+        ))}
+      </div>
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+        <div className="h-5 w-32 rounded bg-slate-200 mb-6" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="py-4 border-b border-slate-100 space-y-2">
+            <div className="h-4 w-32 rounded bg-slate-200" />
+            <div className="h-3 w-20 rounded bg-slate-100" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function UserDashboard() {
   const user = useAuthStore((s) => s.user);
   const firstName = user?.fullName?.split(' ')[0] || 'Kullanici';
+
+  const [data, setData] = useState<UserDashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  async function fetchData() {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await dashboardService.getUserDashboard();
+      setData(result);
+    } catch (err) {
+      console.error('User dashboard fetch error:', err);
+      setError('Dashboard verileri yuklenirken bir hata olustu.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -146,38 +114,62 @@ export function UserDashboard() {
         </p>
       </div>
 
-      {/* KPI Cards - 4 columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {MOCK_KPIS.map((kpi, i) => (
-          <KPICard
-            key={i}
-            icon={kpi.icon}
-            iconColor={kpi.iconColor}
-            label={kpi.label}
-            value={kpi.value}
-            trend={kpi.trend}
-          />
-        ))}
-      </div>
-
-      {/* Alert Widgets (2x2) */}
-      <AlertWidgets alerts={MOCK_ALERTS} />
-
-      {/* Two column layout: Main content + Sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Recent Activities (takes 2 cols) */}
-        <div className="lg:col-span-2">
-          <RecentActivitiesWidget
-            activities={MOCK_ACTIVITIES}
-            showRepresentative
-          />
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+          <p className="text-red-700 font-medium mb-3">{error}</p>
+          <Button variant="secondary" onClick={fetchData}>
+            Tekrar Dene
+          </Button>
         </div>
+      )}
 
-        {/* Right: Follow-ups sidebar */}
-        <div>
-          <FollowUpWidget followUps={MOCK_FOLLOW_UPS} />
-        </div>
-      </div>
+      {/* Loading State */}
+      {loading && !error && (
+        <>
+          <KPISkeletons />
+          <AlertsSkeleton />
+          <ContentSkeleton />
+        </>
+      )}
+
+      {/* Data State */}
+      {!loading && !error && data && (
+        <>
+          {/* KPI Cards - 4 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {data.kpis.map((kpi, i) => (
+              <KPICard
+                key={i}
+                icon={kpi.icon}
+                iconColor={kpi.iconColor}
+                label={kpi.label}
+                value={kpi.value}
+                trend={kpi.trend}
+              />
+            ))}
+          </div>
+
+          {/* Alert Widgets (2x2) */}
+          <AlertWidgets alerts={data.alerts} />
+
+          {/* Two column layout: Main content + Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left: Recent Activities (takes 2 cols) */}
+            <div className="lg:col-span-2">
+              <RecentActivitiesWidget
+                activities={data.recentActivities}
+                showRepresentative
+              />
+            </div>
+
+            {/* Right: Follow-ups sidebar */}
+            <div>
+              <FollowUpWidget followUps={data.followUps} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
