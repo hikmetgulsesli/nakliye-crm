@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=Outfit:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "sidebar-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "Inter", "sans-serif"],
+                        "body": ["Source Sans 3", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Temsilci Devir İşlemi Paneli</title>
+</head>
+<body class="bg-background-light font-body text-slate-900">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar-dark text-slate-300 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div class="flex flex-col">
+<h1 class="font-display font-bold text-white text-sm leading-tight">Global Lojistik CRM</h1>
+<p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Yönetici Paneli</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">description</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined text-xl">sync_alt</span>
+<span class="text-sm font-medium">Temsilci Devri</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-slate-700" data-alt="Admin user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJb_9NK8huYbKTaruv_rAuZaLO7ZwpJClA1ibHlUQy63rLrgvY0B_b4t72sdQX8oE3gYSH705ozsrEJ39tMKsXcdWqgIR0tLfYdeD2ZIv6S3Oui3y-CNUT-2TVTzh5l8NMVZLOUUqnPchg6qXRiHuXy41gLNaBuho-WOlurCeVbeiosLEIIbc8H16Cr2jb-P26c8kmk3XWV6CxK27EDyXq1liJc9WyGQi7Q9ONrt396Kh4UBsoaKX6SHSnkv87_75FBW8y-KVTw6bl')"></div>
+<div class="flex flex-col">
+<p class="text-xs font-bold text-white">Caner Demir</p>
+<p class="text-[10px] text-slate-500">Süper Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-12">
+<!-- Header Bar -->
+<header class="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span>İşlemler</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-slate-900 font-medium">Temsilci Devir İşlemi</span>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">İşlem Geçmişi</button>
+</div>
+</header>
+<div class="max-w-[640px] mx-auto mt-8 px-4">
+<!-- Main Form Card -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="p-8">
+<!-- Title Section -->
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">sync_alt</span>
+</div>
+<div>
+<h2 class="font-display text-2xl font-bold text-slate-900">Temsilci Devir İşlemi</h2>
+<p class="text-slate-500 text-sm">Müşteri ve teklif sahipliğini temsilciler arasında aktarın.</p>
+</div>
+</div>
+<!-- Step 1: Selection -->
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-bold text-slate-700 mb-2">Devredilecek Temsilci</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-7 h-7 rounded-full bg-slate-200 bg-cover" data-alt="Representative Ahmet Yılmaz avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB80qV_XmaTDw38Lx-AXdsWwNerX6tcpOwsK_am6mnkgGeDnySw_QZthm1h7efyAbHk-vq9_Qrk5gxKVEVYa2-5HbyTeBFZbb8cpCCQqCX43HLExxTL88YIWqgEQhjGyOorZgTpubN0lscZas-AxyHqCW7D3RB5KHGtVWSa_4i1E6c0uR16mxu8QRpstakPGNoJ6rDBxtG5R_T5JJuuRgKPjNEL_p1LSwbEil5zKs6i1_gmm3CyJUsEf7DcMGnrEgrTEqzW-c3m-htq')"></div>
+</div>
+<select class="block w-full pl-12 pr-10 py-3 text-base border-slate-200 focus:outline-none focus:ring-primary focus:border-primary rounded-lg">
+<option>Ahmet Yılmaz — 32 müşteri</option>
+<option>Bora Kozan — 12 müşteri</option>
+<option>Ceyda Su — 45 müşteri</option>
+</select>
+</div>
+</div>
+<div class="flex justify-center py-2">
+<div class="w-12 h-12 bg-primary/5 border border-primary/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[48px]">south</span>
+</div>
+</div>
+<div>
+<label class="block text-sm font-bold text-slate-700 mb-2">Devralacak Temsilci</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-7 h-7 rounded-full bg-slate-200 bg-cover" data-alt="Representative Mehmet Kaya avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBp01QO5fcyutGumBVSRfv-0rLtnEQ8qQ-NChJSFsVWm051YJJB9jj1eTpQLJOV8m1YZTrFDJwBlB6DTfUHHJ8gESmxRbwFDK09LbxYWh_bOoCQqxgRXXJRAOOAvpksPtSl61l4EqUzNVG2OqCEDW98gS_g8gyzDfIrPzjiQz4Dx_1kDRZOUCy0-nQV3zO-ee5MI9o1842MDDUqa8PFkcLxz7rkYW9f73uZ8CR6wd3PR23TVdLt9ZPZuGYy1hgp16wSMKQZ9J5dkudu')"></div>
+</div>
+<select class="block w-full pl-12 pr-10 py-3 text-base border-slate-200 focus:outline-none focus:ring-primary focus:border-primary rounded-lg">
+<option selected="">Mehmet Kaya — 15 müşteri</option>
+<option>Derya Ak — 8 müşteri</option>
+<option>Erol Gün — 21 müşteri</option>
+</select>
+</div>
+</div>
+<div class="pt-4">
+<label class="block text-sm font-bold text-slate-700 mb-3">Hangi Kayıtlar Devredilsin?</label>
+<div class="space-y-3">
+<label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+<input checked="" class="w-4 h-4 text-primary border-slate-300 focus:ring-primary" name="records" type="radio"/>
+<span class="ml-3 text-sm font-medium text-slate-900">Tüm kayıtlar</span>
+</label>
+<label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+<input class="w-4 h-4 text-primary border-slate-300 focus:ring-primary" name="records" type="radio"/>
+<span class="ml-3 text-sm font-medium text-slate-900">Sadece aktif müşteriler</span>
+</label>
+<label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+<input class="w-4 h-4 text-primary border-slate-300 focus:ring-primary" name="records" type="radio"/>
+<span class="ml-3 text-sm font-medium text-slate-900">Açık teklifler</span>
+</label>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition-colors border border-slate-200">
+<span class="material-symbols-outlined text-xl">visibility</span>
+                                Önizleme
+                            </button>
+</div>
+<!-- Step 2: Preview Card -->
+<div class="mt-10 bg-blue-50/50 border border-primary/20 rounded-xl p-6">
+<h3 class="font-display font-bold text-slate-900 flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+                                Devir Özeti
+                            </h3>
+<div class="mb-6">
+<div class="flex items-center gap-3 p-3 bg-white border border-primary/10 rounded-lg shadow-sm">
+<span class="font-bold text-slate-900">Ahmet Yılmaz</span>
+<span class="material-symbols-outlined text-primary">arrow_forward</span>
+<span class="font-bold text-slate-900">Mehmet Kaya</span>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center gap-3 text-slate-700 bg-white/60 p-3 rounded-lg border border-slate-100">
+<span class="material-symbols-outlined text-slate-400">group</span>
+<span class="text-sm font-medium">32 müşteri</span>
+</div>
+<div class="flex items-center gap-3 text-slate-700 bg-white/60 p-3 rounded-lg border border-slate-100">
+<span class="material-symbols-outlined text-slate-400">description</span>
+<span class="text-sm font-medium">18 açık teklif</span>
+</div>
+<div class="flex items-center gap-3 text-slate-700 bg-white/60 p-3 rounded-lg border border-slate-100">
+<span class="material-symbols-outlined text-slate-400">call</span>
+<span class="text-sm font-medium">45 aktivite kaydı</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="border-t border-slate-200 bg-slate-50/50 p-6 space-y-4">
+<div class="flex items-center gap-3 p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg">
+<span class="material-symbols-outlined text-xl">warning</span>
+<p class="text-sm font-bold italic">Bu işlem geri alınamaz.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg shadow-primary/20">
+                                Devri Onayla
+                            </button>
+<button class="flex-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold py-3 px-6 rounded-lg transition-colors">
+                                İptal
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

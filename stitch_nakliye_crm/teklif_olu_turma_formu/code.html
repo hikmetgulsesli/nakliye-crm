@@ -1,0 +1,297 @@
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "sans-serif"],
+                        "body": ["Source Sans 3", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex min-h-screen">
+<!-- Left Sidebar -->
+<aside class="w-64 bg-slate-950 text-slate-300 flex flex-col fixed inset-y-0 border-r border-slate-800">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-white">deployed_code</span>
+</div>
+<span class="font-display font-bold text-xl text-white">LojistikCRM</span>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white" href="#">
+<span class="material-symbols-outlined">request_quote</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="text-sm font-medium">Sevkiyatlar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-sm font-medium">Raporlar</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-900/50">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs" data-alt="User avatar placeholder">AD</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-xs font-semibold text-white truncate">Ahmet Demir</p>
+<p class="text-[10px] text-slate-500 truncate">Operasyon Yöneticisi</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 pb-24">
+<!-- Header & Breadcrumbs -->
+<header class="px-8 py-6 border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<div class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Teklifler</a>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 font-medium">Yeni Teklif</span>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Yeni Teklif Oluştur</h1>
+<p class="mt-1 font-mono text-sm text-slate-500">REF ID: TKF-2026-0056</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">Taslak Olarak Kaydet</button>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Form Column -->
+<div class="lg:col-span-2 space-y-8">
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+<h2 class="text-lg font-bold">Yük Bilgileri</h2>
+</div>
+<div class="p-6 space-y-6">
+<!-- Customer Selection -->
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Bağlı Müşteri</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" placeholder="Müşteri ara veya seçin..." type="text"/>
+</div>
+<!-- Mini Preview Card -->
+<div class="mt-3 p-3 bg-primary/5 border border-primary/20 rounded-lg flex items-center gap-4">
+<div class="size-10 bg-primary/10 rounded-full flex items-center justify-center text-primary" data-alt="Client brand logo">
+<span class="material-symbols-outlined">business</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Global Tech Solutions Inc.</p>
+<p class="text-xs text-slate-500">Müşteri Kodu: CUST-9921 • İstanbul, TR</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Teklif Tarihi</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" type="date" value="2024-05-20"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Geçerlilik Tarihi</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" type="date" value="2024-06-20"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Taşıma Modu</label>
+<div class="grid grid-cols-3 gap-2">
+<button class="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-primary bg-primary/5 text-primary">
+<span class="material-symbols-outlined">directions_boat</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Deniz</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined">flight</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Hava</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Kara</span>
+</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Servis Tipi</label>
+<select class="w-full px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm">
+<option>FCL - Tam Konteyner</option>
+<option>LCL - Parsiyel</option>
+<option>Hinterland</option>
+</select>
+</div>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Çıkış Noktası</h3>
+<div>
+<label class="block text-[11px] font-bold text-slate-500 mb-1">Ülke</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<img alt="Turkey flag" class="w-5 h-auto rounded-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6f5PKw_wm13w2lhxkT0AgZYkTrvdk8mDt8sJOSLskq02fscE-Ksn3_ki2uZfwbQl42sU4F1_FpKQfsZ4vkks-HKATiSXs_dfXDiUvInU3JRd-MDIA6oGrDddPTwjQujG4NEKNco6OAz14bp3AYbCtZ_8ztmooG5_e4OPivuJ9MIQjCUtYKBIRmeDWKTTj3e9BemMwiNZSgp9sRDBcH_TCHMqlu2us5dfRm24HqPXzVK0nr3NTfeKQ4b7SKzbsIEBwqe44T80zILWx"/>
+</div>
+<select class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm">
+<option>Türkiye</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-500 mb-1">Yükleme Noktası (POL)</label>
+<input class="w-full px-4 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm" placeholder="Örn: Ambarlı Limanı" type="text"/>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Varış Noktası</h3>
+<div>
+<label class="block text-[11px] font-bold text-slate-500 mb-1">Ülke</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<img alt="Germany flag" class="w-5 h-auto rounded-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBedffZ7MRbH9UCoGHCYSQLcNpBA-luaVeqL3L-H-jJL-hf-i9xwUc_LERl_R386_AUKGvlIC3n94xLhiIYp_3oBfL6bG1L_HRkm0Lwmya4eOSR_KSD9KHGt8OS87zKZtbcm4THOUH2LxtMlji_pIOkMvJpLTpWPSunyCpDOONrlfi9kPYJuhvt0muF4yVgEKxXLlsbTy-M3arveu31rCOU-ttvl_dYfCkyf_mufv8eTOcvf_pSDtImHF4PTVLiYo0g00IMU0BJSu5P"/>
+</div>
+<select class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm">
+<option>Almanya</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-500 mb-1">Varış Noktası (POD)</label>
+<input class="w-full px-4 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm" placeholder="Örn: Hamburg Port" type="text"/>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Incoterm</label>
+<select class="w-full px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm">
+<option>FOB - Free On Board</option>
+<option>EXW - Ex Works</option>
+<option>CIF - Cost, Insurance &amp; Freight</option>
+<option>DDP - Delivered Duty Paid</option>
+</select>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Side Column -->
+<div class="space-y-8">
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">payments</span>
+<h2 class="text-lg font-bold">Fiyat ve Durum</h2>
+</div>
+<div class="p-6 space-y-6">
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Teklif Tutarı</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+<span class="material-symbols-outlined">attach_money</span>
+</div>
+<input class="w-full pl-10 pr-24 py-4 text-2xl font-bold bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary/20 transition-all" placeholder="0.00" type="number"/>
+<div class="absolute inset-y-2 right-2">
+<select class="h-full border-0 bg-white dark:bg-slate-800 rounded-md py-0 pl-2 pr-7 text-sm font-bold text-slate-700 dark:text-slate-200 focus:ring-0">
+<option>USD</option>
+<option>EUR</option>
+<option>TRY</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Fiyat Notu</label>
+<textarea class="w-full px-4 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm" placeholder="Müşteriye özel notlar..." rows="3"></textarea>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Sonuç</label>
+<div class="space-y-3">
+<div class="relative">
+<select class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-950 border-2 border-amber-400/30 rounded-lg text-sm font-bold text-amber-600 focus:ring-amber-400 focus:border-amber-400">
+<option>BEKLEYEN</option>
+<option>KAZANILDI</option>
+<option class="text-red-600">KAYBEDİLDİ</option>
+</select>
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-amber-500">
+<span class="material-symbols-outlined">hourglass_empty</span>
+</div>
+</div>
+<!-- Conditional field for "Kaybedildi" (hidden/shown logic represented by state here) -->
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-700">
+<label class="block text-[11px] font-bold text-slate-500 uppercase mb-2">Kaybedilme Nedeni</label>
+<select class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs">
+<option>Neden seçin...</option>
+<option>Fiyat yüksek bulundu</option>
+<option>Transit süre uzun</option>
+<option>Kapasite sorunu</option>
+<option>Rakip firma seçildi</option>
+</select>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Atanan Temsilci</label>
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-800 bg-slate-200 flex items-center justify-center overflow-hidden" data-alt="Representative avatar 1">
+<img alt="User 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8oJNk_dgpZ2LDN3kfS6CIIml9qO3IyYEhtgGfaJBhkyJ1QlCNCkiCVBYQSH2B-Leey0McFyCumtjwATv5hnOvVPCDHnMSc-AZ7G5D8Ycr7g18WKq_ztDUWHaH5X_FS6DWBabu5r3F00iWj1hRumgz6_sueaVqeHglh9HKlyx2YRLwrA8nQYvH6AaOi2vmwwQFR_Jz8vijHhlmTbsugh6FgCOMq79nh2C0vthCA4IoPfv5X2qU0MJML3aNejBo2erRGt5xXCHbrhl2"/>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold">Caner Yıldız</p>
+<p class="text-[10px] text-slate-500">Satış Departmanı</p>
+</div>
+<button class="text-primary text-xs font-bold hover:underline">Değiştir</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Sticky Footer -->
+<footer class="fixed bottom-0 left-64 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 z-20">
+<div class="max-w-6xl mx-auto flex justify-end gap-4 px-4">
+<button class="px-8 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">İptal</button>
+<button class="px-12 py-2.5 rounded-lg bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all active:scale-95">Kaydet</button>
+</div>
+</footer>
+</div>
+
+```</body></html>

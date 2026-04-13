@@ -1,0 +1,143 @@
+import { useState } from 'react';
+import { Icon } from '@/components/ui';
+import { reportService, type ReportType, type ExportFormat, type ReportFilters } from '@/services/report.service';
+
+interface ReportCard {
+  type: ReportType;
+  title: string;
+  description: string;
+  icon: string;
+  iconColor: string;
+  iconBg: string;
+}
+
+const REPORT_CARDS: ReportCard[] = [
+  {
+    type: 'periodic_quotes',
+    title: 'Donemsel Teklif Raporu',
+    description: 'Belirli tarih araliginda olusturulan, kazanilan ve kaybedilen tekliflerin ozet raporu',
+    icon: 'description',
+    iconColor: 'text-red-600',
+    iconBg: 'bg-red-50',
+  },
+  {
+    type: 'staff_performance',
+    title: 'Personel Performans Raporu',
+    description: 'Satis temsilcilerinin musteri, teklif ve aktivite bazli performans karsilastirmasi',
+    icon: 'leaderboard',
+    iconColor: 'text-blue-600',
+    iconBg: 'bg-blue-50',
+  },
+  {
+    type: 'win_loss_analysis',
+    title: 'Kazanilan / Kaybedilen Analizi',
+    description: 'Tekliflerin kazanilma ve kaybedilme oranlari ile trend analizi',
+    icon: 'analytics',
+    iconColor: 'text-emerald-600',
+    iconBg: 'bg-emerald-50',
+  },
+  {
+    type: 'country_mode_volume',
+    title: 'Ulke / Mod Bazli Hacim',
+    description: 'Ulke ve tasima modu bazinda teklif hacimleri ve dagilim raporu',
+    icon: 'public',
+    iconColor: 'text-purple-600',
+    iconBg: 'bg-purple-50',
+  },
+  {
+    type: 'loss_reason_analysis',
+    title: 'Kaybedilme Nedeni Analizi',
+    description: 'Kaybedilen tekliflerin neden bazli dagilim ve trend raporu',
+    icon: 'pie_chart',
+    iconColor: 'text-amber-600',
+    iconBg: 'bg-amber-50',
+  },
+];
+
+interface ReportsPanelProps {
+  filters: ReportFilters;
+}
+
+export function ReportsPanel({ filters }: ReportsPanelProps) {
+  const [loadingReport, setLoadingReport] = useState<string | null>(null);
+
+  async function handleExport(type: ReportType, format: ExportFormat) {
+    const key = `${type}_${format}`;
+    setLoadingReport(key);
+    try {
+      const blob = await reportService.exportReport(type, format, filters);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `rapor_${type}_${new Date().toISOString().slice(0, 10)}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Report export error:', err);
+    } finally {
+      setLoadingReport(null);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      {REPORT_CARDS.map((report) => (
+        <div
+          key={report.type}
+          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-center gap-5 hover:border-slate-300 transition-colors"
+        >
+          {/* Icon */}
+          <div
+            className={`flex-shrink-0 size-12 rounded-xl ${report.iconBg} ${report.iconColor} flex items-center justify-center`}
+          >
+            <Icon name={report.icon} size="md" />
+          </div>
+
+          {/* Text */}
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-slate-900">{report.title}</h3>
+            <p className="text-xs text-slate-500 mt-0.5 truncate">
+              {report.description}
+            </p>
+          </div>
+
+          {/* Download buttons */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => handleExport(report.type, 'pdf')}
+              disabled={loadingReport === `${report.type}_pdf`}
+              className="inline-flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg px-3 py-2 text-xs font-bold transition-colors disabled:opacity-50"
+            >
+              {loadingReport === `${report.type}_pdf` ? (
+                <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <Icon name="picture_as_pdf" size="sm" />
+              )}
+              PDF
+            </button>
+            <button
+              onClick={() => handleExport(report.type, 'excel')}
+              disabled={loadingReport === `${report.type}_excel`}
+              className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg px-3 py-2 text-xs font-bold transition-colors disabled:opacity-50"
+            >
+              {loadingReport === `${report.type}_excel` ? (
+                <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <Icon name="table_view" size="sm" />
+              )}
+              Excel
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

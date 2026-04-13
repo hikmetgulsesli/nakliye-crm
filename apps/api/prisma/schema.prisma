@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  fullName     String   @map("full_name")
+  role         Role     @default(USER)
+  isActive     Boolean  @default(true) @map("is_active")
+  avatarUrl    String?  @map("avatar_url")
+  phone        String?
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  assignedCustomers  Customer[]          @relation("AssignedUser")
+  createdCustomers   Customer[]          @relation("CreatedByUser")
+  assignedQuotations Quotation[]         @relation("AssignedQuoteUser")
+  createdQuotations  Quotation[]         @relation("CreatedQuoteUser")
+  activities         Activity[]
+  revisions          QuotationRevision[]
+  auditLogs          AuditLog[]
+  refreshTokens      RefreshToken[]
+  notifications      Notification[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("refresh_tokens")
+}
+
+model Customer {
+  id                   Int       @id @default(autoincrement())
+  companyName          String    @map("company_name")
+  contactName          String?   @map("contact_name")
+  phone                String
+  email                String
+  address              String?
+  transportModes       Json?     @map("transport_modes")
+  serviceTypes         Json?     @map("service_types")
+  incoterms            Json?
+  direction            String?
+  originCountries      Json?     @map("origin_countries")
+  destinationCountries Json?     @map("destination_countries")
+  source               String?
+  potential            String?
+  status               String    @default("Aktif")
+  notes                String?
+  assignedUserId       Int       @map("assigned_user_id")
+  assignedUser         User      @relation("AssignedUser", fields: [assignedUserId], references: [id])
+  lastContactDate      DateTime? @map("last_contact_date")
+  lastQuoteDate        DateTime? @map("last_quote_date")
+  createdById          Int       @map("created_by")
+  createdBy            User      @relation("CreatedByUser", fields: [createdById], references: [id])
+  isDeleted            Boolean   @default(false) @map("is_deleted")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  quotations Quotation[]
+  activities Activity[]
+
+  @@map("customers")
+}
+
+model Quotation {
+  id                 Int       @id @default(autoincrement())
+  quoteNo            String    @unique @map("quote_no")
+  customerId         Int       @map("customer_id")
+  customer           Customer  @relation(fields: [customerId], references: [id])
+  quoteDate          DateTime  @map("quote_date")
+  validityDate       DateTime  @map("validity_date")
+  transportMode      String?   @map("transport_mode")
+  serviceType        String?   @map("service_type")
+  originCountry      String?   @map("origin_country")
+  pol                String?
+  destinationCountry String?   @map("destination_country")
+  pod                String?
+  incoterm           String?
+  price              Decimal?  @db.Decimal(12, 2)
+  currency           String?   @default("USD")
+  priceNote          String?   @map("price_note")
+  status             String    @default("Bekliyor")
+  lossReason         String?   @map("loss_reason")
+  assignedUserId     Int       @map("assigned_user_id")
+  assignedUser       User      @relation("AssignedQuoteUser", fields: [assignedUserId], references: [id])
+  revisionCount      Int       @default(0) @map("revision_count")
+  createdById        Int       @map("created_by")
+  createdBy          User      @relation("CreatedQuoteUser", fields: [createdById], references: [id])
+  isDeleted          Boolean   @default(false) @map("is_deleted")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  revisions QuotationRevision[]
+
+  @@map("quotations")
+}
+
+model QuotationRevision {
+  id            Int       @id @default(autoincrement())
+  quotationId   Int       @map("quotation_id")
+  quotation     Quotation @relation(fields: [quotationId], references: [id])
+  revisionNo    Int       @map("revision_no")
+  changedFields Json      @map("changed_fields")
+  revisedById   Int       @map("revised_by")
+  revisedBy     User      @relation(fields: [revisedById], references: [id])
+  revisedAt     DateTime  @default(now()) @map("revised_at")
+
+  @@map("quotation_revisions")
+}
+
+model Activity {
+  id              Int       @id @default(autoincrement())
+  customerId      Int       @map("customer_id")
+  customer        Customer  @relation(fields: [customerId], references: [id])
+  activityType    String    @map("activity_type")
+  activityDate    DateTime  @map("activity_date")
+  durationMinutes Int?      @map("duration_minutes")
+  notes           String?
+  outcome         String?
+  nextActionDate  DateTime? @map("next_action_date")
+  createdById     Int       @map("created_by")
+  createdBy       User      @relation(fields: [createdById], references: [id])
+  isDeleted       Boolean   @default(false) @map("is_deleted")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@map("activities")
+}
+
+model LookupValue {
+  id        Int      @id @default(autoincrement())
+  category  String
+  value     String
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([category, value])
+  @@map("lookup_values")
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  recordType String   @map("record_type")
+  recordId   Int      @map("record_id")
+  action     String
+  changes    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([recordType, recordId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_log")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false) @map("is_read")
+  link      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}

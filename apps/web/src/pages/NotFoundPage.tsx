@@ -1,0 +1,104 @@
+import { Link, useNavigate } from 'react-router-dom';
+import { Icon, Button } from '@/components/ui';
+
+export default function NotFoundPage() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      {/* Top Nav */}
+      <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-8">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <Icon name="local_shipping" />
+            </div>
+            <span className="font-display font-bold text-lg text-slate-900">
+              Logistics CRM
+            </span>
+          </Link>
+
+          {/* Nav links */}
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              to="/"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/teklifler"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+            >
+              Gonderiler
+            </Link>
+            <Link
+              to="/musteriler"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+            >
+              Musteriler
+            </Link>
+            <Link
+              to="/raporlar"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+            >
+              Raporlar
+            </Link>
+          </nav>
+        </div>
+
+        {/* User avatar placeholder */}
+        <div className="size-10 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-600">
+          ?
+        </div>
+      </header>
+
+      {/* Centered 404 Content */}
+      <main className="flex-1 flex items-center justify-center px-4">
+        <div className="text-center max-w-lg">
+          {/* Large "?" icon in circle */}
+          <div className="mx-auto mb-8 size-32 rounded-full bg-slate-200/60 flex items-center justify-center">
+            <Icon
+              name="help"
+              className="text-slate-400"
+              size="xl"
+            />
+          </div>
+
+          {/* Heading */}
+          <h1 className="text-4xl font-bold font-display text-slate-900 mb-3">
+            Sayfa Bulunamadi
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-slate-500 text-lg mb-8 leading-relaxed">
+            Aradiginiz sayfa tasinmis, silinmis veya hic var olmamis olabilir.
+            Lutfen URL adresini kontrol edin veya ana sayfaya donun.
+          </p>
+
+          {/* Buttons */}
+          <div className="flex items-center justify-center gap-4">
+            <Button icon="home" onClick={() => navigate('/')}>
+              Ana Sayfaya Don
+            </Button>
+            <Button
+              variant="secondary"
+              icon="arrow_back"
+              onClick={() => navigate(-1)}
+            >
+              Geri Git
+            </Button>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-6 text-center border-t border-slate-200 bg-white">
+        <p className="text-sm text-slate-400">
+          &copy; {new Date().getFullYear()} Logistics CRM. Tum haklari saklidir.
+        </p>
+      </footer>
+    </div>
+  );
+}

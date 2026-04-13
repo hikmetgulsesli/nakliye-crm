@@ -1,0 +1,209 @@
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;family=Source+Sans+3:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "sans-serif"],
+                        "body": ["Source Sans 3", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="w-64 bg-[#0f172a] text-slate-300 flex flex-col h-screen sticky top-0 border-r border-slate-800">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white">local_shipping</span>
+</div>
+<h1 class="text-white font-display font-bold text-lg leading-tight">Global Lojistik</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">package_2</span>
+<span class="text-sm font-medium">Gönderiler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white font-semibold" href="#">
+<span class="material-symbols-outlined text-xl">person</span>
+<span class="text-sm font-medium">Profil</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden border border-slate-600">
+<img alt="Profil" class="w-full h-full object-cover" data-alt="User profile avatar of Ahmet Yılmaz" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhMd_ey5CffG5e8cxxSIJlprX3kfBQ4ax35x7ty9dXPceoCZ5DauVx8qFafATZM1fm9bOLmexc3791Nucve5l9ZD3k46h7rR8FkFsBe5Ct_p7vXJ8e0dpiwobkvoHWfCROHy21NhF80_81mcXNJA9HP_dUMM7L_0zcFuEUsqENAbWanNZ--qA7g1MJC3irYKZoHrffvtv68obXNhkRJu4xdFYNgswC2JiC7IKQsY2BdPBcmnbrKSyC2yT98eNObHWg9uimii67m-Ib"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold text-white truncate">Ahmet Yılmaz</p>
+<p class="text-xs text-slate-400 truncate">Kıdemli Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-8 lg:p-12">
+<header class="mb-10">
+<h2 class="text-3xl font-display font-bold text-slate-900 dark:text-white">Profil ve Hesap Ayarları</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2">Kişisel bilgilerinizi, güvenlik ayarlarınızı ve bildirim tercihlerinizi buradan yönetebilirsiniz.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<!-- Kişisel Bilgiler Card -->
+<section class="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-display font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person</span>
+                        Kişisel Bilgiler
+                    </h3>
+<span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full uppercase tracking-wider">Admin</span>
+</div>
+<div class="flex flex-col items-center mb-8 relative group">
+<div class="relative">
+<div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-md">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Large profile photo of Ahmet Yılmaz" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAauOjd3TJwassoh1-XU9C5MuJ6Pfh3g49nhVDnJzPsxUg_HAmJw7CXSfoG2nyhADtH78SdCaIHIDExyfjWPdRppFCaTXc2Deh-WXVD8copPvdAoBHRJuqyF6fSjLp8Kg9ttCcjw6UdBaCZoD8mMppzKxkyw4KuwYIRqPq59EAL2SV4W1aLQe7l3zzzvkDV_MRm3uWkfUVuR0DR-YjSJdOMz0UIQpZhk8DeuvfMHDkB7tfXlHf1cxyAXFjy5rqjldl95rWwdP_x1BNV"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<p class="mt-4 text-xs text-slate-400">JPG, GIF veya PNG. Max 2MB.</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Ad Soyad</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-primary focus:border-primary" type="text" value="Ahmet Yılmaz"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">E-posta</label>
+<div class="relative">
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 cursor-not-allowed pr-10" readonly="" type="email" value="ahmet.yilmaz@global-lojistik.com"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-slate-400 text-lg">lock</span>
+</div>
+<p class="mt-1 text-xs text-slate-400">E-posta adresi güvenliğiniz için kilitlenmiştir.</p>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors">Değişiklikleri Kaydet</button>
+</div>
+</section>
+<!-- Güvenlik Card -->
+<section class="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm flex flex-col">
+<h3 class="text-xl font-display font-semibold flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">security</span>
+                    Güvenlik
+                </h3>
+<div class="space-y-4 flex-1">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Mevcut Şifre</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-primary focus:border-primary" placeholder="••••••••" type="password"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Yeni Şifre</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-primary focus:border-primary" type="password" value="SuperSecure123!"/>
+<div class="mt-2">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold uppercase text-slate-400">Şifre Gücü</span>
+<span class="text-xs font-semibold text-emerald-500 uppercase">Güçlü</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-full"></div>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Yeni Şifre (Tekrar)</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-primary focus:border-primary" type="password" value="SuperSecure123!"/>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<div>
+<p class="font-semibold text-sm">İki Faktörlü Doğrulama (2FA)</p>
+<p class="text-xs text-slate-500">Ekstra hesap güvenliği.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+</section>
+</div>
+<!-- Bildirim Tercihleri Card -->
+<section class="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-8 shadow-sm">
+<h3 class="text-xl font-display font-semibold flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+                Bildirim Tercihleri
+            </h3>
+<div class="space-y-0 divide-y dark:divide-slate-700">
+<div class="py-5 flex items-center justify-between">
+<div class="flex-1 pr-4">
+<h4 class="font-semibold text-slate-900 dark:text-white">E-posta Bildirimleri</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Yeni gönderi oluşturulduğunda veya güncellendiğinde e-posta al.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="py-5 flex items-center justify-between">
+<div class="flex-1 pr-4">
+<h4 class="font-semibold text-slate-900 dark:text-white">Günlük Özet E-postası</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Her gün sabah 09:00'da genel operasyon özetini e-posta olarak al.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="py-5 flex items-center justify-between">
+<div class="flex-1 pr-4">
+<h4 class="font-semibold text-slate-900 dark:text-white">Kritik Uyarı Bildirimleri</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Gecikmiş gönderiler ve sistem uyarıları için anlık bildirimler.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="mt-8 flex justify-end">
+<button class="px-8 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-white font-semibold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Tümünü Varsayılana Döndür</button>
+</div>
+</section>
+</main>
+</body></html>

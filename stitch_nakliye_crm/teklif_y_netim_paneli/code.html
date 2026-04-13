@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Teklif Yönetim Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "sidebar-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-fill .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar-dark text-slate-300 flex-shrink-0 flex flex-col h-screen sticky top-0 border-r border-slate-800">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
+</div>
+<div>
+<h1 class="text-white font-bold text-lg leading-tight">Lojistik CRM</h1>
+<p class="text-xs text-slate-500 uppercase tracking-wider">Uluslararası Nakliye</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Panel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white active-fill" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">package</span>
+<span class="text-sm font-medium">Gönderiler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-sm font-medium">Raporlar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold" data-alt="User avatar profile picture">MA</div>
+<div class="overflow-hidden">
+<p class="text-xs font-medium text-white truncate">Murat Aydın</p>
+<p class="text-[10px] text-slate-500 truncate">Operasyon Müdürü</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-slate-500 cursor-pointer">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top Bar -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<h2 class="text-xl font-bold">Teklifler</h2>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 shadow-sm transition-all">
+<span class="material-symbols-outlined text-lg">add</span>
+                    Yeni Teklif
+                </button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 space-y-6">
+<!-- Filter Bar Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg border-slate-200 focus:border-primary focus:ring-primary/20 text-sm bg-slate-50" placeholder="Teklif no veya müşteri ara..." type="text"/>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">calendar_month</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg border-slate-200 focus:border-primary focus:ring-primary/20 text-sm bg-slate-50" placeholder="Tarih Aralığı Seçin" type="text" value="01/10/2023 - 31/10/2023"/>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+<select class="min-w-[140px] py-2 border-slate-200 rounded-lg text-sm bg-white focus:ring-primary/20">
+<option>Durum: Tümü</option>
+<option>Bekliyor</option>
+<option>Kazanıldı</option>
+<option>Kaybedildi</option>
+</select>
+<select class="min-w-[140px] py-2 border-slate-200 rounded-lg text-sm bg-white focus:ring-primary/20">
+<option>Taşıma Modu</option>
+<option>Deniz</option>
+<option>Hava</option>
+<option>Kara</option>
+</select>
+<select class="min-w-[140px] py-2 border-slate-200 rounded-lg text-sm bg-white focus:ring-primary/20">
+<option>Temsilci</option>
+<option>Can Berk</option>
+<option>Elif Yılmaz</option>
+</select>
+<select class="min-w-[100px] py-2 border-slate-200 rounded-lg text-sm bg-white focus:ring-primary/20">
+<option>Para Birimi</option>
+<option>USD</option>
+<option>EUR</option>
+<option>TRY</option>
+</select>
+<div class="flex-1"></div>
+<button class="px-4 py-2 text-primary font-semibold text-sm hover:bg-primary/5 rounded-lg">Temizle</button>
+<button class="px-6 py-2 bg-slate-800 text-white rounded-lg font-semibold text-sm hover:bg-slate-700">Filtrele</button>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Teklif No</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Müşteri</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Tarih</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Güzergah (POL → POD)</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Mod</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 text-right">Fiyat</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Durum</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Temsilci</th>
+<th class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 text-center">İşlem</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-primary font-semibold text-sm">#QT-2023-0045</span>
+</td>
+<td class="px-6 py-4 font-bold text-sm">Global Tech Logistics</td>
+<td class="px-6 py-4 text-sm text-slate-500">24 Eki 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-sm">
+<span>Shanghai</span>
+<span class="material-symbols-outlined text-slate-400 text-base">arrow_right_alt</span>
+<span>İstanbul</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+<span class="material-symbols-outlined text-sm mr-1">directions_boat</span> Deniz
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-sm">2,450.00 <span class="text-slate-500 font-normal">USD</span></div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500 text-white shadow-sm">
+                                        Kazanıldı
+                                    </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold" data-alt="Representative avatar">EY</div>
+<span class="text-xs font-medium">Elif Yılmaz</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-primary font-semibold text-sm">#QT-2023-0046</span>
+</td>
+<td class="px-6 py-4 font-bold text-sm">Anadolu Tekstil A.Ş.</td>
+<td class="px-6 py-4 text-sm text-slate-500">23 Eki 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-sm">
+<span>Hamburg</span>
+<span class="material-symbols-outlined text-slate-400 text-base">arrow_right_alt</span>
+<span>İzmir</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+<span class="material-symbols-outlined text-sm mr-1">flight</span> Hava
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-sm">1,120.00 <span class="text-slate-500 font-normal">EUR</span></div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border-2 border-dashed border-amber-400 text-amber-700">
+                                        Bekliyor
+                                    </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold" data-alt="Representative avatar">CB</div>
+<span class="text-xs font-medium">Can Berk</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Zebra Striping manual) -->
+<tr class="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-primary font-semibold text-sm">#QT-2023-0047</span>
+</td>
+<td class="px-6 py-4 font-bold text-sm">Mega İnşaat Malz.</td>
+<td class="px-6 py-4 text-sm text-slate-500">21 Eki 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-sm">
+<span>Rotterdam</span>
+<span class="material-symbols-outlined text-slate-400 text-base">arrow_right_alt</span>
+<span>Mersin</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+<span class="material-symbols-outlined text-sm mr-1">directions_boat</span> Deniz
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-sm">3,890.00 <span class="text-slate-500 font-normal">USD</span></div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500 text-white shadow-sm">
+                                        Kaybedildi
+                                    </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold" data-alt="Representative avatar">EY</div>
+<span class="text-xs font-medium">Elif Yılmaz</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4">
+<span class="font-mono text-primary font-semibold text-sm">#QT-2023-0048</span>
+</td>
+<td class="px-6 py-4 font-bold text-sm">Hızlı Market Zinciri</td>
+<td class="px-6 py-4 text-sm text-slate-500">20 Eki 2023</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-sm">
+<span>İstanbul</span>
+<span class="material-symbols-outlined text-slate-400 text-base">arrow_right_alt</span>
+<span>Dubai</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">
+<span class="material-symbols-outlined text-sm mr-1">local_shipping</span> Kara
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-sm">4,200.00 <span class="text-slate-500 font-normal">TRY</span></div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border-2 border-dashed border-amber-400 text-amber-700">
+                                        Bekliyor
+                                    </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold" data-alt="Representative avatar">MA</div>
+<span class="text-xs font-medium">Murat Aydın</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between">
+<p class="text-sm text-slate-500">Toplam <span class="font-bold text-slate-900 dark:text-slate-100">48</span> teklif gösteriliyor</p>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold">1</button>
+<button class="px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm font-medium">2</button>
+<button class="px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm font-medium">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm font-medium">12</button>
+<button class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

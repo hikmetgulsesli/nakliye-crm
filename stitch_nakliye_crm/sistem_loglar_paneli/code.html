@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sistem Logları Paneli - CRM Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=Outfit:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "slate-sidebar": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "sans-serif"],
+                        "body": ["Source Sans 3", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        .mono-text { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-slate-sidebar text-slate-300 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<span class="text-xl font-bold text-white font-display tracking-tight">LogiCRM</span>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">request_quote</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Yönetim</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined text-[20px]">scrollable_header</span>
+<span class="text-sm font-medium">Loglar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Sistem Ayarları</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<div class="flex items-center gap-3 px-2">
+<img alt="Admin" class="size-9 rounded-full bg-slate-700" data-alt="Admin user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ1e4YTjnQnlo-tyHtvQVMuVCOQvGwuR1UeHudLnzxkfvWKdYqhJB7vPicDl23AQCx0OfFRyZNIbhEp1rHoad12RP2-_d0QxEugkSgencmhqe7W41doPLLXKPFPoR_3Yup9QkQa_hsALCF_0KvcMMQAFWYD2OPXZjcGhS6v1w4QQpdd4SFodYqyB_iIAl3BJ0ThkYczFiCR6Zv06UZDprq7HD2G7dBaz3gbMjnisg16FeliuJUdgjVb9SKe_nocSgVEzfKksmq6km_"/>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold text-white truncate">Sistem Admin</p>
+<p class="text-xs text-slate-500 truncate">admin@logicrm.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4">
+<h1 class="text-xl font-bold text-slate-900">Sistem Logları Paneli</h1>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary uppercase tracking-wide">Audit Trail</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-slate-200"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50 rounded-lg transition-colors">
+<span class="text-sm font-medium text-slate-700">TR</span>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8 space-y-6">
+<!-- Filters Section -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kullanıcı</label>
+<select class="w-full h-10 px-3 rounded-lg border-slate-200 bg-slate-50 text-sm focus:ring-primary focus:border-primary">
+<option>Tüm Kullanıcılar</option>
+<option>Ahmet Y.</option>
+<option>Mehmet K.</option>
+<option>Admin</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">İşlem Tipi</label>
+<select class="w-full h-10 px-3 rounded-lg border-slate-200 bg-slate-50 text-sm focus:ring-primary focus:border-primary">
+<option>Tüm İşlemler</option>
+<option>Oluşturma</option>
+<option>Güncelleme</option>
+<option>Silme</option>
+<option>Devir</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kayıt Tipi</label>
+<select class="w-full h-10 px-3 rounded-lg border-slate-200 bg-slate-50 text-sm focus:ring-primary focus:border-primary">
+<option>Tüm Kayıtlar</option>
+<option>Müşteri</option>
+<option>Teklif</option>
+<option>Aktivite</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tarih Aralığı</label>
+<div class="flex items-center h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-sm">
+<span class="material-symbols-outlined text-slate-400 text-[18px] mr-2">calendar_today</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 text-sm w-full" type="text" value="01.03.2026 - 31.03.2026"/>
+</div>
+</div>
+</div>
+<div class="flex justify-end mt-6 gap-3">
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            CSV Export
+                        </button>
+<button class="flex items-center gap-2 px-6 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors shadow-md shadow-primary/10">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filtrele
+                        </button>
+</div>
+</section>
+<!-- Logs Table Section -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-200">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tarih / Saat</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Kullanıcı</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">İşlem</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Kayıt Tipi</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Kayıt</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Değişiklik Özeti</th>
+<th class="px-6 py-4 w-10"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="mono-text text-sm text-slate-600">01.03.2026 14:22</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">AY</div>
+<span class="text-sm font-medium text-slate-700">Ahmet Y.</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Güncelleme</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold uppercase tracking-tight">Müşteri</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<a class="text-sm font-medium text-primary hover:underline underline-offset-4" href="#">ABC Lojistik</a>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-600 max-w-xs truncate">Potansiyel: <span class="line-through text-slate-400">Orta</span> → <span class="font-bold text-green-600">Yüksek</span></p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="mono-text text-sm text-slate-600">01.03.2026 11:30</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<img alt="Admin" class="size-8 rounded-full" data-alt="Admin avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuwGrI7Xa1D2QuqSsTNU_wMaMUpoDzSoQ7iAkZhJmWXTAJRQo5fSsK-8XrwtfiFB38hhJWz0WF6HHuGXJE1_7GugMvK2HIzR_7Gk6nsa_1OV-NuSd503xY-OclKAPh486DX3F_NXnwbkdftTgErBpfVlvQlPtwj_tR9nTfmrhMaWcBmqB8A3gqCxpGWKftuAIP1EbZCGOhxSFNJk4n2IkBiw1mqwtMbk4NU3Qn_FMBRDnNBGGJph9cSWnVW21Grjm9rpEOmlKSCk1g"/>
+<span class="text-sm font-medium text-slate-700">Admin</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">Devir</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold uppercase tracking-tight">Müşteri</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-slate-700">Toplu devir</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-600 max-w-xs truncate">32 müşteri: Ahmet Y. → Mehmet K.</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="mono-text text-sm text-slate-600">28.02.2026 17:05</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">MK</div>
+<span class="text-sm font-medium text-slate-700">Mehmet K.</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">Oluşturma</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold uppercase tracking-tight">Teklif</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<a class="text-sm font-medium text-primary hover:underline underline-offset-4" href="#">TKF-2026-0045</a>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-600 max-w-xs truncate">Yeni deniz yolu taşıma teklifi oluşturuldu.</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="mono-text text-sm text-slate-600">28.02.2026 09:12</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">AY</div>
+<span class="text-sm font-medium text-slate-700">Ahmet Y.</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">Silme</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold uppercase tracking-tight">Aktivite</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-slate-700">Telefon görüşmesi</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-600 max-w-xs truncate">ID: 5543 nolu aktivite kaydı silindi.</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer / Pagination -->
+<div class="p-6 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
+<p class="text-sm text-slate-500 font-medium">Toplam <span class="text-slate-900 font-bold">1,245</span> log kaydı</p>
+<nav class="flex items-center gap-2">
+<button class="size-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="size-9 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm shadow-sm shadow-primary/20">1</button>
+<button class="size-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 font-medium text-sm hover:border-primary hover:text-primary transition-colors">2</button>
+<button class="size-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 font-medium text-sm hover:border-primary hover:text-primary transition-colors">3</button>
+<span class="px-2 text-slate-400 text-sm">...</span>
+<button class="size-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 font-medium text-sm hover:border-primary hover:text-primary transition-colors">125</button>
+<button class="size-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</nav>
+</div>
+</section>
+<!-- Technical Details Section (Expanded Example Visual) -->
+<section class="bg-slate-900 rounded-xl p-6 overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-[18px]">code</span>
+<h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest">Teknik Değişiklik Detayı (JSON Diff)</h3>
+</div>
+<span class="text-[10px] text-slate-500 font-mono">LOG_ID: 88721-AX</span>
+</div>
+<div class="bg-slate-800/50 rounded-lg p-4 mono-text text-xs leading-relaxed">
+<div class="text-slate-400">{</div>
+<div class="pl-4">
+<span class="text-blue-300">"entity"</span>: <span class="text-green-300">"Customer"</span>,
+                        </div>
+<div class="pl-4">
+<span class="text-blue-300">"action"</span>: <span class="text-green-300">"update"</span>,
+                        </div>
+<div class="pl-4">
+<span class="text-blue-300">"changes"</span>: {
+                        </div>
+<div class="pl-8">
+<span class="text-blue-300">"potential_status"</span>: {
+                        </div>
+<div class="pl-12">
+<span class="text-red-300">"old"</span>: <span class="text-red-300">"MEDIUM"</span>,
+                        </div>
+<div class="pl-12">
+<span class="text-green-300">"new"</span>: <span class="text-green-300">"HIGH"</span>
+</div>
+<div class="pl-8">}</div>
+<div class="pl-4">}</div>
+<div class="text-slate-400">}</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

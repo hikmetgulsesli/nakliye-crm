@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@600;700&amp;family=Source+Sans+3:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "outfit": ["Outfit", "sans-serif"],
+                        "sourcesans": ["Source Sans 3", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-gradient-to-b from-slate-50 to-white dark:from-background-dark dark:to-background-dark">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Section based on TopNavBar component -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 md:px-20 py-4 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3 text-slate-900 dark:text-slate-100">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-outfit">CRM Lojistik</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Gönderiler</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Müşteriler</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Raporlar</a>
+</nav>
+<div class="h-10 w-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-cover bg-center" data-alt="User profile avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAF_BCpHv7Ypx7BKqI4fj2fCohiQwWMEPmRgfTTiDK3YVwOntgaa24CELyqhT1uyqgUncEB-0dpCVtnIsgHFM_0iTtZUlwh_zx-q5QSHlizyUp3TdlWAI1vGLY8AhvRiD_038DZSTR-nKphc6dG1yZkcAOwSe2T38FJamygoMGeJH-zpwAr91wRyYF7POHOlW7BUwL7zU0V1IrA2QF8tExcdHB8mUhH_qnVooVRuGGm3sJF-vyOSIHgqBilpV5F8yOKUs0vCYncnZ5W");'></div>
+</div>
+</header>
+<!-- Main Content Area: 404 Error -->
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-20">
+<div class="max-w-[600px] w-full text-center flex flex-col items-center">
+<!-- Icon: Minimalist FileQuestion (represented by Material Symbols) -->
+<div class="mb-8 flex items-center justify-center">
+<div class="w-[120px] h-[120px] rounded-3xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-[80px] text-slate-300 dark:text-slate-600">contact_support</span>
+</div>
+</div>
+<!-- Title -->
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl md:text-5xl font-bold font-outfit tracking-tight mb-4">
+                        Sayfa Bulunamadı
+                    </h1>
+<!-- Subtitle -->
+<p class="text-slate-500 dark:text-slate-400 text-lg font-sourcesans leading-relaxed mb-10 max-w-[420px]">
+                        Aradığınız sayfa mevcut değil veya taşınmış olabilir. Lütfen adresi kontrol edin veya ana sayfaya dönün.
+                    </p>
+<!-- Buttons -->
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center px-4">
+<button class="flex min-w-[180px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-white text-base font-bold leading-normal tracking-wide transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-xl">home</span>
+<span>Ana Sayfaya Dön</span>
+</button>
+<button class="flex min-w-[180px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-12 px-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-base font-bold leading-normal tracking-wide transition-all hover:bg-slate-50 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+<span>Geri Git</span>
+</button>
+</div>
+<!-- Visual Accent -->
+<div class="mt-16 w-full max-w-sm h-1 bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent"></div>
+</div>
+</main>
+<!-- Optional Footer Info -->
+<footer class="py-8 px-6 text-center">
+<p class="text-slate-400 dark:text-slate-600 text-xs font-sourcesans">
+                    © 2024 CRM Lojistik Uluslararası Taşımacılık A.Ş. Tüm hakları saklıdır.
+                </p>
+</footer>
+</div>
+</div>
+</body></html>

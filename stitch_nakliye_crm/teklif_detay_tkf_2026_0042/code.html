@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "sidebar-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "Inter", "sans-serif"],
+                        "body": ["Source Sans 3", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar-dark text-slate-300 flex flex-col fixed h-full z-20">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<span class="text-xl font-display font-bold text-white tracking-tight">Lojistik CRM</span>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-sm font-medium">Teklifler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">inventory_2</span>
+<span class="text-sm font-medium">Yükler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sistem</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-slate-700 overflow-hidden">
+<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="User avatar of Ahmet Yilmaz" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_DDyIvxmqr_y74kNaSfqQg1uQAuQlqMi0ezkSlaPMDgqgu6wUfv6yij08cJI_FBZGxkmGRFXNG8Y8CtHaiqSpozo4NxnwI0uopEOtn89fqpMzSGcBMYJtDuK-kdM9njIz6QZJoL1_67c3uRnKHT5RZxu7CkLuaF6XXTm64IrJc8Nl-og2C-m2D6z_R5rSdYpcPkoopnQ-KgDjU2YHME_HdRSMMYjhFu5Q1qk_GWEAT94lcMqxvYUAf_RBWhvFDuDRWA9TrCITNH-H"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white truncate">Ahmet Yılmaz</p>
+<p class="text-xs text-slate-500 truncate">Operasyon Uzmanı</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 min-h-screen">
+<!-- Top Navigation -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<nav class="flex items-center text-sm font-medium">
+<a class="text-slate-500 hover:text-primary" href="#">Dashboard</a>
+<span class="mx-2 text-slate-400">/</span>
+<a class="text-slate-500 hover:text-primary" href="#">Teklifler</a>
+<span class="mx-2 text-slate-400">/</span>
+<span class="text-slate-900 dark:text-slate-100">TKF-2026-0042</span>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+<button class="flex items-center gap-2 pl-2 pr-1 py-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="text-sm font-semibold">TR</span>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</button>
+</div>
+</header>
+<div class="p-8 space-y-6 max-w-7xl mx-auto">
+<!-- Header Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="space-y-3">
+<div class="flex items-center gap-4">
+<h1 class="text-2xl font-mono font-bold tracking-tight text-slate-900 dark:text-slate-100 uppercase">TKF-2026-0042</h1>
+<span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-sm font-bold rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                    Kazanıldı
+                                </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-sm">
+<a class="flex items-center gap-1 text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4" href="#">
+                                    ABC Lojistik Ltd.
+                                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+<div class="flex items-center gap-4 text-slate-500 border-l border-slate-200 dark:border-slate-800 pl-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">calendar_today</span>
+<span>Tarih: <b>15.02.2026</b></span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">event_available</span>
+<span>Geçerlilik: <b>15.03.2026</b></span>
+</div>
+<div class="flex items-center gap-2 ml-2">
+<img alt="Ahmet Yilmaz" class="w-6 h-6 rounded-full" data-alt="Avatar of agent Ahmet Yilmaz" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR_B4fm5y5w0KeTDTizgnGEh9_hHnENue29tDUCBOHzVH9K8r1CiFZqoPiEiN-LQ9qDWm4OlgVGb3ShKbVLmW4cVl8GziQ6KAxxFDjQMtQtlPLWszJEuN6siWbuJIx2IV7AgkSChnxgeh5zFrUlwyMkj-P0jDSqy8qtiPrw3r_aZ2ie5X7vh9GuUdlupIudJibrqANWFoD_lhVb6ZTku0QBEyQR4oyQhQdKo9_FbnXIGy4SpDgfglYahrKbwhLKnAxHzrfGBl0cSEi"/>
+<span>Temsilci: <b>Ahmet Yılmaz</b></span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-shadow shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                Düzenle
+                            </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-lg">download</span>
+                                PDF İndir
+                            </button>
+</div>
+</div>
+</div>
+<!-- Info Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Yük Bilgileri -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<h2 class="font-display font-bold text-lg">Yük Bilgileri</h2>
+<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">directions_boat</span>
+                                Deniz
+                            </span>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-center gap-8">
+<div class="flex items-center justify-between relative">
+<div class="flex flex-col items-center gap-2 z-10">
+<div class="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-700">
+<span class="text-2xl">🇨🇳</span>
+</div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Shanghai</p>
+<p class="text-[10px] uppercase text-slate-400 font-bold tracking-widest">Çin</p>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center px-4">
+<div class="w-full h-[2px] bg-slate-200 dark:bg-slate-800 relative">
+<div class="absolute inset-0 bg-primary w-1/2"></div>
+<span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-900 px-2">
+<span class="material-symbols-outlined text-primary text-xl">arrow_forward</span>
+</span>
+</div>
+<div class="mt-4 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400">
+                                        FOB
+                                    </div>
+</div>
+<div class="flex flex-col items-center gap-2 z-10">
+<div class="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-700">
+<span class="text-2xl">🇹🇷</span>
+</div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">İstanbul</p>
+<p class="text-[10px] uppercase text-slate-400 font-bold tracking-widest">Ambarlı Limanı</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-xs font-semibold text-slate-400 uppercase mb-1">Konteyner Tipi</p>
+<p class="text-base font-bold text-slate-900 dark:text-slate-100">40' High Cube</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-xs font-semibold text-slate-400 uppercase mb-1">Yükleme Şekli</p>
+<p class="text-base font-bold text-slate-900 dark:text-slate-100">FCL (Tam Konteyner)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Fiyat Bilgileri -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+<h2 class="font-display font-bold text-lg">Fiyat Bilgileri</h2>
+</div>
+<div class="p-8 flex-1 flex flex-col items-center justify-center text-center space-y-4">
+<div class="space-y-1">
+<div class="flex items-baseline justify-center gap-2">
+<span class="text-5xl font-display font-bold text-slate-900 dark:text-slate-100">$2,450</span>
+<span class="text-xl font-bold text-slate-400">USD</span>
+</div>
+<p class="text-slate-500 font-medium">40' konteyner, tahmini transit süre 25 gün</p>
+</div>
+<div class="inline-flex items-center gap-3 px-8 py-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded-2xl border border-emerald-100 dark:border-emerald-800">
+<span class="material-symbols-outlined text-3xl font-bold">check_circle</span>
+<div class="text-left">
+<p class="text-sm font-bold uppercase tracking-wide leading-none">Kazanıldı</p>
+<p class="text-xs opacity-80">Onay Tarihi: 18.02.2026</p>
+</div>
+</div>
+<div class="w-full pt-4 space-y-2">
+<div class="flex justify-between text-sm py-2 border-b border-slate-50 dark:border-slate-800">
+<span class="text-slate-400">Navlun Bedeli</span>
+<span class="font-bold text-slate-700 dark:text-slate-300">$2,100</span>
+</div>
+<div class="flex justify-between text-sm py-2 border-b border-slate-50 dark:border-slate-800">
+<span class="text-slate-400">Lokal Masraflar</span>
+<span class="font-bold text-slate-700 dark:text-slate-300">$350</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Revize Geçmişi -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+<h2 class="font-display font-bold text-lg">Revize Geçmişi</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Revize No</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Tarih</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Güncelleyen</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Değişiklik</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded font-mono text-xs font-bold text-slate-600 dark:text-slate-400">Rev-1</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">15.02.2026</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Ahmet Y." class="w-6 h-6 rounded-full" data-alt="Small avatar of Ahmet Y." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUfsK8yVY4CRVQFQEaVK_h1_CNOVGSg70VV0ThJLB06nalRfcZJ8jE2xXhASokb3x9wRUP2k0ZeFUAl4SIK0sj7WUrTQsbmSVbnkBhbBfuhRSUJucNguYy6pP6Hw7B-cJTH3wQOTDKqs_q6foWlaWNz8Lg_tKPVL6cQnKW2nBlRgTIk9Xlt9sR3o6_v4KeZ3P4t7eOO_QNCx4LIKoTYB5fcs79CPYeVE5ZBcQNYa4w55rRRJYE5Xqs2KvsFBKHtaCy54iuSnzrXaqz"/>
+<span class="text-sm font-semibold">Ahmet Y.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+                                        Fiyat: <span class="line-through text-slate-400 mr-2">$2,800</span>
+<span class="text-emerald-600 dark:text-emerald-400 font-bold">$2,600</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded font-mono text-xs font-bold text-slate-600 dark:text-slate-400">Orijinal</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">14.02.2026</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img alt="Ahmet Y." class="w-6 h-6 rounded-full" data-alt="Small avatar of Ahmet Y." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWWAyFDJL9V9EoW7Hxa8l6ccYyPDnUToTPtZzYZTo-jtDLTQUpNaW7ityc0t6adBiClYkNIbtqXXDE4bAIpSPoXpLz9Lao90oj4FS_JVVwyrDnAqvvqL8ynUAc8PMZKZzghnRj-T3tbzYrR8vLuR5K7RMB1zG36UCw7S8hdgYsqRh8br8N3U7N6S6qXBDc17XsPKAPXn7UFeL7miErfhrByLd7sGJ8yJO9p1hdhZyP9br1NJy221ls1hQUvLwDFH_1BWaCJFuqxZ7_"/>
+<span class="text-sm font-semibold">Ahmet Y.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm italic text-slate-400">Teklif oluşturuldu</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

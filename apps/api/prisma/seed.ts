@@ -1,0 +1,87 @@
+import { prisma } from '../src/config/database';
+import bcrypt from 'bcryptjs';
+
+const lookupData: Record<string, string[]> = {
+  transport_mode: ['Deniz', 'Hava', 'Kara', 'Kombine'],
+  service_type: ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'],
+  incoterm: ['FOB', 'EXW', 'FCA', 'DAP', 'CIF', 'CFR', 'DDP'],
+  customer_source: ['Referans', 'Soguk arama', 'Fuar', 'Dijital'],
+  customer_status: ['Aktif', 'Pasif', 'Soguk'],
+  potential_level: ['Dusuk', 'Orta', 'Yuksek'],
+  quote_status: ['Bekliyor', 'Kazanildi', 'Kaybedildi', 'Iptal'],
+  loss_reason: ['Fiyat', 'Rakip', 'Gecikmeli donus', 'Diger'],
+  currency: ['USD', 'EUR', 'TRY'],
+  activity_type: ['Telefon', 'E-posta', 'Yuz Yuze', 'Video Gorusme'],
+  activity_outcome: ['Olumlu', 'Notr', 'Olumsuz', 'Teklif Istendi'],
+  country: ['Turkiye', 'Cin', 'Almanya', 'Italya', 'ABD', 'Ingiltere', 'Fransa', 'Ispanya', 'Hollanda'],
+};
+
+async function main() {
+  console.log('Seeding database...');
+
+  // --- Users ---
+  const adminPassword = await bcrypt.hash('Admin123!', 12);
+  const userPassword = await bcrypt.hash('User123!', 12);
+
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@nakliyecrm.com' },
+    update: {},
+    create: {
+      email: 'admin@nakliyecrm.com',
+      passwordHash: adminPassword,
+      fullName: 'Sistem Yoneticisi',
+      role: 'ADMIN',
+      phone: '+90 555 000 0001',
+    },
+  });
+  console.log(`Admin user created: ${admin.email}`);
+
+  const salesReps = [
+    { email: 'ahmet@nakliyecrm.com', fullName: 'Ahmet Yilmaz', phone: '+90 555 000 0002' },
+    { email: 'ayse@nakliyecrm.com', fullName: 'Ayse Demir', phone: '+90 555 000 0003' },
+    { email: 'mehmet@nakliyecrm.com', fullName: 'Mehmet Kaya', phone: '+90 555 000 0004' },
+  ];
+
+  for (const rep of salesReps) {
+    const user = await prisma.user.upsert({
+      where: { email: rep.email },
+      update: {},
+      create: {
+        email: rep.email,
+        passwordHash: userPassword,
+        fullName: rep.fullName,
+        role: 'USER',
+        phone: rep.phone,
+      },
+    });
+    console.log(`Sales rep created: ${user.email}`);
+  }
+
+  // --- Lookup Values ---
+  for (const [category, values] of Object.entries(lookupData)) {
+    for (let i = 0; i < values.length; i++) {
+      await prisma.lookupValue.upsert({
+        where: { category_value: { category, value: values[i] } },
+        update: { sortOrder: i + 1 },
+        create: {
+          category,
+          value: values[i],
+          sortOrder: i + 1,
+          isActive: true,
+        },
+      });
+    }
+    console.log(`Lookup category seeded: ${category} (${values.length} values)`);
+  }
+
+  console.log('Seeding complete!');
+}
+
+main()
+  .catch((e) => {
+    console.error('Seed error:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

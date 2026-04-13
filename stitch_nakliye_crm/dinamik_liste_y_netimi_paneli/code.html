@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dinamik Liste Yönetimi Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "sidebar-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "Inter", "sans-serif"],
+                        "body": ["'Source Sans 3'", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-sidebar-dark text-slate-300 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shutter_speed</span>
+</div>
+<div>
+<h1 class="text-white text-sm font-bold leading-tight">Global Lojistik</h1>
+<p class="text-xs text-slate-500">CRM Yönetici Paneli</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+<span class="text-sm font-medium">Operasyonlar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span class="text-sm font-medium">Müşteriler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">payments</span>
+<span class="text-sm font-medium">Finans</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Sistem</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Sistem Ayarları</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="size-8 rounded-full bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold text-white truncate">Admin Kullanıcı</p>
+<p class="text-[10px] text-slate-500 truncate">admin@lojistik.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-8 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold">Dinamik Liste Yönetimi</h2>
+<nav class="hidden md:flex items-center gap-1 text-sm text-slate-500">
+<span>Sistem</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-medium">Dinamik Listeler</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:border-slate-800"></div>
+<button class="flex items-center gap-2 text-sm font-medium px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">translate</span>
+<span>TR</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-auto p-8">
+<div class="max-w-7xl mx-auto flex gap-6">
+<!-- Left Panel: Categories -->
+<div class="w-[280px] shrink-0">
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800">
+<h3 class="font-bold text-sm text-slate-400 uppercase tracking-widest">Kategoriler</h3>
+</div>
+<div class="p-2 space-y-1">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-bold" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">directions_boat</span>
+<span class="text-sm">Taşıma Modu</span>
+</div>
+<span class="bg-primary/20 text-primary text-[11px] px-2 py-0.5 rounded-full font-bold">45</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+<span class="text-sm font-medium">Servis Tipi</span>
+</div>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] px-2 py-0.5 rounded-full font-bold">38</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">public</span>
+<span class="text-sm font-medium">Incoterm</span>
+</div>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] px-2 py-0.5 rounded-full font-bold">12</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="text-sm font-medium">Müşteri Kaynağı</span>
+</div>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] px-2 py-0.5 rounded-full font-bold">20</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">account_balance</span>
+<span class="text-sm font-medium">Banka Hesapları</span>
+</div>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] px-2 py-0.5 rounded-full font-bold">5</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Right Panel: Values Table -->
+<div class="flex-1 space-y-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<!-- Table Header -->
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Taşıma Modu</h3>
+<p class="text-sm text-slate-500 mt-1">Sistemdeki aktif taşıma yöntemlerini sürükleyip bırakarak sıralayabilir veya düzenleyebilirsiniz.</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 text-sm transition-all shadow-lg shadow-primary/25">
+<span class="material-symbols-outlined text-xl">add</span>
+<span>Yeni Değer Ekle</span>
+</button>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400 w-16">Sıra</th>
+<th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Değer</th>
+<th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Durum</th>
+<th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Kullanım Sayısı</th>
+<th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400 text-right">İşlemler</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-300 cursor-grab active:cursor-grabbing">drag_indicator</span>
+<span class="text-sm font-bold text-slate-400">1</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">directions_boat</span>
+</div>
+<span class="text-sm font-bold">Deniz</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                                    Aktif
+                                                </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">45 Kayıt</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-all">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded transition-all">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-300 cursor-grab">drag_indicator</span>
+<span class="text-sm font-bold text-slate-400">2</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">flight</span>
+</div>
+<span class="text-sm font-bold">Hava</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                                    Aktif
+                                                </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">38 Kayıt</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-all">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded transition-all">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-slate-50/50 dark:bg-slate-800/20 italic text-slate-400 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-200 cursor-grab">drag_indicator</span>
+<span class="text-sm font-bold">3</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-lg">alt_route</span>
+</div>
+<span class="text-sm">Multimodal</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                                    Pasif
+                                                </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium">2 Kayıt</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-slate-300 hover:text-primary transition-all">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-1.5 text-slate-300 hover:text-slate-500 transition-all">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-slate-50/50 dark:bg-slate-800/20 italic text-slate-400 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-200 cursor-grab">drag_indicator</span>
+<span class="text-sm font-bold">4</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-lg">train</span>
+</div>
+<span class="text-sm">Demiryolu</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                                    Pasif
+                                                </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium">0 Kayıt</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-slate-300 hover:text-primary transition-all">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-1.5 text-slate-300 hover:text-slate-500 transition-all">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer -->
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<p class="text-xs text-slate-500 font-medium">Toplam 4 kayıt gösteriliyor</p>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-800 text-xs font-bold text-slate-400 cursor-not-allowed">Geri</button>
+<button class="px-3 py-1 border border-primary/20 rounded bg-primary text-white text-xs font-bold">1</button>
+<button class="px-3 py-1 border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-800 text-xs font-bold text-slate-600 hover:bg-slate-50">İleri</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

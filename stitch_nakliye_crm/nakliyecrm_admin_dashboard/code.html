@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NakliyeCRM Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2563eb",
+                        "accent": "#f59e0b",
+                        "surface": "#f8fafc",
+                        "text-main": "#1e293b",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Outfit", "Inter", "sans-serif"],
+                        "body": ["'Source Sans 3'", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1, h2, h3, .nav-item { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(37, 99, 235, 0.1); border-left: 4px solid #2563eb; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-72 bg-[#0f172a] text-slate-300 flex flex-col sticky top-0 h-screen overflow-y-auto shrink-0 shadow-xl">
+<div class="p-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white">local_shipping</span>
+</div>
+<div>
+<h1 class="text-white text-xl font-bold tracking-tight">NakliyeCRM</h1>
+<p class="text-xs text-slate-500 uppercase tracking-widest">Lojistik Yönetimi</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-2">
+<a class="nav-item flex items-center gap-4 px-4 py-3 rounded-xl bg-primary/20 text-white font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="nav-item flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart_4_bars</span>
+                Raporlar
+            </a>
+<a class="nav-item flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">manage_accounts</span>
+                Kullanıcı Yönetimi
+            </a>
+<a class="nav-item flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Sistem Ayarları
+            </a>
+<a class="nav-item flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Loglar
+            </a>
+</nav>
+<div class="p-6 border-t border-slate-800">
+<div class="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">A</div>
+<div class="overflow-hidden">
+<p class="text-white text-sm font-semibold truncate">Admin User</p>
+<p class="text-xs text-slate-500 truncate">admin@nakliyecrm.com</p>
+</div>
+<span class="material-symbols-outlined text-slate-500 ml-auto cursor-pointer">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top Bar -->
+<header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-2xl font-bold text-slate-900">Admin Dashboard</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-slate-100 border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Sevkiyat, müşteri veya teklif ara..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+<p class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">Mehmet Demir</p>
+<p class="text-xs text-slate-500">Global Lojistik Md.</p>
+</div>
+<img alt="Admin Avatar" class="size-10 rounded-full border-2 border-slate-100" data-alt="Admin user avatar smiling male" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_pi15H8LrckHPfG9fwc1SkIPsYqMSYyBB6tdbH2tVA5c08VDb4CJdxJJeuee5sxswAT93dYru0xCXJcUS7WMMWQrJarCsFw0B4xzar2e3EFaJOhY1ADrDVcQi_0wK9CtKHmOfszTDLQnj5nyryhCQlh_ys4phV5qSJBvcwjoGVXL6UxdOGbjt0DJ5OhpH3PpXVqBq8lksHnk0LsojiCOTd3231daoxmW6PxQmV3Iqu49dZxH1lTcmXJRmf-WJNXxOs4cTeqw3BPd"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 space-y-8">
+<!-- Filters Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 p-1 bg-slate-200/50 rounded-full">
+<button class="px-6 py-1.5 text-sm font-medium rounded-full transition-all">Bu Hafta</button>
+<button class="px-6 py-1.5 text-sm font-medium rounded-full bg-white shadow-sm text-primary">Bu Ay</button>
+<button class="px-6 py-1.5 text-sm font-medium rounded-full transition-all hover:bg-white/50">Geçen Ay</button>
+<button class="px-6 py-1.5 text-sm font-medium rounded-full transition-all hover:bg-white/50">Özel Aralık</button>
+</div>
+<button class="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined">add</span>
+                    Yeni Teklif Oluştur
+                </button>
+</div>
+<!-- KPI Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+<!-- KPI 1 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="size-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">description</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">+14%</span>
+</div>
+<div class="mt-4">
+<p class="text-slate-500 text-sm font-medium">Verilen Teklif (Bu Ay)</p>
+<h3 class="text-3xl font-bold text-slate-900 mt-1">156</h3>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="size-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">+8%</span>
+</div>
+<div class="mt-4">
+<p class="text-slate-500 text-sm font-medium">Kazanılan</p>
+<h3 class="text-3xl font-bold text-slate-900 mt-1">64</h3>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="size-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">track_changes</span>
+</div>
+<div class="size-8 rounded-full border-4 border-slate-100 border-t-purple-500"></div>
+</div>
+<div class="mt-4">
+<p class="text-slate-500 text-sm font-medium">Kazanma Oranı</p>
+<h3 class="text-3xl font-bold text-slate-900 mt-1">%41</h3>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="size-12 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">Stabil</span>
+</div>
+<div class="mt-4">
+<p class="text-slate-500 text-sm font-medium">Aktif Müşteri</p>
+<h3 class="text-3xl font-bold text-slate-900 mt-1">234</h3>
+</div>
+</div>
+<!-- KPI 5 -->
+<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="size-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">+12</span>
+</div>
+<div class="mt-4">
+<p class="text-slate-500 text-sm font-medium">Yüksek Potansiyel</p>
+<h3 class="text-3xl font-bold text-slate-900 mt-1">28</h3>
+</div>
+</div>
+</div>
+<!-- Team Performance Table -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 flex items-center justify-between">
+<h3 class="text-xl font-bold text-slate-900">Ekip Performansı</h3>
+<button class="text-primary text-sm font-semibold hover:underline">Tümünü Gör</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+<th class="px-6 py-4 font-semibold">Temsilci</th>
+<th class="px-6 py-4 font-semibold">Teklif Sayısı</th>
+<th class="px-6 py-4 font-semibold">Kazanılan</th>
+<th class="px-6 py-4 font-semibold">Kazanma %</th>
+<th class="px-6 py-4 font-semibold">Görüşülen Müşteri</th>
+<th class="px-6 py-4 font-semibold">Son Aktivite</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors bg-emerald-50/40">
+<td class="px-6 py-4 flex items-center gap-3">
+<img alt="Rep Avatar" class="size-8 rounded-full border border-slate-200" data-alt="Avatar of female sales representative" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYZ0dBs_di5zvIcWe0Is60K5kc2HPe77QKABk1zAyE7NJkWVMgCOOztz3uz-f5utcbbkevEUfQVDXASMV4jztZbJQHvr7OuqUeWbXaVb0ChOg-djTehaLHByHn6sjTTbYrp3_YBKGOsRkOF-_VGPNd_A0DDR2gE3eOlQFi4C6b4LIwCkmZCNwA_huUhA4G76JdIFDauWmXZI5tv_MRU6rsXZwGYOCDZO-0ebUEtxbEfBbJbYM-O1JdLtKPMWHbs2j0DKG_Ka6vQNH5"/>
+<span class="font-semibold text-slate-900">Ayşe D.</span>
+</td>
+<td class="px-6 py-4 text-slate-600">45</td>
+<td class="px-6 py-4 text-slate-600">30</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden min-w-[100px]">
+<div class="h-full bg-emerald-500" style="width: 66%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">%66</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600">88</td>
+<td class="px-6 py-4 text-slate-500 text-sm italic">2 saat önce</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<img alt="Rep Avatar" class="size-8 rounded-full border border-slate-200" data-alt="Avatar of male sales representative" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFobFXv54Tx6OpwngyvC6xGiFaEv1BmMAY-k8oROG_SeIwTpEzBmQ5S4tjw5qXtbQpplcJxgOXuiYR2yPlwLV--3_Rs2wSaM6_IpteO_IHHLGv9Yal68c4xdLfBwxIHA8MixIq4NLnagHGBaEXZOF2fmp_zRvITvsy3a7E5xrbrwpLayMsvm0tOBOABnmKlJ_1DIf5QSfWhoE98sCixlMYt0UC9E1pd_a6DW0uC_hD4LpND35aEZz_gdJGzd-YH0dZaJSmYZ2xpR3R"/>
+<span class="font-semibold text-slate-900">Mehmet Y.</span>
+</td>
+<td class="px-6 py-4 text-slate-600">38</td>
+<td class="px-6 py-4 text-slate-600">20</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden min-w-[100px]">
+<div class="h-full bg-primary" style="width: 52%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">%52</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600">74</td>
+<td class="px-6 py-4 text-slate-500 text-sm italic">5 saat önce</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<img alt="Rep Avatar" class="size-8 rounded-full border border-slate-200" data-alt="Avatar of male sales representative" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhg6vc3pflSco3axV07rXfQ7ffbgxfDvfE-iOFQcoe4SDiLLWbla5VvOoNznWBMbt4HFGwHb84H2QM2JQtWamD6P5jSsKcBDXEqYzvjxdWzu0MZyM3JOZ3YYvHF8FHTJf7996x-CCCbpJYLQImgNkRvEGZDz1vGDcuGm4BYNgfVAJ_RwYx0CWerFFdB06lNo9-Fsdl6VnQ5rqr7yV1DQ6kePoEfTRPn5pnbQfJlAmyzUwB-qzyIZ4TWC4iuA9pLIAKcVWwg6FAwoYy"/>
+<span class="font-semibold text-slate-900">Caner K.</span>
+</td>
+<td class="px-6 py-4 text-slate-600">32</td>
+<td class="px-6 py-4 text-slate-600">15</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden min-w-[100px]">
+<div class="h-full bg-primary" style="width: 46%"></div>
+</div>
+<span class="text-xs font-bold text-slate-900">%46</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-600">60</td>
+<td class="px-6 py-4 text-slate-500 text-sm italic">1 gün önce</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Analytics Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Country Density Card -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-lg font-bold text-slate-900">Ülke Bazlı Yoğunluk</h3>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 text-xs font-bold bg-primary text-white rounded-lg">Çıkış Ülkeleri</button>
+<button class="px-4 py-1.5 text-xs font-bold bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200">Varış Ülkeleri</button>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Chart Bar 1 -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm font-semibold">
+<span>Çin</span>
+<span>%42</span>
+</div>
+<div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<!-- Chart Bar 2 -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm font-semibold">
+<span>Almanya</span>
+<span>%28</span>
+</div>
+<div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary/80 rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<!-- Chart Bar 3 -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm font-semibold">
+<span>ABD</span>
+<span>%18</span>
+</div>
+<div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary/60 rounded-full" style="width: 18%"></div>
+</div>
+</div>
+<!-- Chart Bar 4 -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm font-semibold">
+<span>İngiltere</span>
+<span>%12</span>
+</div>
+<div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 12%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Split Vertical Charts -->
+<div class="grid grid-rows-2 gap-6">
+<!-- Transport Mode -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<h3 class="text-lg font-bold text-slate-900 mb-4">Taşıma Modu Dağılımı</h3>
+<div class="flex items-center gap-8 flex-1">
+<div class="relative size-32 shrink-0">
+<svg class="size-full" viewbox="0 0 36 36">
+<path class="text-slate-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="50, 100" stroke-linecap="round" stroke-width="4"></path>
+<path class="text-emerald-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="25, 100" stroke-dashoffset="-50" stroke-linecap="round" stroke-width="4"></path>
+<path class="text-amber-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="15, 100" stroke-dashoffset="-75" stroke-linecap="round" stroke-width="4"></path>
+<path class="text-purple-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="10, 100" stroke-dashoffset="-90" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xl font-bold">156</span>
+<span class="text-[10px] text-slate-500 uppercase">Toplam</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 flex-1">
+<div class="flex items-center gap-2">
+<span class="size-3 bg-primary rounded-full"></span>
+<span class="text-sm font-medium">Deniz (50%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 bg-emerald-500 rounded-full"></span>
+<span class="text-sm font-medium">Kara (25%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 bg-amber-500 rounded-full"></span>
+<span class="text-sm font-medium">Hava (15%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 bg-purple-500 rounded-full"></span>
+<span class="text-sm font-medium">Kombine (10%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Reasons for Loss -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+<h3 class="text-lg font-bold text-slate-900 mb-4">Kaybedilme Nedenleri</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4">
+<span class="w-16 text-xs font-bold text-slate-500">FİYAT</span>
+<div class="flex-1 h-4 bg-red-100 rounded-full overflow-hidden">
+<div class="h-full bg-red-500" style="width: 75%"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-16 text-xs font-bold text-slate-500">RAKİP</span>
+<div class="flex-1 h-4 bg-red-100 rounded-full overflow-hidden">
+<div class="h-full bg-red-400" style="width: 45%"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="w-16 text-xs font-bold text-slate-500">TERMİN</span>
+<div class="flex-1 h-4 bg-red-100 rounded-full overflow-hidden">
+<div class="h-full bg-red-300" style="width: 30%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
