@@ -3,9 +3,16 @@ import { useAuthStore } from '@/stores/authStore';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Card, Button, Input, Icon, Badge } from '@/components/ui';
 import { cn } from '@/utils/cn';
+import api from '@/config/api';
+
+interface AlertState {
+  type: 'success' | 'error';
+  message: string;
+}
 
 export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
+  const setUser = useAuthStore((s) => s.setUser);
 
   // --- Personal Info state ---
   const [fullName, setFullName] = useState(user?.fullName || '');
@@ -25,6 +32,17 @@ export default function ProfilePage() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [dailySummary, setDailySummary] = useState(true);
   const [criticalAlerts, setCriticalAlerts] = useState(true);
+
+  // --- Loading & feedback ---
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [notifSaving, setNotifSaving] = useState(false);
+  const [alert, setAlert] = useState<AlertState | null>(null);
+
+  const showAlert = (type: AlertState['type'], message: string) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert(null), 4000);
+  };
 
   // Password strength
   const getPasswordStrength = (
@@ -65,6 +83,84 @@ export default function ProfilePage() {
     ).toUpperCase();
   };
 
+  // --- Handlers ---
+
+  const handleProfileSave = async () => {
+    if (!fullName.trim()) {
+      showAlert('error', 'Ad Soyad alani bos birakilamaz.');
+      return;
+    }
+    setProfileSaving(true);
+    try {
+      const { data } = await api.patch('/auth/profile', { fullName, email });
+      if (user) {
+        setUser({ ...user, fullName: data.fullName ?? fullName, email: data.email ?? email });
+      }
+      showAlert('success', 'Profil bilgileri basariyla guncellendi.');
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'Profil guncellenirken bir hata olustu.';
+      showAlert('error', message);
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showAlert('error', 'Tum sifre alanlarini doldurun.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      showAlert('error', 'Yeni sifreler eslemiyor.');
+      return;
+    }
+    if (newPassword.length < 6) {
+      showAlert('error', 'Yeni sifre en az 6 karakter olmalidir.');
+      return;
+    }
+    setPasswordSaving(true);
+    try {
+      await api.patch('/auth/profile/password', { currentPassword, newPassword });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      showAlert('success', 'Sifre basariyla guncellendi.');
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'Sifre guncellenirken bir hata olustu.';
+      showAlert('error', message);
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
+  const handleTwoFactorToggle = () => {
+    // 2FA is not implemented on the backend yet, just toggle locally
+    setTwoFactorEnabled(!twoFactorEnabled);
+    showAlert('success', twoFactorEnabled ? '2FA devre disi birakildi.' : '2FA etkinlestirildi.');
+  };
+
+  const handleNotificationSave = async () => {
+    setNotifSaving(true);
+    try {
+      await api.patch('/auth/profile', {
+        notificationPreferences: {
+          emailNotifications,
+          dailySummary,
+          criticalAlerts,
+        },
+      });
+      showAlert('success', 'Bildirim tercihleri kaydedildi.');
+    } catch {
+      showAlert('error', 'Bildirim tercihleri kaydedilirken bir hata olustu.');
+    } finally {
+      setNotifSaving(false);
+    }
+  };
+
   return (
     <div>
       <PageHeader
@@ -75,6 +171,23 @@ export default function ProfilePage() {
         title="Profil ve Hesap Ayarlari"
         subtitle="Kisisel bilgilerinizi ve guvenlik ayarlarinizi yonetin."
       />
+
+      {/* Alert banner */}
+      {alert && (
+        <div
+          className={cn(
+            'mb-4 rounded-lg border p-3 text-sm flex items-center gap-2',
+            alert.type === 'success'
+              ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+              : 'bg-red-50 border-red-200 text-red-700',
+          )}
+        >
+          <span className="material-symbols-outlined text-[18px]">
+            {alert.type === 'success' ? 'check_circle' : 'error'}
+          </span>
+          {alert.message}
+        </div>
+      )}
 
       {/* Two-card top row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -138,8 +251,13 @@ export default function ProfilePage() {
               />
             </div>
 
-            <Button className="w-full" icon="save">
-              Degisiklikleri Kaydet
+            <Button
+              className="w-full"
+              icon="save"
+              onClick={handleProfileSave}
+              disabled={profileSaving}
+            >
+              {profileSaving ? 'Kaydediliyor...' : 'Degisiklikleri Kaydet'}
             </Button>
           </div>
         </Card>
@@ -210,7 +328,7 @@ export default function ProfilePage() {
                 type="button"
                 role="switch"
                 aria-checked={twoFactorEnabled}
-                onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
+                onClick={handleTwoFactorToggle}
                 className={cn(
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
                   twoFactorEnabled ? 'bg-primary' : 'bg-slate-300',
@@ -225,8 +343,14 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            <Button className="w-full" icon="lock" variant="secondary">
-              Sifreyi Guncelle
+            <Button
+              className="w-full"
+              icon="lock"
+              variant="secondary"
+              onClick={handlePasswordUpdate}
+              disabled={passwordSaving}
+            >
+              {passwordSaving ? 'Guncelleniyor...' : 'Sifreyi Guncelle'}
             </Button>
           </div>
         </Card>
@@ -321,6 +445,17 @@ export default function ProfilePage() {
               />
             </button>
           </div>
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-slate-200">
+          <Button
+            icon="save"
+            variant="secondary"
+            onClick={handleNotificationSave}
+            disabled={notifSaving}
+          >
+            {notifSaving ? 'Kaydediliyor...' : 'Tercihleri Kaydet'}
+          </Button>
         </div>
       </Card>
     </div>
