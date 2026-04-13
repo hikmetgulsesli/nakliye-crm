@@ -16,9 +16,9 @@ function ForbiddenPage() {
 }
 
 export default function AdminRoute() {
-  const isAdmin = useAuthStore((s) => s.isAdmin);
+  const isAdmin = useAuthStore((s) => s.isAdmin());
 
-  if (!isAdmin()) {
+  if (!isAdmin) {
     return <ForbiddenPage />;
   }
 
