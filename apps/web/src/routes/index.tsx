@@ -12,6 +12,8 @@ const CustomerDetailPage = lazy(() => import('../pages/customers/CustomerDetailP
 const QuoteListPage = lazy(() => import('../pages/quotes/QuoteListPage'));
 const QuoteCreatePage = lazy(() => import('../pages/quotes/QuoteCreatePage'));
 const QuoteDetailPage = lazy(() => import('../pages/quotes/QuoteDetailPage'));
+const CustomerEditPage = lazy(() => import('../pages/customers/CustomerEditPage'));
+const QuoteEditPage = lazy(() => import('../pages/quotes/QuoteEditPage'));
 const UserManagementPage = lazy(() => import('../pages/admin/UserManagementPage'));
 const LookupManagementPage = lazy(() => import('../pages/admin/LookupManagementPage'));
 const AuditLogPage = lazy(() => import('../pages/admin/AuditLogPage'));
@@ -92,6 +94,14 @@ export const router = createBrowserRouter([
               </SuspenseWrapper>
             ),
           },
+          {
+            path: 'musteriler/:id/duzenle',
+            element: (
+              <SuspenseWrapper>
+                <CustomerEditPage />
+              </SuspenseWrapper>
+            ),
+          },
           // Teklifler
           {
             path: 'teklifler',
@@ -114,6 +124,14 @@ export const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <QuoteDetailPage />
+              </SuspenseWrapper>
+            ),
+          },
+          {
+            path: 'teklifler/:id/duzenle',
+            element: (
+              <SuspenseWrapper>
+                <QuoteEditPage />
               </SuspenseWrapper>
             ),
           },
