@@ -1,6 +1,63 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
 
+function getPeriodRange(period: string): { start: Date; end: Date } {
+  const now = new Date();
+  const end = new Date(now);
+
+  switch (period) {
+    case 'this_week': {
+      const start = new Date(now);
+      start.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      start.setHours(0, 0, 0, 0);
+      return { start, end };
+    }
+    case 'last_month': {
+      const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+      return { start, end: endOfLastMonth };
+    }
+    case 'this_month':
+    default: {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1);
+      return { start, end };
+    }
+  }
+}
+
+// Country flag mapping helper
+const COUNTRY_FLAGS: Record<string, string> = {
+  'Turkiye': '\uD83C\uDDF9\uD83C\uDDF7',
+  'Cin': '\uD83C\uDDE8\uD83C\uDDF3',
+  'Almanya': '\uD83C\uDDE9\uD83C\uDDEA',
+  'ABD': '\uD83C\uDDFA\uD83C\uDDF8',
+  'Ingiltere': '\uD83C\uDDEC\uD83C\uDDE7',
+  'Fransa': '\uD83C\uDDEB\uD83C\uDDF7',
+  'Italya': '\uD83C\uDDEE\uD83C\uDDF9',
+  'Ispanya': '\uD83C\uDDEA\uD83C\uDDF8',
+  'Rusya': '\uD83C\uDDF7\uD83C\uDDFA',
+  'BAE': '\uD83C\uDDE6\uD83C\uDDEA',
+  'Japonya': '\uD83C\uDDEF\uD83C\uDDF5',
+  'Guney Kore': '\uD83C\uDDF0\uD83C\uDDF7',
+  'Hindistan': '\uD83C\uDDEE\uD83C\uDDF3',
+  'Brezilya': '\uD83C\uDDE7\uD83C\uDDF7',
+  'Hollanda': '\uD83C\uDDF3\uD83C\uDDF1',
+  'Belcika': '\uD83C\uDDE7\uD83C\uDDEA',
+  'Suudi Arabistan': '\uD83C\uDDF8\uD83C\uDDE6',
+  'Misir': '\uD83C\uDDEA\uD83C\uDDEC',
+  'Yunanistan': '\uD83C\uDDEC\uD83C\uDDF7',
+  'Polonya': '\uD83C\uDDF5\uD83C\uDDF1',
+};
+
+// Transport mode color mapping
+const TRANSPORT_MODE_COLORS: Record<string, string> = {
+  'Deniz': 'blue',
+  'Kara': 'emerald',
+  'Hava': 'amber',
+  'Demiryolu': 'slate',
+  'Kombine': 'purple',
+};
+
 export async function userDashboard(req: Request, res: Response) {
   const userId = req.user!.userId;
   const now = new Date();
@@ -13,13 +70,27 @@ export async function userDashboard(req: Request, res: Response) {
   // Start of this month
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
+  // 14 days ago for uncalled customers
+  const fourteenDaysAgo = new Date(now);
+  fourteenDaysAgo.setDate(now.getDate() - 14);
+
+  // 7 days ago for pending quotes
+  const sevenDaysAgo = new Date(now);
+  sevenDaysAgo.setDate(now.getDate() - 7);
+
   const [
     weekQuotes,
     monthQuotes,
     wonQuotes,
     contactedCustomers,
-    totalCustomers,
-    pendingQuotes,
+    // Alerts
+    uncalledCount,
+    pendingCount,
+    expiredCount,
+    highPotentialCount,
+    // Follow-ups
+    upcomingActivities,
+    // Recent activities
     recentActivities,
   ] = await Promise.all([
     // This week's quotations count
@@ -55,20 +126,56 @@ export async function userDashboard(req: Request, res: Response) {
         isDeleted: false,
       },
     }),
-    // Total assigned customers
+    // Alert: uncalled customers (14+ days)
     prisma.customer.count({
       where: {
         assignedUserId: userId,
         isDeleted: false,
+        status: 'Aktif',
+        OR: [
+          { lastContactDate: { lt: fourteenDaysAgo } },
+          { lastContactDate: null },
+        ],
       },
     }),
-    // Pending quotations
+    // Alert: pending old quotes (7+ days)
     prisma.quotation.count({
       where: {
         assignedUserId: userId,
-        status: 'Bekliyor',
         isDeleted: false,
+        status: 'Bekliyor',
+        createdAt: { lt: sevenDaysAgo },
       },
+    }),
+    // Alert: expired quotes
+    prisma.quotation.count({
+      where: {
+        assignedUserId: userId,
+        isDeleted: false,
+        status: 'Bekliyor',
+        validityDate: { lt: now },
+      },
+    }),
+    // Alert: high potential customers
+    prisma.customer.count({
+      where: {
+        assignedUserId: userId,
+        isDeleted: false,
+        potential: 'Yuksek',
+      },
+    }),
+    // Follow-ups: upcoming activities (future or today)
+    prisma.activity.findMany({
+      where: {
+        createdById: userId,
+        isDeleted: false,
+        activityDate: { gte: new Date(now.getFullYear(), now.getMonth(), now.getDate()) },
+      },
+      include: {
+        customer: { select: { id: true, companyName: true } },
+      },
+      orderBy: { activityDate: 'asc' },
+      take: 5,
     }),
     // Recent activities
     prisma.activity.findMany({
@@ -78,56 +185,258 @@ export async function userDashboard(req: Request, res: Response) {
       },
       include: {
         customer: { select: { id: true, companyName: true } },
+        createdBy: { select: { id: true, fullName: true } },
       },
       orderBy: { activityDate: 'desc' },
-      take: 5,
+      take: 10,
     }),
   ]);
+
+  // Build KPI cards
+  const kpis = [
+    {
+      icon: 'assignment',
+      iconColor: 'blue',
+      label: 'Bu Haftaki Teklifler',
+      value: weekQuotes,
+    },
+    {
+      icon: 'receipt_long',
+      iconColor: 'indigo',
+      label: 'Bu Ay Teklifler',
+      value: monthQuotes,
+    },
+    {
+      icon: 'emoji_events',
+      iconColor: 'emerald',
+      label: 'Kazanilan Teklifler',
+      value: wonQuotes,
+    },
+    {
+      icon: 'handshake',
+      iconColor: 'purple',
+      label: 'Gorusulen Musteri',
+      value: contactedCustomers,
+    },
+  ];
+
+  // Build alerts
+  const alerts = [
+    {
+      id: 'uncalled',
+      type: 'uncalled',
+      count: uncalledCount,
+      description: '14 gundur aranmadi',
+    },
+    {
+      id: 'pending',
+      type: 'pending',
+      count: pendingCount,
+      description: '7+ gun donus bekliyor',
+    },
+    {
+      id: 'expired',
+      type: 'expired',
+      count: expiredCount,
+      description: 'Suresi dolan teklifler',
+    },
+    {
+      id: 'highPotential',
+      type: 'highPotential',
+      count: highPotentialCount,
+      description: 'Yuksek potansiyelli musteriler',
+    },
+  ];
+
+  // Map follow-ups
+  const followUps = upcomingActivities.map((a) => {
+    const actDate = new Date(a.activityDate);
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    let dateStr: string;
+    if (actDate >= today && actDate < tomorrow) {
+      dateStr = `Bugun, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (actDate >= tomorrow && actDate < new Date(tomorrow.getTime() + 86400000)) {
+      dateStr = `Yarin, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+    } else {
+      dateStr = actDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }) +
+        ', ' + actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Map activity type to follow-up type
+    let type: 'call' | 'email' | 'meeting' = 'call';
+    const actType = (a.activityType || '').toLowerCase();
+    if (actType.includes('email') || actType.includes('e-posta')) type = 'email';
+    else if (actType.includes('toplanti') || actType.includes('meeting') || actType.includes('ziyaret')) type = 'meeting';
+
+    return {
+      id: a.id.toString(),
+      customerName: a.customer?.companyName || 'Bilinmeyen',
+      date: dateStr,
+      type,
+      note: a.notes || '',
+    };
+  });
+
+  // Map recent activities with relative dates
+  const mappedActivities = recentActivities.map((a) => {
+    const actDate = new Date(a.activityDate);
+    const diffMs = now.getTime() - actDate.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    let dateStr: string;
+    if (diffHours < 1) dateStr = 'Az once';
+    else if (diffHours < 24) dateStr = `${diffHours} saat once`;
+    else if (diffDays === 1) {
+      dateStr = `Dun, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+    } else {
+      dateStr = `${diffDays} gun once`;
+    }
+
+    return {
+      id: a.id.toString(),
+      date: dateStr,
+      customerName: a.customer?.companyName || 'Bilinmeyen',
+      type: a.activityType || 'Not',
+      note: a.notes || '',
+      representative: a.createdBy?.fullName || '',
+    };
+  });
 
   res.json({
     success: true,
     data: {
-      weekQuotes,
-      monthQuotes,
-      wonQuotes,
-      contactedCustomers,
-      totalCustomers,
-      pendingQuotes,
-      recentActivities,
+      kpis,
+      alerts,
+      followUps,
+      recentActivities: mappedActivities,
     },
   });
 }
 
-export async function adminDashboard(_req: Request, res: Response) {
+export async function adminDashboard(req: Request, res: Response) {
+  const period = (req.query.period as string) || 'this_month';
+  const { start: periodStart, end: periodEnd } = getPeriodRange(period);
   const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  // Previous period for trend calculation
+  const periodDuration = periodEnd.getTime() - periodStart.getTime();
+  const prevStart = new Date(periodStart.getTime() - periodDuration);
+  const prevEnd = new Date(periodStart);
 
   // Team KPIs
   const [
-    totalCustomers,
-    totalQuotesMonth,
-    wonQuotesMonth,
-    lostQuotesMonth,
-    totalActivitiesMonth,
+    totalQuotesPeriod,
+    wonQuotesPeriod,
+    lostQuotesPeriod,
+    activeCustomers,
+    highPotentialCustomers,
+    // Previous period for trends
+    prevTotalQuotes,
+    prevWonQuotes,
+    prevActiveCustomers,
+    // Aggregation data
+    quotationsInPeriod,
+    lostQuotations,
   ] = await Promise.all([
-    prisma.customer.count({ where: { isDeleted: false } }),
     prisma.quotation.count({
-      where: { createdAt: { gte: monthStart }, isDeleted: false },
+      where: { createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
     }),
     prisma.quotation.count({
-      where: { status: 'Kazanildi', updatedAt: { gte: monthStart }, isDeleted: false },
+      where: { status: 'Kazanildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
     }),
     prisma.quotation.count({
-      where: { status: 'Kaybedildi', updatedAt: { gte: monthStart }, isDeleted: false },
+      where: { status: 'Kaybedildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
     }),
-    prisma.activity.count({
-      where: { createdAt: { gte: monthStart }, isDeleted: false },
+    prisma.customer.count({
+      where: { isDeleted: false, status: 'Aktif' },
+    }),
+    prisma.customer.count({
+      where: { isDeleted: false, potential: 'Yuksek' },
+    }),
+    // Previous period totals for trends
+    prisma.quotation.count({
+      where: { createdAt: { gte: prevStart, lt: prevEnd }, isDeleted: false },
+    }),
+    prisma.quotation.count({
+      where: { status: 'Kazanildi', updatedAt: { gte: prevStart, lt: prevEnd }, isDeleted: false },
+    }),
+    prisma.customer.count({
+      where: { isDeleted: false, status: 'Aktif', createdAt: { lt: prevEnd } },
+    }),
+    // All quotations in period for aggregation
+    prisma.quotation.findMany({
+      where: { createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
+      select: {
+        originCountry: true,
+        destinationCountry: true,
+        transportMode: true,
+      },
+    }),
+    // Lost quotations for loss reasons
+    prisma.quotation.findMany({
+      where: { status: 'Kaybedildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
+      select: { lossReason: true },
     }),
   ]);
 
-  const winRate = totalQuotesMonth > 0
-    ? Math.round((wonQuotesMonth / (wonQuotesMonth + lostQuotesMonth)) * 100)
+  const winRate = (wonQuotesPeriod + lostQuotesPeriod) > 0
+    ? Math.round((wonQuotesPeriod / (wonQuotesPeriod + lostQuotesPeriod)) * 100)
     : 0;
+
+  // Calculate trends
+  function calcTrend(current: number, previous: number): { value: string; positive: boolean } {
+    if (previous === 0) {
+      return current > 0
+        ? { value: `+${current}`, positive: true }
+        : { value: 'Stabil', positive: true };
+    }
+    const pct = Math.round(((current - previous) / previous) * 100);
+    return {
+      value: pct >= 0 ? `+${pct}%` : `${pct}%`,
+      positive: pct >= 0,
+    };
+  }
+
+  // Build KPI cards
+  const kpis = [
+    {
+      icon: 'description',
+      iconColor: 'blue',
+      label: 'Verilen Teklif',
+      value: totalQuotesPeriod,
+      trend: calcTrend(totalQuotesPeriod, prevTotalQuotes),
+    },
+    {
+      icon: 'check_circle',
+      iconColor: 'emerald',
+      label: 'Kazanilan',
+      value: wonQuotesPeriod,
+      trend: calcTrend(wonQuotesPeriod, prevWonQuotes),
+    },
+    {
+      icon: 'track_changes',
+      iconColor: 'purple',
+      label: 'Kazanma Orani',
+      value: `%${winRate}`,
+    },
+    {
+      icon: 'groups',
+      iconColor: 'slate',
+      label: 'Aktif Musteri',
+      value: activeCustomers,
+      trend: calcTrend(activeCustomers, prevActiveCustomers),
+    },
+    {
+      icon: 'star',
+      iconColor: 'amber',
+      label: 'Yuksek Potansiyel',
+      value: highPotentialCustomers,
+    },
+  ];
 
   // Per-user performance table
   const users = await prisma.user.findMany({
@@ -137,44 +446,134 @@ export async function adminDashboard(_req: Request, res: Response) {
 
   const performanceTable = await Promise.all(
     users.map(async (user) => {
-      const [quotes, won, activities, customers] = await Promise.all([
+      const [quotes, won, activities, customers, lastAct] = await Promise.all([
         prisma.quotation.count({
-          where: { assignedUserId: user.id, createdAt: { gte: monthStart }, isDeleted: false },
+          where: { assignedUserId: user.id, createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
         }),
         prisma.quotation.count({
-          where: { assignedUserId: user.id, status: 'Kazanildi', updatedAt: { gte: monthStart }, isDeleted: false },
+          where: { assignedUserId: user.id, status: 'Kazanildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
         }),
         prisma.activity.count({
-          where: { createdById: user.id, createdAt: { gte: monthStart }, isDeleted: false },
+          where: { createdById: user.id, createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
         }),
         prisma.customer.count({
           where: { assignedUserId: user.id, isDeleted: false },
         }),
+        prisma.activity.findFirst({
+          where: { createdById: user.id, isDeleted: false },
+          orderBy: { activityDate: 'desc' },
+          select: { activityDate: true },
+        }),
       ]);
 
+      const userWinRate = (quotes > 0) ? Math.round((won / quotes) * 100) : 0;
+
+      // Format last activity as relative time
+      let lastActivity = '-';
+      if (lastAct?.activityDate) {
+        const diffMs = now.getTime() - new Date(lastAct.activityDate).getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (diffHours < 1) lastActivity = 'Az once';
+        else if (diffHours < 24) lastActivity = `${diffHours} saat once`;
+        else if (diffDays === 1) lastActivity = 'Dun';
+        else lastActivity = `${diffDays} gun once`;
+      }
+
       return {
-        userId: user.id,
-        fullName: user.fullName,
-        quotesThisMonth: quotes,
-        wonThisMonth: won,
-        activitiesThisMonth: activities,
-        totalCustomers: customers,
+        id: user.id.toString(),
+        name: user.fullName,
+        quoteCount: quotes,
+        wonCount: won,
+        winRate: userWinRate,
+        contactedCustomers: customers,
+        lastActivity,
+        isTopPerformer: false, // will be set below
       };
     })
   );
 
+  // Mark top performer
+  if (performanceTable.length > 0) {
+    const topIdx = performanceTable.reduce((best, cur, idx) =>
+      cur.wonCount > performanceTable[best].wonCount ? idx : best, 0);
+    if (performanceTable[topIdx].wonCount > 0) {
+      performanceTable[topIdx].isTopPerformer = true;
+    }
+  }
+
+  // Aggregate origin countries
+  const originCounts: Record<string, number> = {};
+  const destCounts: Record<string, number> = {};
+  const modeCounts: Record<string, number> = {};
+
+  for (const q of quotationsInPeriod) {
+    if (q.originCountry) {
+      originCounts[q.originCountry] = (originCounts[q.originCountry] || 0) + 1;
+    }
+    if (q.destinationCountry) {
+      destCounts[q.destinationCountry] = (destCounts[q.destinationCountry] || 0) + 1;
+    }
+    if (q.transportMode) {
+      modeCounts[q.transportMode] = (modeCounts[q.transportMode] || 0) + 1;
+    }
+  }
+
+  const totalOrigin = Object.values(originCounts).reduce((a, b) => a + b, 0) || 1;
+  const originCountries = Object.entries(originCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([country, count]) => ({
+      country,
+      flag: COUNTRY_FLAGS[country] || '\uD83C\uDFF3\uFE0F',
+      percentage: Math.round((count / totalOrigin) * 100),
+      count,
+    }));
+
+  const totalDest = Object.values(destCounts).reduce((a, b) => a + b, 0) || 1;
+  const destinationCountries = Object.entries(destCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([country, count]) => ({
+      country,
+      flag: COUNTRY_FLAGS[country] || '\uD83C\uDFF3\uFE0F',
+      percentage: Math.round((count / totalDest) * 100),
+      count,
+    }));
+
+  const totalModes = Object.values(modeCounts).reduce((a, b) => a + b, 0) || 1;
+  const transportModes = Object.entries(modeCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([mode, count]) => ({
+      mode,
+      percentage: Math.round((count / totalModes) * 100),
+      color: TRANSPORT_MODE_COLORS[mode] || 'slate',
+    }));
+
+  // Aggregate loss reasons
+  const lossCounts: Record<string, number> = {};
+  for (const q of lostQuotations) {
+    const reason = q.lossReason || 'Belirtilmemis';
+    lossCounts[reason] = (lossCounts[reason] || 0) + 1;
+  }
+  const totalLoss = Object.values(lossCounts).reduce((a, b) => a + b, 0) || 1;
+  const lossReasons = Object.entries(lossCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([reason, count]) => ({
+      reason,
+      percentage: Math.round((count / totalLoss) * 100),
+      count,
+    }));
+
   res.json({
     success: true,
     data: {
-      kpis: {
-        totalCustomers,
-        totalQuotesMonth,
-        wonQuotesMonth,
-        lostQuotesMonth,
-        winRate,
-        totalActivitiesMonth,
-      },
-      performanceTable,
+      kpis,
+      teamPerformance: performanceTable,
+      originCountries,
+      destinationCountries,
+      transportModes,
+      lossReasons,
     },
   });
 }
@@ -191,7 +590,6 @@ export async function alerts(req: Request, res: Response) {
   sevenDaysAgo.setDate(now.getDate() - 7);
 
   const userFilter = isAdmin ? {} : { assignedUserId: userId };
-  const userFilterCreated = isAdmin ? {} : { createdById: userId };
 
   const [uncalledCustomers, pendingOldQuotes, expiredQuotes] = await Promise.all([
     // Customers not contacted in 14+ days

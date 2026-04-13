@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Badge, Pagination } from '@/components/ui';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { AuditLogTable } from '@/components/admin/AuditLogTable';
 import { AuditLogFilters } from '@/components/admin/AuditLogFilters';
@@ -98,17 +99,27 @@ export default function AuditLogPage() {
         users={users}
       />
 
-      <AuditLogTable data={logs} loading={loading} />
-
-      {/* Pagination */}
-      <div className="mt-4">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          totalItems={total}
-          onPageChange={setPage}
+      {!loading && logs.length === 0 ? (
+        <EmptyState
+          icon="history"
+          title="Henuz log kaydi bulunmuyor"
+          description="Sistem islemleri burada otomatik olarak kaydedilir."
         />
-      </div>
+      ) : (
+        <>
+          <AuditLogTable data={logs} loading={loading} />
+
+          {/* Pagination */}
+          <div className="mt-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

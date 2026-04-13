@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, SearchInput, Pagination } from '@/components/ui';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { UserManagementTable } from '@/components/admin/UserManagementTable';
 import { UserForm } from '@/components/admin/UserForm';
@@ -106,23 +107,38 @@ export default function UserManagementPage() {
         }
       />
 
-      <UserManagementTable
-        data={users}
-        loading={loading}
-        onEdit={handleEdit}
-        onToggleStatus={handleToggleStatus}
-        onTransfer={handleTransfer}
-      />
-
-      {/* Pagination */}
-      <div className="mt-4">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          totalItems={total}
-          onPageChange={setPage}
+      {!loading && users.length === 0 ? (
+        <EmptyState
+          icon="group"
+          title="Henuz kullanici eklenmemis"
+          description="Sisteme yeni kullanici ekleyerek baslayabilirsiniz."
+          action={
+            <Button icon="person_add" onClick={handleCreate}>
+              Yeni Kullanici Ekle
+            </Button>
+          }
         />
-      </div>
+      ) : (
+        <>
+          <UserManagementTable
+            data={users}
+            loading={loading}
+            onEdit={handleEdit}
+            onToggleStatus={handleToggleStatus}
+            onTransfer={handleTransfer}
+          />
+
+          {/* Pagination */}
+          <div className="mt-4">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+            />
+          </div>
+        </>
+      )}
 
       {/* User Form Modal */}
       <UserForm

@@ -3,11 +3,14 @@ import { Button, Select, DatePicker } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ReportsPanel } from '@/components/admin/ReportsPanel';
 import { userService } from '@/services/user.service';
-import type { ReportFilters } from '@/services/report.service';
+import { reportService, type ReportFilters, type ReportType } from '@/services/report.service';
 
 export default function ReportsPage() {
   const [filters, setFilters] = useState<ReportFilters>({});
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [reportGenerated, setReportGenerated] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -42,6 +45,28 @@ export default function ReportsPage() {
     { value: 'middle_east', label: 'Orta Dogu' },
   ];
 
+  const handleGenerateReport = async () => {
+    setGenerating(true);
+    setError(null);
+    setReportGenerated(false);
+
+    try {
+      // Generate a periodic_quotes report as the default type
+      const reportType: ReportType = 'periodic_quotes';
+      await reportService.getReport(reportType, filters);
+      setReportGenerated(true);
+
+      // Auto-hide success after 4 seconds
+      setTimeout(() => setReportGenerated(false), 4000);
+    } catch (err) {
+      console.error('Failed to generate report:', err);
+      setError('Rapor olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+      setTimeout(() => setError(null), 4000);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <div>
       <PageHeader
@@ -52,6 +77,20 @@ export default function ReportsPage() {
         title="Yonetici Raporlari"
         subtitle="Detayli raporlar olusturun ve indirin"
       />
+
+      {/* Alert messages */}
+      {reportGenerated && (
+        <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+          Rapor basariyla olusturuldu.
+        </div>
+      )}
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">error</span>
+          {error}
+        </div>
+      )}
 
       {/* Filter bar */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
@@ -102,8 +141,13 @@ export default function ReportsPage() {
 
           {/* Rapor Olustur Button */}
           <div>
-            <Button icon="assessment" className="w-full">
-              Rapor Olustur
+            <Button
+              icon="assessment"
+              className="w-full"
+              onClick={handleGenerateReport}
+              disabled={generating}
+            >
+              {generating ? 'Olusturuluyor...' : 'Rapor Olustur'}
             </Button>
           </div>
         </div>

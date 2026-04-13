@@ -112,3 +112,64 @@ export async function me(req: Request, res: Response) {
   });
   res.json({ success: true, data: user });
 }
+
+export async function updateProfile(req: Request, res: Response) {
+  const { fullName, email, phone } = req.body;
+  const userId = req.user!.userId;
+
+  // Check if email is already taken by another user
+  if (email) {
+    const existing = await prisma.user.findFirst({
+      where: { email, id: { not: userId } },
+    });
+    if (existing) {
+      throw new AppError('Bu e-posta adresi baska bir kullanici tarafindan kullaniliyor', 409);
+    }
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(fullName !== undefined && { fullName }),
+      ...(email !== undefined && { email }),
+      ...(phone !== undefined && { phone }),
+    },
+    select: {
+      id: true, email: true, fullName: true, role: true,
+      avatarUrl: true, phone: true,
+    },
+  });
+
+  res.json({ success: true, data: updated });
+}
+
+export async function changePassword(req: Request, res: Response) {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user!.userId;
+
+  if (!currentPassword || !newPassword) {
+    throw new AppError('Mevcut sifre ve yeni sifre gereklidir', 400);
+  }
+
+  if (newPassword.length < 6) {
+    throw new AppError('Yeni sifre en az 6 karakter olmalidir', 400);
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new AppError('Kullanici bulunamadi', 404);
+  }
+
+  const isValid = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!isValid) {
+    throw new AppError('Mevcut sifre yanlis', 401);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 12);
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: hashedPassword },
+  });
+
+  res.json({ success: true, message: 'Sifre basariyla guncellendi' });
+}
