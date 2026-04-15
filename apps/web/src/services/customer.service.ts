@@ -12,6 +12,13 @@ export interface CustomerFilters {
   potential?: string;
   transportMode?: string;
   assignedUserId?: number;
+  serviceType?: string;
+  originCountry?: string;
+  destinationCountry?: string;
+  incoterm?: string;
+  source?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface ConflictMatch {
@@ -40,6 +47,13 @@ export const customerService = {
     if (filters?.potential) params.potential = filters.potential;
     if (filters?.transportMode) params.transportMode = filters.transportMode;
     if (filters?.assignedUserId) params.assignedUserId = filters.assignedUserId;
+    if (filters?.serviceType) params.serviceType = filters.serviceType;
+    if (filters?.originCountry) params.originCountry = filters.originCountry;
+    if (filters?.destinationCountry) params.destinationCountry = filters.destinationCountry;
+    if (filters?.incoterm) params.incoterm = filters.incoterm;
+    if (filters?.source) params.source = filters.source;
+    if (filters?.startDate) params.startDate = filters.startDate;
+    if (filters?.endDate) params.endDate = filters.endDate;
 
     const { data } = await api.get<PaginatedResponse<Customer>>('/customers', { params });
     return data;
@@ -62,6 +76,11 @@ export const customerService = {
 
   async delete(id: number): Promise<void> {
     await api.delete(`/customers/${id}`);
+  },
+
+  async restore(id: number): Promise<Customer> {
+    const { data } = await api.patch<Customer>(`/customers/${id}/restore`);
+    return data;
   },
 
   async conflictCheck(
