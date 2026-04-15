@@ -13,7 +13,7 @@ interface ReportCard {
 
 const REPORT_CARDS: ReportCard[] = [
   {
-    type: 'periodic_quotes',
+    type: 'periodic-quotes',
     title: 'Donemsel Teklif Raporu',
     description: 'Belirli tarih araliginda olusturulan, kazanilan ve kaybedilen tekliflerin ozet raporu',
     icon: 'description',
@@ -21,7 +21,7 @@ const REPORT_CARDS: ReportCard[] = [
     iconBg: 'bg-red-50',
   },
   {
-    type: 'staff_performance',
+    type: 'staff-performance',
     title: 'Personel Performans Raporu',
     description: 'Satis temsilcilerinin musteri, teklif ve aktivite bazli performans karsilastirmasi',
     icon: 'leaderboard',
@@ -29,7 +29,7 @@ const REPORT_CARDS: ReportCard[] = [
     iconBg: 'bg-blue-50',
   },
   {
-    type: 'win_loss_analysis',
+    type: 'win-loss',
     title: 'Kazanilan / Kaybedilen Analizi',
     description: 'Tekliflerin kazanilma ve kaybedilme oranlari ile trend analizi',
     icon: 'analytics',
@@ -37,7 +37,7 @@ const REPORT_CARDS: ReportCard[] = [
     iconBg: 'bg-emerald-50',
   },
   {
-    type: 'country_mode_volume',
+    type: 'country-mode-volume',
     title: 'Ulke / Mod Bazli Hacim',
     description: 'Ulke ve tasima modu bazinda teklif hacimleri ve dagilim raporu',
     icon: 'public',
@@ -45,7 +45,7 @@ const REPORT_CARDS: ReportCard[] = [
     iconBg: 'bg-purple-50',
   },
   {
-    type: 'loss_reason_analysis',
+    type: 'loss-reasons',
     title: 'Kaybedilme Nedeni Analizi',
     description: 'Kaybedilen tekliflerin neden bazli dagilim ve trend raporu',
     icon: 'pie_chart',
@@ -59,30 +59,36 @@ interface ReportsPanelProps {
 }
 
 export function ReportsPanel({ filters }: ReportsPanelProps) {
-  const [loadingReport, setLoadingReport] = useState<string | null>(null);
+  const [loadingButtons, setLoadingButtons] = useState<Record<string, boolean>>({});
+  const [error, setError] = useState<string | null>(null);
 
   async function handleExport(type: ReportType, format: ExportFormat) {
     const key = `${type}_${format}`;
-    setLoadingReport(key);
+    setLoadingButtons((prev) => ({ ...prev, [key]: true }));
+    setError(null);
+
     try {
-      const blob = await reportService.exportReport(type, format, filters);
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `rapor_${type}_${new Date().toISOString().slice(0, 10)}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      await reportService.exportReport(type, format, filters);
     } catch (err) {
       console.error('Report export error:', err);
+      const message =
+        err instanceof Error ? err.message : 'Bilinmeyen bir hata olustu';
+      setError(`Rapor indirilemedi: ${message}`);
+      setTimeout(() => setError(null), 4000);
     } finally {
-      setLoadingReport(null);
+      setLoadingButtons((prev) => ({ ...prev, [key]: false }));
     }
   }
 
   return (
     <div className="space-y-3">
+      {error && (
+        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">error</span>
+          {error}
+        </div>
+      )}
+
       {REPORT_CARDS.map((report) => (
         <div
           key={report.type}
@@ -107,10 +113,10 @@ export function ReportsPanel({ filters }: ReportsPanelProps) {
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => handleExport(report.type, 'pdf')}
-              disabled={loadingReport === `${report.type}_pdf`}
+              disabled={!!loadingButtons[`${report.type}_pdf`]}
               className="inline-flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg px-3 py-2 text-xs font-bold transition-colors disabled:opacity-50"
             >
-              {loadingReport === `${report.type}_pdf` ? (
+              {loadingButtons[`${report.type}_pdf`] ? (
                 <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -122,10 +128,10 @@ export function ReportsPanel({ filters }: ReportsPanelProps) {
             </button>
             <button
               onClick={() => handleExport(report.type, 'excel')}
-              disabled={loadingReport === `${report.type}_excel`}
+              disabled={!!loadingButtons[`${report.type}_excel`]}
               className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg px-3 py-2 text-xs font-bold transition-colors disabled:opacity-50"
             >
-              {loadingReport === `${report.type}_excel` ? (
+              {loadingButtons[`${report.type}_excel`] ? (
                 <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
