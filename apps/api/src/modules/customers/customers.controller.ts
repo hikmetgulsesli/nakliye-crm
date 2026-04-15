@@ -12,6 +12,32 @@ export async function list(req: Request, res: Response) {
   if (req.query.status) where.status = req.query.status;
   if (req.query.potential) where.potential = req.query.potential;
   if (req.query.assignedUserId) where.assignedUserId = parseInt(String(req.query.assignedUserId), 10);
+  if (req.query.direction) where.direction = req.query.direction;
+  if (req.query.source) where.source = req.query.source;
+
+  // JSON array contains filters
+  if (req.query.transportMode) {
+    where.transportModes = { array_contains: req.query.transportMode };
+  }
+  if (req.query.serviceType) {
+    where.serviceTypes = { array_contains: req.query.serviceType };
+  }
+  if (req.query.originCountry) {
+    where.originCountries = { array_contains: req.query.originCountry };
+  }
+  if (req.query.destinationCountry) {
+    where.destinationCountries = { array_contains: req.query.destinationCountry };
+  }
+  if (req.query.incoterm) {
+    where.incoterms = { array_contains: req.query.incoterm };
+  }
+
+  // Date range filter
+  if (req.query.dateFrom || req.query.dateTo) {
+    where.createdAt = {};
+    if (req.query.dateFrom) (where.createdAt as Record<string, unknown>).gte = new Date(String(req.query.dateFrom));
+    if (req.query.dateTo) (where.createdAt as Record<string, unknown>).lte = new Date(String(req.query.dateTo));
+  }
 
   if (req.query.search) {
     const search = String(req.query.search);
@@ -199,4 +225,32 @@ export async function remove(req: Request, res: Response) {
   });
 
   res.json({ success: true, message: 'Musteri silindi' });
+}
+
+export async function restore(req: Request, res: Response) {
+  const id = parseInt(req.params.id, 10);
+
+  const existing = await prisma.customer.findFirst({
+    where: { id, isDeleted: true },
+  });
+  if (!existing) {
+    throw new AppError('Silinmis musteri bulunamadi', 404);
+  }
+
+  const customer = await prisma.customer.update({
+    where: { id },
+    data: { isDeleted: false },
+    include: {
+      assignedUser: { select: { id: true, fullName: true } },
+    },
+  });
+
+  await createAuditLog({
+    userId: req.user!.userId,
+    recordType: 'Customer',
+    recordId: id,
+    action: 'RESTORE',
+  });
+
+  res.json({ success: true, data: customer });
 }
