@@ -5,6 +5,7 @@ import AdminRoute from './AdminRoute';
 
 // Lazy-loaded pages
 const LoginPage = lazy(() => import('../pages/LoginPage'));
+const ForgotPasswordPage = lazy(() => import('../pages/ForgotPasswordPage'));
 const DashboardPage = lazy(() => import('../pages/DashboardPage'));
 const CustomerListPage = lazy(() => import('../pages/customers/CustomerListPage'));
 const CustomerCreatePage = lazy(() => import('../pages/customers/CustomerCreatePage'));
@@ -21,6 +22,11 @@ const TransferPage = lazy(() => import('../pages/admin/TransferPage'));
 const ReportsPage = lazy(() => import('../pages/admin/ReportsPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+const AboutPage = lazy(() => import('../pages/AboutPage'));
+const ServicesPage = lazy(() => import('../pages/ServicesPage'));
+const ContactPage = lazy(() => import('../pages/ContactPage'));
+const TermsPage = lazy(() => import('../pages/TermsPage'));
+const PrivacyPage = lazy(() => import('../pages/PrivacyPage'));
 
 // Lazy-loaded layout
 const AppLayout = lazy(() => import('../components/layout/AppLayout'));
@@ -43,6 +49,54 @@ export const router = createBrowserRouter([
     element: (
       <SuspenseWrapper>
         <LoginPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/sifremi-unuttum',
+    element: (
+      <SuspenseWrapper>
+        <ForgotPasswordPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/hakkimizda',
+    element: (
+      <SuspenseWrapper>
+        <AboutPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/hizmetler',
+    element: (
+      <SuspenseWrapper>
+        <ServicesPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/iletisim',
+    element: (
+      <SuspenseWrapper>
+        <ContactPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/kullanim-sartlari',
+    element: (
+      <SuspenseWrapper>
+        <TermsPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/gizlilik-politikasi',
+    element: (
+      <SuspenseWrapper>
+        <PrivacyPage />
       </SuspenseWrapper>
     ),
   },

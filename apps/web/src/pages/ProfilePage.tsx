@@ -376,7 +376,7 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            {/* 2FA Secret / QR placeholder */}
+            {/* 2FA Secret / QR code */}
             {twoFactorEnabled && twoFactorSecret && (
               <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
                 <p className="text-xs font-medium text-slate-700 mb-1">

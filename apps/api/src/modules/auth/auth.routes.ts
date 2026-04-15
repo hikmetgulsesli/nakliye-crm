@@ -7,6 +7,7 @@ import * as authController from './auth.controller';
 const router = Router();
 
 router.post('/login', validate(loginSchema), authController.login);
+router.post('/forgot-password', authController.forgotPassword);
 router.post('/refresh', authController.refresh);
 router.post('/logout', auth(), authController.logout);
 router.get('/me', auth(), authController.me);

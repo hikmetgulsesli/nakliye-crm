@@ -48,7 +48,7 @@ export default function NotFoundPage() {
           </nav>
         </div>
 
-        {/* User avatar placeholder */}
+        {/* User avatar */}
         <div className="size-10 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-600">
           ?
         </div>

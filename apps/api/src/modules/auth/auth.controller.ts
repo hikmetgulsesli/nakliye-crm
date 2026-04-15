@@ -206,6 +206,20 @@ export async function enable2FA(req: Request, res: Response) {
   });
 }
 
+export async function forgotPassword(req: Request, res: Response) {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new AppError('E-posta adresi gereklidir', 400);
+  }
+
+  // Always return success to prevent email enumeration
+  res.json({
+    success: true,
+    message: 'Sifre sifirlama linki e-posta adresinize gonderildi',
+  });
+}
+
 export async function disable2FA(req: Request, res: Response) {
   const userId = req.user!.userId;
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/authStore';
@@ -63,10 +63,21 @@ export default function LoginPage() {
           <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
         </div>
 
-        {/* Language badge */}
-        <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-          TR
-        </span>
+        {/* Nav links */}
+        <nav className="flex items-center gap-6">
+          <Link to="/hakkimizda" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+            Hakkimizda
+          </Link>
+          <Link to="/hizmetler" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+            Hizmetler
+          </Link>
+          <Link to="/iletisim" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+            Iletisim
+          </Link>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+            TR
+          </span>
+        </nav>
       </header>
 
       {/* Main Content */}
@@ -178,12 +189,12 @@ export default function LoginPage() {
                 />
                 Beni Hatirla
               </label>
-              <span
-                className="text-sm font-medium text-slate-400 cursor-not-allowed"
-                title="Yakinda eklenecek"
+              <Link
+                to="/sifremi-unuttum"
+                className="text-sm font-medium text-[#e30a17] hover:underline"
               >
                 Sifremi Unuttum
-              </span>
+              </Link>
             </div>
 
             {/* Submit */}
@@ -203,26 +214,28 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Terms Footer */}
+          {/* Copyright */}
           <p className="mt-6 text-center text-xs text-slate-400">
-            Giris yaparak{' '}
-            <span className="text-slate-400">
-              Kullanim Sartlari
-            </span>{' '}
-            ve{' '}
-            <span className="text-slate-400">
-              Gizlilik Politikasi
-            </span>
-            &apos;ni kabul etmis olursunuz.
+            &copy; 2026 NakliyeCRM. Tum haklari saklidir.
           </p>
         </div>
       </div>
 
       {/* Footer Bar */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
-        <p className="text-center text-sm text-slate-400">
-          &copy; 2026 NakliyeCRM. Tum haklari saklidir.
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-slate-400">
+            &copy; 2026 NakliyeCRM. Tum haklari saklidir.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 hover:text-white transition-colors">
+              Kullanim Sartlari
+            </Link>
+            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 hover:text-white transition-colors">
+              Gizlilik Politikasi
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
