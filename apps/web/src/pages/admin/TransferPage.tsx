@@ -9,6 +9,7 @@ import type { User } from '@nakliye-crm/shared';
 export default function TransferPage() {
   const [users, setUsers] = useState<(User & { customerCount?: number; quoteCount?: number })[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -16,7 +17,7 @@ export default function TransferPage() {
         const result = await userService.getAll(1, 100);
         setUsers(result.data);
       } catch (err) {
-        console.error('Failed to fetch users:', err);
+        setError('Kullanici listesi yuklenirken bir hata olustu.');
       } finally {
         setLoading(false);
       }
@@ -25,9 +26,12 @@ export default function TransferPage() {
   }, []);
 
   function handleTransferComplete() {
+    setError(null);
     // Refresh user list to get updated counts
     userService.getAll(1, 100).then((result) => {
       setUsers(result.data);
+    }).catch(() => {
+      setError('Devir islemi sonrasi kullanici listesi yenilenemedi.');
     });
   }
 
@@ -58,6 +62,15 @@ export default function TransferPage() {
           </Link>
         }
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       <TransferForm
         users={users}

@@ -29,8 +29,8 @@ export default function CustomerCreatePage() {
               label: u.fullName,
             })),
         );
-      } catch (error) {
-        console.error('Failed to fetch users:', error);
+      } catch (err) {
+        setConflictWarning('Kullanici listesi yuklenirken bir hata olustu.');
       }
     }
     fetchUsers();
@@ -61,8 +61,7 @@ export default function CustomerCreatePage() {
       // No conflict or force create - proceed
       const customer = await customerService.create(data);
       navigate(`/musteriler/${customer.id}`);
-    } catch (error: unknown) {
-      console.error('Failed to create customer:', error);
+    } catch (err: unknown) {
       setConflictWarning('Musteri olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
@@ -79,8 +78,8 @@ export default function CustomerCreatePage() {
       });
       setShowConflictModal(false);
       navigate(`/musteriler/${customer.id}`);
-    } catch (error) {
-      console.error('Failed to force create customer:', error);
+    } catch (err) {
+      setConflictWarning('Musteri olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }

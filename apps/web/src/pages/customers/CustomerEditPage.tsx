@@ -31,8 +31,7 @@ export default function CustomerEditPage() {
               label: u.fullName,
             })),
         );
-      } catch (err) {
-        console.error('Failed to fetch customer:', err);
+      } catch (err: unknown) {
         setError('Musteri bilgileri yuklenirken bir hata olustu.');
       } finally {
         setPageLoading(false);
@@ -47,8 +46,7 @@ export default function CustomerEditPage() {
     try {
       await customerService.update(Number(id), data);
       navigate(`/musteriler/${id}`);
-    } catch (err) {
-      console.error('Failed to update customer:', err);
+    } catch (err: unknown) {
       setError('Musteri guncellenirken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);

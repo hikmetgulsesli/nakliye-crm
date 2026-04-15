@@ -86,13 +86,21 @@ export default function ProfilePage() {
   // --- Handlers ---
 
   const handleProfileSave = async () => {
-    if (!fullName.trim()) {
+    const trimmedName = fullName.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName) {
       showAlert('error', 'Ad Soyad alani bos birakilamaz.');
       return;
     }
+    if (!trimmedEmail) {
+      showAlert('error', 'E-posta alani bos birakilamaz.');
+      return;
+    }
+    setFullName(trimmedName);
+    setEmail(trimmedEmail);
     setProfileSaving(true);
     try {
-      const { data } = await api.patch('/auth/profile', { fullName, email });
+      const { data } = await api.patch('/auth/profile', { fullName: trimmedName, email: trimmedEmail });
       if (user) {
         setUser({ ...user, fullName: data.fullName ?? fullName, email: data.email ?? email });
       }
@@ -108,11 +116,11 @@ export default function ProfilePage() {
   };
 
   const handlePasswordUpdate = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
       showAlert('error', 'Tum sifre alanlarini doldurun.');
       return;
     }
-    if (newPassword !== confirmPassword) {
+    if (newPassword.trim() !== confirmPassword.trim()) {
       showAlert('error', 'Yeni sifreler eslemiyor.');
       return;
     }

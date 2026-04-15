@@ -13,6 +13,7 @@ export default function QuoteDetailPage() {
   const [quotation, setQuotation] = useState<Quotation | null>(null);
   const [revisions, setRevisions] = useState<QuotationRevision[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [revisionsLoading, setRevisionsLoading] = useState(true);
 
   const quotationId = Number(id);
@@ -23,9 +24,8 @@ export default function QuoteDetailPage() {
     try {
       const data = await quotationService.getById(quotationId);
       setQuotation(data);
-    } catch (error) {
-      console.error('Failed to fetch quotation:', error);
-      navigate('/teklifler');
+    } catch (err) {
+      setError('Teklif bilgileri yuklenirken bir hata olustu.');
     } finally {
       setLoading(false);
     }
@@ -37,8 +37,8 @@ export default function QuoteDetailPage() {
     try {
       const data = await quotationService.getRevisions(quotationId);
       setRevisions(data);
-    } catch (error) {
-      console.error('Failed to fetch revisions:', error);
+    } catch (err) {
+      // Revisions are non-critical, silently handle
     } finally {
       setRevisionsLoading(false);
     }
@@ -73,6 +73,21 @@ export default function QuoteDetailPage() {
     );
   }
 
+  if (error && !quotation) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <span className="material-symbols-outlined text-4xl text-red-400">error</span>
+        <p className="text-slate-600">{error}</p>
+        <button
+          onClick={() => navigate('/teklifler')}
+          className="text-sm text-primary hover:underline"
+        >
+          Teklif listesine don
+        </button>
+      </div>
+    );
+  }
+
   if (!quotation) {
     return (
       <div className="text-center py-20">
@@ -89,7 +104,7 @@ export default function QuoteDetailPage() {
           { label: 'Teklifler', href: '/teklifler' },
           { label: quotation.quoteNo },
         ]}
-        title=""
+        title={quotation.quoteNo}
       />
 
       <QuotationDetail

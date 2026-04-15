@@ -16,6 +16,7 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 400);
+  const [error, setError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
@@ -37,7 +38,7 @@ export default function UserManagementPage() {
       setUsers(filtered);
       setTotal(result.total);
     } catch (err) {
-      console.error('Failed to fetch users:', err);
+      setError('Kullanicilar yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -58,6 +59,7 @@ export default function UserManagementPage() {
   }
 
   async function handleToggleStatus(user: User) {
+    setError(null);
     try {
       if (user.isActive) {
         await userService.deactivate(user.id);
@@ -66,7 +68,7 @@ export default function UserManagementPage() {
       }
       fetchUsers();
     } catch (err) {
-      console.error('Toggle status error:', err);
+      setError('Kullanici durumu degistirilirken bir hata olustu.');
     }
   }
 
@@ -75,12 +77,17 @@ export default function UserManagementPage() {
   }
 
   async function handleFormSubmit(data: UserCreateInput | UserUpdateInput) {
-    if (editingUser) {
-      await userService.update(editingUser.id, data as UserUpdateInput);
-    } else {
-      await userService.create(data as UserCreateInput);
+    setError(null);
+    try {
+      if (editingUser) {
+        await userService.update(editingUser.id, data as UserUpdateInput);
+      } else {
+        await userService.create(data as UserCreateInput);
+      }
+      fetchUsers();
+    } catch (err) {
+      setError('Kullanici kaydedilirken bir hata olustu. Lutfen tekrar deneyin.');
     }
-    fetchUsers();
   }
 
   return (
@@ -106,6 +113,15 @@ export default function UserManagementPage() {
           </div>
         }
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       {!loading && users.length === 0 ? (
         <EmptyState
