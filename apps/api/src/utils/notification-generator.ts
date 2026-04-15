@@ -217,8 +217,8 @@ let schedulerInterval: ReturnType<typeof setInterval> | null = null;
 export function startNotificationScheduler(): void {
   console.log('[Notifications] Scheduler started - running every 60 minutes');
 
-  // Run once immediately
-  generateNotifications();
+  // Run first check after 30 seconds (let DB connection stabilize)
+  setTimeout(() => generateNotifications(), 30_000);
 
   // Then every 60 minutes
   schedulerInterval = setInterval(
