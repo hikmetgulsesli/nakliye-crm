@@ -3,13 +3,33 @@ import { Button, Select, DatePicker } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ReportsPanel } from '@/components/admin/ReportsPanel';
 import { userService } from '@/services/user.service';
-import { reportService, type ReportFilters, type ReportType } from '@/services/report.service';
+import { reportService, type ReportFilters, type ReportType, type ReportSummary } from '@/services/report.service';
+
+const REPORT_TYPE_OPTIONS: { value: ReportType | ''; label: string }[] = [
+  { value: '', label: 'Rapor Turu Secin' },
+  { value: 'periodic-quotes', label: 'Donemsel Teklif Raporu' },
+  { value: 'staff-performance', label: 'Personel Performans Raporu' },
+  { value: 'win-loss', label: 'Kazanilan / Kaybedilen Analizi' },
+  { value: 'country-mode-volume', label: 'Ulke / Mod Bazli Hacim' },
+  { value: 'loss-reasons', label: 'Kaybedilme Nedeni Analizi' },
+];
+
+const TRANSPORT_MODE_OPTIONS = [
+  { value: '', label: 'Tum Modlar' },
+  { value: 'sea', label: 'Deniz' },
+  { value: 'air', label: 'Hava' },
+  { value: 'land', label: 'Kara' },
+  { value: 'rail', label: 'Demiryolu' },
+  { value: 'multimodal', label: 'Multimodal' },
+];
 
 export default function ReportsPage() {
   const [filters, setFilters] = useState<ReportFilters>({});
+  const [selectedReportType, setSelectedReportType] = useState<ReportType | ''>('');
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [generating, setGenerating] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
+  const [reportData, setReportData] = useState<ReportSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,31 +56,28 @@ export default function ReportsPage() {
     ...users,
   ];
 
-  const regionOptions = [
-    { value: '', label: 'Tum Bolgeler' },
-    { value: 'europe', label: 'Avrupa' },
-    { value: 'asia', label: 'Asya' },
-    { value: 'america', label: 'Amerika' },
-    { value: 'africa', label: 'Afrika' },
-    { value: 'middle_east', label: 'Orta Dogu' },
-  ];
-
   const handleGenerateReport = async () => {
+    if (!selectedReportType) {
+      setError('Lutfen bir rapor turu secin.');
+      setTimeout(() => setError(null), 4000);
+      return;
+    }
+
     setGenerating(true);
     setError(null);
     setReportGenerated(false);
+    setReportData(null);
 
     try {
-      // Generate a periodic_quotes report as the default type
-      const reportType: ReportType = 'periodic_quotes';
-      await reportService.getReport(reportType, filters);
+      const data = await reportService.getReport(selectedReportType, filters);
+      setReportData(data);
       setReportGenerated(true);
-
-      // Auto-hide success after 4 seconds
       setTimeout(() => setReportGenerated(false), 4000);
     } catch (err) {
       console.error('Failed to generate report:', err);
-      setError('Rapor olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+      const message =
+        err instanceof Error ? err.message : 'Bilinmeyen bir hata olustu';
+      setError(`Rapor olusturulurken bir hata olustu: ${message}`);
       setTimeout(() => setError(null), 4000);
     } finally {
       setGenerating(false);
@@ -94,7 +111,16 @@ export default function ReportsPage() {
 
       {/* Filter bar */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
+          {/* RAPOR TURU */}
+          <Select
+            label="Rapor Turu"
+            icon="assessment"
+            value={selectedReportType}
+            onChange={(e) => setSelectedReportType(e.target.value as ReportType | '')}
+            options={REPORT_TYPE_OPTIONS}
+          />
+
           {/* TARIH ARALIGI */}
           <DatePicker
             label="Baslangic Tarihi"
@@ -115,28 +141,28 @@ export default function ReportsPage() {
           <Select
             label="Satis Temsilcisi"
             icon="person"
-            value={filters.userId?.toString() ?? ''}
+            value={filters.assignedUserId?.toString() ?? ''}
             onChange={(e) =>
               setFilters({
                 ...filters,
-                userId: e.target.value ? Number(e.target.value) : undefined,
+                assignedUserId: e.target.value ? Number(e.target.value) : undefined,
               })
             }
             options={userOptions}
           />
 
-          {/* BOLGE / HAT */}
+          {/* TASIMA MODU */}
           <Select
-            label="Bolge / Hat"
-            icon="public"
-            value={filters.region ?? ''}
+            label="Tasima Modu"
+            icon="local_shipping"
+            value={filters.transportMode ?? ''}
             onChange={(e) =>
               setFilters({
                 ...filters,
-                region: e.target.value || undefined,
+                transportMode: e.target.value || undefined,
               })
             }
-            options={regionOptions}
+            options={TRANSPORT_MODE_OPTIONS}
           />
 
           {/* Rapor Olustur Button */}
@@ -145,13 +171,36 @@ export default function ReportsPage() {
               icon="assessment"
               className="w-full"
               onClick={handleGenerateReport}
-              disabled={generating}
+              disabled={generating || !selectedReportType}
             >
               {generating ? 'Olusturuluyor...' : 'Rapor Olustur'}
             </Button>
           </div>
         </div>
       </div>
+
+      {/* Report preview / summary */}
+      {reportData && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">{reportData.title}</h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Olusturulma: {new Date(reportData.generatedAt).toLocaleString('tr-TR')}
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+              <span className="material-symbols-outlined text-[14px]">check_circle</span>
+              Hazir
+            </span>
+          </div>
+          <div className="bg-slate-50 rounded-xl p-4 text-sm text-slate-700 overflow-auto max-h-80">
+            <pre className="whitespace-pre-wrap font-mono text-xs">
+              {JSON.stringify(reportData.data, null, 2)}
+            </pre>
+          </div>
+        </div>
+      )}
 
       {/* Report cards */}
       <ReportsPanel filters={filters} />

@@ -7,11 +7,11 @@ const router = Router();
 
 router.use(auth(), rbac('ADMIN'));
 
-router.get('/sales-performance', reportsController.salesPerformance);
-router.get('/customer-acquisition', reportsController.customerAcquisition);
-router.get('/quotation-conversion', reportsController.quotationConversion);
-router.get('/activity-summary', reportsController.activitySummary);
-router.get('/loss-analysis', reportsController.lossAnalysis);
-router.get('/export', reportsController.exportReport);
+router.get('/periodic-quotes', reportsController.periodicQuotes);
+router.get('/staff-performance', reportsController.staffPerformance);
+router.get('/win-loss', reportsController.winLoss);
+router.get('/country-mode-volume', reportsController.countryModeVolume);
+router.get('/loss-reasons', reportsController.lossReasons);
+router.get('/export/:type', reportsController.exportReport);
 
 export { router as reportRoutes };
