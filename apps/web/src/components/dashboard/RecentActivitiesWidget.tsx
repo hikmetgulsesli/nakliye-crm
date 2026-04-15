@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui';
 
@@ -5,6 +6,7 @@ interface RecentActivity {
   id: string;
   date: string;
   customerName: string;
+  customerId?: number;
   type: string;
   note: string;
   representative?: string;
@@ -44,6 +46,8 @@ export function RecentActivitiesWidget({
   showRepresentative = false,
   className,
 }: RecentActivitiesWidgetProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={cn(
@@ -56,7 +60,10 @@ export function RecentActivitiesWidget({
         <h3 className="font-display font-bold text-lg text-slate-900">
           Son Aktiviteler
         </h3>
-        <button className="text-primary text-sm font-medium hover:underline">
+        <button
+          onClick={() => navigate('/musteriler')}
+          className="text-primary text-sm font-medium hover:underline"
+        >
           Tumunu Gor
         </button>
       </div>
@@ -99,7 +106,15 @@ export function RecentActivitiesWidget({
               activities.map((activity) => (
                 <tr
                   key={activity.id}
-                  className="hover:bg-slate-50 transition-colors"
+                  onClick={() => {
+                    if (activity.customerId) {
+                      navigate(`/musteriler/${activity.customerId}`);
+                    }
+                  }}
+                  className={cn(
+                    'hover:bg-slate-50 transition-colors',
+                    activity.customerId && 'cursor-pointer',
+                  )}
                 >
                   <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
                     {activity.date}

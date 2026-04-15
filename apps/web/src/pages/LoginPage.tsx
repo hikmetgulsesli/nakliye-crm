@@ -63,21 +63,10 @@ export default function LoginPage() {
           <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
         </div>
 
-        {/* Right nav */}
-        <div className="flex items-center gap-6">
-          <a href="#" className="text-sm text-white/80 transition-colors hover:text-white">
-            Hakkimizda
-          </a>
-          <a href="#" className="text-sm text-white/80 transition-colors hover:text-white">
-            Hizmetler
-          </a>
-          <a href="#" className="text-sm text-white/80 transition-colors hover:text-white">
-            Iletisim
-          </a>
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-            TR
-          </span>
-        </div>
+        {/* Language badge */}
+        <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+          TR
+        </span>
       </header>
 
       {/* Main Content */}
@@ -189,9 +178,12 @@ export default function LoginPage() {
                 />
                 Beni Hatirla
               </label>
-              <a href="#" className="text-sm font-medium text-[#e30a17] hover:text-[#c00914]">
+              <span
+                className="text-sm font-medium text-slate-400 cursor-not-allowed"
+                title="Yakinda eklenecek"
+              >
                 Sifremi Unuttum
-              </a>
+              </span>
             </div>
 
             {/* Submit */}
@@ -214,13 +206,13 @@ export default function LoginPage() {
           {/* Terms Footer */}
           <p className="mt-6 text-center text-xs text-slate-400">
             Giris yaparak{' '}
-            <a href="#" className="text-[#e30a17] hover:underline">
+            <span className="text-slate-400">
               Kullanim Sartlari
-            </a>{' '}
+            </span>{' '}
             ve{' '}
-            <a href="#" className="text-[#e30a17] hover:underline">
+            <span className="text-slate-400">
               Gizlilik Politikasi
-            </a>
+            </span>
             &apos;ni kabul etmis olursunuz.
           </p>
         </div>

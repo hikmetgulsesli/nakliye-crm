@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Avatar, Icon } from '@/components/ui';
 
@@ -19,6 +20,8 @@ interface TeamPerformanceTableProps {
 }
 
 export function TeamPerformanceTable({ data, className }: TeamPerformanceTableProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={cn(
@@ -31,7 +34,10 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
         <h3 className="font-display font-bold text-lg text-slate-900">
           Satis Temsilcisi Performansi
         </h3>
-        <button className="text-sm font-medium text-slate-600 hover:text-primary transition-colors flex items-center gap-1">
+        <button
+          onClick={() => navigate('/kullanicilar')}
+          className="text-sm font-medium text-slate-600 hover:text-primary transition-colors flex items-center gap-1"
+        >
           Tumunu Gor
           <Icon name="chevron_right" size="sm" />
         </button>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Icon } from '@/components/ui';
 
@@ -12,6 +13,13 @@ interface AlertWidgetsProps {
   alerts: AlertData[];
   className?: string;
 }
+
+const ALERT_ROUTES: Record<AlertData['type'], string> = {
+  uncalled: '/musteriler',
+  pending: '/teklifler?status=Bekliyor',
+  expired: '/teklifler',
+  highPotential: '/musteriler?potential=Yuksek',
+};
 
 const ALERT_CONFIG: Record<
   AlertData['type'],
@@ -48,6 +56,8 @@ const ALERT_CONFIG: Record<
 };
 
 export function AlertWidgets({ alerts, className }: AlertWidgetsProps) {
+  const navigate = useNavigate();
+
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-4', className)}>
       {alerts.map((alert) => {
@@ -55,6 +65,7 @@ export function AlertWidgets({ alerts, className }: AlertWidgetsProps) {
         return (
           <div
             key={alert.id}
+            onClick={() => navigate(ALERT_ROUTES[alert.type])}
             className={cn(
               'bg-white rounded-xl border border-slate-200 shadow-sm p-5 border-l-4 hover:shadow-md transition-shadow cursor-pointer',
               config.border,

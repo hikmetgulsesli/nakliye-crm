@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useNotificationStore, type Notification } from '@/stores/notificationStore';
 
@@ -27,6 +28,7 @@ interface NotificationDropdownProps {
 
 export default function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
   const { notifications, markRead, markAllRead } = useNotificationStore();
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,7 +112,13 @@ export default function NotificationDropdown({ open, onClose }: NotificationDrop
 
       {/* Footer */}
       <div className="border-t border-slate-100 px-5 py-3 text-center">
-        <button className="text-sm font-medium text-primary hover:text-primary-700">
+        <button
+          onClick={() => {
+            onClose();
+            navigate('/');
+          }}
+          className="text-sm font-medium text-primary hover:text-primary-700"
+        >
           Tum Bildirimleri Gor
         </button>
       </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Icon } from '@/components/ui';
 
@@ -24,6 +25,8 @@ const TYPE_CONFIG: Record<
 };
 
 export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={cn(
@@ -36,7 +39,10 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
         <h3 className="font-display font-bold text-lg text-slate-900">
           Yaklasan Takipler
         </h3>
-        <button className="text-primary text-sm font-medium hover:underline">
+        <button
+          onClick={() => navigate('/musteriler')}
+          className="text-primary text-sm font-medium hover:underline"
+        >
           Tumunu Gor
         </button>
       </div>

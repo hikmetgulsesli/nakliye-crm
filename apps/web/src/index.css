@@ -55,3 +55,9 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
 }
+
+/* Print styles */
+@media print {
+  aside, header, .no-print { display: none !important; }
+  main { margin: 0 !important; padding: 0 !important; }
+}

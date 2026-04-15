@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Icon, Skeleton } from '@/components/ui';
+import { Button, Icon, Modal, Skeleton } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { CustomerDetailTabs } from '@/components/customers/CustomerDetailTabs';
@@ -23,6 +23,7 @@ export default function CustomerDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     async function fetchCustomer() {
@@ -42,10 +43,6 @@ export default function CustomerDetailPage() {
 
   async function handleDelete() {
     if (!customer) return;
-    const confirmed = window.confirm(
-      `"${customer.companyName}" musterisini silmek istediginize emin misiniz?`,
-    );
-    if (!confirmed) return;
 
     setDeleting(true);
     try {
@@ -55,6 +52,7 @@ export default function CustomerDetailPage() {
       setError('Musteri silinirken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setDeleting(false);
+      setShowDeleteModal(false);
     }
   }
 
@@ -170,7 +168,7 @@ export default function CustomerDetailPage() {
             <Button
               variant="danger"
               icon="delete"
-              onClick={handleDelete}
+              onClick={() => setShowDeleteModal(true)}
               loading={deleting}
             >
               Sil
@@ -181,6 +179,27 @@ export default function CustomerDetailPage() {
 
       {/* Tabs */}
       <CustomerDetailTabs customer={customer} />
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Musteriyi Sil"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+              Iptal
+            </Button>
+            <Button variant="danger" onClick={handleDelete} loading={deleting}>
+              Sil
+            </Button>
+          </>
+        }
+      >
+        <p className="text-sm text-slate-600">
+          Bu musteriyi silmek istediginize emin misiniz? Bu islem geri alinabilir.
+        </p>
+      </Modal>
     </div>
   );
 }

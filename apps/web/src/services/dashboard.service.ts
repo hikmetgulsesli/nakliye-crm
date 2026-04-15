@@ -61,6 +61,7 @@ export interface RecentActivity {
   id: string;
   date: string;
   customerName: string;
+  customerId?: number;
   type: string;
   note: string;
   representative?: string;

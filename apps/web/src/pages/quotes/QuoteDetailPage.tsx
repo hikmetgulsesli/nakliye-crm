@@ -54,8 +54,7 @@ export default function QuoteDetailPage() {
   }
 
   function handleDownloadPdf() {
-    // PDF download functionality - placeholder
-    window.open(`/api/quotations/${quotationId}/pdf`, '_blank');
+    window.print();
   }
 
   if (loading) {
