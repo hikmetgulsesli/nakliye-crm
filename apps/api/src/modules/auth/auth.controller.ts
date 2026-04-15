@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { prisma } from '../../config/database';
 import * as tokenService from './token.service';
 import { AppError } from '../../middleware/error-handler';
@@ -114,7 +115,7 @@ export async function me(req: Request, res: Response) {
 }
 
 export async function updateProfile(req: Request, res: Response) {
-  const { fullName, email, phone } = req.body;
+  const { fullName, email, phone, notificationPrefs } = req.body;
   const userId = req.user!.userId;
 
   // Check if email is already taken by another user
@@ -133,10 +134,11 @@ export async function updateProfile(req: Request, res: Response) {
       ...(fullName !== undefined && { fullName }),
       ...(email !== undefined && { email }),
       ...(phone !== undefined && { phone }),
+      ...(notificationPrefs !== undefined && { notificationPrefs }),
     },
     select: {
       id: true, email: true, fullName: true, role: true,
-      avatarUrl: true, phone: true,
+      avatarUrl: true, phone: true, notificationPrefs: true,
     },
   });
 
@@ -172,4 +174,57 @@ export async function changePassword(req: Request, res: Response) {
   });
 
   res.json({ success: true, message: 'Sifre basariyla guncellendi' });
+}
+
+export async function enable2FA(req: Request, res: Response) {
+  const userId = req.user!.userId;
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new AppError('Kullanici bulunamadi', 404);
+  }
+
+  if (user.twoFactorEnabled) {
+    throw new AppError('2FA zaten aktif', 400);
+  }
+
+  // Generate a TOTP-compatible secret (base32-like hex secret)
+  const secret = crypto.randomBytes(20).toString('hex');
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      twoFactorSecret: secret,
+      twoFactorEnabled: true,
+    },
+  });
+
+  res.json({
+    success: true,
+    data: { secret },
+    message: '2FA basariyla etkinlestirildi',
+  });
+}
+
+export async function disable2FA(req: Request, res: Response) {
+  const userId = req.user!.userId;
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new AppError('Kullanici bulunamadi', 404);
+  }
+
+  if (!user.twoFactorEnabled) {
+    throw new AppError('2FA zaten deaktif', 400);
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      twoFactorSecret: null,
+      twoFactorEnabled: false,
+    },
+  });
+
+  res.json({ success: true, message: '2FA basariyla devre disi birakildi' });
 }

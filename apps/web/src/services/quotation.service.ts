@@ -15,6 +15,10 @@ export interface QuotationFilters {
   transportMode?: string;
   assignedUserId?: number;
   currency?: string;
+  originCountry?: string;
+  destinationCountry?: string;
+  serviceType?: string;
+  incoterm?: string;
 }
 
 export const quotationService = {
@@ -31,6 +35,10 @@ export const quotationService = {
     if (filters?.transportMode) params.transportMode = filters.transportMode;
     if (filters?.assignedUserId) params.assignedUserId = filters.assignedUserId;
     if (filters?.currency) params.currency = filters.currency;
+    if (filters?.originCountry) params.originCountry = filters.originCountry;
+    if (filters?.destinationCountry) params.destinationCountry = filters.destinationCountry;
+    if (filters?.serviceType) params.serviceType = filters.serviceType;
+    if (filters?.incoterm) params.incoterm = filters.incoterm;
 
     const { data } = await api.get<PaginatedResponse<Quotation>>('/quotations', { params });
     return data;
@@ -53,6 +61,11 @@ export const quotationService = {
 
   async delete(id: number): Promise<void> {
     await api.delete(`/quotations/${id}`);
+  },
+
+  async restore(id: number): Promise<Quotation> {
+    const { data } = await api.patch<Quotation>(`/quotations/${id}/restore`);
+    return data;
   },
 
   async getRevisions(quotationId: number): Promise<QuotationRevision[]> {

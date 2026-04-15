@@ -137,16 +137,39 @@ export default function ProfilePage() {
     }
   };
 
-  const handleTwoFactorToggle = () => {
-    // 2FA is not implemented on the backend yet, just toggle locally
-    setTwoFactorEnabled(!twoFactorEnabled);
-    showAlert('success', twoFactorEnabled ? '2FA devre disi birakildi.' : '2FA etkinlestirildi.');
+  const [twoFactorSecret, setTwoFactorSecret] = useState<string | null>(null);
+  const [twoFactorLoading, setTwoFactorLoading] = useState(false);
+
+  const handleTwoFactorToggle = async () => {
+    setTwoFactorLoading(true);
+    try {
+      if (twoFactorEnabled) {
+        await api.post('/auth/2fa/disable');
+        setTwoFactorEnabled(false);
+        setTwoFactorSecret(null);
+        showAlert('success', '2FA devre disi birakildi.');
+      } else {
+        const { data } = await api.post('/auth/2fa/enable');
+        setTwoFactorEnabled(true);
+        setTwoFactorSecret(data.secret || null);
+        showAlert('success', '2FA etkinlestirildi.');
+      }
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        '2FA isleminde bir hata olustu.';
+      showAlert('error', message);
+    } finally {
+      setTwoFactorLoading(false);
+    }
   };
 
   const handleNotificationSave = async () => {
     setNotifSaving(true);
     try {
       await api.patch('/auth/profile', {
+        fullName,
+        email,
         notificationPreferences: {
           emailNotifications,
           dailySummary,
@@ -329,9 +352,11 @@ export default function ProfilePage() {
                 role="switch"
                 aria-checked={twoFactorEnabled}
                 onClick={handleTwoFactorToggle}
+                disabled={twoFactorLoading}
                 className={cn(
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
                   twoFactorEnabled ? 'bg-primary' : 'bg-slate-300',
+                  twoFactorLoading && 'opacity-50 cursor-not-allowed',
                 )}
               >
                 <span
@@ -342,6 +367,21 @@ export default function ProfilePage() {
                 />
               </button>
             </div>
+
+            {/* 2FA Secret / QR placeholder */}
+            {twoFactorEnabled && twoFactorSecret && (
+              <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <p className="text-xs font-medium text-slate-700 mb-1">
+                  2FA Kurulum Anahtari
+                </p>
+                <code className="block text-sm font-mono bg-white px-3 py-2 rounded border border-slate-200 text-slate-900 break-all select-all">
+                  {twoFactorSecret}
+                </code>
+                <p className="text-xs text-slate-500 mt-2">
+                  Bu anahtari Google Authenticator veya benzeri bir uygulamaya girin.
+                </p>
+              </div>
+            )}
 
             <Button
               className="w-full"

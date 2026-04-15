@@ -14,6 +14,18 @@ export async function list(req: Request, res: Response) {
   if (req.query.customerId) where.customerId = parseInt(String(req.query.customerId), 10);
   if (req.query.assignedUserId) where.assignedUserId = parseInt(String(req.query.assignedUserId), 10);
   if (req.query.transportMode) where.transportMode = req.query.transportMode;
+  if (req.query.originCountry) where.originCountry = req.query.originCountry;
+  if (req.query.destinationCountry) where.destinationCountry = req.query.destinationCountry;
+  if (req.query.serviceType) where.serviceType = req.query.serviceType;
+  if (req.query.incoterm) where.incoterm = req.query.incoterm;
+  if (req.query.currency) where.currency = req.query.currency;
+
+  // Date range filter on quoteDate
+  if (req.query.dateFrom || req.query.dateTo) {
+    where.quoteDate = {};
+    if (req.query.dateFrom) (where.quoteDate as Record<string, unknown>).gte = new Date(String(req.query.dateFrom));
+    if (req.query.dateTo) (where.quoteDate as Record<string, unknown>).lte = new Date(String(req.query.dateTo));
+  }
 
   if (req.query.search) {
     const search = String(req.query.search);
@@ -257,4 +269,33 @@ export async function remove(req: Request, res: Response) {
   });
 
   res.json({ success: true, message: 'Teklif silindi' });
+}
+
+export async function restore(req: Request, res: Response) {
+  const id = parseInt(req.params.id, 10);
+
+  const existing = await prisma.quotation.findFirst({
+    where: { id, isDeleted: true },
+  });
+  if (!existing) {
+    throw new AppError('Silinmis teklif bulunamadi', 404);
+  }
+
+  const quotation = await prisma.quotation.update({
+    where: { id },
+    data: { isDeleted: false },
+    include: {
+      customer: { select: { id: true, companyName: true } },
+      assignedUser: { select: { id: true, fullName: true } },
+    },
+  });
+
+  await createAuditLog({
+    userId: req.user!.userId,
+    recordType: 'Quotation',
+    recordId: id,
+    action: 'RESTORE',
+  });
+
+  res.json({ success: true, data: quotation });
 }

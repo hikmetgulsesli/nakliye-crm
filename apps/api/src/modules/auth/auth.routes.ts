@@ -12,5 +12,7 @@ router.post('/logout', auth(), authController.logout);
 router.get('/me', auth(), authController.me);
 router.patch('/profile', auth(), authController.updateProfile);
 router.patch('/profile/password', auth(), authController.changePassword);
+router.post('/2fa/enable', auth(), authController.enable2FA);
+router.post('/2fa/disable', auth(), authController.disable2FA);
 
 export { router as authRoutes };

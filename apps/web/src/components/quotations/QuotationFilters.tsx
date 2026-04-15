@@ -31,6 +31,9 @@ export function QuotationFilters({
     { value: 'Kaybedildi', label: 'Kaybedildi' },
   ];
   const transportModeOptions = getOptions('transport_mode');
+  const serviceTypeOptions = getOptions('service_type');
+  const countryOptions = getOptions('country');
+  const incotermOptions = getOptions('incoterm');
 
   function handleChange(key: keyof QuotationFiltersType, value: string) {
     onChange({ ...filters, [key]: value || undefined });
@@ -83,6 +86,46 @@ export function QuotationFilters({
             placeholder="Tasima Modu"
             value={filters.transportMode || ''}
             onChange={(e) => handleChange('transportMode', e.target.value)}
+          />
+        </div>
+
+        {/* Service Type */}
+        <div className="w-40">
+          <Select
+            options={serviceTypeOptions}
+            placeholder="Servis Tipi"
+            value={filters.serviceType || ''}
+            onChange={(e) => handleChange('serviceType', e.target.value)}
+          />
+        </div>
+
+        {/* Origin Country */}
+        <div className="w-40">
+          <Select
+            options={countryOptions}
+            placeholder="Cikis Ulkesi"
+            value={filters.originCountry || ''}
+            onChange={(e) => handleChange('originCountry', e.target.value)}
+          />
+        </div>
+
+        {/* Destination Country */}
+        <div className="w-40">
+          <Select
+            options={countryOptions}
+            placeholder="Varis Ulkesi"
+            value={filters.destinationCountry || ''}
+            onChange={(e) => handleChange('destinationCountry', e.target.value)}
+          />
+        </div>
+
+        {/* Incoterm */}
+        <div className="w-36">
+          <Select
+            options={incotermOptions}
+            placeholder="Incoterm"
+            value={filters.incoterm || ''}
+            onChange={(e) => handleChange('incoterm', e.target.value)}
           />
         </div>
 

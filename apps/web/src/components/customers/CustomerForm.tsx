@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -5,6 +6,8 @@ import { Input, Select, Button, Textarea, Checkbox, MultiSelect } from '@/compon
 import { Icon } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import { useLookups } from '@/hooks/useLookups';
+import { useDebounce } from '@/hooks/useDebounce';
+import { customerService, type ConflictMatch } from '@/services/customer.service';
 import type { Customer, CustomerCreateInput } from '@nakliye-crm/shared';
 
 // Extended form schema to handle multiple phones/emails
@@ -111,6 +114,34 @@ export function CustomerForm({
 
   const selectedTransportModes = watch('transportModes') || [];
 
+  // --- Real-time conflict detection ---
+  const watchedCompanyName = watch('companyName');
+  const debouncedCompanyName = useDebounce(watchedCompanyName, 500);
+  const [conflictMatches, setConflictMatches] = useState<ConflictMatch[]>([]);
+
+  useEffect(() => {
+    if (!debouncedCompanyName || debouncedCompanyName.length < 3) {
+      setConflictMatches([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const phones = watch('phones').map((p) => p.value).filter(Boolean).join(', ');
+        const emails = watch('emails').map((e) => e.value).filter(Boolean).join(', ');
+        const matches = await customerService.conflictCheck(phones, emails, debouncedCompanyName);
+        // Exclude current customer if editing
+        const filtered = initialData?.id
+          ? matches.filter((m) => m.customerId !== initialData.id)
+          : matches;
+        if (!cancelled) setConflictMatches(filtered);
+      } catch {
+        // Silently ignore conflict check errors
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [debouncedCompanyName]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function toggleTransportMode(mode: string) {
     const current = selectedTransportModes;
     if (current.includes(mode)) {
@@ -171,6 +202,22 @@ export function CustomerForm({
               error={errors.companyName?.message}
               {...register('companyName')}
             />
+
+            {/* Conflict suggestions */}
+            {conflictMatches.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 -mt-2">
+                <span className="text-xs text-amber-700 font-medium">Benzer kayitlar:</span>
+                {conflictMatches.map((match) => (
+                  <span
+                    key={match.customerId}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200"
+                  >
+                    <Icon name="warning" size="sm" className="text-amber-500 !text-[14px]" />
+                    {match.companyName} (%{Math.round(match.similarity)})
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Yetkili Adi */}
             <Input

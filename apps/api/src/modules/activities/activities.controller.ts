@@ -176,3 +176,32 @@ export async function remove(req: Request, res: Response) {
 
   res.json({ success: true, message: 'Aktivite silindi' });
 }
+
+export async function restore(req: Request, res: Response) {
+  const id = parseInt(req.params.id, 10);
+
+  const existing = await prisma.activity.findFirst({
+    where: { id, isDeleted: true },
+  });
+  if (!existing) {
+    throw new AppError('Silinmis aktivite bulunamadi', 404);
+  }
+
+  const activity = await prisma.activity.update({
+    where: { id },
+    data: { isDeleted: false },
+    include: {
+      customer: { select: { id: true, companyName: true } },
+      createdBy: { select: { id: true, fullName: true } },
+    },
+  });
+
+  await createAuditLog({
+    userId: req.user!.userId,
+    recordType: 'Activity',
+    recordId: id,
+    action: 'RESTORE',
+  });
+
+  res.json({ success: true, data: activity });
+}

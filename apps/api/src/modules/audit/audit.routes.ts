@@ -8,6 +8,7 @@ const router = Router();
 router.use(auth(), rbac('ADMIN'));
 
 router.get('/', auditController.list);
+router.get('/export/csv', auditController.exportCsv);
 router.get('/record/:type/:id', auditController.getByRecord);
 
 export { router as auditRoutes };
