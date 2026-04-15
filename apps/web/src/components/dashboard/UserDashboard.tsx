@@ -91,7 +91,6 @@ export function UserDashboard() {
       const result = await dashboardService.getUserDashboard();
       setData(result);
     } catch (err) {
-      console.error('User dashboard fetch error:', err);
       setError('Dashboard verileri yuklenirken bir hata olustu.');
     } finally {
       setLoading(false);
@@ -118,7 +117,7 @@ export function UserDashboard() {
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
           <p className="text-red-700 font-medium mb-3">{error}</p>
-          <Button variant="secondary" onClick={fetchData}>
+          <Button variant="secondary" onClick={() => { setData(null); setError(null); fetchData(); }}>
             Tekrar Dene
           </Button>
         </div>

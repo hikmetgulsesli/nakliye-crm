@@ -9,6 +9,7 @@ import type { QuotationCreateInput } from '@nakliye-crm/shared';
 export default function QuoteCreatePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
 
   // Generate a temporary ref ID for display
@@ -27,8 +28,8 @@ export default function QuoteCreatePage() {
               label: u.fullName,
             })),
         );
-      } catch (error) {
-        console.error('Failed to fetch users:', error);
+      } catch (err) {
+        setError('Kullanici listesi yuklenirken bir hata olustu.');
       }
     }
     fetchUsers();
@@ -36,11 +37,12 @@ export default function QuoteCreatePage() {
 
   async function handleSubmit(data: QuotationCreateInput) {
     setLoading(true);
+    setError(null);
     try {
       const quotation = await quotationService.create(data);
       navigate(`/teklifler/${quotation.id}`);
-    } catch (error) {
-      console.error('Failed to create quotation:', error);
+    } catch (err) {
+      setError('Teklif olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -57,6 +59,15 @@ export default function QuoteCreatePage() {
         title="Yeni Teklif Olustur"
         subtitle={`Yeni bir teklif olusturun`}
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       <QuotationForm
         onSubmit={handleSubmit}

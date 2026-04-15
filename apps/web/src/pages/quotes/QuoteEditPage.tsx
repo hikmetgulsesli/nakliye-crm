@@ -31,8 +31,7 @@ export default function QuoteEditPage() {
               label: u.fullName,
             })),
         );
-      } catch (err) {
-        console.error('Failed to fetch quotation:', err);
+      } catch (err: unknown) {
         setError('Teklif bilgileri yuklenirken bir hata olustu.');
       } finally {
         setPageLoading(false);
@@ -47,8 +46,7 @@ export default function QuoteEditPage() {
     try {
       await quotationService.update(Number(id), data);
       navigate(`/teklifler/${id}`);
-    } catch (err) {
-      console.error('Failed to update quotation:', err);
+    } catch (err: unknown) {
       setError('Teklif guncellenirken bir hata olustu.');
     } finally {
       setLoading(false);

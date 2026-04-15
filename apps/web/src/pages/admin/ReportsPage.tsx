@@ -45,7 +45,7 @@ export default function ReportsPage() {
             })),
         );
       } catch (err) {
-        console.error('Failed to fetch users:', err);
+        setError('Kullanici listesi yuklenirken bir hata olustu.');
       }
     }
     fetchUsers();
@@ -74,7 +74,6 @@ export default function ReportsPage() {
       setReportGenerated(true);
       setTimeout(() => setReportGenerated(false), 4000);
     } catch (err) {
-      console.error('Failed to generate report:', err);
       const message =
         err instanceof Error ? err.message : 'Bilinmeyen bir hata olustu';
       setError(`Rapor olusturulurken bir hata olustu: ${message}`);

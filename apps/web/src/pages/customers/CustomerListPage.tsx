@@ -20,6 +20,7 @@ export default function CustomerListPage() {
   const [filters, setFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [appliedFilters, setAppliedFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
   const debouncedSearch = useDebounce(filters.search, 400);
@@ -37,8 +38,8 @@ export default function CustomerListPage() {
               label: u.fullName,
             })),
         );
-      } catch (error) {
-        console.error('Failed to fetch users:', error);
+      } catch (err) {
+        setError('Kullanici listesi yuklenirken bir hata olustu.');
       }
     }
     fetchUsers();
@@ -55,8 +56,8 @@ export default function CustomerListPage() {
       const result = await customerService.getAll(page, pageSize, filtersToApply);
       setCustomers(result.data);
       setTotal(result.total);
-    } catch (error) {
-      console.error('Failed to fetch customers:', error);
+    } catch (err) {
+      setError('Musteriler yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -92,6 +93,15 @@ export default function CustomerListPage() {
           </Button>
         }
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       <CustomerFilters
         filters={filters}

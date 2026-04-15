@@ -21,6 +21,7 @@ export default function CustomerDetailPage() {
   const navigate = useNavigate();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -30,9 +31,8 @@ export default function CustomerDetailPage() {
       try {
         const data = await customerService.getById(Number(id));
         setCustomer(data);
-      } catch (error) {
-        console.error('Failed to fetch customer:', error);
-        navigate('/musteriler');
+      } catch (err) {
+        setError('Musteri bilgileri yuklenirken bir hata olustu.');
       } finally {
         setLoading(false);
       }
@@ -51,8 +51,8 @@ export default function CustomerDetailPage() {
     try {
       await customerService.delete(customer.id);
       navigate('/musteriler');
-    } catch (error) {
-      console.error('Failed to delete customer:', error);
+    } catch (err) {
+      setError('Musteri silinirken bir hata olustu. Lutfen tekrar deneyin.');
     } finally {
       setDeleting(false);
     }
@@ -83,6 +83,21 @@ export default function CustomerDetailPage() {
     );
   }
 
+  if (error && !customer) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <span className="material-symbols-outlined text-4xl text-red-400">error</span>
+        <p className="text-slate-600">{error}</p>
+        <button
+          onClick={() => navigate('/musteriler')}
+          className="text-sm text-primary hover:underline"
+        >
+          Musteri listesine don
+        </button>
+      </div>
+    );
+  }
+
   if (!customer) return null;
 
   return (
@@ -95,6 +110,15 @@ export default function CustomerDetailPage() {
         ]}
         title={customer.companyName}
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       {/* Company header card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">

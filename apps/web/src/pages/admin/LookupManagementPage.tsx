@@ -11,6 +11,7 @@ export default function LookupManagementPage() {
   const [allValues, setAllValues] = useState<LookupValue[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('transport_mode');
+  const [error, setError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<LookupValue | null>(null);
 
@@ -29,7 +30,7 @@ export default function LookupManagementPage() {
       }
       setAllValues(flat);
     } catch (err) {
-      console.error('Failed to fetch lookups:', err);
+      setError('Liste degerleri yuklenirken bir hata olustu.');
     } finally {
       setLoading(false);
     }
@@ -73,17 +74,22 @@ export default function LookupManagementPage() {
       await lookupService.toggle(item.id);
       fetchLookups();
     } catch (err) {
-      console.error('Delete error:', err);
+      setError('Deger silinirken bir hata olustu. Lutfen tekrar deneyin.');
     }
   }
 
   async function handleFormSubmit(data: LookupCreateInput | LookupUpdateInput) {
-    if (editingItem) {
-      await lookupService.update(editingItem.id, data as LookupUpdateInput);
-    } else {
-      await lookupService.create(data as LookupCreateInput);
+    setError(null);
+    try {
+      if (editingItem) {
+        await lookupService.update(editingItem.id, data as LookupUpdateInput);
+      } else {
+        await lookupService.create(data as LookupCreateInput);
+      }
+      fetchLookups();
+    } catch (err) {
+      setError('Deger kaydedilirken bir hata olustu. Lutfen tekrar deneyin.');
     }
-    fetchLookups();
   }
 
   // Drag handlers
@@ -119,7 +125,7 @@ export default function LookupManagementPage() {
       await lookupService.reorder(reorderItems);
       fetchLookups();
     } catch (err) {
-      console.error('Reorder error:', err);
+      setError('Siralama degistirilirken bir hata olustu.');
     }
   }
 
@@ -137,6 +143,15 @@ export default function LookupManagementPage() {
         title="Dinamik Liste Yonetimi"
         subtitle="Sistem genelinde kullanilan liste degerlerini yonetin"
       />
+
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
+          <span className="text-sm text-red-700">{error}</span>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-12 gap-6">
         {/* Left sidebar - Categories */}
