@@ -13,11 +13,11 @@ function KPISkeletons() {
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse"
+          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse"
         >
           <div className="flex items-start justify-between">
             <div className="size-12 rounded-xl bg-slate-200" />
-            <div className="h-5 w-12 rounded-full bg-slate-100" />
+            <div className="h-5 w-12 rounded-full bg-slate-100 dark:bg-slate-800" />
           </div>
           <div className="mt-4 space-y-2">
             <div className="h-3 w-28 rounded bg-slate-200" />
@@ -35,7 +35,7 @@ function AlertsSkeleton() {
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 animate-pulse"
+          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 animate-pulse"
         >
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-xl bg-slate-200" />
@@ -53,22 +53,22 @@ function AlertsSkeleton() {
 function ContentSkeleton() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+      <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse">
         <div className="h-5 w-40 rounded bg-slate-200 mb-6" />
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 py-4 border-b border-slate-100">
+          <div key={i} className="flex items-center gap-4 py-4 border-b border-slate-100 dark:border-slate-800">
             <div className="h-4 w-20 rounded bg-slate-200" />
             <div className="h-4 w-28 rounded bg-slate-200" />
-            <div className="h-4 flex-1 rounded bg-slate-100" />
+            <div className="h-4 flex-1 rounded bg-slate-100 dark:bg-slate-800" />
           </div>
         ))}
       </div>
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse">
         <div className="h-5 w-32 rounded bg-slate-200 mb-6" />
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="py-4 border-b border-slate-100 space-y-2">
+          <div key={i} className="py-4 border-b border-slate-100 dark:border-slate-800 space-y-2">
             <div className="h-4 w-32 rounded bg-slate-200" />
-            <div className="h-3 w-20 rounded bg-slate-100" />
+            <div className="h-3 w-20 rounded bg-slate-100 dark:bg-slate-800" />
           </div>
         ))}
       </div>
@@ -105,10 +105,10 @@ export function UserDashboard() {
     <div className="space-y-8">
       {/* Greeting */}
       <div>
-        <h1 className="text-3xl font-bold font-display text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-bold font-display text-slate-900 dark:text-slate-100 tracking-tight">
           Merhaba, {firstName} <span role="img" aria-label="wave">&#128075;</span>
         </h1>
-        <p className="text-slate-500 mt-1">
+        <p className="text-slate-500 dark:text-slate-400 mt-1">
           Iste bugunku satis ozetiniz ve yapmaniz gerekenler.
         </p>
       </div>

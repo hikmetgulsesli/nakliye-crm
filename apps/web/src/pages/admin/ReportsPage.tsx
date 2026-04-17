@@ -109,7 +109,7 @@ export default function ReportsPage() {
       )}
 
       {/* Filter bar */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
           {/* RAPOR TURU */}
           <Select
@@ -180,11 +180,11 @@ export default function ReportsPage() {
 
       {/* Report preview / summary */}
       {reportData && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">{reportData.title}</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{reportData.title}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Olusturulma: {new Date(reportData.generatedAt).toLocaleString('tr-TR')}
               </p>
             </div>
@@ -193,7 +193,7 @@ export default function ReportsPage() {
               Hazir
             </span>
           </div>
-          <div className="bg-slate-50 rounded-xl p-4 text-sm text-slate-700 overflow-auto max-h-80">
+          <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-sm text-slate-700 dark:text-slate-300 overflow-auto max-h-80">
             <pre className="whitespace-pre-wrap font-mono text-xs">
               {JSON.stringify(reportData.data, null, 2)}
             </pre>

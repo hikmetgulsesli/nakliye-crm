@@ -93,8 +93,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <h1 className="text-center text-3xl font-black text-slate-900">Hos Geldiniz</h1>
-          <p className="mt-2 text-center text-sm text-slate-500">
+          <h1 className="text-center text-3xl font-black text-slate-900 dark:text-slate-100">Hos Geldiniz</h1>
+          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
             Devam etmek icin hesabiniza giris yapin
           </p>
 
@@ -110,21 +110,21 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             {/* Email */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
                 E-posta Adresi
               </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
                   person
                 </span>
                 <input
                   type="email"
                   placeholder="ornek@sirket.com"
                   className={cn(
-                    'w-full rounded-xl border bg-white py-3 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2',
+                    'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
                     errors.email
                       ? 'border-red-300 focus:ring-red-300'
-                      : 'border-slate-200 focus:ring-[#e30a17]/30',
+                      : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
                   )}
                   {...register('email', {
                     required: 'E-posta adresi zorunludur',
@@ -142,19 +142,19 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">Sifre</label>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Sifre</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
                   lock
                 </span>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Sifrenizi giriniz"
                   className={cn(
-                    'w-full rounded-xl border bg-white py-3 pl-10 pr-12 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2',
+                    'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-12 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
                     errors.password
                       ? 'border-red-300 focus:ring-red-300'
-                      : 'border-slate-200 focus:ring-[#e30a17]/30',
+                      : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
                   )}
                   {...register('password', {
                     required: 'Sifre zorunludur',
@@ -167,7 +167,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:text-slate-300"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     {showPassword ? 'visibility_off' : 'visibility'}
@@ -181,7 +181,7 @@ export default function LoginPage() {
 
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                 <input
                   type="checkbox"
                   className="size-4 rounded border-slate-300 text-[#e30a17] focus:ring-[#e30a17]/30"
@@ -215,7 +215,7 @@ export default function LoginPage() {
           </form>
 
           {/* Copyright */}
-          <p className="mt-6 text-center text-xs text-slate-400">
+          <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
             &copy; 2026 NakliyeCRM. Tum haklari saklidir.
           </p>
         </div>
@@ -224,14 +224,14 @@ export default function LoginPage() {
       {/* Footer Bar */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-400 dark:text-slate-500">
             &copy; 2026 NakliyeCRM. Tum haklari saklidir.
           </p>
           <div className="flex items-center gap-4">
-            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Kullanim Sartlari
             </Link>
-            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Gizlilik Politikasi
             </Link>
           </div>

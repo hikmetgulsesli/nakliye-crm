@@ -39,7 +39,7 @@ export function AuditLogFilters({
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 mb-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
         {/* KULLANICI */}
         <Select

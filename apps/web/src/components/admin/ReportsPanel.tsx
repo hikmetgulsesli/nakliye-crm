@@ -92,7 +92,7 @@ export function ReportsPanel({ filters }: ReportsPanelProps) {
       {REPORT_CARDS.map((report) => (
         <div
           key={report.type}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-center gap-5 hover:border-slate-300 transition-colors"
+          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 flex items-center gap-5 hover:border-slate-300 transition-colors"
         >
           {/* Icon */}
           <div
@@ -103,8 +103,8 @@ export function ReportsPanel({ filters }: ReportsPanelProps) {
 
           {/* Text */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-slate-900">{report.title}</h3>
-            <p className="text-xs text-slate-500 mt-0.5 truncate">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{report.title}</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
               {report.description}
             </p>
           </div>

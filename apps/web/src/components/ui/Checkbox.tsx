@@ -20,12 +20,13 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           type="checkbox"
           className={cn(
             'h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer',
+            'dark:border-slate-600 dark:bg-slate-800 dark:checked:bg-primary',
             className,
           )}
           {...props}
         />
         {label && (
-          <span className="text-sm text-slate-700">{label}</span>
+          <span className="text-sm text-slate-700 dark:text-slate-300">{label}</span>
         )}
       </label>
     );

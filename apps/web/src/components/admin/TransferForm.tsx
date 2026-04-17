@@ -78,21 +78,21 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
   return (
     <div className="space-y-6">
       {/* Form Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-2xl mx-auto">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-8 max-w-2xl mx-auto">
         {/* Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center size-12 rounded-xl bg-blue-50 text-primary mb-3">
             <Icon name="swap_horiz" size="lg" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Temsilci Devir Islemi</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Temsilci Devir Islemi</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Musteri ve teklif sahipligini temsilciler arasinda aktarin
           </p>
         </div>
 
         {/* From User */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
             Devredilecek Temsilci
           </label>
           <div className="relative">
@@ -102,7 +102,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
                 setFromUserId(e.target.value ? Number(e.target.value) : null);
                 setPreview(null);
               }}
-              className="w-full h-14 bg-white border border-slate-200 rounded-xl text-slate-900 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+              className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
             >
               <option value="">Temsilci secin...</option>
               {users
@@ -113,14 +113,14 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
                   </option>
                 ))}
             </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
               <Icon name="expand_more" size="sm" />
             </div>
           </div>
           {fromUser && (
             <div className="flex items-center gap-3 mt-2 px-1">
               <Avatar name={fromUser.fullName} src={fromUser.avatarUrl} size="sm" />
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-slate-600 dark:text-slate-300">
                 {fromUser.fullName} - {fromUser.customerCount ?? 0} musteri
               </span>
             </div>
@@ -129,14 +129,14 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
 
         {/* Arrow */}
         <div className="flex justify-center py-2">
-          <div className="size-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+          <div className="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
             <Icon name="arrow_downward" size="sm" />
           </div>
         </div>
 
         {/* To User */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
             Devralacak Temsilci
           </label>
           <div className="relative">
@@ -146,7 +146,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
                 setToUserId(e.target.value ? Number(e.target.value) : null);
                 setPreview(null);
               }}
-              className="w-full h-14 bg-white border border-slate-200 rounded-xl text-slate-900 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+              className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
             >
               <option value="">Temsilci secin...</option>
               {availableToUsers.map((u) => (
@@ -155,14 +155,14 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
                 </option>
               ))}
             </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
               <Icon name="expand_more" size="sm" />
             </div>
           </div>
           {toUser && (
             <div className="flex items-center gap-3 mt-2 px-1">
               <Avatar name={toUser.fullName} src={toUser.avatarUrl} size="sm" />
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-slate-600 dark:text-slate-300">
                 {toUser.fullName} - {toUser.customerCount ?? 0} musteri
               </span>
             </div>
@@ -171,7 +171,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
 
         {/* Scope radio buttons */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-slate-700 mb-3">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
             Hangi Kayitlar Devredilsin?
           </label>
           <div className="space-y-3">
@@ -195,7 +195,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
                   <div className="size-5 rounded-full border-2 border-slate-300 peer-checked:border-primary transition-colors" />
                   <div className="absolute size-2.5 rounded-full bg-primary scale-0 peer-checked:scale-100 transition-transform" />
                 </div>
-                <span className="text-sm text-slate-700 group-hover:text-slate-900 transition-colors">
+                <span className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:text-slate-100 transition-colors">
                   {opt.label}
                 </span>
               </label>
@@ -219,7 +219,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
 
       {/* Preview section */}
       {preview && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 max-w-2xl mx-auto">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-8 max-w-2xl mx-auto">
           {/* Summary badge */}
           <div className="flex justify-center mb-6">
             <span className="inline-flex items-center gap-2 bg-blue-50 text-primary rounded-full px-4 py-2 text-sm font-bold">
@@ -232,7 +232,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="flex items-center gap-2">
               <Avatar name={preview.sourceUser.fullName} size="md" />
-              <span className="font-semibold text-slate-900">
+              <span className="font-semibold text-slate-900 dark:text-slate-100">
                 {preview.sourceUser.fullName}
               </span>
             </div>
@@ -241,7 +241,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
             </div>
             <div className="flex items-center gap-2">
               <Avatar name={preview.targetUser.fullName} size="md" />
-              <span className="font-semibold text-slate-900">
+              <span className="font-semibold text-slate-900 dark:text-slate-100">
                 {preview.targetUser.fullName}
               </span>
             </div>
@@ -249,23 +249,23 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-slate-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-center">
+              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.customers}
               </p>
-              <p className="text-xs text-slate-500 mt-1">musteri</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">musteri</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-center">
+              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.quotations}
               </p>
-              <p className="text-xs text-slate-500 mt-1">acik teklif</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">acik teklif</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-center">
+              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.activities}
               </p>
-              <p className="text-xs text-slate-500 mt-1">aktivite kaydi</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">aktivite kaydi</p>
             </div>
           </div>
 
@@ -281,7 +281,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={handleCancel}
-              className="text-sm text-slate-500 hover:text-slate-700 font-medium px-4 py-2 transition-colors"
+              className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 font-medium px-4 py-2 transition-colors"
             >
               Iptal
             </button>

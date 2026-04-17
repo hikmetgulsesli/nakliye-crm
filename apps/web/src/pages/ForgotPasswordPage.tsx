@@ -70,8 +70,8 @@ export default function ForgotPasswordPage() {
             </div>
           </div>
 
-          <h1 className="text-center text-3xl font-black text-slate-900">Sifremi Unuttum</h1>
-          <p className="mt-2 text-center text-sm text-slate-500">
+          <h1 className="text-center text-3xl font-black text-slate-900 dark:text-slate-100">Sifremi Unuttum</h1>
+          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
             E-posta adresinizi girin, sifre sifirlama linki gonderelim.
           </p>
 
@@ -101,21 +101,21 @@ export default function ForgotPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
+                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
                   E-posta Adresi
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
                     mail
                   </span>
                   <input
                     type="email"
                     placeholder="ornek@sirket.com"
                     className={cn(
-                      'w-full rounded-xl border bg-white py-3 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2',
+                      'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
                       errors.email
                         ? 'border-red-300 focus:ring-red-300'
-                        : 'border-slate-200 focus:ring-[#e30a17]/30',
+                        : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
                     )}
                     {...register('email', {
                       required: 'E-posta adresi zorunludur',
@@ -148,7 +148,7 @@ export default function ForgotPasswordPage() {
 
               <Link
                 to="/login"
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60"
               >
                 <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                 Giris Sayfasina Don
@@ -160,7 +160,7 @@ export default function ForgotPasswordPage() {
 
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
-        <p className="text-center text-sm text-slate-400">
+        <p className="text-center text-sm text-slate-400 dark:text-slate-500">
           &copy; 2026 NakliyeCRM. Tum haklari saklidir.
         </p>
       </footer>

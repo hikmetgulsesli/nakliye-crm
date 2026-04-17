@@ -228,7 +228,7 @@ export default function ProfilePage() {
             {/* Avatar with camera overlay */}
             <div className="relative group">
               <div
-                className="size-24 rounded-full bg-slate-200 flex items-center justify-center text-2xl font-bold text-slate-600 overflow-hidden cursor-pointer"
+                className="size-24 rounded-full bg-slate-200 flex items-center justify-center text-2xl font-bold text-slate-600 dark:text-slate-300 overflow-hidden cursor-pointer"
                 onClick={handleAvatarClick}
               >
                 {avatarPreview ? (
@@ -316,7 +316,7 @@ export default function ProfilePage() {
             {/* Password strength indicator */}
             {newPassword.length > 0 && (
               <div className="space-y-1.5">
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div
                     className={cn(
                       'h-full rounded-full transition-all duration-300',
@@ -325,7 +325,7 @@ export default function ProfilePage() {
                     style={{ width: strength.width }}
                   />
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Sifre Gucu: <span className="font-medium">{strength.label}</span>
                 </p>
               </div>
@@ -346,12 +346,12 @@ export default function ProfilePage() {
             />
 
             {/* 2FA Toggle */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+            <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
               <div>
-                <p className="text-sm font-medium text-slate-900">
+                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                   Iki Faktorlu Dogrulama
                 </p>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Hesabiniza ekstra guvenlik katmani ekleyin.
                 </p>
               </div>
@@ -369,7 +369,7 @@ export default function ProfilePage() {
               >
                 <span
                   className={cn(
-                    'inline-block h-4 w-4 rounded-full bg-white transition-transform shadow-sm',
+                    'inline-block h-4 w-4 rounded-full bg-white dark:bg-slate-900 transition-transform shadow-sm',
                     twoFactorEnabled ? 'translate-x-6' : 'translate-x-1',
                   )}
                 />
@@ -378,14 +378,14 @@ export default function ProfilePage() {
 
             {/* 2FA Secret / QR code */}
             {twoFactorEnabled && twoFactorSecret && (
-              <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <p className="text-xs font-medium text-slate-700 mb-1">
+              <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-800">
+                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   2FA Kurulum Anahtari
                 </p>
-                <code className="block text-sm font-mono bg-white px-3 py-2 rounded border border-slate-200 text-slate-900 break-all select-all">
+                <code className="block text-sm font-mono bg-white dark:bg-slate-900 px-3 py-2 rounded border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 break-all select-all">
                   {twoFactorSecret}
                 </code>
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                   Bu anahtari Google Authenticator veya benzeri bir uygulamaya girin.
                 </p>
               </div>
@@ -406,14 +406,14 @@ export default function ProfilePage() {
 
       {/* Full-width Notification Preferences */}
       <Card title="Bildirim Tercihleri">
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 dark:divide-slate-800">
           {/* Email Notifications */}
           <div className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
             <div>
-              <p className="text-sm font-medium text-slate-900">
+              <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                 E-posta Bildirimleri
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Onemli guncellemeler icin e-posta alabilirsiniz.
               </p>
             </div>
@@ -429,7 +429,7 @@ export default function ProfilePage() {
             >
               <span
                 className={cn(
-                  'inline-block h-4 w-4 rounded-full bg-white transition-transform shadow-sm',
+                  'inline-block h-4 w-4 rounded-full bg-white dark:bg-slate-900 transition-transform shadow-sm',
                   emailNotifications ? 'translate-x-6' : 'translate-x-1',
                 )}
               />
@@ -439,10 +439,10 @@ export default function ProfilePage() {
           {/* Daily Summary */}
           <div className="flex items-center justify-between py-4">
             <div>
-              <p className="text-sm font-medium text-slate-900">
+              <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                 Gunluk Ozet E-postasi
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Her gun saat 09:00'da gunluk aktivite ozeti alin.
               </p>
             </div>
@@ -458,7 +458,7 @@ export default function ProfilePage() {
             >
               <span
                 className={cn(
-                  'inline-block h-4 w-4 rounded-full bg-white transition-transform shadow-sm',
+                  'inline-block h-4 w-4 rounded-full bg-white dark:bg-slate-900 transition-transform shadow-sm',
                   dailySummary ? 'translate-x-6' : 'translate-x-1',
                 )}
               />
@@ -468,10 +468,10 @@ export default function ProfilePage() {
           {/* Critical Alerts */}
           <div className="flex items-center justify-between py-4 last:pb-0">
             <div>
-              <p className="text-sm font-medium text-slate-900">
+              <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                 Kritik Uyari Bildirimleri
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Acil durumlarda anlik bildirim alin.
               </p>
             </div>
@@ -487,7 +487,7 @@ export default function ProfilePage() {
             >
               <span
                 className={cn(
-                  'inline-block h-4 w-4 rounded-full bg-white transition-transform shadow-sm',
+                  'inline-block h-4 w-4 rounded-full bg-white dark:bg-slate-900 transition-transform shadow-sm',
                   criticalAlerts ? 'translate-x-6' : 'translate-x-1',
                 )}
               />
@@ -495,7 +495,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-slate-200">
+        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
           <Button
             icon="save"
             variant="secondary"

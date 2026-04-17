@@ -89,7 +89,7 @@ export function RouteVisual({
         </span>
         <span
           className={cn(
-            'font-semibold text-slate-700 truncate',
+            'font-semibold text-slate-700 dark:text-slate-300 truncate',
             isLg ? 'text-base' : isSm ? 'text-xs' : 'text-sm',
           )}
         >
@@ -122,7 +122,7 @@ export function RouteVisual({
         </span>
         <span
           className={cn(
-            'font-semibold text-slate-700 truncate',
+            'font-semibold text-slate-700 dark:text-slate-300 truncate',
             isLg ? 'text-base' : isSm ? 'text-xs' : 'text-sm',
           )}
         >

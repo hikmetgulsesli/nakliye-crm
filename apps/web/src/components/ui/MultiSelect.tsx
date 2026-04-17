@@ -59,7 +59,7 @@ export function MultiSelect({
   return (
     <div ref={ref} className={cn('relative w-full', className)}>
       {label && (
-        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
           {label}
         </label>
       )}
@@ -67,21 +67,25 @@ export function MultiSelect({
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
           'min-h-[48px] w-full bg-white border rounded-xl px-3 py-2 flex items-center flex-wrap gap-1.5 cursor-pointer transition-colors',
-          isOpen ? 'border-primary ring-2 ring-primary/50' : 'border-slate-200',
-          error && 'border-red-400',
+          'dark:bg-slate-900',
+          isOpen
+            ? 'border-primary ring-2 ring-primary/50'
+            : 'border-slate-200 dark:border-slate-700',
+          error && 'border-red-400 dark:border-red-500',
         )}
       >
         {selectedLabels.length === 0 ? (
-          <span className="text-sm text-slate-400">{placeholder}</span>
+          <span className="text-sm text-slate-400 dark:text-slate-500">{placeholder}</span>
         ) : (
           selectedLabels.map((opt) => (
             <span
               key={opt.value}
-              className="inline-flex items-center gap-1 bg-primary/10 text-primary rounded-lg px-3 py-1 text-sm font-medium"
+              className="inline-flex items-center gap-1 bg-primary/10 text-primary rounded-lg px-3 py-1 text-sm font-medium dark:bg-primary/20 dark:text-primary-300"
             >
               {opt.label}
               <button
                 onClick={(e) => removeOption(opt.value, e)}
+                aria-label={`${opt.label} kaldir`}
                 className="hover:text-primary/70 transition-colors"
               >
                 <Icon name="close" size="sm" />
@@ -93,7 +97,7 @@ export function MultiSelect({
           <Icon
             name={isOpen ? 'expand_less' : 'expand_more'}
             size="sm"
-            className="text-slate-400"
+            className="text-slate-400 dark:text-slate-500"
           />
         </div>
       </div>
@@ -101,7 +105,7 @@ export function MultiSelect({
       {/* Dropdown list */}
       <div
         className={cn(
-          'absolute z-40 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto transition-all duration-150 origin-top',
+          'absolute z-40 mt-1 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-60 overflow-y-auto transition-all duration-150 origin-top',
           isOpen
             ? 'opacity-100 scale-100 pointer-events-auto'
             : 'opacity-0 scale-95 pointer-events-none',
@@ -113,19 +117,24 @@ export function MultiSelect({
             <button
               key={opt.value}
               onClick={() => toggleOption(opt.value)}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               <div
                 className={cn(
                   'flex items-center justify-center size-5 rounded border transition-colors flex-shrink-0',
                   isSelected
                     ? 'bg-primary border-primary text-white'
-                    : 'border-slate-300',
+                    : 'border-slate-300 dark:border-slate-600',
                 )}
               >
                 {isSelected && <Icon name="check" size="sm" />}
               </div>
-              <span className={cn('text-slate-700', isSelected && 'font-medium')}>
+              <span
+                className={cn(
+                  'text-slate-700 dark:text-slate-200',
+                  isSelected && 'font-medium',
+                )}
+              >
                 {opt.label}
               </span>
             </button>
@@ -133,7 +142,7 @@ export function MultiSelect({
         })}
       </div>
 
-      {error && <p className="mt-1.5 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1.5 text-sm text-red-500 dark:text-red-400">{error}</p>}
     </div>
   );
 }

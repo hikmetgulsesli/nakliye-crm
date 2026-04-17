@@ -30,7 +30,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
         <div className="space-y-4">
           {/* Transport Modes */}
           <div>
-            <p className="text-sm text-slate-500 mb-2">Tasima Modlari</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Tasima Modlari</p>
             <div className="flex flex-wrap gap-2">
               {customer.transportModes && customer.transportModes.length > 0 ? (
                 customer.transportModes.map((mode) => (
@@ -46,33 +46,33 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
               )}
             </div>
           </div>
 
           {/* Service Types */}
           <div>
-            <p className="text-sm text-slate-500 mb-2">Servis Tipleri</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Servis Tipleri</p>
             <div className="flex flex-wrap gap-2">
               {customer.serviceTypes && customer.serviceTypes.length > 0 ? (
                 customer.serviceTypes.map((type) => (
                   <span
                     key={type}
-                    className="bg-slate-100 text-slate-700 rounded-full px-3 py-1 text-sm font-medium"
+                    className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full px-3 py-1 text-sm font-medium"
                   >
                     {type}
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
               )}
             </div>
           </div>
 
           {/* Incoterms */}
           <div>
-            <p className="text-sm text-slate-500 mb-2">Incoterms</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Incoterms</p>
             <div className="flex flex-wrap gap-2">
               {customer.incoterms && customer.incoterms.length > 0 ? (
                 customer.incoterms.map((term) => (
@@ -84,7 +84,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
               )}
             </div>
           </div>
@@ -92,8 +92,8 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
           {/* Direction */}
           {customer.direction && (
             <div>
-              <p className="text-sm text-slate-500 mb-2">Yon</p>
-              <span className="text-sm text-slate-700">{customer.direction}</span>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Yon</p>
+              <span className="text-sm text-slate-700 dark:text-slate-300">{customer.direction}</span>
             </div>
           )}
         </div>
@@ -103,7 +103,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       <Card title="Sik Kullanilan Hatlar">
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-slate-500 mb-2">Cikis Ulkeleri</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Cikis Ulkeleri</p>
             <div className="flex flex-wrap gap-2">
               {customer.originCountries && customer.originCountries.length > 0 ? (
                 customer.originCountries.map((country) => (
@@ -116,13 +116,13 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
               )}
             </div>
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 mb-2">Varis Ulkeleri</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Varis Ulkeleri</p>
             <div className="flex flex-wrap gap-2">
               {customer.destinationCountries &&
               customer.destinationCountries.length > 0 ? (
@@ -136,7 +136,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
               )}
             </div>
           </div>
@@ -150,8 +150,8 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
           <InfoRow icon="trending_up" label="Potansiyel" value={customer.potential} />
           {customer.notes && (
             <div>
-              <p className="text-sm text-slate-500 mb-1">Notlar</p>
-              <p className="text-sm text-slate-700 bg-slate-50 rounded-xl p-3">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Notlar</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3">
                 {customer.notes}
               </p>
             </div>
@@ -191,13 +191,13 @@ function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="flex items-center justify-center size-9 rounded-lg bg-slate-100 text-slate-500 flex-shrink-0 mt-0.5">
+      <div className="flex items-center justify-center size-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5">
         <Icon name={icon} size="sm" />
       </div>
       <div>
-        <p className="text-xs text-slate-500">{label}</p>
-        <p className="text-sm font-medium text-slate-900">
-          {value || <span className="text-slate-400">Belirtilmemis</span>}
+        <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+          {value || <span className="text-slate-400 dark:text-slate-500">Belirtilmemis</span>}
         </p>
       </div>
     </div>

@@ -3,6 +3,7 @@ import forms from '@tailwindcss/forms';
 
 const config: Config = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -34,8 +35,10 @@ const config: Config = {
         },
         surface: '#f8fafc',
         'bg-light': '#f6f6f8',
+        'bg-dark': '#0b1220',
         'sidebar-dark': '#0f172a',
         'text-main': '#1e293b',
+        'text-dark': '#e2e8f0',
       },
       fontFamily: {
         display: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],

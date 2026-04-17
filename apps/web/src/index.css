@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply transition-colors duration-200;
+  }
+
   body {
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    @apply bg-bg-light text-text-main;
+    @apply bg-bg-light text-text-main dark:bg-bg-dark dark:text-text-dark;
   }
 
   h1,
@@ -49,11 +53,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-gray-300 dark:bg-slate-700 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-gray-400 dark:bg-slate-600;
 }
 
 /* Print styles */

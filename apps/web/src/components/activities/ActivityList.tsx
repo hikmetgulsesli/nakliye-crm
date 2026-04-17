@@ -17,7 +17,7 @@ const ACTIVITY_TYPE_CONFIG: Record<string, { icon: string; color: string; label:
 
 const OUTCOME_CONFIG: Record<string, { color: string; label: string }> = {
   olumlu: { color: 'text-emerald-600 bg-emerald-50', label: 'Olumlu' },
-  notr: { color: 'text-slate-600 bg-slate-50', label: 'Notr' },
+  notr: { color: 'text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60', label: 'Notr' },
   olumsuz: { color: 'text-red-600 bg-red-50', label: 'Olumsuz' },
   teklif_istendi: { color: 'text-blue-600 bg-blue-50', label: 'Teklif Istendi' },
 };
@@ -41,7 +41,7 @@ export function ActivityList({
     return (
       <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="animate-pulse flex gap-3 p-4 border border-slate-100 rounded-xl">
+          <div key={i} className="animate-pulse flex gap-3 p-4 border border-slate-100 dark:border-slate-800 rounded-xl">
             <div className="size-10 bg-slate-200 rounded-full flex-shrink-0" />
             <div className="flex-1 space-y-2">
               <div className="h-4 bg-slate-200 rounded w-1/3" />
@@ -56,7 +56,7 @@ export function ActivityList({
 
   if (activities.length === 0) {
     return (
-      <div className="text-center py-10 text-slate-400 text-sm">
+      <div className="text-center py-10 text-slate-400 dark:text-slate-500 text-sm">
         {emptyMessage}
       </div>
     );
@@ -77,7 +77,7 @@ export function ActivityList({
         return (
           <div
             key={activity.id}
-            className="flex gap-3 p-4 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors"
+            className="flex gap-3 p-4 border border-slate-100 dark:border-slate-800 rounded-xl hover:border-slate-200 dark:border-slate-800 transition-colors"
           >
             {/* Type icon */}
             <div
@@ -92,7 +92,7 @@ export function ActivityList({
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-sm text-slate-900">
+                <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
                   {typeConfig.label}
                 </span>
                 {outcomeConfig && (
@@ -106,7 +106,7 @@ export function ActivityList({
                   </span>
                 )}
                 {activity.durationMinutes && (
-                  <span className="text-xs text-slate-400 flex items-center gap-0.5">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-0.5">
                     <Icon name="timer" size="sm" className="!text-[14px]" />
                     {activity.durationMinutes} dk
                   </span>
@@ -114,12 +114,12 @@ export function ActivityList({
               </div>
 
               {activity.notes && (
-                <p className="text-sm text-slate-600 line-clamp-2 mb-1">
+                <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2 mb-1">
                   {activity.notes}
                 </p>
               )}
 
-              <div className="flex items-center gap-3 text-xs text-slate-400">
+              <div className="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
                 <span className="flex items-center gap-1">
                   <Icon name="schedule" size="sm" className="!text-[14px]" />
                   {formatDate(activity.activityDate)}

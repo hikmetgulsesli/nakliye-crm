@@ -67,7 +67,7 @@ export function AlertWidgets({ alerts, className }: AlertWidgetsProps) {
             key={alert.id}
             onClick={() => navigate(ALERT_ROUTES[alert.type])}
             className={cn(
-              'bg-white rounded-xl border border-slate-200 shadow-sm p-5 border-l-4 hover:shadow-md transition-shadow cursor-pointer',
+              'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 border-l-4 hover:shadow-md transition-shadow cursor-pointer',
               config.border,
             )}
           >
@@ -83,12 +83,12 @@ export function AlertWidgets({ alerts, className }: AlertWidgetsProps) {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-sm font-bold text-slate-900">{config.title}</h4>
-                  <span className="text-2xl font-bold text-slate-900 font-display">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">{config.title}</h4>
+                  <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 font-display">
                     {alert.count}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">{alert.description}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{alert.description}</p>
               </div>
             </div>
           </div>

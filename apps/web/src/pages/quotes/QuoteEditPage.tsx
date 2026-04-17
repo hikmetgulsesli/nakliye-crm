@@ -65,7 +65,7 @@ export default function QuoteEditPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
         <span className="material-symbols-outlined text-4xl text-red-400">error</span>
-        <p className="text-slate-600">{error}</p>
+        <p className="text-slate-600 dark:text-slate-300">{error}</p>
       </div>
     );
   }

@@ -149,21 +149,21 @@ export function ActivityModal({
       <div className="space-y-5">
         {/* Bagli Musteri (readonly) */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
             Bagli Musteri
           </label>
-          <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+          <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 rounded-xl p-3">
             <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary font-bold text-xs">
               {customerName.charAt(0)}
             </div>
-            <span className="font-medium text-slate-700 text-sm">{customerName}</span>
-            <Icon name="lock" size="sm" className="text-slate-400 ml-auto" />
+            <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">{customerName}</span>
+            <Icon name="lock" size="sm" className="text-slate-400 dark:text-slate-500 ml-auto" />
           </div>
         </div>
 
         {/* Aktivite Tipi - Icon buttons */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
             Aktivite Tipi
           </label>
           <Controller
@@ -180,7 +180,7 @@ export function ActivityModal({
                       'flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl border-2 transition-all text-xs font-medium',
                       field.value === type.value
                         ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300',
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:border-slate-300',
                     )}
                   >
                     <Icon name={type.icon} size="sm" />
@@ -203,12 +203,12 @@ export function ActivityModal({
             {...register('activityDate')}
           />
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Saat
             </label>
             <input
               type="time"
-              className="w-full h-12 bg-white border border-slate-200 rounded-xl text-slate-900 px-4 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+              className="w-full h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
               {...register('activityTime')}
             />
           </div>
@@ -240,7 +240,7 @@ export function ActivityModal({
 
         {/* Sonuc */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
             Sonuc
           </label>
           <Controller
@@ -255,7 +255,7 @@ export function ActivityModal({
                       'flex items-center gap-3 px-4 py-2.5 rounded-xl border cursor-pointer transition-all',
                       field.value === option.value
                         ? 'border-primary bg-primary/5'
-                        : 'border-slate-200 hover:border-slate-300',
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300',
                     )}
                   >
                     <input
@@ -275,7 +275,7 @@ export function ActivityModal({
                     <span
                       className={cn(
                         'text-sm font-medium',
-                        field.value === option.value ? 'text-primary' : 'text-slate-600',
+                        field.value === option.value ? 'text-primary' : 'text-slate-600 dark:text-slate-300',
                       )}
                     >
                       {option.label}

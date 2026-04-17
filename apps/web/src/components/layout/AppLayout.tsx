@@ -38,7 +38,7 @@ export default function AppLayout() {
       {/* Main content area */}
       <div className="ml-64 flex flex-1 flex-col">
         <Header title={title} />
-        <main className="flex-1 overflow-y-auto bg-bg-light p-6">
+        <main className="flex-1 overflow-y-auto bg-bg-light dark:bg-bg-dark p-6">
           <Outlet />
         </main>
       </div>

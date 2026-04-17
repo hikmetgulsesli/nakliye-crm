@@ -29,14 +29,14 @@ export function LookupValuesTable({
 }: LookupValuesTableProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="animate-pulse">
-          <div className="px-6 py-5 border-b border-slate-100">
+          <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800">
             <div className="h-5 bg-slate-200 rounded w-48 mb-2" />
-            <div className="h-3 bg-slate-100 rounded w-64" />
+            <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-64" />
           </div>
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-6 py-4 border-b border-slate-100">
+            <div key={i} className="flex items-center gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
               <div className="h-4 bg-slate-200 rounded w-6" />
               <div className="h-4 bg-slate-200 rounded w-8" />
               <div className="flex-1 h-4 bg-slate-200 rounded w-32" />
@@ -50,13 +50,13 @@ export function LookupValuesTable({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+      <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h3 className="text-lg font-bold text-slate-900">{categoryLabel}</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{categoryLabel}</h3>
           {categoryDescription && (
-            <p className="text-sm text-slate-500 mt-0.5">{categoryDescription}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{categoryDescription}</p>
           )}
         </div>
         <button
@@ -72,29 +72,29 @@ export function LookupValuesTable({
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-slate-50">
+            <tr className="bg-slate-50 dark:bg-slate-800/60">
               <th className="w-10" />
-              <th className="text-slate-500 text-xs uppercase tracking-wider px-4 py-3 text-left font-semibold w-16">
+              <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-4 py-3 text-left font-semibold w-16">
                 Sira
               </th>
-              <th className="text-slate-500 text-xs uppercase tracking-wider px-6 py-3 text-left font-semibold">
+              <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-left font-semibold">
                 Deger
               </th>
-              <th className="text-slate-500 text-xs uppercase tracking-wider px-6 py-3 text-left font-semibold">
+              <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-left font-semibold">
                 Durum
               </th>
-              <th className="text-slate-500 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold">
+              <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold">
                 Kullanan Kayit
               </th>
-              <th className="text-slate-500 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold w-24">
+              <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold w-24">
                 Islemler
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {values.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-slate-400 text-sm">
+                <td colSpan={6} className="px-6 py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                   Bu kategoride henuz deger bulunmuyor
                 </td>
               </tr>
@@ -110,24 +110,24 @@ export function LookupValuesTable({
                   }}
                   onDragEnd={() => onDragEnd?.()}
                   className={cn(
-                    'hover:bg-slate-50 transition-colors group',
+                    'hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 transition-colors group',
                     !item.isActive && 'opacity-50',
                   )}
                 >
                   {/* Drag handle */}
                   <td className="pl-4 py-4">
-                    <span className="text-slate-300 group-hover:text-slate-400 cursor-grab active:cursor-grabbing">
+                    <span className="text-slate-300 group-hover:text-slate-400 dark:text-slate-500 cursor-grab active:cursor-grabbing">
                       <Icon name="drag_indicator" size="sm" />
                     </span>
                   </td>
 
                   {/* SIRA */}
-                  <td className="px-4 py-4 text-sm text-slate-500 font-mono">
+                  <td className="px-4 py-4 text-sm text-slate-500 dark:text-slate-400 font-mono">
                     {item.sortOrder}
                   </td>
 
                   {/* DEGER */}
-                  <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                  <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
                     {item.value}
                   </td>
 
@@ -142,7 +142,7 @@ export function LookupValuesTable({
                   </td>
 
                   {/* KULLANAN KAYIT */}
-                  <td className="px-6 py-4 text-center text-sm text-slate-600">
+                  <td className="px-6 py-4 text-center text-sm text-slate-600 dark:text-slate-300">
                     {(item as unknown as Record<string, unknown>).usageCount as React.ReactNode ?? 0}
                   </td>
 
@@ -151,14 +151,14 @@ export function LookupValuesTable({
                     <div className="flex items-center justify-center gap-1">
                       <button
                         onClick={() => onEdit(item)}
-                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-blue-50 transition-colors"
+                        className="p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:text-primary hover:bg-blue-50 transition-colors"
                         title="Duzenle"
                       >
                         <Icon name="edit" size="sm" />
                       </button>
                       <button
                         onClick={() => onDelete(item)}
-                        className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                         title="Sil"
                       >
                         <Icon name="delete" size="sm" />

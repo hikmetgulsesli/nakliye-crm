@@ -21,11 +21,11 @@ function KPISkeletons() {
       {Array.from({ length: 5 }).map((_, i) => (
         <div
           key={i}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse"
+          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse"
         >
           <div className="flex items-start justify-between">
             <div className="size-12 rounded-xl bg-slate-200" />
-            <div className="h-5 w-12 rounded-full bg-slate-100" />
+            <div className="h-5 w-12 rounded-full bg-slate-100 dark:bg-slate-800" />
           </div>
           <div className="mt-4 space-y-2">
             <div className="h-3 w-24 rounded bg-slate-200" />
@@ -39,13 +39,13 @@ function KPISkeletons() {
 
 function TableSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-pulse">
-      <div className="px-6 py-5 border-b border-slate-200">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden animate-pulse">
+      <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800">
         <div className="h-5 w-64 rounded bg-slate-200" />
       </div>
-      <div className="bg-slate-50 h-12" />
+      <div className="bg-slate-50 dark:bg-slate-800/60 h-12" />
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 px-6 py-4 border-t border-slate-100">
+        <div key={i} className="flex items-center gap-4 px-6 py-4 border-t border-slate-100 dark:border-slate-800">
           <div className="size-8 rounded-full bg-slate-200" />
           <div className="h-4 bg-slate-200 rounded w-28" />
           <div className="h-4 bg-slate-200 rounded w-12" />
@@ -62,28 +62,28 @@ function TableSkeleton() {
 function ChartsSkeleton() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse">
         <div className="h-5 w-40 rounded bg-slate-200 mb-6" />
         <div className="space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="flex items-center gap-3">
               <div className="h-4 w-8 rounded bg-slate-200" />
-              <div className="h-4 flex-1 rounded bg-slate-100" />
+              <div className="h-4 flex-1 rounded bg-slate-100 dark:bg-slate-800" />
               <div className="h-4 w-12 rounded bg-slate-200" />
             </div>
           ))}
         </div>
       </div>
       <div className="flex flex-col gap-8">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse">
           <div className="h-5 w-36 rounded bg-slate-200 mb-6" />
-          <div className="h-32 rounded bg-slate-100" />
+          <div className="h-32 rounded bg-slate-100 dark:bg-slate-800" />
         </div>
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 animate-pulse">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-pulse">
           <div className="h-5 w-36 rounded bg-slate-200 mb-6" />
           <div className="space-y-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-6 rounded bg-slate-100" />
+              <div key={i} className="h-6 rounded bg-slate-100 dark:bg-slate-800" />
             ))}
           </div>
         </div>
@@ -128,8 +128,8 @@ export function AdminDashboard() {
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                 activePeriod === tab.key
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900',
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:text-slate-100',
               )}
             >
               {tab.label}

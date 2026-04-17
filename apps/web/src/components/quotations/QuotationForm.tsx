@@ -187,7 +187,7 @@ export function QuotationForm({
       {(refId || onSaveDraft) && (
         <div className="flex items-center justify-between mb-4">
           {refId && (
-            <span className="text-sm text-slate-400 font-mono">
+            <span className="text-sm text-slate-400 dark:text-slate-500 font-mono">
               REF ID: {refId}
             </span>
           )}
@@ -209,22 +209,22 @@ export function QuotationForm({
           <div className="space-y-5">
             {/* Bagli Musteri */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Bagli Musteri
               </label>
               <div className="relative">
                 {selectedCustomer ? (
-                  <div className="flex items-center justify-between border border-slate-200 rounded-xl p-3 bg-slate-50">
+                  <div className="flex items-center justify-between border border-slate-200 dark:border-slate-800 rounded-xl p-3 bg-slate-50 dark:bg-slate-800/60">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center size-10 rounded-full bg-primary/10 text-primary font-bold text-sm">
                         {selectedCustomer.companyName.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-semibold text-slate-900 text-sm">
+                        <p className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
                           {selectedCustomer.companyName}
                         </p>
                         {selectedCustomer.contactName && (
-                          <p className="text-xs text-slate-500">{selectedCustomer.contactName}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{selectedCustomer.contactName}</p>
                         )}
                       </div>
                     </div>
@@ -234,7 +234,7 @@ export function QuotationForm({
                         setSelectedCustomer(null);
                         setValue('customerId', 0);
                       }}
-                      className="text-slate-400 hover:text-slate-600 p-1"
+                      className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:text-slate-300 p-1"
                     >
                       <Icon name="close" size="sm" />
                     </button>
@@ -253,22 +253,22 @@ export function QuotationForm({
                       error={errors.customerId?.message}
                     />
                     {showDropdown && customerResults.length > 0 && (
-                      <div className="absolute z-10 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                      <div className="absolute z-10 mt-1 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg max-h-60 overflow-y-auto">
                         {customerResults.map((c) => (
                           <button
                             key={c.id}
                             type="button"
                             onClick={() => handleSelectCustomer(c)}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 text-left border-b border-slate-50 last:border-0"
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 text-left border-b border-slate-50 last:border-0"
                           >
                             <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex-shrink-0">
                               {c.companyName.charAt(0)}
                             </div>
                             <div className="min-w-0">
-                              <p className="font-medium text-slate-900 text-sm truncate">
+                              <p className="font-medium text-slate-900 dark:text-slate-100 text-sm truncate">
                                 {c.companyName}
                               </p>
-                              <p className="text-xs text-slate-500 truncate">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                                 {c.contactName || c.phone}
                               </p>
                             </div>
@@ -297,7 +297,7 @@ export function QuotationForm({
 
             {/* Transport Mode button group */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Tasima Modu
               </label>
               <div className="flex gap-2">
@@ -310,7 +310,7 @@ export function QuotationForm({
                       'flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all font-medium text-sm flex-1 justify-center',
                       watchTransportMode === mode.value
                         ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300',
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-slate-300',
                     )}
                   >
                     <Icon name={mode.icon} size="sm" />
@@ -330,7 +330,7 @@ export function QuotationForm({
 
             {/* Origin */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
                 Cikis Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
@@ -350,7 +350,7 @@ export function QuotationForm({
 
             {/* Destination */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
                 Varis Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
@@ -383,7 +383,7 @@ export function QuotationForm({
           <div className="space-y-5">
             {/* Price + Currency */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Teklif Tutari
               </label>
               <div className="flex gap-3">
@@ -396,7 +396,7 @@ export function QuotationForm({
                         type="number"
                         placeholder="0.00"
                         step="0.01"
-                        className="w-full h-14 bg-white border border-slate-200 rounded-xl text-slate-900 px-4 text-2xl font-bold transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                        className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 text-2xl font-bold transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                       />
@@ -405,7 +405,7 @@ export function QuotationForm({
                 </div>
                 <div className="w-32">
                   <select
-                    className="w-full h-14 bg-white border border-slate-200 rounded-xl text-slate-900 px-4 font-bold appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 font-bold appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
                     {...register('currency')}
                   >
                     {CURRENCY_OPTIONS.map((opt) => (
@@ -448,7 +448,7 @@ export function QuotationForm({
 
             {/* Assigned User */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Atanan Temsilci
               </label>
               <Controller
@@ -457,7 +457,7 @@ export function QuotationForm({
                 render={({ field }) => (
                   <div className="space-y-2">
                     <select
-                      className="w-full h-12 bg-white border border-slate-200 rounded-xl text-slate-900 px-4 appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                      className="w-full h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
                       value={field.value || ''}
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
                     >
@@ -477,7 +477,7 @@ export function QuotationForm({
                           name={users.find((u) => u.value === field.value.toString())?.label}
                           size="sm"
                         />
-                        <span className="text-sm text-slate-700 font-medium">
+                        <span className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                           {users.find((u) => u.value === field.value.toString())?.label}
                         </span>
                       </div>

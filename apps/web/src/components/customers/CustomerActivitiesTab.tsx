@@ -14,7 +14,7 @@ const ACTIVITY_TYPE_ICONS: Record<string, { icon: string; color: string }> = {
   Toplanti: { icon: 'groups', color: 'bg-emerald-100 text-emerald-600' },
   Ziyaret: { icon: 'location_on', color: 'bg-amber-100 text-amber-600' },
   Teklif: { icon: 'request_quote', color: 'bg-indigo-100 text-indigo-600' },
-  Not: { icon: 'note', color: 'bg-slate-100 text-slate-600' },
+  Not: { icon: 'note', color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' },
 };
 
 function formatDateTime(dateStr: string): string {
@@ -63,7 +63,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
         <div className="space-y-6">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="flex gap-4">
@@ -81,7 +81,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
 
   if (activities.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <EmptyState
           icon="timeline"
           title="Henuz aktivite yok"
@@ -92,10 +92,10 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <h3 className="text-lg font-bold text-slate-900 mb-6">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+      <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">
         Aktiviteler
-        <span className="ml-2 text-sm font-normal text-slate-500">
+        <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
           ({activities.length})
         </span>
       </h3>
@@ -109,7 +109,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
           {activities.map((activity) => {
             const typeConfig = ACTIVITY_TYPE_ICONS[activity.activityType] || {
               icon: 'event',
-              color: 'bg-slate-100 text-slate-600',
+              color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
             };
 
             return (
@@ -128,21 +128,21 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
                 <div className="flex-1 pt-0.5">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-semibold text-slate-900 text-sm">
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
                         {activity.activityType}
                       </p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         {activity.createdBy?.fullName} -{' '}
                         {formatDateTime(activity.activityDate)}
                       </p>
                     </div>
-                    <span className="text-xs text-slate-400 flex-shrink-0">
+                    <span className="text-xs text-slate-400 dark:text-slate-500 flex-shrink-0">
                       {formatRelative(activity.activityDate)}
                     </span>
                   </div>
 
                   {activity.notes && (
-                    <p className="text-sm text-slate-600 mt-2 bg-slate-50 rounded-lg p-3">
+                    <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3">
                       {activity.notes}
                     </p>
                   )}
@@ -150,7 +150,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
                   {activity.outcome && (
                     <div className="mt-2 flex items-center gap-1.5">
                       <Icon name="check_circle" size="sm" className="text-emerald-500" />
-                      <span className="text-sm text-slate-600">
+                      <span className="text-sm text-slate-600 dark:text-slate-300">
                         Sonuc: {activity.outcome}
                       </span>
                     </div>
@@ -159,7 +159,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
                   {activity.nextActionDate && (
                     <div className="mt-2 flex items-center gap-1.5">
                       <Icon name="event" size="sm" className="text-amber-500" />
-                      <span className="text-sm text-slate-600">
+                      <span className="text-sm text-slate-600 dark:text-slate-300">
                         Sonraki islem:{' '}
                         {new Date(activity.nextActionDate).toLocaleDateString('tr-TR')}
                       </span>
@@ -167,7 +167,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
                   )}
 
                   {activity.durationMinutes && (
-                    <span className="inline-flex items-center gap-1 mt-2 text-xs text-slate-400">
+                    <span className="inline-flex items-center gap-1 mt-2 text-xs text-slate-400 dark:text-slate-500">
                       <Icon name="schedule" size="sm" />
                       {activity.durationMinutes} dk
                     </span>

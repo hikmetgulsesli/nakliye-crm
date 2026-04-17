@@ -51,7 +51,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton key={i} className="h-12 w-full rounded-lg" />
@@ -63,7 +63,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
 
   if (quotes.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <EmptyState
           icon="request_quote"
           title="Henuz teklif yok"
@@ -101,21 +101,21 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
       key: 'quoteDate',
       label: 'TARIH',
       render: (row: Quotation) => (
-        <span className="text-slate-700 text-sm">{formatDate(row.quoteDate)}</span>
+        <span className="text-slate-700 dark:text-slate-300 text-sm">{formatDate(row.quoteDate)}</span>
       ),
     },
     {
       key: 'transportMode',
       label: 'TASIMA MODU',
       render: (row: Quotation) => (
-        <span className="text-slate-700 text-sm">{row.transportMode || '-'}</span>
+        <span className="text-slate-700 dark:text-slate-300 text-sm">{row.transportMode || '-'}</span>
       ),
     },
     {
       key: 'route',
       label: 'GUZERGAH',
       render: (row: Quotation) => (
-        <span className="text-slate-700 text-sm">
+        <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.originCountry && row.destinationCountry
             ? `${row.originCountry} → ${row.destinationCountry}`
             : '-'}
@@ -126,7 +126,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
       key: 'price',
       label: 'FIYAT',
       render: (row: Quotation) => (
-        <span className="text-slate-900 font-semibold text-sm">
+        <span className="text-slate-900 dark:text-slate-100 font-semibold text-sm">
           {formatPrice(row.price, row.currency)}
         </span>
       ),
@@ -140,7 +140,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
       key: 'assignedUser',
       label: 'TEMSILCI',
       render: (row: Quotation) => (
-        <span className="text-slate-700 text-sm">
+        <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.assignedUser?.fullName || '-'}
         </span>
       ),
@@ -148,11 +148,11 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <div className="flex items-center justify-between px-6 pt-5 pb-3">
-        <h3 className="text-lg font-bold text-slate-900">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
           Teklifler
-          <span className="ml-2 text-sm font-normal text-slate-500">
+          <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
             ({quotes.length})
           </span>
         </h3>

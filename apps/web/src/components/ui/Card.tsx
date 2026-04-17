@@ -13,7 +13,7 @@ export function Card({ title, action, noPadding = false, className, children }: 
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm',
         !noPadding && 'p-6',
         className,
       )}
@@ -26,7 +26,7 @@ export function Card({ title, action, noPadding = false, className, children }: 
           )}
         >
           {title && (
-            <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h3>
           )}
           {action && <div className="flex-shrink-0">{action}</div>}
         </div>

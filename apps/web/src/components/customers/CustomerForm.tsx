@@ -115,32 +115,44 @@ export function CustomerForm({
   const selectedTransportModes = watch('transportModes') || [];
 
   // --- Real-time conflict detection ---
+  // Triggers when companyName, phones veya emails 500ms sabit kaldiginda
   const watchedCompanyName = watch('companyName');
+  const watchedPhones = watch('phones');
+  const watchedEmails = watch('emails');
+  const phoneKey = (watchedPhones || []).map((p) => p?.value || '').join('|');
+  const emailKey = (watchedEmails || []).map((e) => e?.value || '').join('|');
   const debouncedCompanyName = useDebounce(watchedCompanyName, 500);
+  const debouncedPhoneKey = useDebounce(phoneKey, 500);
+  const debouncedEmailKey = useDebounce(emailKey, 500);
   const [conflictMatches, setConflictMatches] = useState<ConflictMatch[]>([]);
 
   useEffect(() => {
-    if (!debouncedCompanyName || debouncedCompanyName.length < 3) {
+    const hasEnoughName = (debouncedCompanyName || '').length >= 3;
+    const hasPhone = debouncedPhoneKey.replace(/\|/g, '').length >= 10;
+    const hasEmail = /@.+\./.test(debouncedEmailKey);
+    if (!hasEnoughName && !hasPhone && !hasEmail) {
       setConflictMatches([]);
       return;
     }
     let cancelled = false;
     (async () => {
       try {
-        const phones = watch('phones').map((p) => p.value).filter(Boolean).join(', ');
-        const emails = watch('emails').map((e) => e.value).filter(Boolean).join(', ');
+        const phones = (watchedPhones || []).map((p) => p?.value || '').filter(Boolean).join(', ');
+        const emails = (watchedEmails || []).map((e) => e?.value || '').filter(Boolean).join(', ');
         const matches = await customerService.conflictCheck(phones, emails, debouncedCompanyName);
-        // Exclude current customer if editing
+        // Duzenleme ise mevcut kaydi hariç tut
         const filtered = initialData?.id
           ? matches.filter((m) => m.customerId !== initialData.id)
           : matches;
         if (!cancelled) setConflictMatches(filtered);
       } catch {
-        // Silently ignore conflict check errors
+        // sessizce yut
       }
     })();
-    return () => { cancelled = true; };
-  }, [debouncedCompanyName]); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedCompanyName, debouncedPhoneKey, debouncedEmailKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleTransportMode(mode: string) {
     const current = selectedTransportModes;
@@ -180,16 +192,16 @@ export function CustomerForm({
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       {/* Conflict warning banner */}
       {conflictWarning && (
-        <div className="mb-6 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-          <Icon name="warning" className="text-amber-600 flex-shrink-0" />
-          <p className="text-sm text-amber-800">{conflictWarning}</p>
+        <div className="mb-6 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 dark:bg-amber-500/10 dark:border-amber-500/30">
+          <Icon name="warning" className="text-amber-600 dark:text-amber-300 flex-shrink-0" />
+          <p className="text-sm text-amber-800 dark:text-amber-200">{conflictWarning}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column - Temel Bilgiler */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">
             Temel Bilgiler
           </h2>
 
@@ -206,13 +218,16 @@ export function CustomerForm({
             {/* Conflict suggestions */}
             {conflictMatches.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 -mt-2">
-                <span className="text-xs text-amber-700 font-medium">Benzer kayitlar:</span>
+                <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
+                  Benzer kayitlar:
+                </span>
                 {conflictMatches.map((match) => (
                   <span
                     key={match.customerId}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200"
+                    title={`${match.matchType === 'phone' ? 'Telefon' : match.matchType === 'email' ? 'E-posta' : 'Firma adi'} eslesmesi`}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-200 dark:border-amber-500/30"
                   >
-                    <Icon name="warning" size="sm" className="text-amber-500 !text-[14px]" />
+                    <Icon name="warning" size="sm" className="text-amber-500 dark:text-amber-300 !text-[14px]" />
                     {match.companyName} (%{Math.round(match.similarity)})
                   </span>
                 ))}
@@ -230,7 +245,7 @@ export function CustomerForm({
 
             {/* Telefonlar */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Telefon
               </label>
               {phoneFields.map((field, index) => (
@@ -247,7 +262,7 @@ export function CustomerForm({
                     <button
                       type="button"
                       onClick={() => removePhone(index)}
-                      className="text-slate-400 hover:text-red-500 transition-colors p-2"
+                      className="text-slate-400 dark:text-slate-500 hover:text-red-500 transition-colors p-2"
                     >
                       <Icon name="close" size="sm" />
                     </button>
@@ -266,7 +281,7 @@ export function CustomerForm({
 
             {/* E-postalar */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 E-posta
               </label>
               {emailFields.map((field, index) => (
@@ -283,7 +298,7 @@ export function CustomerForm({
                     <button
                       type="button"
                       onClick={() => removeEmail(index)}
-                      className="text-slate-400 hover:text-red-500 transition-colors p-2"
+                      className="text-slate-400 dark:text-slate-500 hover:text-red-500 transition-colors p-2"
                     >
                       <Icon name="close" size="sm" />
                     </button>
@@ -323,15 +338,15 @@ export function CustomerForm({
         </div>
 
         {/* Right Column - Nakliye & CRM Bilgileri */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">
             Nakliye & CRM Bilgileri
           </h2>
 
           <div className="space-y-5">
             {/* Tasima Modu - Button Group */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Tasima Modu
               </label>
               <div className="flex flex-wrap gap-2">
@@ -346,7 +361,7 @@ export function CustomerForm({
                         'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all',
                         isActive
                           ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-primary/50 hover:text-primary',
+                          : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-primary/50 hover:text-primary',
                       )}
                     >
                       <Icon name={mode.icon} size="sm" />
@@ -374,7 +389,7 @@ export function CustomerForm({
 
             {/* Incoterms - Pill selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Incoterms
               </label>
               <Controller
@@ -400,7 +415,7 @@ export function CustomerForm({
                             'px-3 py-1.5 rounded-full text-sm font-medium border transition-all',
                             isSelected
                               ? 'bg-primary/10 text-primary border-primary/30'
-                              : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-primary/30',
+                              : 'bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-primary/30',
                           )}
                         >
                           {opt.label}
@@ -494,7 +509,7 @@ export function CustomerForm({
       </div>
 
       {/* Bottom action bar */}
-      <div className="mt-6 flex items-center justify-end gap-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+      <div className="mt-6 flex items-center justify-end gap-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4">
         <Button variant="secondary" type="button" onClick={onCancel}>
           Iptal
         </Button>

@@ -40,7 +40,7 @@ export function Dropdown({ trigger, items, align = 'right', className }: Dropdow
 
       <div
         className={cn(
-          'absolute z-40 mt-2 min-w-[180px] bg-white rounded-xl border border-slate-200 shadow-lg py-1 transition-all duration-150 origin-top',
+          'absolute z-40 mt-2 min-w-[180px] bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-lg py-1 transition-all duration-150 origin-top',
           align === 'right' ? 'right-0' : 'left-0',
           isOpen
             ? 'opacity-100 scale-100 pointer-events-auto'
@@ -57,8 +57,8 @@ export function Dropdown({ trigger, items, align = 'right', className }: Dropdow
             className={cn(
               'w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left transition-colors',
               item.danger
-                ? 'text-red-600 hover:bg-red-50'
-                : 'text-slate-700 hover:bg-slate-50',
+                ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10'
+                : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800',
             )}
           >
             {item.icon && (

@@ -24,11 +24,11 @@ export function LossReasonsChart({ data, className }: LossReasonsChartProps) {
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm p-6',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6',
         className,
       )}
     >
-      <h3 className="font-display font-bold text-lg text-slate-900 mb-6">
+      <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100 mb-6">
         Kaybedilme Nedenleri
       </h3>
 
@@ -37,17 +37,17 @@ export function LossReasonsChart({ data, className }: LossReasonsChartProps) {
           <div key={item.reason}>
             {/* Label row */}
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-sm font-medium text-slate-700 uppercase tracking-wider">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 {item.reason}
               </span>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">{item.count} teklif</span>
-                <span className="text-sm font-bold text-slate-900">%{item.percentage}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">{item.count} teklif</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">%{item.percentage}</span>
               </div>
             </div>
 
             {/* Bar */}
-            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+            <div className="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
               <div
                 className={cn(
                   'h-full rounded-full transition-all duration-500',

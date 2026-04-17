@@ -32,7 +32,7 @@ export function CustomerFilters({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 mb-6">
       <div className="flex flex-wrap items-end gap-3">
         {/* Search */}
         <div className="w-64">
@@ -158,7 +158,7 @@ export function CustomerFilters({
         <div className="flex items-center gap-3 ml-auto">
           <button
             onClick={onClear}
-            className="text-sm text-slate-500 hover:text-primary transition-colors font-medium"
+            className="text-sm text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-medium"
           >
             Temizle
           </button>

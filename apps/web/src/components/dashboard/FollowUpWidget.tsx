@@ -30,13 +30,13 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden',
         className,
       )}
     >
       {/* Header */}
-      <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-        <h3 className="font-display font-bold text-lg text-slate-900">
+      <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100">
           Yaklasan Takipler
         </h3>
         <button
@@ -48,9 +48,9 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
       </div>
 
       {/* Follow-up list */}
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-slate-100 dark:divide-slate-800">
         {followUps.length === 0 ? (
-          <div className="px-6 py-8 text-center text-sm text-slate-400">
+          <div className="px-6 py-8 text-center text-sm text-slate-400 dark:text-slate-500">
             Yaklasan takip bulunmuyor.
           </div>
         ) : (
@@ -59,7 +59,7 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
             return (
               <div
                 key={item.id}
-                className="px-6 py-4 flex items-start gap-4 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="px-6 py-4 flex items-start gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 transition-colors cursor-pointer"
               >
                 {/* Icon */}
                 <div
@@ -74,15 +74,15 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-sm font-semibold text-slate-900 truncate">
+                    <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
                       {item.customerName}
                     </h4>
-                    <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded shrink-0">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded shrink-0">
                       {item.date}
                     </span>
                   </div>
                   {item.note && (
-                    <p className="text-sm text-slate-500 mt-1 line-clamp-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
                       {item.note}
                     </p>
                   )}
@@ -92,7 +92,7 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
                 <Icon
                   name="chevron_right"
                   size="sm"
-                  className="text-slate-400 shrink-0 mt-1"
+                  className="text-slate-400 dark:text-slate-500 shrink-0 mt-1"
                 />
               </div>
             );

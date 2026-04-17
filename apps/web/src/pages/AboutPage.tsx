@@ -114,7 +114,7 @@ export default function AboutPage() {
                   <span className="material-symbols-outlined text-[22px] text-[#e30a17]">{f.icon}</span>
                 </div>
                 <h3 className="text-base font-bold text-white">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{f.desc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400 dark:text-slate-500">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -135,12 +135,12 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
           <div className="flex items-center gap-4">
-            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Kullanim Sartlari
             </Link>
-            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Gizlilik Politikasi
             </Link>
           </div>

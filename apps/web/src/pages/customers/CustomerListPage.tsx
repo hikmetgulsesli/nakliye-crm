@@ -95,9 +95,13 @@ export default function CustomerListPage() {
       />
 
       {error && (
-        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
-          <span className="text-sm text-red-700">{error}</span>
-          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between dark:bg-red-500/10 dark:border-red-500/30">
+          <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
+          <button
+            onClick={() => setError(null)}
+            aria-label="Kapat"
+            className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200"
+          >
             <span className="material-symbols-outlined text-sm">close</span>
           </button>
         </div>

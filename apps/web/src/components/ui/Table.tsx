@@ -27,12 +27,12 @@ export function Table<T extends Record<string, unknown>>({
     <div className={cn('w-full overflow-x-auto', className)}>
       <table className="w-full">
         <thead>
-          <tr className="bg-slate-50">
+          <tr className="bg-slate-50 dark:bg-slate-800/60">
             {columns.map((col) => (
               <th
                 key={col.key}
                 className={cn(
-                  'text-slate-500 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold',
+                  'text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold',
                   col.className,
                 )}
               >
@@ -41,12 +41,12 @@ export function Table<T extends Record<string, unknown>>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
           {data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-12 text-center text-slate-400 text-sm"
+                className="px-6 py-12 text-center text-slate-400 dark:text-slate-500 text-sm"
               >
                 {emptyMessage}
               </td>
@@ -57,14 +57,14 @@ export function Table<T extends Record<string, unknown>>({
                 key={rowIndex}
                 onClick={() => onRowClick?.(row, rowIndex)}
                 className={cn(
-                  'hover:bg-slate-50 transition-colors',
+                  'hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors',
                   onRowClick && 'cursor-pointer',
                 )}
               >
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={cn('px-6 py-4 text-sm text-slate-700', col.className)}
+                    className={cn('px-6 py-4 text-sm text-slate-700 dark:text-slate-300', col.className)}
                   >
                     {col.render
                       ? col.render(row, rowIndex)

@@ -82,7 +82,7 @@ export default function PrivacyPage() {
               </div>
             </div>
             <h1 className="text-4xl font-black text-white">Gizlilik Politikasi</h1>
-            <p className="mt-4 text-sm text-slate-400">Son guncelleme: 1 Ocak 2026</p>
+            <p className="mt-4 text-sm text-slate-400 dark:text-slate-500">Son guncelleme: 1 Ocak 2026</p>
           </div>
 
           <div className="mt-12 space-y-8">
@@ -109,9 +109,9 @@ export default function PrivacyPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
           <div className="flex items-center gap-4">
-            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Kullanim Sartlari
             </Link>
             <Link to="/gizlilik-politikasi" className="text-sm text-white transition-colors">

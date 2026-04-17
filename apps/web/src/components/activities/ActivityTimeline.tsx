@@ -70,7 +70,7 @@ export function ActivityTimeline({ activities, loading = false }: ActivityTimeli
 
   if (activities.length === 0) {
     return (
-      <div className="text-center py-10 text-slate-400 text-sm">
+      <div className="text-center py-10 text-slate-400 dark:text-slate-500 text-sm">
         Henuz aktivite gecmisi yok
       </div>
     );
@@ -85,7 +85,7 @@ export function ActivityTimeline({ activities, loading = false }: ActivityTimeli
           {/* Date header */}
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">
               {formatDate(dateActivities[0].activityDate)}
             </span>
             <div className="h-px flex-1 bg-slate-200" />
@@ -127,15 +127,15 @@ export function ActivityTimeline({ activities, loading = false }: ActivityTimeli
 
                   {/* Activity card */}
                   <div className="flex-1 pb-6 min-w-0">
-                    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-sm text-slate-900">
+                          <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
                             {typeConfig.label}
                           </span>
                           {outcomeConfig && (
-                            <span className="flex items-center gap-1 text-xs font-medium text-slate-500">
+                            <span className="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
                               <span
                                 className={cn(
                                   'size-2 rounded-full inline-block',
@@ -146,20 +146,20 @@ export function ActivityTimeline({ activities, loading = false }: ActivityTimeli
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-400 dark:text-slate-500">
                           {formatTime(activity.activityDate)}
                         </span>
                       </div>
 
                       {/* Notes */}
                       {activity.notes && (
-                        <p className="text-sm text-slate-600 mb-2 whitespace-pre-line">
+                        <p className="text-sm text-slate-600 dark:text-slate-300 mb-2 whitespace-pre-line">
                           {activity.notes}
                         </p>
                       )}
 
                       {/* Footer info */}
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
                         {activity.durationMinutes && (
                           <span className="flex items-center gap-1">
                             <Icon name="timer" size="sm" className="!text-[14px]" />

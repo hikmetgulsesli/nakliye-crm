@@ -48,15 +48,15 @@ function formatDate(dateStr?: string): string {
 
 function renderChanges(changedFields: Record<string, { old: unknown; new: unknown }>): React.ReactNode {
   const entries = Object.entries(changedFields);
-  if (entries.length === 0) return <span className="text-slate-400">-</span>;
+  if (entries.length === 0) return <span className="text-slate-400 dark:text-slate-500">-</span>;
 
   return (
     <div className="space-y-1">
       {entries.map(([field, change]) => (
         <div key={field} className="text-xs">
-          <span className="font-medium text-slate-700">{formatFieldName(field)}: </span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">{formatFieldName(field)}: </span>
           <span className="text-red-500 line-through">{formatValue(change.old)}</span>
-          <span className="text-slate-400 mx-1">&rarr;</span>
+          <span className="text-slate-400 dark:text-slate-500 mx-1">&rarr;</span>
           <span className="text-emerald-600 font-medium">{formatValue(change.new)}</span>
         </div>
       ))}
@@ -70,14 +70,14 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
       key: 'revisionNo',
       label: 'REVIZE NO',
       render: (row: QuotationRevision) => (
-        <span className="font-bold text-slate-900">#{row.revisionNo}</span>
+        <span className="font-bold text-slate-900 dark:text-slate-100">#{row.revisionNo}</span>
       ),
     },
     {
       key: 'revisedAt',
       label: 'TARIH',
       render: (row: QuotationRevision) => (
-        <span className="text-slate-500 text-sm whitespace-nowrap">
+        <span className="text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">
           {formatDate(row.revisedAt)}
         </span>
       ),
@@ -86,7 +86,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
       key: 'revisedBy',
       label: 'GUNCELLEYEN',
       render: (row: QuotationRevision) => (
-        <span className="text-slate-700 text-sm">
+        <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.revisedBy?.fullName || '-'}
         </span>
       ),
@@ -116,7 +116,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
 
   if (revisions.length === 0) {
     return (
-      <div className="text-center py-8 text-slate-400 text-sm">
+      <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-sm">
         Henuz revize gecmisi bulunmuyor
       </div>
     );

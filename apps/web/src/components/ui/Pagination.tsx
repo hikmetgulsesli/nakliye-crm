@@ -48,14 +48,15 @@ export function Pagination({
 
   return (
     <div className={cn('flex items-center justify-between', className)}>
-      <span className="text-sm text-slate-500">
-        Toplam <span className="font-semibold text-slate-700">{totalItems}</span> kayit
+      <span className="text-sm text-slate-500 dark:text-slate-400">
+        Toplam <span className="font-semibold text-slate-700 dark:text-slate-200">{totalItems}</span> kayit
       </span>
       <div className="flex items-center gap-1">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="flex items-center justify-center size-9 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          aria-label="Onceki sayfa"
+          className="flex items-center justify-center size-9 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
         >
           <Icon name="chevron_left" size="sm" />
         </button>
@@ -64,7 +65,7 @@ export function Pagination({
           page === '...' ? (
             <span
               key={`dots-${i}`}
-              className="flex items-center justify-center size-9 text-slate-400 text-sm"
+              className="flex items-center justify-center size-9 text-slate-400 dark:text-slate-500 text-sm"
             >
               ...
             </span>
@@ -72,11 +73,12 @@ export function Pagination({
             <button
               key={page}
               onClick={() => onPageChange(page)}
+              aria-current={page === currentPage ? 'page' : undefined}
               className={cn(
                 'flex items-center justify-center size-9 rounded-lg text-sm font-medium transition-colors',
                 page === currentPage
                   ? 'bg-primary text-white'
-                  : 'border border-slate-200 text-slate-600 hover:bg-slate-50',
+                  : 'border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800',
               )}
             >
               {page}
@@ -87,7 +89,8 @@ export function Pagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="flex items-center justify-center size-9 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          aria-label="Sonraki sayfa"
+          className="flex items-center justify-center size-9 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
         >
           <Icon name="chevron_right" size="sm" />
         </button>

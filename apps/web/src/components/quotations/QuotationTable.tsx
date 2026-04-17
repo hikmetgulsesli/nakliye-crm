@@ -56,7 +56,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
       label: 'MUSTERI',
       render: (row: Quotation) => (
         <div className="min-w-0">
-          <p className="font-semibold text-slate-900 truncate">
+          <p className="font-semibold text-slate-900 dark:text-slate-100 truncate">
             {row.customer?.companyName || '-'}
           </p>
         </div>
@@ -66,7 +66,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
       key: 'quoteDate',
       label: 'TARIH',
       render: (row: Quotation) => (
-        <span className="text-slate-500 text-sm whitespace-nowrap">
+        <span className="text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">
           {formatDate(row.quoteDate)}
         </span>
       ),
@@ -91,7 +91,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
       label: 'FIYAT',
       render: (row: Quotation) => (
         <div className="flex items-center gap-2">
-          <span className="font-bold text-slate-900 whitespace-nowrap">
+          <span className="font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
             {formatPrice(row.price, row.currency)}
           </span>
           {row.currency && (
@@ -111,7 +111,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
       key: 'assignedUser',
       label: 'TEMSILCI',
       render: (row: Quotation) => (
-        <span className="text-slate-700 text-sm">
+        <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.assignedUser?.fullName || '-'}
         </span>
       ),
@@ -120,11 +120,11 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="animate-pulse">
-          <div className="bg-slate-50 h-12" />
+          <div className="bg-slate-50 dark:bg-slate-800/60 h-12" />
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex gap-4 px-6 py-4 border-t border-slate-100">
+            <div key={i} className="flex gap-4 px-6 py-4 border-t border-slate-100 dark:border-slate-800">
               <div className="h-4 bg-slate-200 rounded w-1/6" />
               <div className="h-4 bg-slate-200 rounded w-1/6" />
               <div className="h-4 bg-slate-200 rounded w-1/12" />
@@ -140,7 +140,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <Table<Quotation & Record<string, unknown>>
         columns={columns}
         data={data as (Quotation & Record<string, unknown>)[]}

@@ -58,10 +58,10 @@ export function QuotationDetail({
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-2xl font-bold text-slate-900">{q.quoteNo}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{q.quoteNo}</h2>
             <StatusBadge status={q.status} />
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
             {q.customer && (
               <Link
                 to={`/musteriler/${q.customerId}`}
@@ -110,7 +110,7 @@ export function QuotationDetail({
         <Card title="Yuk Bilgileri">
           <div className="space-y-5">
             {/* Route visual large */}
-            <div className="bg-slate-50 rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4">
               <RouteVisual
                 originCountry={q.originCountry}
                 pol={q.pol}
@@ -128,31 +128,31 @@ export function QuotationDetail({
                   <Icon name={transportInfo.icon} />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900 text-sm">{transportInfo.label}</p>
+                  <p className="font-semibold text-slate-900 dark:text-slate-100 text-sm">{transportInfo.label}</p>
                   {q.serviceType && (
-                    <p className="text-xs text-slate-500">{q.serviceType}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{q.serviceType}</p>
                   )}
                 </div>
               </div>
             )}
 
             {/* Details grid */}
-            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Cikis Ulkesi</p>
-                <p className="text-sm font-medium text-slate-700">{q.originCountry || '-'}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Cikis Ulkesi</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.originCountry || '-'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Varis Ulkesi</p>
-                <p className="text-sm font-medium text-slate-700">{q.destinationCountry || '-'}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Varis Ulkesi</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.destinationCountry || '-'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Incoterms</p>
-                <p className="text-sm font-medium text-slate-700">{q.incoterm || '-'}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Incoterms</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.incoterm || '-'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Revize Sayisi</p>
-                <p className="text-sm font-medium text-slate-700">{q.revisionCount}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Revize Sayisi</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.revisionCount}</p>
               </div>
             </div>
           </div>
@@ -162,31 +162,31 @@ export function QuotationDetail({
         <Card title="Fiyat Bilgileri">
           <div className="space-y-5">
             {/* Large price display */}
-            <div className="bg-slate-50 rounded-xl p-6 text-center">
-              <p className="text-4xl font-bold text-slate-900 mb-1">
+            <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-6 text-center">
+              <p className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-1">
                 {getCurrencySymbol(q.currency)}
                 {formatPrice(q.price)}
               </p>
-              <p className="text-sm text-slate-500 font-medium">{q.currency || ''}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{q.currency || ''}</p>
             </div>
 
             {/* Validity + Status */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Gecerlilik Tarihi</p>
-                <p className="text-sm font-medium text-slate-700">{formatDate(q.validityDate)}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Gecerlilik Tarihi</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{formatDate(q.validityDate)}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Durum</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Durum</p>
                 <StatusBadge status={q.status} />
               </div>
             </div>
 
             {/* Price note */}
             {q.priceNote && (
-              <div className="border-t border-slate-100 pt-4">
-                <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Fiyat Notu</p>
-                <p className="text-sm text-slate-600 whitespace-pre-line">{q.priceNote}</p>
+              <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Fiyat Notu</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-line">{q.priceNote}</p>
               </div>
             )}
 
@@ -199,14 +199,14 @@ export function QuotationDetail({
             )}
 
             {/* Meta */}
-            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 text-xs text-slate-400">
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500">
               <div>
                 <p className="uppercase tracking-wider mb-1">Olusturan</p>
-                <p className="text-sm text-slate-600">{q.createdBy?.fullName || '-'}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300">{q.createdBy?.fullName || '-'}</p>
               </div>
               <div>
                 <p className="uppercase tracking-wider mb-1">Olusturulma</p>
-                <p className="text-sm text-slate-600">{formatDate(q.createdAt)}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300">{formatDate(q.createdAt)}</p>
               </div>
             </div>
           </div>

@@ -29,13 +29,13 @@ export function CountryDensityChart({
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden',
         className,
       )}
     >
       {/* Header */}
       <div className="px-6 pt-6 pb-4">
-        <h3 className="font-display font-bold text-lg text-slate-900 mb-4">
+        <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">
           Ulke Bazli Yogunluk
         </h3>
 
@@ -47,7 +47,7 @@ export function CountryDensityChart({
               'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               activeTab === 'origin'
                 ? 'bg-primary text-white shadow-sm'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200',
             )}
           >
             Cikis Ulkeleri
@@ -58,7 +58,7 @@ export function CountryDensityChart({
               'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               activeTab === 'destination'
                 ? 'bg-primary text-white shadow-sm'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200',
             )}
           >
             Varis Ulkeleri
@@ -73,24 +73,24 @@ export function CountryDensityChart({
             {/* Country label */}
             <div className="flex items-center gap-2 w-28 shrink-0">
               <span className="text-xl leading-none">{item.flag}</span>
-              <span className="text-sm font-medium text-slate-700 truncate">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">
                 {item.country}
               </span>
             </div>
 
             {/* Bar */}
-            <div className="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden relative">
+            <div className="flex-1 h-8 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden relative">
               <div
                 className="h-full bg-primary/80 rounded-lg transition-all duration-500"
                 style={{ width: `${(item.percentage / maxPercentage) * 100}%` }}
               />
-              <span className="absolute inset-y-0 right-3 flex items-center text-xs font-bold text-slate-600">
+              <span className="absolute inset-y-0 right-3 flex items-center text-xs font-bold text-slate-600 dark:text-slate-300">
                 {item.count}
               </span>
             </div>
 
             {/* Percentage */}
-            <span className="text-sm font-bold text-slate-900 w-12 text-right">
+            <span className="text-sm font-bold text-slate-900 dark:text-slate-100 w-12 text-right">
               %{item.percentage}
             </span>
           </div>

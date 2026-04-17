@@ -127,7 +127,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="font-bold text-white">{c.title}</h3>
                 <p className="mt-1 text-sm font-medium text-slate-200">{c.value}</p>
-                <p className="mt-0.5 text-xs text-slate-400">{c.sub}</p>
+                <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{c.sub}</p>
               </div>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function ContactPage() {
             {/* Form */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
               <h2 className="text-xl font-bold text-white">Bize Yazin</h2>
-              <p className="mt-1 text-sm text-slate-400">Formu doldurun, size en kisa surede donelim.</p>
+              <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">Formu doldurun, size en kisa surede donelim.</p>
 
               {submitted && (
                 <div className="mt-4 flex items-center gap-2 rounded-lg bg-green-500/20 px-4 py-3 text-sm text-green-300">
@@ -154,7 +154,7 @@ export default function ContactPage() {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Adiniz ve soyadiniz"
-                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 ${
+                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 ${
                       errors.name ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}
                   />
@@ -167,7 +167,7 @@ export default function ContactPage() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="ornek@sirket.com"
-                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 ${
+                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 ${
                       errors.email ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}
                   />
@@ -180,7 +180,7 @@ export default function ContactPage() {
                     value={form.subject}
                     onChange={handleChange}
                     placeholder="Mesajinizin konusu"
-                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 ${
+                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 ${
                       errors.subject ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}
                   />
@@ -194,7 +194,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     rows={5}
                     placeholder="Mesajinizi buraya yazin..."
-                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 resize-none ${
+                    className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 resize-none ${
                       errors.message ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}
                   />
@@ -221,11 +221,11 @@ export default function ContactPage() {
             <div className="flex flex-col gap-6">
               <div className="flex flex-1 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
                 <div className="text-center p-8">
-                  <span className="material-symbols-outlined text-[64px] text-slate-500">map</span>
-                  <p className="mt-4 text-sm text-slate-400">
+                  <span className="material-symbols-outlined text-[64px] text-slate-500 dark:text-slate-400">map</span>
+                  <p className="mt-4 text-sm text-slate-400 dark:text-slate-500">
                     Istanbul, Besiktas, Levent
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                     Buyukdere Caddesi No:185, 34394
                   </p>
                 </div>
@@ -241,7 +241,7 @@ export default function ContactPage() {
                     <span>Cumartesi</span>
                     <span>10:00 - 14:00</span>
                   </div>
-                  <div className="flex justify-between text-slate-400">
+                  <div className="flex justify-between text-slate-400 dark:text-slate-500">
                     <span>Pazar</span>
                     <span>Kapali</span>
                   </div>
@@ -255,12 +255,12 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
           <div className="flex items-center gap-4">
-            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Kullanim Sartlari
             </Link>
-            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
               Gizlilik Politikasi
             </Link>
           </div>

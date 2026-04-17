@@ -51,13 +51,13 @@ export function RecentActivitiesWidget({
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden',
         className,
       )}
     >
       {/* Header */}
-      <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-        <h3 className="font-display font-bold text-lg text-slate-900">
+      <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100">
           Son Aktiviteler
         </h3>
         <button
@@ -72,32 +72,32 @@ export function RecentActivitiesWidget({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Tarih
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Musteri
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Tip
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Not
               </th>
               {showRepresentative && (
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Temsilci
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {activities.length === 0 ? (
               <tr>
                 <td
                   colSpan={showRepresentative ? 5 : 4}
-                  className="px-6 py-12 text-center text-sm text-slate-400"
+                  className="px-6 py-12 text-center text-sm text-slate-400 dark:text-slate-500"
                 >
                   Henuz aktivite bulunmuyor.
                 </td>
@@ -112,14 +112,14 @@ export function RecentActivitiesWidget({
                     }
                   }}
                   className={cn(
-                    'hover:bg-slate-50 transition-colors',
+                    'hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 transition-colors',
                     activity.customerId && 'cursor-pointer',
                   )}
                 >
-                  <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
                     {activity.date}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                  <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">
                     {activity.customerName}
                   </td>
                   <td className="px-6 py-4">
@@ -127,11 +127,11 @@ export function RecentActivitiesWidget({
                       {activity.type}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 max-w-xs truncate">
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 max-w-xs truncate">
                     {activity.note}
                   </td>
                   {showRepresentative && (
-                    <td className="px-6 py-4 text-sm text-slate-500">
+                    <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                       {activity.representative || '-'}
                     </td>
                   )}

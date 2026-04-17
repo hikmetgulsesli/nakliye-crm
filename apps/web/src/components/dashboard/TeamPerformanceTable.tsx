@@ -25,18 +25,18 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden',
         className,
       )}
     >
       {/* Header */}
-      <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center">
-        <h3 className="font-display font-bold text-lg text-slate-900">
+      <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+        <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100">
           Satis Temsilcisi Performansi
         </h3>
         <button
           onClick={() => navigate('/kullanicilar')}
-          className="text-sm font-medium text-slate-600 hover:text-primary transition-colors flex items-center gap-1"
+          className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors flex items-center gap-1"
         >
           Tumunu Gor
           <Icon name="chevron_right" size="sm" />
@@ -47,33 +47,33 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Temsilci
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Teklif Sayisi
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Kazanilan
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Kazanma %
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Gorusulen Musteri
               </th>
-              <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Son Aktivite
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {data.map((member) => (
               <tr
                 key={member.id}
                 className={cn(
-                  'hover:bg-slate-50 transition-colors',
+                  'hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 transition-colors',
                   member.isTopPerformer && 'bg-emerald-50/40',
                 )}
               >
@@ -85,7 +85,7 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                       name={member.name}
                       size="sm"
                     />
-                    <span className="font-medium text-sm text-slate-900">
+                    <span className="font-medium text-sm text-slate-900 dark:text-slate-100">
                       {member.name}
                     </span>
                     {member.isTopPerformer && (
@@ -99,7 +99,7 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                 </td>
 
                 {/* Teklif Sayisi */}
-                <td className="px-6 py-4 text-sm text-slate-700">
+                <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
                   {member.quoteCount}
                 </td>
 
@@ -124,19 +124,19 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                         style={{ width: `${Math.min(member.winRate, 100)}%` }}
                       />
                     </div>
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                       %{member.winRate}
                     </span>
                   </div>
                 </td>
 
                 {/* Gorusulen Musteri */}
-                <td className="px-6 py-4 text-sm text-slate-500">
+                <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                   {member.contactedCustomers}
                 </td>
 
                 {/* Son Aktivite */}
-                <td className="px-6 py-4 text-sm text-slate-500">
+                <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                   {member.lastActivity}
                 </td>
               </tr>

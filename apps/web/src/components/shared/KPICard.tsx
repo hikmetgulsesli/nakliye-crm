@@ -19,7 +19,7 @@ const colorMap: Record<string, { bg: string; text: string }> = {
   amber: { bg: 'bg-amber-100', text: 'text-amber-600' },
   red: { bg: 'bg-red-100', text: 'text-red-600' },
   purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
-  slate: { bg: 'bg-slate-100', text: 'text-slate-600' },
+  slate: { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-600 dark:text-slate-300' },
   indigo: { bg: 'bg-indigo-100', text: 'text-indigo-600' },
 };
 
@@ -36,7 +36,7 @@ export function KPICard({
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl border border-slate-200 shadow-sm p-6',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6',
         className,
       )}
     >
@@ -54,8 +54,8 @@ export function KPICard({
             className={cn(
               'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold',
               trend.positive
-                ? 'bg-emerald-50 text-emerald-700'
-                : 'bg-red-50 text-red-700',
+                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                : 'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-300',
             )}
           >
             <Icon
@@ -67,8 +67,8 @@ export function KPICard({
         )}
       </div>
       <div className="mt-4">
-        <p className="text-sm text-slate-500">{label}</p>
-        <p className="text-3xl font-bold text-slate-900 mt-1">{value}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 mt-1">{value}</p>
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default function Sidebar() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">NakliyeCRM</h1>
-            <p className="text-xs uppercase tracking-widest text-slate-500">
+            <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
               Lojistik Yonetimi
             </p>
           </div>
@@ -91,11 +91,11 @@ export default function Sidebar() {
             <p className="truncate text-sm font-medium text-white">
               {user?.fullName || 'Kullanici'}
             </p>
-            <p className="truncate text-xs text-slate-400">{user?.email || ''}</p>
+            <p className="truncate text-xs text-slate-400 dark:text-slate-500">{user?.email || ''}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white"
+            className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-700 hover:text-white"
             title="Cikis Yap"
           >
             <span className="material-symbols-outlined text-[20px]">logout</span>
