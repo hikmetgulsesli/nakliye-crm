@@ -129,9 +129,6 @@ export default function CustomerDetailPage() {
           {/* Company info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                {customer.companyName}
-              </h2>
               <StatusBadge status={customer.status} />
               {customer.potential && (
                 <StatusBadge status={customer.potential} />

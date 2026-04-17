@@ -58,7 +58,6 @@ export function QuotationDetail({
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{q.quoteNo}</h2>
             <StatusBadge status={q.status} />
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
