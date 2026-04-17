@@ -88,48 +88,54 @@ export default function LoginPage() {
       {/* Main Content */}
       <div className="relative z-10 flex flex-1 items-center justify-end px-8 py-12 lg:px-24">
         {/* Login Card */}
-        <div className="w-full max-w-[480px] rounded-2xl border border-white/20 bg-[#fdfbf8]/90 p-8 shadow-2xl backdrop-blur-md">
+        <div className="w-full max-w-[460px] rounded-[28px] bg-white p-10 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.65)] ring-1 ring-slate-900/5">
           {/* Globe Icon */}
-          <div className="mb-4 flex justify-center">
-            <div className="flex size-14 items-center justify-center rounded-full bg-[#e30a17]/10">
+          <div className="mb-5 flex justify-center">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-[#e30a17]/10 ring-1 ring-[#e30a17]/15">
               <span className="material-symbols-outlined text-[28px] text-[#e30a17]">
                 public
               </span>
             </div>
           </div>
 
-          <h1 className="text-center text-3xl font-black text-slate-900 dark:text-slate-100">Hos Geldiniz</h1>
-          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+          <h1 className="text-center text-[28px] font-black leading-tight tracking-tight text-slate-900">
+            Hos Geldiniz
+          </h1>
+          <p className="mt-2 text-center text-sm text-slate-600">
             Devam etmek icin hesabiniza giris yapin
           </p>
 
           {/* Error Message */}
           {error && (
-            <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-              <span className="material-symbols-outlined text-[18px]">error</span>
-              {error}
+            <div className="mt-5 flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-200">
+              <span className="material-symbols-outlined text-[18px] text-red-500 mt-0.5 shrink-0">
+                error
+              </span>
+              <span className="leading-relaxed">{error}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5">
             {/* Email */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className="mb-2 block text-[13px] font-semibold tracking-wide text-slate-800">
                 E-posta Adresi
               </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
-                  person
+                <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-500">
+                  mail
                 </span>
                 <input
                   type="email"
+                  autoComplete="email"
                   placeholder="ornek@sirket.com"
                   className={cn(
-                    'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
+                    'h-12 w-full rounded-xl border bg-slate-50 pl-11 pr-4 text-[15px] text-slate-900 transition-colors placeholder:text-slate-400',
+                    'focus:outline-none focus:ring-4',
                     errors.email
-                      ? 'border-red-300 focus:ring-red-300'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500/15 bg-red-50/40'
+                      : 'border-slate-200 focus:border-[#e30a17] focus:ring-[#e30a17]/15 focus:bg-white',
                   )}
                   {...register('email', {
                     required: 'E-posta adresi zorunludur',
@@ -141,25 +147,32 @@ export default function LoginPage() {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+                <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-red-600">
+                  <span className="material-symbols-outlined text-[14px]">error</span>
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
             {/* Password */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Sifre</label>
+              <label className="mb-2 block text-[13px] font-semibold tracking-wide text-slate-800">
+                Sifre
+              </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
+                <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-500">
                   lock
                 </span>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Sifrenizi giriniz"
+                  autoComplete="current-password"
+                  placeholder="En az 6 karakter"
                   className={cn(
-                    'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-12 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
+                    'h-12 w-full rounded-xl border bg-slate-50 pl-11 pr-12 text-[15px] text-slate-900 transition-colors placeholder:text-slate-400',
+                    'focus:outline-none focus:ring-4',
                     errors.password
-                      ? 'border-red-300 focus:ring-red-300'
-                      : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
+                      ? 'border-red-400 focus:border-red-500 focus:ring-red-500/15 bg-red-50/40'
+                      : 'border-slate-200 focus:border-[#e30a17] focus:ring-[#e30a17]/15 focus:bg-white',
                   )}
                   {...register('password', {
                     required: 'Sifre zorunludur',
@@ -172,7 +185,8 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:text-slate-300"
+                  aria-label={showPassword ? 'Sifreyi gizle' : 'Sifreyi goster'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     {showPassword ? 'visibility_off' : 'visibility'}
@@ -180,23 +194,28 @@ export default function LoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>
+                <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-red-600">
+                  <span className="material-symbols-outlined text-[14px]">error</span>
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
             {/* Remember + Forgot */}
-            <div className="flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+            <div className="flex items-center justify-between pt-1">
+              <label className="group inline-flex cursor-pointer select-none items-center gap-2.5">
                 <input
                   type="checkbox"
-                  className="size-4 rounded border-slate-300 text-[#e30a17] focus:ring-[#e30a17]/30"
+                  className="size-[18px] rounded-md border-slate-300 text-[#e30a17] shadow-sm transition focus:ring-2 focus:ring-[#e30a17]/30 focus:ring-offset-0"
                   {...register('remember')}
                 />
-                Beni Hatirla
+                <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900">
+                  Beni Hatirla
+                </span>
               </label>
               <Link
                 to="/sifremi-unuttum"
-                className="text-sm font-medium text-[#e30a17] hover:underline"
+                className="text-sm font-semibold text-[#e30a17] transition-colors hover:text-[#b40713]"
               >
                 Sifremi Unuttum
               </Link>
@@ -206,23 +225,27 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#e30a17] py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c00914] disabled:opacity-60"
+              className="group relative mt-2 flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#e30a17] text-[15px] font-semibold text-white shadow-[0_10px_25px_-10px_rgba(227,10,23,0.6)] transition-all hover:bg-[#c00914] hover:shadow-[0_14px_30px_-10px_rgba(227,10,23,0.7)] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
             >
               {isSubmitting ? (
                 <div className="size-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               ) : (
                 <>
-                  Giris Yap
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span>Giris Yap</span>
+                  <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
+                    arrow_forward
+                  </span>
                 </>
               )}
             </button>
           </form>
 
-          {/* Copyright */}
-          <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
-            &copy; 2026 NakliyeCRM. Tum haklari saklidir.
-          </p>
+          {/* Divider + Copyright */}
+          <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-400">
+            <span className="h-px w-6 bg-slate-200" />
+            <span>&copy; 2026 NakliyeCRM</span>
+            <span className="h-px w-6 bg-slate-200" />
+          </div>
         </div>
       </div>
 

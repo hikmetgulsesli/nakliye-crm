@@ -64,62 +64,74 @@ export default function ForgotPasswordPage() {
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-1 items-center justify-center px-8 py-12">
-        <div className="w-full max-w-[480px] rounded-2xl border border-white/20 bg-[#fdfbf8]/90 p-8 shadow-2xl backdrop-blur-md">
+        <div className="w-full max-w-[460px] rounded-[28px] bg-white p-10 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.65)] ring-1 ring-slate-900/5">
           {/* Icon */}
-          <div className="mb-4 flex justify-center">
-            <div className="flex size-14 items-center justify-center rounded-full bg-[#e30a17]/10">
+          <div className="mb-5 flex justify-center">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-[#e30a17]/10 ring-1 ring-[#e30a17]/15">
               <span className="material-symbols-outlined text-[28px] text-[#e30a17]">
                 lock_reset
               </span>
             </div>
           </div>
 
-          <h1 className="text-center text-3xl font-black text-slate-900 dark:text-slate-100">Sifremi Unuttum</h1>
-          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+          <h1 className="text-center text-[28px] font-black leading-tight tracking-tight text-slate-900">
+            Sifremi Unuttum
+          </h1>
+          <p className="mt-2 text-center text-sm text-slate-600">
             E-posta adresinizi girin, sifre sifirlama linki gonderelim.
           </p>
 
           {/* Error */}
           {error && (
-            <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-              <span className="material-symbols-outlined text-[18px]">error</span>
-              {error}
+            <div className="mt-5 flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-200">
+              <span className="material-symbols-outlined text-[18px] text-red-500 mt-0.5 shrink-0">
+                error
+              </span>
+              <span className="leading-relaxed">{error}</span>
             </div>
           )}
 
           {/* Success */}
           {sent ? (
-            <div className="mt-6">
-              <div className="flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                Sifre sifirlama linki e-posta adresinize gonderildi.
+            <div className="mt-7">
+              <div className="flex items-start gap-2.5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800 ring-1 ring-emerald-200">
+                <span className="material-symbols-outlined text-[18px] text-emerald-600 mt-0.5 shrink-0">
+                  check_circle
+                </span>
+                <span className="leading-relaxed">
+                  Sifre sifirlama linki e-posta adresinize gonderildi.
+                </span>
               </div>
               <Link
                 to="/login"
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#e30a17] py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c00914]"
+                className="group mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e30a17] text-[15px] font-semibold text-white shadow-[0_10px_25px_-10px_rgba(227,10,23,0.6)] transition-all hover:bg-[#c00914] hover:shadow-[0_14px_30px_-10px_rgba(227,10,23,0.7)]"
               >
-                <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                Giris Sayfasina Don
+                <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-0.5">
+                  arrow_back
+                </span>
+                <span>Giris Sayfasina Don</span>
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="mb-2 block text-[13px] font-semibold tracking-wide text-slate-800">
                   E-posta Adresi
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
+                  <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-500">
                     mail
                   </span>
                   <input
                     type="email"
+                    autoComplete="email"
                     placeholder="ornek@sirket.com"
                     className={cn(
-                      'w-full rounded-xl border bg-white dark:bg-slate-900 py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2',
+                      'h-12 w-full rounded-xl border bg-slate-50 pl-11 pr-4 text-[15px] text-slate-900 transition-colors placeholder:text-slate-400',
+                      'focus:outline-none focus:ring-4',
                       errors.email
-                        ? 'border-red-300 focus:ring-red-300'
-                        : 'border-slate-200 dark:border-slate-800 focus:ring-[#e30a17]/30',
+                        ? 'border-red-400 focus:border-red-500 focus:ring-red-500/15 bg-red-50/40'
+                        : 'border-slate-200 focus:border-[#e30a17] focus:ring-[#e30a17]/15 focus:bg-white',
                     )}
                     {...register('email', {
                       required: 'E-posta adresi zorunludur',
@@ -131,31 +143,38 @@ export default function ForgotPasswordPage() {
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+                  <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-red-600">
+                    <span className="material-symbols-outlined text-[14px]">error</span>
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#e30a17] py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c00914] disabled:opacity-60"
+                className="group relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#e30a17] text-[15px] font-semibold text-white shadow-[0_10px_25px_-10px_rgba(227,10,23,0.6)] transition-all hover:bg-[#c00914] hover:shadow-[0_14px_30px_-10px_rgba(227,10,23,0.7)] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
               >
                 {isSubmitting ? (
                   <div className="size-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 ) : (
                   <>
-                    Sifre Sifirlama Linki Gonder
-                    <span className="material-symbols-outlined text-[18px]">send</span>
+                    <span>Sifre Sifirlama Linki Gonder</span>
+                    <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
+                      send
+                    </span>
                   </>
                 )}
               </button>
 
               <Link
                 to="/login"
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60"
+                className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 text-[14px] font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
               >
-                <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                Giris Sayfasina Don
+                <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-0.5">
+                  arrow_back
+                </span>
+                <span>Giris Sayfasina Don</span>
               </Link>
             </form>
           )}
