@@ -35,10 +35,7 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
-  // Non-admin sees only own quotations
-  if (req.user!.role !== 'ADMIN') {
-    where.assignedUserId = req.user!.userId;
-  }
+  // PRD v3: tum kullanicilar tum teklifleri gorebilir (seffaflik)
 
   const [data, total] = await Promise.all([
     prisma.quotation.findMany({
@@ -77,10 +74,7 @@ export async function getById(req: Request, res: Response) {
     throw new AppError('Teklif bulunamadi', 404);
   }
 
-  if (req.user!.role !== 'ADMIN' && quotation.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu teklif icin yetkiniz yok', 403);
-  }
-
+  // PRD v3: tum kullanicilar tum teklifleri gorebilir
   res.json({ success: true, data: quotation });
 }
 
@@ -92,10 +86,7 @@ export async function getRevisions(req: Request, res: Response) {
     throw new AppError('Teklif bulunamadi', 404);
   }
 
-  if (req.user!.role !== 'ADMIN' && quotation.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu teklif icin yetkiniz yok', 403);
-  }
-
+  // PRD v3: revizyon gecmisi herkese acik
   const revisions = await prisma.quotationRevision.findMany({
     where: { quotationId: id },
     orderBy: { revisionNo: 'desc' },

@@ -12,10 +12,8 @@ export async function list(req: Request, res: Response) {
   if (req.query.activityType) where.activityType = req.query.activityType;
   if (req.query.outcome) where.outcome = req.query.outcome;
 
-  // Non-admin sees only own activities
-  if (req.user!.role !== 'ADMIN') {
-    where.createdById = req.user!.userId;
-  } else if (req.query.createdById) {
+  // PRD v3: tum kullanicilar tum aktiviteleri gorebilir (dashboard "Son Aktiviteler" seffafligi)
+  if (req.query.createdById) {
     where.createdById = parseInt(String(req.query.createdById), 10);
   }
 
@@ -57,10 +55,7 @@ export async function getById(req: Request, res: Response) {
     throw new AppError('Aktivite bulunamadi', 404);
   }
 
-  if (req.user!.role !== 'ADMIN' && activity.createdById !== req.user!.userId) {
-    throw new AppError('Bu aktivite icin yetkiniz yok', 403);
-  }
-
+  // PRD v3: tum kullanicilar tum aktiviteleri gorebilir
   res.json({ success: true, data: activity });
 }
 

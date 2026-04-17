@@ -7,7 +7,10 @@ export const activityCreateSchema = z.object({
   durationMinutes: z.number().int().min(0).optional(),
   notes: z.string().optional(),
   outcome: z.string().optional(),
-  nextActionDate: z.string().optional(),
+  nextActionDate: z.string().optional().nullable(),
 });
 
+export const activityUpdateSchema = activityCreateSchema.partial().omit({ customerId: true });
+
 export type ActivityCreateSchemaInput = z.infer<typeof activityCreateSchema>;
+export type ActivityUpdateSchemaInput = z.infer<typeof activityUpdateSchema>;

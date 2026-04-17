@@ -49,10 +49,7 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
-  // Non-admin users can only see their own customers
-  if (req.user!.role !== 'ADMIN') {
-    where.assignedUserId = req.user!.userId;
-  }
+  // PRD v3: tum kullanicilar tum musterileri gorebilir (cakisma onleme icin kritik)
 
   const [data, total] = await Promise.all([
     prisma.customer.findMany({
@@ -95,11 +92,7 @@ export async function getById(req: Request, res: Response) {
     throw new AppError('Musteri bulunamadi', 404);
   }
 
-  // Non-admin users can only see their own customers
-  if (req.user!.role !== 'ADMIN' && customer.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu musteri icin yetkiniz yok', 403);
-  }
-
+  // PRD v3: tum kullanicilar tum musterileri gorebilir
   res.json({ success: true, data: customer });
 }
 

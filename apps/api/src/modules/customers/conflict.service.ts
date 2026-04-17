@@ -7,8 +7,10 @@ interface ConflictResult {
   contactName: string | null;
   phone: string;
   email: string;
+  assignedUserId: number;
   assignedUserName: string;
-  matchType: string;
+  lastContactDate: Date | null;
+  matchType: 'company_name' | 'phone' | 'email';
   similarity: number;
 }
 
@@ -41,14 +43,17 @@ export async function checkConflicts(req: Request, res: Response) {
           companyName.toLowerCase(),
           c.companyName.toLowerCase()
         );
-        if (similarity >= 40) {
+        // PRD v3: %80+ benzerlik uyari verir
+        if (similarity >= 80) {
           matches.push({
             customerId: c.id,
             companyName: c.companyName,
             contactName: c.contactName,
             phone: c.phone,
             email: c.email,
+            assignedUserId: c.assignedUserId,
             assignedUserName: c.assignedUser.fullName,
+            lastContactDate: c.lastContactDate,
             matchType: 'company_name',
             similarity,
           });
@@ -78,7 +83,9 @@ export async function checkConflicts(req: Request, res: Response) {
           contactName: c.contactName,
           phone: c.phone,
           email: c.email,
+          assignedUserId: c.assignedUserId,
           assignedUserName: c.assignedUser.fullName,
+          lastContactDate: c.lastContactDate,
           matchType: 'phone',
           similarity: 100,
         });
@@ -106,7 +113,9 @@ export async function checkConflicts(req: Request, res: Response) {
           contactName: c.contactName,
           phone: c.phone,
           email: c.email,
+          assignedUserId: c.assignedUserId,
           assignedUserName: c.assignedUser.fullName,
+          lastContactDate: c.lastContactDate,
           matchType: 'email',
           similarity: 100,
         });
