@@ -44,10 +44,10 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
     if (!fullName.trim()) newErrors.fullName = 'Ad soyad zorunludur';
     if (!email.trim()) newErrors.email = 'E-posta zorunludur';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      newErrors.email = 'Gecerli bir e-posta girin';
-    if (!isEditing && !password) newErrors.password = 'Sifre zorunludur';
+      newErrors.email = 'Geçerli bir e-posta girin';
+    if (!isEditing && !password) newErrors.password = 'Şifre zorunludur';
     if (!isEditing && password && password.length < 6)
-      newErrors.password = 'Sifre en az 6 karakter olmali';
+      newErrors.password = 'Şifre en az 6 karakter olmali';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -88,18 +88,18 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? 'Kullanici Duzenle' : 'Yeni Kullanici'}
+      title={isEditing ? 'Kullanıcı Düzenle' : 'Yeni Kullanıcı'}
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Iptal
+            İptal
           </Button>
           <Button
             loading={saving}
             onClick={handleSubmit}
             icon={isEditing ? 'save' : 'person_add'}
           >
-            {isEditing ? 'Kaydet' : 'Olustur'}
+            {isEditing ? 'Kaydet' : 'Oluştur'}
           </Button>
         </>
       }
@@ -111,7 +111,7 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           error={errors.fullName}
-          placeholder="Ornek: Ahmet Yilmaz"
+          placeholder="Örnek: Ahmet Yilmaz"
         />
 
         <Input
@@ -121,7 +121,7 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
-          placeholder="ornek@sirket.com"
+          placeholder="örnek@sirket.com"
         />
 
         <Input
@@ -138,14 +138,14 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
           value={role}
           onChange={(e) => setRole(e.target.value as 'ADMIN' | 'USER')}
           options={[
-            { value: 'USER', label: 'Kullanici' },
+            { value: 'USER', label: 'Kullanıcı' },
             { value: 'ADMIN', label: 'Admin' },
           ]}
         />
 
         {!isEditing && (
           <Input
-            label="Sifre"
+            label="Şifre"
             icon="lock"
             type="password"
             value={password}

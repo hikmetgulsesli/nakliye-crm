@@ -26,7 +26,7 @@ export async function generateNotifications(): Promise<void> {
   }
 }
 
-// ---------- 1. 14+ gun aranmayan musteriler ----------
+// ---------- 1. 14+ gün aranmayan müşteriler ----------
 
 async function notifyUncontactedCustomers(now: Date) {
   const fourteenDaysAgo = new Date(now);
@@ -51,7 +51,7 @@ async function notifyUncontactedCustomers(now: Date) {
     const existing = await prisma.notification.findFirst({
       where: {
         userId: customer.assignedUserId,
-        title: 'Aranmayan Musteri',
+        title: 'Aranmayan Müşteri',
         message: { contains: customer.companyName },
         createdAt: { gte: oneDayAgo },
       },
@@ -62,7 +62,7 @@ async function notifyUncontactedCustomers(now: Date) {
         data: {
           userId: customer.assignedUserId,
           type: 'warning',
-          title: 'Aranmayan Musteri',
+          title: 'Aranmayan Müşteri',
           message: `${customer.companyName} - 14+ gundur aranmadi`,
           link: `/customers/${customer.id}`,
         },
@@ -71,7 +71,7 @@ async function notifyUncontactedCustomers(now: Date) {
   }
 }
 
-// ---------- 2. 7+ gun bekleyen teklifler ----------
+// ---------- 2. 7+ gün bekleyen teklifler ----------
 
 async function notifyPendingQuotations(now: Date) {
   const sevenDaysAgo = new Date(now);
@@ -118,7 +118,7 @@ async function notifyPendingQuotations(now: Date) {
   }
 }
 
-// ---------- 3. Suresi dolmus teklifler ----------
+// ---------- 3. Süresi dolmus teklifler ----------
 
 async function notifyExpiredQuotations(now: Date) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -145,7 +145,7 @@ async function notifyExpiredQuotations(now: Date) {
     const existing = await prisma.notification.findFirst({
       where: {
         userId: q.assignedUserId,
-        title: 'Suresi Dolmus Teklif',
+        title: 'Süresi Dolmus Teklif',
         message: { contains: q.quoteNo },
         createdAt: { gte: oneDayAgo },
       },
@@ -156,8 +156,8 @@ async function notifyExpiredQuotations(now: Date) {
         data: {
           userId: q.assignedUserId,
           type: 'error',
-          title: 'Suresi Dolmus Teklif',
-          message: `${q.quoteNo} (${q.customer.companyName}) - Gecerlilik suresi doldu`,
+          title: 'Süresi Dolmus Teklif',
+          message: `${q.quoteNo} (${q.customer.companyName}) - Geçerlilik süresi doldu`,
           link: `/quotations/${q.id}`,
         },
       });
@@ -165,7 +165,7 @@ async function notifyExpiredQuotations(now: Date) {
   }
 }
 
-// ---------- 4. Yuksek potansiyel + 30 gun teklif yok ----------
+// ---------- 4. Yüksek potansiyel + 30 gün teklif yok ----------
 
 async function notifyHighPotentialNoQuote(now: Date) {
   const thirtyDaysAgo = new Date(now);
@@ -174,7 +174,7 @@ async function notifyHighPotentialNoQuote(now: Date) {
   const customers = await prisma.customer.findMany({
     where: {
       isDeleted: false,
-      potential: 'Yuksek',
+      potential: 'Yüksek',
       OR: [
         { lastQuoteDate: { lt: thirtyDaysAgo } },
         { lastQuoteDate: null },
@@ -190,7 +190,7 @@ async function notifyHighPotentialNoQuote(now: Date) {
     const existing = await prisma.notification.findFirst({
       where: {
         userId: customer.assignedUserId,
-        title: 'Yuksek Potansiyel - Teklif Yok',
+        title: 'Yüksek Potansiyel - Teklif Yok',
         message: { contains: customer.companyName },
         createdAt: { gte: oneDayAgo },
       },
@@ -201,7 +201,7 @@ async function notifyHighPotentialNoQuote(now: Date) {
         data: {
           userId: customer.assignedUserId,
           type: 'warning',
-          title: 'Yuksek Potansiyel - Teklif Yok',
+          title: 'Yüksek Potansiyel - Teklif Yok',
           message: `${customer.companyName} - 30+ gundur teklif verilmedi`,
           link: `/customers/${customer.id}`,
         },

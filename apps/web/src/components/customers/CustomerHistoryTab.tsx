@@ -9,11 +9,11 @@ interface CustomerHistoryTabProps {
 }
 
 const ACTION_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
-  CREATE: { icon: 'add_circle', color: 'text-emerald-500', label: 'Olusturuldu' },
-  UPDATE: { icon: 'edit', color: 'text-blue-500', label: 'Guncellendi' },
+  CREATE: { icon: 'add_circle', color: 'text-emerald-500', label: 'Oluşturuldu' },
+  UPDATE: { icon: 'edit', color: 'text-blue-500', label: 'Güncellendi' },
   DELETE: { icon: 'delete', color: 'text-red-500', label: 'Silindi' },
   RESTORE: { icon: 'restore', color: 'text-emerald-500', label: 'Geri alindi' },
-  STATUS_CHANGE: { icon: 'swap_horiz', color: 'text-amber-500', label: 'Durum degisti' },
+  STATUS_CHANGE: { icon: 'swap_horiz', color: 'text-amber-500', label: 'Durum değişti' },
   ASSIGN: { icon: 'person_add', color: 'text-purple-500', label: 'Temsilci atandi' },
   TRANSFER: { icon: 'swap_horiz', color: 'text-purple-500', label: 'Devredildi' },
 };
@@ -71,8 +71,8 @@ export function CustomerHistoryTab({ customerId }: CustomerHistoryTabProps) {
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <EmptyState
           icon="history"
-          title="Gecmis kaydi yok"
-          description="Bu musteriye ait degisiklik gecmisi bulunamadi."
+          title="Geçmiş kaydı yok"
+          description="Bu müşteriye ait değişiklik geçmişi bulunamadı."
         />
       </div>
     );
@@ -81,7 +81,7 @@ export function CustomerHistoryTab({ customerId }: CustomerHistoryTabProps) {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
       <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">
-        Degisiklik Gecmisi
+        Değişiklik Geçmişi
         <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
           ({logs.length})
         </span>

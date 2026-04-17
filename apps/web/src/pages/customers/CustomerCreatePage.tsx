@@ -30,7 +30,7 @@ export default function CustomerCreatePage() {
             })),
         );
       } catch (err) {
-        setConflictWarning('Kullanici listesi yuklenirken bir hata olustu.');
+        setConflictWarning('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
@@ -53,16 +53,16 @@ export default function CustomerCreatePage() {
         setConflictMatches(conflictResult);
         setPendingData(data);
         setShowConflictModal(true);
-        setConflictWarning('Bu telefon numarasi baska bir kayitta kullaniliyor');
+        setConflictWarning('Bu telefon numarasi başka bir kayitta kullaniliyor');
         setLoading(false);
         return;
       }
 
       // No conflict or force create - proceed
       const customer = await customerService.create(data);
-      navigate(`/musteriler/${customer.id}`);
+      navigate(`/müşteriler/${customer.id}`);
     } catch (err: unknown) {
-      setConflictWarning('Musteri olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+      setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -77,9 +77,9 @@ export default function CustomerCreatePage() {
         forceCreate: true,
       });
       setShowConflictModal(false);
-      navigate(`/musteriler/${customer.id}`);
+      navigate(`/müşteriler/${customer.id}`);
     } catch (err) {
-      setConflictWarning('Musteri olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+      setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -90,10 +90,10 @@ export default function CustomerCreatePage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Musteriler', href: '/musteriler' },
-          { label: 'Yeni Musteri Ekle' },
+          { label: 'Müşteriler', href: '/musteriler' },
+          { label: 'Yeni Müşteri Ekle' },
         ]}
-        title="Yeni Musteri Ekle"
+        title="Yeni Müşteri Ekle"
       />
 
       <CustomerForm

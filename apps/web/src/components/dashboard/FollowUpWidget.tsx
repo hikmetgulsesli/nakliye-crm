@@ -43,7 +43,7 @@ export function FollowUpWidget({ followUps, className }: FollowUpWidgetProps) {
           onClick={() => navigate('/musteriler')}
           className="text-primary text-sm font-medium hover:underline"
         >
-          Tumunu Gor
+          Tümünü Gör
         </button>
       </div>
 

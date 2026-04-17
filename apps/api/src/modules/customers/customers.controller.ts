@@ -49,7 +49,7 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
-  // PRD v3: tum kullanicilar tum musterileri gorebilir (cakisma onleme icin kritik)
+  // PRD v3: tüm kullanıcılar tüm müşterileri görebilir (çakışma onleme için kritik)
 
   const [data, total] = await Promise.all([
     prisma.customer.findMany({
@@ -89,10 +89,10 @@ export async function getById(req: Request, res: Response) {
   });
 
   if (!customer) {
-    throw new AppError('Musteri bulunamadi', 404);
+    throw new AppError('Müşteri bulunamadı', 404);
   }
 
-  // PRD v3: tum kullanicilar tum musterileri gorebilir
+  // PRD v3: tüm kullanıcılar tüm müşterileri görebilir
   res.json({ success: true, data: customer });
 }
 
@@ -144,11 +144,11 @@ export async function update(req: Request, res: Response) {
 
   const existing = await prisma.customer.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Musteri bulunamadi', 404);
+    throw new AppError('Müşteri bulunamadı', 404);
   }
 
   if (req.user!.role !== 'ADMIN' && existing.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu musteri icin yetkiniz yok', 403);
+    throw new AppError('Bu müşteri için yetkiniz yok', 403);
   }
 
   const {
@@ -204,7 +204,7 @@ export async function remove(req: Request, res: Response) {
 
   const existing = await prisma.customer.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Musteri bulunamadi', 404);
+    throw new AppError('Müşteri bulunamadı', 404);
   }
 
   // Soft delete via middleware
@@ -217,7 +217,7 @@ export async function remove(req: Request, res: Response) {
     action: 'DELETE',
   });
 
-  res.json({ success: true, message: 'Musteri silindi' });
+  res.json({ success: true, message: 'Müşteri silindi' });
 }
 
 export async function restore(req: Request, res: Response) {
@@ -227,7 +227,7 @@ export async function restore(req: Request, res: Response) {
     where: { id, isDeleted: true },
   });
   if (!existing) {
-    throw new AppError('Silinmis musteri bulunamadi', 404);
+    throw new AppError('Silinmiş müşteri bulunamadı', 404);
   }
 
   const customer = await prisma.customer.update({

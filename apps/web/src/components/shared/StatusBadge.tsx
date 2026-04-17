@@ -9,10 +9,10 @@ interface StatusBadgeProps {
 
 /**
  * Color mapping for status values:
- * Aktif = emerald, Pasif = slate, Soguk = blue, Bekliyor = amber,
- * Kazanildi = emerald, Kaybedildi = red
+ * Aktif = emerald, Pasif = slate, Soğuk = blue, Bekliyor = amber,
+ * Kazanıldı = emerald, Kaybedildi = red
  * Potential levels:
- * Yuksek Oncelikli = amber, Orta = info/blue, Dusuk = slate
+ * Yüksek Oncelikli = amber, Orta = info/blue, Düşük = slate
  */
 const STATUS_VARIANT_MAP: Record<string, BadgeVariant> = {
   // Customer statuses
@@ -20,30 +20,30 @@ const STATUS_VARIANT_MAP: Record<string, BadgeVariant> = {
   aktif: 'success',
   Pasif: 'neutral',
   pasif: 'neutral',
-  Soguk: 'info',
-  soguk: 'info',
+  Soğuk: 'info',
+  soğuk: 'info',
   Bekliyor: 'warning',
   bekliyor: 'warning',
-  Kazanildi: 'success',
-  kazanildi: 'success',
+  Kazanıldı: 'success',
+  kazanıldı: 'success',
   Kaybedildi: 'danger',
   kaybedildi: 'danger',
 
   // Potential levels
-  'Yuksek Oncelikli': 'warning',
+  'Yüksek Oncelikli': 'warning',
   'yuksek_oncelikli': 'warning',
-  'Yuksek': 'warning',
-  'yuksek': 'warning',
+  'Yüksek': 'warning',
+  'yüksek': 'warning',
   Orta: 'info',
   orta: 'info',
-  Dusuk: 'neutral',
-  dusuk: 'neutral',
+  Düşük: 'neutral',
+  düşük: 'neutral',
 
   // Quote statuses
   Hazirlaniyor: 'warning',
   hazirlaniyor: 'warning',
-  Gonderildi: 'info',
-  gonderildi: 'info',
+  Gönderildi: 'info',
+  gönderildi: 'info',
   Revize: 'warning',
   revize: 'warning',
 };

@@ -33,11 +33,11 @@ function formatRelative(dateStr: string): string {
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return 'Bugun';
+  if (diffDays === 0) return 'Bugün';
   if (diffDays === 1) return 'Dun';
-  if (diffDays < 7) return `${diffDays} gun once`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} hafta once`;
-  return `${Math.floor(diffDays / 30)} ay once`;
+  if (diffDays < 7) return `${diffDays} gün önce`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} hafta önce`;
+  return `${Math.floor(diffDays / 30)} ay önce`;
 }
 
 export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps) {
@@ -85,7 +85,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
         <EmptyState
           icon="timeline"
           title="Henuz aktivite yok"
-          description="Bu musteriye ait aktivite bulunamadi."
+          description="Bu müşteriye ait aktivite bulunamadı."
         />
       </div>
     );
@@ -160,7 +160,7 @@ export function CustomerActivitiesTab({ customerId }: CustomerActivitiesTabProps
                     <div className="mt-2 flex items-center gap-1.5">
                       <Icon name="event" size="sm" className="text-amber-500" />
                       <span className="text-sm text-slate-600 dark:text-slate-300">
-                        Sonraki islem:{' '}
+                        Sonraki işlem:{' '}
                         {new Date(activity.nextActionDate).toLocaleDateString('tr-TR')}
                       </span>
                     </div>

@@ -32,7 +32,7 @@ export default function QuoteEditPage() {
             })),
         );
       } catch (err: unknown) {
-        setError('Teklif bilgileri yuklenirken bir hata olustu.');
+        setError('Teklif bilgileri yüklenirken bir hata oluştu.');
       } finally {
         setPageLoading(false);
       }
@@ -47,7 +47,7 @@ export default function QuoteEditPage() {
       await quotationService.update(Number(id), data);
       navigate(`/teklifler/${id}`);
     } catch (err: unknown) {
-      setError('Teklif guncellenirken bir hata olustu.');
+      setError('Teklif guncellenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -77,9 +77,9 @@ export default function QuoteEditPage() {
           { label: 'Dashboard', href: '/' },
           { label: 'Teklifler', href: '/teklifler' },
           { label: quotation?.quoteNo || '', href: `/teklifler/${id}` },
-          { label: 'Duzenle' },
+          { label: 'Düzenle' },
         ]}
-        title="Teklif Duzenle"
+        title="Teklif Düzenle"
         subtitle={quotation?.quoteNo ? `${quotation.quoteNo} numarali teklifi duzenliyorsunuz` : ''}
       />
 

@@ -39,7 +39,7 @@ export default function CustomerListPage() {
             })),
         );
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
@@ -57,7 +57,7 @@ export default function CustomerListPage() {
       setCustomers(result.data);
       setTotal(result.total);
     } catch (err) {
-      setError('Musteriler yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Müşteriler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -83,13 +83,13 @@ export default function CustomerListPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Musteriler' },
+          { label: 'Müşteriler' },
         ]}
-        title="Musteriler"
-        subtitle="Tum musteri kayitlarini yonetin ve takip edin"
+        title="Müşteriler"
+        subtitle="Tüm müşteri kayitlarini yönetin ve takip edin"
         action={
           <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
-            Yeni Musteri
+            Yeni Müşteri
           </Button>
         }
       />
@@ -118,11 +118,11 @@ export default function CustomerListPage() {
       {!loading && customers.length === 0 ? (
         <EmptyState
           icon="group"
-          title="Henuz musteri eklenmemis"
-          description="Ilk musterinizi ekleyerek baslayabilirsiniz."
+          title="Henuz müşteri eklenmemis"
+          description="Ilk müşterinizi ekleyerek baslayabilirsiniz."
           action={
             <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
-              Yeni Musteri Ekle
+              Yeni Müşteri Ekle
             </Button>
           }
         />

@@ -50,11 +50,11 @@ export default function ProfilePage() {
   ): { label: string; color: string; width: string } => {
     if (pw.length === 0) return { label: '', color: '', width: '0%' };
     if (pw.length < 6)
-      return { label: 'Zayif', color: 'bg-red-500', width: '25%' };
+      return { label: 'Zayıf', color: 'bg-red-500', width: '25%' };
     if (pw.length < 10)
       return { label: 'Orta', color: 'bg-amber-500', width: '50%' };
     if (/(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])/.test(pw))
-      return { label: 'Guclu', color: 'bg-emerald-500', width: '100%' };
+      return { label: 'Güçlü', color: 'bg-emerald-500', width: '100%' };
     return { label: 'Iyi', color: 'bg-blue-500', width: '75%' };
   };
 
@@ -104,11 +104,11 @@ export default function ProfilePage() {
       if (user) {
         setUser({ ...user, fullName: data.fullName ?? fullName, email: data.email ?? email });
       }
-      showAlert('success', 'Profil bilgileri basariyla guncellendi.');
+      showAlert('success', 'Profil bilgileri basariyla güncellendi.');
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Profil guncellenirken bir hata olustu.';
+        'Profil guncellenirken bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setProfileSaving(false);
@@ -117,7 +117,7 @@ export default function ProfilePage() {
 
   const handlePasswordUpdate = async () => {
     if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
-      showAlert('error', 'Tum sifre alanlarini doldurun.');
+      showAlert('error', 'Tüm şifre alanlarini doldurun.');
       return;
     }
     if (newPassword.trim() !== confirmPassword.trim()) {
@@ -125,7 +125,7 @@ export default function ProfilePage() {
       return;
     }
     if (newPassword.length < 6) {
-      showAlert('error', 'Yeni sifre en az 6 karakter olmalidir.');
+      showAlert('error', 'Yeni şifre en az 6 karakter olmalidir.');
       return;
     }
     setPasswordSaving(true);
@@ -134,11 +134,11 @@ export default function ProfilePage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      showAlert('success', 'Sifre basariyla guncellendi.');
+      showAlert('success', 'Şifre basariyla güncellendi.');
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Sifre guncellenirken bir hata olustu.';
+        'Şifre guncellenirken bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setPasswordSaving(false);
@@ -165,7 +165,7 @@ export default function ProfilePage() {
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        '2FA isleminde bir hata olustu.';
+        '2FA isleminde bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setTwoFactorLoading(false);
@@ -186,7 +186,7 @@ export default function ProfilePage() {
       });
       showAlert('success', 'Bildirim tercihleri kaydedildi.');
     } catch {
-      showAlert('error', 'Bildirim tercihleri kaydedilirken bir hata olustu.');
+      showAlert('error', 'Bildirim tercihleri kaydedilirken bir hata oluştu.');
     } finally {
       setNotifSaving(false);
     }
@@ -197,10 +197,10 @@ export default function ProfilePage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Ana Sayfa', href: '/' },
-          { label: 'Profil ve Hesap Ayarlari' },
+          { label: 'Profil ve Hesap Ayarları' },
         ]}
-        title="Profil ve Hesap Ayarlari"
-        subtitle="Kisisel bilgilerinizi ve guvenlik ayarlarinizi yonetin."
+        title="Profil ve Hesap Ayarları"
+        subtitle="Kisisel bilgilerinizi ve guvenlik ayarlarinizi yönetin."
       />
 
       {/* Alert banner */}
@@ -297,20 +297,20 @@ export default function ProfilePage() {
         <Card title="Guvenlik">
           <div className="space-y-4">
             <Input
-              label="Mevcut Sifre"
+              label="Mevcut Şifre"
               icon="lock"
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder="Mevcut sifrenizi girin"
+              placeholder="Mevcut şifrenizi girin"
             />
             <Input
-              label="Yeni Sifre"
+              label="Yeni Şifre"
               icon="lock"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Yeni sifrenizi girin"
+              placeholder="Yeni şifrenizi girin"
             />
 
             {/* Password strength indicator */}
@@ -326,18 +326,18 @@ export default function ProfilePage() {
                   />
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Sifre Gucu: <span className="font-medium">{strength.label}</span>
+                  Şifre Gucu: <span className="font-medium">{strength.label}</span>
                 </p>
               </div>
             )}
 
             <Input
-              label="Yeni Sifre (Tekrar)"
+              label="Yeni Şifre (Tekrar)"
               icon="lock"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Yeni sifrenizi tekrar girin"
+              placeholder="Yeni şifrenizi tekrar girin"
               error={
                 confirmPassword && confirmPassword !== newPassword
                   ? 'Sifreler eslesmiyor'
@@ -352,7 +352,7 @@ export default function ProfilePage() {
                   Iki Faktorlu Dogrulama
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Hesabiniza ekstra guvenlik katmani ekleyin.
+                  Hesabınıza ekstra guvenlik katmani ekleyin.
                 </p>
               </div>
               <button
@@ -398,7 +398,7 @@ export default function ProfilePage() {
               onClick={handlePasswordUpdate}
               disabled={passwordSaving}
             >
-              {passwordSaving ? 'Guncelleniyor...' : 'Sifreyi Guncelle'}
+              {passwordSaving ? 'Guncelleniyor...' : 'Sifreyi Güncelle'}
             </Button>
           </div>
         </Card>
@@ -414,7 +414,7 @@ export default function ProfilePage() {
                 E-posta Bildirimleri
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Onemli guncellemeler icin e-posta alabilirsiniz.
+                Onemli guncellemeler için e-posta alabilirsiniz.
               </p>
             </div>
             <button
@@ -440,10 +440,10 @@ export default function ProfilePage() {
           <div className="flex items-center justify-between py-4">
             <div>
               <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                Gunluk Ozet E-postasi
+                Günlük Özet E-postasi
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Her gun saat 09:00'da gunluk aktivite ozeti alin.
+                Her gün saat 09:00'da günlük aktivite ozeti alin.
               </p>
             </div>
             <button

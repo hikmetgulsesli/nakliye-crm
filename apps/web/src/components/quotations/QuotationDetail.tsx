@@ -64,7 +64,7 @@ export function QuotationDetail({
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
             {q.customer && (
               <Link
-                to={`/musteriler/${q.customerId}`}
+                to={`/müşteriler/${q.customerId}`}
                 className="flex items-center gap-1 text-primary hover:underline font-medium"
               >
                 <Icon name="business" size="sm" />
@@ -77,7 +77,7 @@ export function QuotationDetail({
             </span>
             <span className="flex items-center gap-1">
               <Icon name="schedule" size="sm" />
-              Gecerlilik: {formatDate(q.validityDate)}
+              Geçerlilik: {formatDate(q.validityDate)}
             </span>
             {q.assignedUser && (
               <span className="flex items-center gap-1.5">
@@ -96,7 +96,7 @@ export function QuotationDetail({
             onClick={onEdit}
             className="!bg-emerald-500 hover:!bg-emerald-600 !shadow-emerald-500/20"
           >
-            Duzenle
+            Düzenle
           </Button>
           <Button variant="secondary" icon="picture_as_pdf" onClick={onDownloadPdf}>
             PDF Indir
@@ -139,11 +139,11 @@ export function QuotationDetail({
             {/* Details grid */}
             <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
               <div>
-                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Cikis Ulkesi</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Çıkış Ülkesi</p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.originCountry || '-'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Varis Ulkesi</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Varış Ülkesi</p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.destinationCountry || '-'}</p>
               </div>
               <div>
@@ -151,7 +151,7 @@ export function QuotationDetail({
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.incoterm || '-'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Revize Sayisi</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Revize Sayısı</p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.revisionCount}</p>
               </div>
             </div>
@@ -173,7 +173,7 @@ export function QuotationDetail({
             {/* Validity + Status */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Gecerlilik Tarihi</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Geçerlilik Tarihi</p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{formatDate(q.validityDate)}</p>
               </div>
               <div>
@@ -205,7 +205,7 @@ export function QuotationDetail({
                 <p className="text-sm text-slate-600 dark:text-slate-300">{q.createdBy?.fullName || '-'}</p>
               </div>
               <div>
-                <p className="uppercase tracking-wider mb-1">Olusturulma</p>
+                <p className="uppercase tracking-wider mb-1">Oluşturulma</p>
                 <p className="text-sm text-slate-600 dark:text-slate-300">{formatDate(q.createdAt)}</p>
               </div>
             </div>
@@ -213,8 +213,8 @@ export function QuotationDetail({
         </Card>
       </div>
 
-      {/* Revize Gecmisi */}
-      <Card title="Revize Gecmisi" noPadding>
+      {/* Revize Geçmişi */}
+      <Card title="Revize Geçmişi" noPadding>
         <div className="px-0">
           <RevisionHistory revisions={revisions} loading={revisionsLoading} />
         </div>

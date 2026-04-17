@@ -27,14 +27,14 @@ function getPeriodRange(period: string): { start: Date; end: Date } {
 
 // Country flag mapping helper
 const COUNTRY_FLAGS: Record<string, string> = {
-  'Turkiye': '\uD83C\uDDF9\uD83C\uDDF7',
-  'Cin': '\uD83C\uDDE8\uD83C\uDDF3',
+  'Türkiye': '\uD83C\uDDF9\uD83C\uDDF7',
+  'Çin': '\uD83C\uDDE8\uD83C\uDDF3',
   'Almanya': '\uD83C\uDDE9\uD83C\uDDEA',
   'ABD': '\uD83C\uDDFA\uD83C\uDDF8',
-  'Ingiltere': '\uD83C\uDDEC\uD83C\uDDE7',
+  'İngiltere': '\uD83C\uDDEC\uD83C\uDDE7',
   'Fransa': '\uD83C\uDDEB\uD83C\uDDF7',
-  'Italya': '\uD83C\uDDEE\uD83C\uDDF9',
-  'Ispanya': '\uD83C\uDDEA\uD83C\uDDF8',
+  'İtalya': '\uD83C\uDDEE\uD83C\uDDF9',
+  'İspanya': '\uD83C\uDDEA\uD83C\uDDF8',
   'Rusya': '\uD83C\uDDF7\uD83C\uDDFA',
   'BAE': '\uD83C\uDDE6\uD83C\uDDEA',
   'Japonya': '\uD83C\uDDEF\uD83C\uDDF5',
@@ -113,7 +113,7 @@ export async function userDashboard(req: Request, res: Response) {
     prisma.quotation.count({
       where: {
         assignedUserId: userId,
-        status: 'Kazanildi',
+        status: 'Kazanıldı',
         updatedAt: { gte: monthStart },
         isDeleted: false,
       },
@@ -161,7 +161,7 @@ export async function userDashboard(req: Request, res: Response) {
       where: {
         assignedUserId: userId,
         isDeleted: false,
-        potential: 'Yuksek',
+        potential: 'Yüksek',
       },
     }),
     // Follow-ups: upcoming activities (future or today)
@@ -209,13 +209,13 @@ export async function userDashboard(req: Request, res: Response) {
     {
       icon: 'emoji_events',
       iconColor: 'emerald',
-      label: 'Kazanilan Teklifler',
+      label: 'Kazanılan Teklifler',
       value: wonQuotes,
     },
     {
       icon: 'handshake',
       iconColor: 'purple',
-      label: 'Gorusulen Musteri',
+      label: 'Görüşülen Müşteri',
       value: contactedCustomers,
     },
   ];
@@ -232,19 +232,19 @@ export async function userDashboard(req: Request, res: Response) {
       id: 'pending',
       type: 'pending',
       count: pendingCount,
-      description: '7+ gun donus bekliyor',
+      description: '7+ gün dönüş bekliyor',
     },
     {
       id: 'expired',
       type: 'expired',
       count: expiredCount,
-      description: 'Suresi dolan teklifler',
+      description: 'Süresi dolan teklifler',
     },
     {
       id: 'highPotential',
       type: 'highPotential',
       count: highPotentialCount,
-      description: 'Yuksek potansiyelli musteriler',
+      description: 'Yüksek potansiyelli müşteriler',
     },
   ];
 
@@ -257,7 +257,7 @@ export async function userDashboard(req: Request, res: Response) {
 
     let dateStr: string;
     if (actDate >= today && actDate < tomorrow) {
-      dateStr = `Bugun, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+      dateStr = `Bugün, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
     } else if (actDate >= tomorrow && actDate < new Date(tomorrow.getTime() + 86400000)) {
       dateStr = `Yarin, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
     } else {
@@ -288,12 +288,12 @@ export async function userDashboard(req: Request, res: Response) {
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     let dateStr: string;
-    if (diffHours < 1) dateStr = 'Az once';
-    else if (diffHours < 24) dateStr = `${diffHours} saat once`;
+    if (diffHours < 1) dateStr = 'Az önce';
+    else if (diffHours < 24) dateStr = `${diffHours} saat önce`;
     else if (diffDays === 1) {
       dateStr = `Dun, ${actDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
     } else {
-      dateStr = `${diffDays} gun once`;
+      dateStr = `${diffDays} gün önce`;
     }
 
     return {
@@ -346,7 +346,7 @@ export async function adminDashboard(req: Request, res: Response) {
       where: { createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
     }),
     prisma.quotation.count({
-      where: { status: 'Kazanildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
+      where: { status: 'Kazanıldı', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
     }),
     prisma.quotation.count({
       where: { status: 'Kaybedildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
@@ -355,14 +355,14 @@ export async function adminDashboard(req: Request, res: Response) {
       where: { isDeleted: false, status: 'Aktif' },
     }),
     prisma.customer.count({
-      where: { isDeleted: false, potential: 'Yuksek' },
+      where: { isDeleted: false, potential: 'Yüksek' },
     }),
     // Previous period totals for trends
     prisma.quotation.count({
       where: { createdAt: { gte: prevStart, lt: prevEnd }, isDeleted: false },
     }),
     prisma.quotation.count({
-      where: { status: 'Kazanildi', updatedAt: { gte: prevStart, lt: prevEnd }, isDeleted: false },
+      where: { status: 'Kazanıldı', updatedAt: { gte: prevStart, lt: prevEnd }, isDeleted: false },
     }),
     prisma.customer.count({
       where: { isDeleted: false, status: 'Aktif', createdAt: { lt: prevEnd } },
@@ -413,27 +413,27 @@ export async function adminDashboard(req: Request, res: Response) {
     {
       icon: 'check_circle',
       iconColor: 'emerald',
-      label: 'Kazanilan',
+      label: 'Kazanılan',
       value: wonQuotesPeriod,
       trend: calcTrend(wonQuotesPeriod, prevWonQuotes),
     },
     {
       icon: 'track_changes',
       iconColor: 'purple',
-      label: 'Kazanma Orani',
+      label: 'Kazanma Oranı',
       value: `%${winRate}`,
     },
     {
       icon: 'groups',
       iconColor: 'slate',
-      label: 'Aktif Musteri',
+      label: 'Aktif Müşteri',
       value: activeCustomers,
       trend: calcTrend(activeCustomers, prevActiveCustomers),
     },
     {
       icon: 'star',
       iconColor: 'amber',
-      label: 'Yuksek Potansiyel',
+      label: 'Yüksek Potansiyel',
       value: highPotentialCustomers,
     },
   ];
@@ -451,7 +451,7 @@ export async function adminDashboard(req: Request, res: Response) {
           where: { assignedUserId: user.id, createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
         }),
         prisma.quotation.count({
-          where: { assignedUserId: user.id, status: 'Kazanildi', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
+          where: { assignedUserId: user.id, status: 'Kazanıldı', updatedAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
         }),
         prisma.activity.count({
           where: { createdById: user.id, createdAt: { gte: periodStart, lte: periodEnd }, isDeleted: false },
@@ -474,10 +474,10 @@ export async function adminDashboard(req: Request, res: Response) {
         const diffMs = now.getTime() - new Date(lastAct.activityDate).getTime();
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        if (diffHours < 1) lastActivity = 'Az once';
-        else if (diffHours < 24) lastActivity = `${diffHours} saat once`;
+        if (diffHours < 1) lastActivity = 'Az önce';
+        else if (diffHours < 24) lastActivity = `${diffHours} saat önce`;
         else if (diffDays === 1) lastActivity = 'Dun';
-        else lastActivity = `${diffDays} gun once`;
+        else lastActivity = `${diffDays} gün önce`;
       }
 
       return {

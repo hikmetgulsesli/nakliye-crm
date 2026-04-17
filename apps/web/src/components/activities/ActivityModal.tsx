@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn';
 
 const activitySchema = z.object({
   customerId: z.number().min(1),
-  activityType: z.string().min(1, 'Aktivite tipi secin'),
+  activityType: z.string().min(1, 'Aktivite tipi seçin'),
   activityDate: z.string().min(1, 'Tarih zorunludur'),
   activityTime: z.string().optional(),
   durationMinutes: z.number().optional(),
@@ -49,20 +49,20 @@ interface ActivityModalProps {
 const ACTIVITY_TYPES = [
   { value: 'telefon', label: 'Telefon', icon: 'phone' },
   { value: 'eposta', label: 'E-posta', icon: 'email' },
-  { value: 'yuz_yuze', label: 'Yuz Yuze', icon: 'groups' },
+  { value: 'yuz_yuze', label: 'Yüz Yuze', icon: 'groups' },
   { value: 'video', label: 'Video', icon: 'videocam' },
 ];
 
 const OUTCOME_OPTIONS = [
   { value: 'olumlu', label: 'Olumlu' },
-  { value: 'notr', label: 'Notr' },
+  { value: 'nötr', label: 'Nötr' },
   { value: 'olumsuz', label: 'Olumsuz' },
   { value: 'teklif_istendi', label: 'Teklif Istendi' },
 ];
 
 const OUTCOME_COLORS: Record<string, string> = {
   olumlu: 'bg-emerald-500',
-  notr: 'bg-slate-400',
+  nötr: 'bg-slate-400',
   olumsuz: 'bg-red-500',
   teklif_istendi: 'bg-blue-500',
 };
@@ -133,7 +133,7 @@ export function ActivityModal({
       footer={
         <>
           <Button type="button" variant="secondary" onClick={handleClose}>
-            Iptal
+            İptal
           </Button>
           <Button
             type="button"
@@ -147,10 +147,10 @@ export function ActivityModal({
       }
     >
       <div className="space-y-5">
-        {/* Bagli Musteri (readonly) */}
+        {/* Bagli Müşteri (readonly) */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Bagli Musteri
+            Bagli Müşteri
           </label>
           <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 rounded-xl p-3">
             <div className="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary font-bold text-xs">
@@ -230,10 +230,10 @@ export function ActivityModal({
           )}
         />
 
-        {/* Gorusme Notu */}
+        {/* Görüşme Notu */}
         <Textarea
-          label="Gorusme Notu"
-          placeholder="Gorusme ile ilgili notlarinizi yazin..."
+          label="Görüşme Notu"
+          placeholder="Görüşme ile ilgili notlarinizi yazin..."
           rows={4}
           {...register('notes')}
         />

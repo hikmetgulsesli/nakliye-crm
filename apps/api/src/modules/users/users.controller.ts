@@ -99,7 +99,7 @@ export async function update(req: Request, res: Response) {
 
   const existing = await prisma.user.findUnique({ where: { id } });
   if (!existing) {
-    throw new AppError('Kullanici bulunamadi', 404);
+    throw new AppError('Kullanıcı bulunamadı', 404);
   }
 
   if (email && email !== existing.email) {
@@ -133,7 +133,7 @@ export async function deactivate(req: Request, res: Response) {
 
   const existing = await prisma.user.findUnique({ where: { id } });
   if (!existing) {
-    throw new AppError('Kullanici bulunamadi', 404);
+    throw new AppError('Kullanıcı bulunamadı', 404);
   }
 
   if (id === req.user!.userId) {

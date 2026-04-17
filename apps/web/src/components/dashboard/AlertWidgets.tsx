@@ -18,7 +18,7 @@ const ALERT_ROUTES: Record<AlertData['type'], string> = {
   uncalled: '/musteriler',
   pending: '/teklifler?status=Bekliyor',
   expired: '/teklifler',
-  highPotential: '/musteriler?potential=Yuksek',
+  highPotential: '/müşteriler?potential=Yüksek',
 };
 
 const ALERT_CONFIG: Record<
@@ -30,7 +30,7 @@ const ALERT_CONFIG: Record<
     iconBg: 'bg-red-100',
     iconColor: 'text-red-600',
     icon: 'phone_missed',
-    title: 'Aranmayan Musteriler',
+    title: 'Aranmayan Müşteriler',
   },
   pending: {
     border: 'border-l-amber-500',
@@ -44,14 +44,14 @@ const ALERT_CONFIG: Record<
     iconBg: 'bg-orange-100',
     iconColor: 'text-orange-600',
     icon: 'schedule',
-    title: 'Suresi Dolan Teklifler',
+    title: 'Süresi Dolan Teklifler',
   },
   highPotential: {
     border: 'border-l-emerald-500',
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
     icon: 'star',
-    title: 'Yuksek Potansiyel',
+    title: 'Yüksek Potansiyel',
   },
 };
 

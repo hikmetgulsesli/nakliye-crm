@@ -33,7 +33,7 @@ export default function CustomerDetailPage() {
         const data = await customerService.getById(Number(id));
         setCustomer(data);
       } catch (err) {
-        setError('Musteri bilgileri yuklenirken bir hata olustu.');
+        setError('Müşteri bilgileri yüklenirken bir hata oluştu.');
       } finally {
         setLoading(false);
       }
@@ -49,7 +49,7 @@ export default function CustomerDetailPage() {
       await customerService.delete(customer.id);
       navigate('/musteriler');
     } catch (err) {
-      setError('Musteri silinirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Müşteri silinirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setDeleting(false);
       setShowDeleteModal(false);
@@ -90,7 +90,7 @@ export default function CustomerDetailPage() {
           onClick={() => navigate('/musteriler')}
           className="text-sm text-primary hover:underline"
         >
-          Musteri listesine don
+          Müşteri listesine don
         </button>
       </div>
     );
@@ -103,7 +103,7 @@ export default function CustomerDetailPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Musteriler', href: '/musteriler' },
+          { label: 'Müşteriler', href: '/musteriler' },
           { label: customer.companyName },
         ]}
         title={customer.companyName}
@@ -147,7 +147,7 @@ export default function CustomerDetailPage() {
               )}
               <span className="flex items-center gap-1.5">
                 <Icon name="phone" size="sm" className="text-slate-400 dark:text-slate-500" />
-                Son Iletisim: <span className="text-slate-700 dark:text-slate-300 font-medium">{formatDate(customer.lastContactDate)}</span>
+                Son İletişim: <span className="text-slate-700 dark:text-slate-300 font-medium">{formatDate(customer.lastContactDate)}</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <Icon name="request_quote" size="sm" className="text-slate-400 dark:text-slate-500" />
@@ -161,9 +161,9 @@ export default function CustomerDetailPage() {
             <Button
               variant="secondary"
               icon="edit"
-              onClick={() => navigate(`/musteriler/${customer.id}/duzenle`)}
+              onClick={() => navigate(`/müşteriler/${customer.id}/düzenle`)}
             >
-              Duzenle
+              Düzenle
             </Button>
             <Button
               variant="danger"
@@ -188,7 +188,7 @@ export default function CustomerDetailPage() {
         footer={
           <>
             <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-              Iptal
+              İptal
             </Button>
             <Button variant="danger" onClick={handleDelete} loading={deleting}>
               Sil
@@ -197,7 +197,7 @@ export default function CustomerDetailPage() {
         }
       >
         <p className="text-sm text-slate-600 dark:text-slate-300">
-          Bu musteriyi silmek istediginize emin misiniz? Bu islem geri alinabilir.
+          Bu musteriyi silmek istediginize emin misiniz? Bu işlem geri alinabilir.
         </p>
       </Modal>
     </div>

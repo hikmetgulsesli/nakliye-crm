@@ -6,16 +6,16 @@ import { userService } from '@/services/user.service';
 import { reportService, type ReportFilters, type ReportType, type ReportSummary } from '@/services/report.service';
 
 const REPORT_TYPE_OPTIONS: { value: ReportType | ''; label: string }[] = [
-  { value: '', label: 'Rapor Turu Secin' },
-  { value: 'periodic-quotes', label: 'Donemsel Teklif Raporu' },
+  { value: '', label: 'Rapor Turu Seçin' },
+  { value: 'periodic-quotes', label: 'Dönemsel Teklif Raporu' },
   { value: 'staff-performance', label: 'Personel Performans Raporu' },
-  { value: 'win-loss', label: 'Kazanilan / Kaybedilen Analizi' },
-  { value: 'country-mode-volume', label: 'Ulke / Mod Bazli Hacim' },
+  { value: 'win-loss', label: 'Kazanılan / Kaybedilen Analizi' },
+  { value: 'country-mode-volume', label: 'Ülke / Mod Bazli Hacim' },
   { value: 'loss-reasons', label: 'Kaybedilme Nedeni Analizi' },
 ];
 
 const TRANSPORT_MODE_OPTIONS = [
-  { value: '', label: 'Tum Modlar' },
+  { value: '', label: 'Tüm Modlar' },
   { value: 'sea', label: 'Deniz' },
   { value: 'air', label: 'Hava' },
   { value: 'land', label: 'Kara' },
@@ -45,20 +45,20 @@ export default function ReportsPage() {
             })),
         );
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
   }, []);
 
   const userOptions = [
-    { value: '', label: 'Tum Temsilciler' },
+    { value: '', label: 'Tüm Temsilciler' },
     ...users,
   ];
 
   const handleGenerateReport = async () => {
     if (!selectedReportType) {
-      setError('Lutfen bir rapor turu secin.');
+      setError('Lütfen bir rapor turu seçin.');
       setTimeout(() => setError(null), 4000);
       return;
     }
@@ -75,8 +75,8 @@ export default function ReportsPage() {
       setTimeout(() => setReportGenerated(false), 4000);
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : 'Bilinmeyen bir hata olustu';
-      setError(`Rapor olusturulurken bir hata olustu: ${message}`);
+        err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu';
+      setError(`Rapor oluşturulurken bir hata oluştu: ${message}`);
       setTimeout(() => setError(null), 4000);
     } finally {
       setGenerating(false);
@@ -90,7 +90,7 @@ export default function ReportsPage() {
           { label: 'Dashboard', href: '/' },
           { label: 'Raporlar' },
         ]}
-        title="Yonetici Raporlari"
+        title="Yönetici Raporlari"
         subtitle="Detayli raporlar olusturun ve indirin"
       />
 
@@ -98,7 +98,7 @@ export default function ReportsPage() {
       {reportGenerated && (
         <div className="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700 flex items-center gap-2">
           <span className="material-symbols-outlined text-[18px]">check_circle</span>
-          Rapor basariyla olusturuldu.
+          Rapor basariyla oluşturuldu.
         </div>
       )}
       {error && (
@@ -122,14 +122,14 @@ export default function ReportsPage() {
 
           {/* TARIH ARALIGI */}
           <DatePicker
-            label="Baslangic Tarihi"
+            label="Başlangıç Tarihi"
             value={filters.startDate ?? ''}
             onChange={(e) =>
               setFilters({ ...filters, startDate: e.target.value || undefined })
             }
           />
           <DatePicker
-            label="Bitis Tarihi"
+            label="Bitiş Tarihi"
             value={filters.endDate ?? ''}
             onChange={(e) =>
               setFilters({ ...filters, endDate: e.target.value || undefined })
@@ -138,7 +138,7 @@ export default function ReportsPage() {
 
           {/* SATIS TEMSILCISI */}
           <Select
-            label="Satis Temsilcisi"
+            label="Satış Temsilcisi"
             icon="person"
             value={filters.assignedUserId?.toString() ?? ''}
             onChange={(e) =>
@@ -152,7 +152,7 @@ export default function ReportsPage() {
 
           {/* TASIMA MODU */}
           <Select
-            label="Tasima Modu"
+            label="Taşıma Modu"
             icon="local_shipping"
             value={filters.transportMode ?? ''}
             onChange={(e) =>
@@ -164,7 +164,7 @@ export default function ReportsPage() {
             options={TRANSPORT_MODE_OPTIONS}
           />
 
-          {/* Rapor Olustur Button */}
+          {/* Rapor Oluştur Button */}
           <div>
             <Button
               icon="assessment"
@@ -172,7 +172,7 @@ export default function ReportsPage() {
               onClick={handleGenerateReport}
               disabled={generating || !selectedReportType}
             >
-              {generating ? 'Olusturuluyor...' : 'Rapor Olustur'}
+              {generating ? 'Olusturuluyor...' : 'Rapor Oluştur'}
             </Button>
           </div>
         </div>
@@ -185,7 +185,7 @@ export default function ReportsPage() {
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{reportData.title}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Olusturulma: {new Date(reportData.generatedAt).toLocaleString('tr-TR')}
+                Oluşturulma: {new Date(reportData.generatedAt).toLocaleString('tr-TR')}
               </p>
             </div>
             <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">

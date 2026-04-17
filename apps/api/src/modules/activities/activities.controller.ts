@@ -12,7 +12,7 @@ export async function list(req: Request, res: Response) {
   if (req.query.activityType) where.activityType = req.query.activityType;
   if (req.query.outcome) where.outcome = req.query.outcome;
 
-  // PRD v3: tum kullanicilar tum aktiviteleri gorebilir (dashboard "Son Aktiviteler" seffafligi)
+  // PRD v3: tüm kullanıcılar tüm aktiviteleri görebilir (dashboard "Son Aktiviteler" seffafligi)
   if (req.query.createdById) {
     where.createdById = parseInt(String(req.query.createdById), 10);
   }
@@ -52,10 +52,10 @@ export async function getById(req: Request, res: Response) {
   });
 
   if (!activity) {
-    throw new AppError('Aktivite bulunamadi', 404);
+    throw new AppError('Aktivite bulunamadı', 404);
   }
 
-  // PRD v3: tum kullanicilar tum aktiviteleri gorebilir
+  // PRD v3: tüm kullanıcılar tüm aktiviteleri görebilir
   res.json({ success: true, data: activity });
 }
 
@@ -68,7 +68,7 @@ export async function create(req: Request, res: Response) {
   // Verify customer exists
   const customer = await prisma.customer.findFirst({ where: { id: customerId } });
   if (!customer) {
-    throw new AppError('Musteri bulunamadi', 404);
+    throw new AppError('Müşteri bulunamadı', 404);
   }
 
   const activity = await prisma.activity.create({
@@ -109,11 +109,11 @@ export async function update(req: Request, res: Response) {
 
   const existing = await prisma.activity.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Aktivite bulunamadi', 404);
+    throw new AppError('Aktivite bulunamadı', 404);
   }
 
   if (req.user!.role !== 'ADMIN' && existing.createdById !== req.user!.userId) {
-    throw new AppError('Bu aktivite icin yetkiniz yok', 403);
+    throw new AppError('Bu aktivite için yetkiniz yok', 403);
   }
 
   const {
@@ -153,11 +153,11 @@ export async function remove(req: Request, res: Response) {
 
   const existing = await prisma.activity.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Aktivite bulunamadi', 404);
+    throw new AppError('Aktivite bulunamadı', 404);
   }
 
   if (req.user!.role !== 'ADMIN' && existing.createdById !== req.user!.userId) {
-    throw new AppError('Bu aktivite icin yetkiniz yok', 403);
+    throw new AppError('Bu aktivite için yetkiniz yok', 403);
   }
 
   await prisma.activity.delete({ where: { id } });
@@ -179,7 +179,7 @@ export async function restore(req: Request, res: Response) {
     where: { id, isDeleted: true },
   });
   if (!existing) {
-    throw new AppError('Silinmis aktivite bulunamadi', 404);
+    throw new AppError('Silinmiş aktivite bulunamadı', 404);
   }
 
   const activity = await prisma.activity.update({

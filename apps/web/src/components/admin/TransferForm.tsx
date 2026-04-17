@@ -68,9 +68,9 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
   }
 
   const scopeOptions: { value: TransferScope; label: string }[] = [
-    { value: 'all', label: 'Tum kayitlar' },
-    { value: 'active_customers', label: 'Sadece aktif musteriler' },
-    { value: 'open_quotes', label: 'Acik teklifler' },
+    { value: 'all', label: 'Tüm kayıtlar' },
+    { value: 'active_customers', label: 'Sadece aktif müşteriler' },
+    { value: 'open_quotes', label: 'Açık teklifler' },
   ];
 
   const availableToUsers = users.filter((u) => u.id !== fromUserId && u.isActive);
@@ -84,9 +84,9 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="inline-flex items-center justify-center size-12 rounded-xl bg-blue-50 text-primary mb-3">
             <Icon name="swap_horiz" size="lg" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Temsilci Devir Islemi</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Temsilci Devir İşlemi</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Musteri ve teklif sahipligini temsilciler arasinda aktarin
+            Müşteri ve teklif sahipligini temsilciler arasinda aktarin
           </p>
         </div>
 
@@ -104,12 +104,12 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
               }}
               className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
             >
-              <option value="">Temsilci secin...</option>
+              <option value="">Temsilci seçin...</option>
               {users
                 .filter((u) => u.isActive)
                 .map((u) => (
                   <option key={u.id} value={u.id}>
-                    {u.fullName} ({u.customerCount ?? 0} musteri)
+                    {u.fullName} ({u.customerCount ?? 0} müşteri)
                   </option>
                 ))}
             </select>
@@ -121,7 +121,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
             <div className="flex items-center gap-3 mt-2 px-1">
               <Avatar name={fromUser.fullName} src={fromUser.avatarUrl} size="sm" />
               <span className="text-sm text-slate-600 dark:text-slate-300">
-                {fromUser.fullName} - {fromUser.customerCount ?? 0} musteri
+                {fromUser.fullName} - {fromUser.customerCount ?? 0} müşteri
               </span>
             </div>
           )}
@@ -148,10 +148,10 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
               }}
               className="w-full h-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 pl-4 pr-10 appearance-none transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
             >
-              <option value="">Temsilci secin...</option>
+              <option value="">Temsilci seçin...</option>
               {availableToUsers.map((u) => (
                 <option key={u.id} value={u.id}>
-                  {u.fullName} ({u.customerCount ?? 0} musteri)
+                  {u.fullName} ({u.customerCount ?? 0} müşteri)
                 </option>
               ))}
             </select>
@@ -163,7 +163,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
             <div className="flex items-center gap-3 mt-2 px-1">
               <Avatar name={toUser.fullName} src={toUser.avatarUrl} size="sm" />
               <span className="text-sm text-slate-600 dark:text-slate-300">
-                {toUser.fullName} - {toUser.customerCount ?? 0} musteri
+                {toUser.fullName} - {toUser.customerCount ?? 0} müşteri
               </span>
             </div>
           )}
@@ -172,7 +172,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
         {/* Scope radio buttons */}
         <div className="mb-8">
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
-            Hangi Kayitlar Devredilsin?
+            Hangi Kayıtlar Devredilsin?
           </label>
           <div className="space-y-3">
             {scopeOptions.map((opt) => (
@@ -253,19 +253,19 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.customers}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">musteri</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">müşteri</p>
             </div>
             <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-center">
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.quotations}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">acik teklif</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">açık teklif</p>
             </div>
             <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-center">
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {preview.affectedRecords.activities}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">aktivite kaydi</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">aktivite kaydı</p>
             </div>
           </div>
 
@@ -273,7 +273,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
             <Icon name="warning" size="sm" className="text-amber-600 flex-shrink-0" />
             <p className="text-sm text-amber-800 font-medium">
-              Bu islem geri alinmaz. Devam etmek istediginizden emin misiniz?
+              Bu işlem geri alinmaz. Devam etmek istediginizden emin misiniz?
             </p>
           </div>
 
@@ -283,7 +283,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
               onClick={handleCancel}
               className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 font-medium px-4 py-2 transition-colors"
             >
-              Iptal
+              İptal
             </button>
             <Button
               icon="swap_horiz"

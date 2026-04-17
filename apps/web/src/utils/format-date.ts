@@ -30,7 +30,7 @@ export function formatDateTime(date: Date | string | null | undefined): string {
 
 /**
  * Format relative time in Turkish
- * e.g. "2 saat once", "1 gun once", "az once"
+ * e.g. "2 saat önce", "1 gün önce", "az önce"
  */
 export function formatRelativeTime(date: Date | string | null | undefined): string {
   if (!date) return '-';
@@ -47,11 +47,11 @@ export function formatRelativeTime(date: Date | string | null | undefined): stri
   const diffMonths = Math.floor(diffDays / 30);
   const diffYears = Math.floor(diffDays / 365);
 
-  if (diffSeconds < 60) return 'az once';
-  if (diffMinutes < 60) return `${diffMinutes} dakika once`;
-  if (diffHours < 24) return `${diffHours} saat once`;
-  if (diffDays < 7) return `${diffDays} gun once`;
-  if (diffWeeks < 4) return `${diffWeeks} hafta once`;
-  if (diffMonths < 12) return `${diffMonths} ay once`;
-  return `${diffYears} yil once`;
+  if (diffSeconds < 60) return 'az önce';
+  if (diffMinutes < 60) return `${diffMinutes} dakika önce`;
+  if (diffHours < 24) return `${diffHours} saat önce`;
+  if (diffDays < 7) return `${diffDays} gün önce`;
+  if (diffWeeks < 4) return `${diffWeeks} hafta önce`;
+  if (diffMonths < 12) return `${diffMonths} ay önce`;
+  return `${diffYears} yil önce`;
 }

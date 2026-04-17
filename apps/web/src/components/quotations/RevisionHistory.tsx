@@ -12,14 +12,14 @@ const FIELD_LABELS: Record<string, string> = {
   currency: 'Para Birimi',
   status: 'Durum',
   pol: 'Yukleme Noktasi',
-  pod: 'Varis Noktasi',
-  originCountry: 'Cikis Ulkesi',
-  destinationCountry: 'Varis Ulkesi',
-  transportMode: 'Tasima Modu',
+  pod: 'Varış Noktasi',
+  originCountry: 'Çıkış Ülkesi',
+  destinationCountry: 'Varış Ülkesi',
+  transportMode: 'Taşıma Modu',
   serviceType: 'Servis Tipi',
   incoterm: 'Incoterms',
   quoteDate: 'Teklif Tarihi',
-  validityDate: 'Gecerlilik Tarihi',
+  validityDate: 'Geçerlilik Tarihi',
   priceNote: 'Fiyat Notu',
   lossReason: 'Kaybedilme Nedeni',
   assignedUserId: 'Temsilci',
@@ -117,7 +117,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
   if (revisions.length === 0) {
     return (
       <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-sm">
-        Henuz revize gecmisi bulunmuyor
+        Henuz revize geçmişi bulunmuyor
       </div>
     );
   }
@@ -126,7 +126,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
     <Table<QuotationRevision & Record<string, unknown>>
       columns={columns}
       data={revisions as (QuotationRevision & Record<string, unknown>)[]}
-      emptyMessage="Revize gecmisi bulunamadi"
+      emptyMessage="Revize geçmişi bulunamadı"
     />
   );
 }

@@ -145,7 +145,7 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
         columns={columns}
         data={data as (Quotation & Record<string, unknown>)[]}
         onRowClick={(row) => navigate(`/teklifler/${row.id}`)}
-        emptyMessage="Teklif bulunamadi"
+        emptyMessage="Teklif bulunamadı"
       />
     </div>
   );

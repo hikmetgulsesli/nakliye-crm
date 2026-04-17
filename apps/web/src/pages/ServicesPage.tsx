@@ -3,33 +3,33 @@ import { Link } from 'react-router-dom';
 const services = [
   {
     icon: 'groups',
-    title: 'Musteri Iliskileri Yonetimi',
-    desc: 'Tum musterilerinizi tek bir platformda yonetin. Detayli musteri profilleri, iletisim gecmisi, notlar ve hatirlatmalar ile musteri iliskilerinizi guclendirin. Musteri segmentasyonu ve onceliklendirme ozellikleri sayesinde en degerli musterilerinize odaklanin.',
+    title: 'Müşteri Iliskileri Yönetimi',
+    desc: 'Tüm musterilerinizi tek bir platformda yönetin. Detayli müşteri profilleri, iletişim geçmişi, notlar ve hatirlatmalar ile müşteri iliskilerinizi guclendirin. Müşteri segmentasyonu ve onceliklendirme ozellikleri sayesinde en degerli musterilerinize odaklanin.',
   },
   {
     icon: 'request_quote',
     title: 'Teklif ve Fiyatlandirma',
-    desc: 'Otomatik teklif numaralama sistemi ile profesyonel teklifler olusturun. Revize takibi, onay surecleri ve teklif gecmisi ile sureci uctan uca yonetin. Farkli nakliye turlerine gore fiyatlandirma sablonlari ile hizli ve tutarli teklifler hazirlayin.',
+    desc: 'Otomatik teklif numaralama sistemi ile profesyonel teklifler olusturun. Revize takibi, onay surecleri ve teklif geçmişi ile sureci uctan uca yönetin. Farkli nakliye turlerine gore fiyatlandirma sablonlari ile hızlı ve tutarli teklifler hazirlayin.',
   },
   {
     icon: 'local_shipping',
     title: 'Lojistik Operasyon Takibi',
-    desc: 'Deniz, hava ve kara tasimaciliginda operasyonlarinizi takip edin. Yukun cikis noktasindan varis noktasina kadar tum sureci izleyin. Konteyner, parsiyel ve komple yukleme secenekleri ile esnek operasyon yonetimi saglayin.',
+    desc: 'Deniz, hava ve kara tasimaciliginda operasyonlarinizi takip edin. Yukun çıkış noktasindan varış noktasina kadar tüm sureci izleyin. Konteyner, parsiyel ve komple yukleme secenekleri ile esnek operasyon yönetimi saglayin.',
   },
   {
     icon: 'assessment',
     title: 'Raporlama ve Analiz',
-    desc: 'Kapsamli raporlama araclari ile isletmenizin performansini olcun. PDF ve Excel formatinda raporlar olusturun. Satis trendleri, musteri analizleri ve temsilci performansi gibi kritik metrikleri gorsellestirin.',
+    desc: 'Kapsamli raporlama araclari ile isletmenizin performansini olcun. PDF ve Excel formatinda raporlar olusturun. Satış trendleri, müşteri analizleri ve temsilci performansı gibi kritik metrikleri gorsellestirin.',
   },
   {
     icon: 'supervisor_account',
-    title: 'Ekip Yonetimi',
-    desc: 'Satis temsilcilerinize musteri ve teklif atamasi yapin. Devir islemleri ile calisanlarin ayrilis sureclerini sorunsuz yonetin. Ekip bazli performans raporlari ile verimlilik takibi yapin.',
+    title: 'Ekip Yönetimi',
+    desc: 'Satış temsilcilerinize müşteri ve teklif atamasi yapın. Devir işlemleri ile calisanlarin ayrilis sureclerini sorunsuz yönetin. Ekip bazli performans raporlari ile verimlilik takibi yapın.',
   },
   {
     icon: 'security',
     title: 'Guvenlik ve Denetim',
-    desc: 'Iki faktorlu dogrulama (2FA) ile hesap guvenligini artirin. Rol bazli erisim kontrolu (RBAC) sayesinde her kullanicinin sadece yetkili oldugu alanlara erismesini saglayin. Kapsamli denetim kayitlari ile tum islemleri takip edin.',
+    desc: 'Iki faktorlu dogrulama (2FA) ile hesap guvenligini artirin. Rol bazli erisim kontrolu (RBAC) sayesinde her kullanicinin sadece yetkili oldugu alanlara erismesini saglayin. Kapsamli denetim kayitlari ile tüm işlemleri takip edin.',
   },
 ];
 
@@ -49,23 +49,23 @@ export default function ServicesPage() {
           <div className="flex size-10 items-center justify-center rounded-full bg-[#e30a17]">
             <span className="material-symbols-outlined text-[22px] text-white">local_shipping</span>
           </div>
-          <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
+          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link to="/hakkimizda" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Hakkimizda
+            Hakkımızda
           </Link>
           <Link to="/hizmetler" className="text-sm font-medium text-white transition-colors">
             Hizmetler
           </Link>
           <Link to="/iletisim" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Iletisim
+            İletişim
           </Link>
           <Link
             to="/login"
             className="rounded-lg bg-[#e30a17] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c00914]"
           >
-            Giris Yap
+            Giriş Yap
           </Link>
         </nav>
       </header>
@@ -82,7 +82,7 @@ export default function ServicesPage() {
             </div>
             <h1 className="text-4xl font-black text-white lg:text-5xl">Hizmetlerimiz</h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
-              NakliyeCRM, uluslararasi nakliye firmalari icin ozel olarak tasarlanmis kapsamli cozumler sunar.
+              NakliyeCRM, uluslararası nakliye firmalari için ozel olarak tasarlanmis kapsamli çözümler sunar.
               Isletmenizin her ihtiyacina yonelik profesyonel araclarla verimliligini artirin.
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function ServicesPage() {
               to="/login"
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#e30a17] px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c00914]"
             >
-              Giris Yap
+              Giriş Yap
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </Link>
           </div>
@@ -122,13 +122,13 @@ export default function ServicesPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-4">
             <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Kullanim Sartlari
+              Kullanım Şartları
             </Link>
             <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Gizlilik Politikasi
+              Gizlilik Politikası
             </Link>
           </div>
         </div>

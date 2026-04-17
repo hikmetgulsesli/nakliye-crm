@@ -123,9 +123,9 @@ export const router = createBrowserRouter([
               </SuspenseWrapper>
             ),
           },
-          // Musteriler
+          // Müşteriler
           {
-            path: 'musteriler',
+            path: 'müşteriler',
             element: (
               <SuspenseWrapper>
                 <CustomerListPage />
@@ -133,7 +133,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'musteriler/yeni',
+            path: 'müşteriler/yeni',
             element: (
               <SuspenseWrapper>
                 <CustomerCreatePage />
@@ -141,7 +141,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'musteriler/:id',
+            path: 'müşteriler/:id',
             element: (
               <SuspenseWrapper>
                 <CustomerDetailPage />
@@ -149,7 +149,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'musteriler/:id/duzenle',
+            path: 'müşteriler/:id/düzenle',
             element: (
               <SuspenseWrapper>
                 <CustomerEditPage />
@@ -182,7 +182,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'teklifler/:id/duzenle',
+            path: 'teklifler/:id/düzenle',
             element: (
               <SuspenseWrapper>
                 <QuoteEditPage />
@@ -194,7 +194,7 @@ export const router = createBrowserRouter([
             element: <AdminRoute />,
             children: [
               {
-                path: 'kullanicilar',
+                path: 'kullanıcılar',
                 element: (
                   <SuspenseWrapper>
                     <UserManagementPage />
@@ -202,7 +202,7 @@ export const router = createBrowserRouter([
                 ),
               },
               {
-                path: 'liste-yonetimi',
+                path: 'liste-yönetimi',
                 element: (
                   <SuspenseWrapper>
                     <LookupManagementPage />

@@ -11,11 +11,11 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Dashboard', icon: 'dashboard', path: '/' },
-  { label: 'Musteriler', icon: 'people', path: '/musteriler' },
+  { label: 'Müşteriler', icon: 'people', path: '/musteriler' },
   { label: 'Teklifler', icon: 'description', path: '/teklifler' },
   { label: 'Raporlar', icon: 'bar_chart_4_bars', path: '/raporlar', adminOnly: true },
-  { label: 'Kullanici Yonetimi', icon: 'manage_accounts', path: '/kullanicilar', adminOnly: true },
-  { label: 'Sistem Ayarlari', icon: 'settings', path: '/liste-yonetimi', adminOnly: true },
+  { label: 'Kullanıcı Yönetimi', icon: 'manage_accounts', path: '/kullanicilar', adminOnly: true },
+  { label: 'Sistem Ayarları', icon: 'settings', path: '/liste-yonetimi', adminOnly: true },
   { label: 'Loglar', icon: 'receipt_long', path: '/loglar', adminOnly: true },
 ];
 
@@ -48,7 +48,7 @@ export default function Sidebar() {
           <div>
             <h1 className="text-xl font-bold text-white">NakliyeCRM</h1>
             <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-              Lojistik Yonetimi
+              Lojistik Yönetimi
             </p>
           </div>
         </div>
@@ -89,14 +89,14 @@ export default function Sidebar() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-white">
-              {user?.fullName || 'Kullanici'}
+              {user?.fullName || 'Kullanıcı'}
             </p>
             <p className="truncate text-xs text-slate-400 dark:text-slate-500">{user?.email || ''}</p>
           </div>
           <button
             onClick={handleLogout}
             className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-700 hover:text-white"
-            title="Cikis Yap"
+            title="Çıkış Yap"
           >
             <span className="material-symbols-outlined text-[20px]">logout</span>
           </button>

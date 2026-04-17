@@ -37,7 +37,7 @@ export function CustomerFilters({
         {/* Search */}
         <div className="w-64">
           <SearchInput
-            placeholder="Firma adi, telefon, e-posta..."
+            placeholder="Firma adı, telefon, e-posta..."
             value={filters.search || ''}
             onChange={(e) => handleChange('search', e.target.value)}
           />
@@ -67,7 +67,7 @@ export function CustomerFilters({
         <div className="w-44">
           <Select
             options={transportModeOptions}
-            placeholder="Tasima Modu"
+            placeholder="Taşıma Modu"
             value={filters.transportMode || ''}
             onChange={(e) => handleChange('transportMode', e.target.value)}
           />
@@ -87,7 +87,7 @@ export function CustomerFilters({
         <div className="w-44">
           <Select
             options={countryOptions}
-            placeholder="Cikis Ulkesi"
+            placeholder="Çıkış Ülkesi"
             value={filters.originCountry || ''}
             onChange={(e) => handleChange('originCountry', e.target.value)}
           />
@@ -97,7 +97,7 @@ export function CustomerFilters({
         <div className="w-44">
           <Select
             options={countryOptions}
-            placeholder="Varis Ulkesi"
+            placeholder="Varış Ülkesi"
             value={filters.destinationCountry || ''}
             onChange={(e) => handleChange('destinationCountry', e.target.value)}
           />
@@ -141,14 +141,14 @@ export function CustomerFilters({
         {/* Date Range */}
         <div className="w-40">
           <DatePicker
-            placeholder="Baslangic"
+            placeholder="Başlangıç"
             value={filters.startDate || ''}
             onChange={(e) => handleChange('startDate', e.target.value)}
           />
         </div>
         <div className="w-40">
           <DatePicker
-            placeholder="Bitis"
+            placeholder="Bitiş"
             value={filters.endDate || ''}
             onChange={(e) => handleChange('endDate', e.target.value)}
           />

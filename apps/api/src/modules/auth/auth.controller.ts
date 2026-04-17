@@ -10,12 +10,12 @@ export async function login(req: Request, res: Response) {
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !user.isActive) {
-    throw new AppError('Gecersiz e-posta veya sifre', 401);
+    throw new AppError('Gecersiz e-posta veya şifre', 401);
   }
 
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (!isValid) {
-    throw new AppError('Gecersiz e-posta veya sifre', 401);
+    throw new AppError('Gecersiz e-posta veya şifre', 401);
   }
 
   await prisma.user.update({
@@ -52,7 +52,7 @@ export async function login(req: Request, res: Response) {
 export async function refresh(req: Request, res: Response) {
   const token = req.cookies?.refreshToken;
   if (!token) {
-    throw new AppError('Refresh token bulunamadi', 401);
+    throw new AppError('Refresh token bulunamadı', 401);
   }
 
   const stored = await prisma.refreshToken.findUnique({
@@ -99,7 +99,7 @@ export async function logout(req: Request, res: Response) {
     await prisma.refreshToken.deleteMany({ where: { token } });
   }
   res.clearCookie('refreshToken', { path: '/api/auth' });
-  res.json({ success: true, message: 'Cikis yapildi' });
+  res.json({ success: true, message: 'Çıkış yapıldı' });
 }
 
 export async function me(req: Request, res: Response) {
@@ -124,7 +124,7 @@ export async function updateProfile(req: Request, res: Response) {
       where: { email, id: { not: userId } },
     });
     if (existing) {
-      throw new AppError('Bu e-posta adresi baska bir kullanici tarafindan kullaniliyor', 409);
+      throw new AppError('Bu e-posta adresi başka bir kullanıcı tarafindan kullaniliyor', 409);
     }
   }
 
@@ -150,21 +150,21 @@ export async function changePassword(req: Request, res: Response) {
   const userId = req.user!.userId;
 
   if (!currentPassword || !newPassword) {
-    throw new AppError('Mevcut sifre ve yeni sifre gereklidir', 400);
+    throw new AppError('Mevcut şifre ve yeni şifre gereklidir', 400);
   }
 
   if (newPassword.length < 6) {
-    throw new AppError('Yeni sifre en az 6 karakter olmalidir', 400);
+    throw new AppError('Yeni şifre en az 6 karakter olmalidir', 400);
   }
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
-    throw new AppError('Kullanici bulunamadi', 404);
+    throw new AppError('Kullanıcı bulunamadı', 404);
   }
 
   const isValid = await bcrypt.compare(currentPassword, user.passwordHash);
   if (!isValid) {
-    throw new AppError('Mevcut sifre yanlis', 401);
+    throw new AppError('Mevcut şifre yanlis', 401);
   }
 
   const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -173,7 +173,7 @@ export async function changePassword(req: Request, res: Response) {
     data: { passwordHash: hashedPassword },
   });
 
-  res.json({ success: true, message: 'Sifre basariyla guncellendi' });
+  res.json({ success: true, message: 'Şifre basariyla güncellendi' });
 }
 
 export async function enable2FA(req: Request, res: Response) {
@@ -181,7 +181,7 @@ export async function enable2FA(req: Request, res: Response) {
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
-    throw new AppError('Kullanici bulunamadi', 404);
+    throw new AppError('Kullanıcı bulunamadı', 404);
   }
 
   if (user.twoFactorEnabled) {
@@ -216,7 +216,7 @@ export async function forgotPassword(req: Request, res: Response) {
   // Always return success to prevent email enumeration
   res.json({
     success: true,
-    message: 'Sifre sifirlama linki e-posta adresinize gonderildi',
+    message: 'Şifre sıfırlama linki e-posta adresinize gönderildi',
   });
 }
 
@@ -225,7 +225,7 @@ export async function disable2FA(req: Request, res: Response) {
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
-    throw new AppError('Kullanici bulunamadi', 404);
+    throw new AppError('Kullanıcı bulunamadı', 404);
   }
 
   if (!user.twoFactorEnabled) {

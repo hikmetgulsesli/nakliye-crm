@@ -7,10 +7,10 @@ const router = Router();
 
 router.use(auth());
 
-// GET /users: tum auth'lu kullanicilar (temsilci filter, atama dropdown'i icin)
+// GET /users: tüm auth'lu kullanıcılar (temsilci filter, atama dropdown'i için)
 router.get('/', usersController.list);
 
-// Yazma islemleri admin only
+// Yazma işlemleri admin only
 router.post('/', rbac('ADMIN'), usersController.create);
 router.patch('/:id', rbac('ADMIN'), usersController.update);
 router.patch('/:id/deactivate', rbac('ADMIN'), usersController.deactivate);

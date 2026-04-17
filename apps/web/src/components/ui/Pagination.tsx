@@ -49,13 +49,13 @@ export function Pagination({
   return (
     <div className={cn('flex items-center justify-between', className)}>
       <span className="text-sm text-slate-500 dark:text-slate-400">
-        Toplam <span className="font-semibold text-slate-700 dark:text-slate-200">{totalItems}</span> kayit
+        Toplam <span className="font-semibold text-slate-700 dark:text-slate-200">{totalItems}</span> kayıt
       </span>
       <div className="flex items-center gap-1">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          aria-label="Onceki sayfa"
+          aria-label="Önceki sayfa"
           className="flex items-center justify-center size-9 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
         >
           <Icon name="chevron_left" size="sm" />

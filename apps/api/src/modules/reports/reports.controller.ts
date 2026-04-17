@@ -63,7 +63,7 @@ export async function periodicQuotes(req: Request, res: Response) {
   });
 
   const total = quotations.length;
-  const won = quotations.filter((q) => q.status === 'Kazanildi').length;
+  const won = quotations.filter((q) => q.status === 'Kazanıldı').length;
   const lost = quotations.filter((q) => q.status === 'Kaybedildi').length;
   const pending = quotations.filter((q) => q.status === 'Bekliyor').length;
   const winRate = total > 0 ? Math.round((won / total) * 100) : 0;
@@ -103,7 +103,7 @@ export async function staffPerformance(req: Request, res: Response) {
       });
 
       const totalQuotes = quotes.length;
-      const wonQuotes = quotes.filter((q) => q.status === 'Kazanildi').length;
+      const wonQuotes = quotes.filter((q) => q.status === 'Kazanıldı').length;
       const lostQuotes = quotes.filter((q) => q.status === 'Kaybedildi').length;
       const winRate = totalQuotes > 0 ? Math.round((wonQuotes / totalQuotes) * 100) : 0;
 
@@ -166,7 +166,7 @@ export async function winLoss(req: Request, res: Response) {
 
   const [won, lost] = await Promise.all([
     prisma.quotation.findMany({
-      where: { ...baseWhere, status: 'Kazanildi' },
+      where: { ...baseWhere, status: 'Kazanıldı' },
       include,
       orderBy: { quoteDate: 'desc' },
     }),
@@ -333,11 +333,11 @@ async function fetchReportData(reportType: string, query: any) {
       });
 
       return {
-        title: 'Donemsel Teklif Raporu',
-        columns: ['Teklif No', 'Musteri', 'Tarih', 'Mod', 'Fiyat', 'Para Birimi', 'Durum', 'Sorumlu'],
+        title: 'Dönemsel Teklif Raporu',
+        columns: ['Teklif No', 'Müşteri', 'Tarih', 'Mod', 'Fiyat', 'Para Birimi', 'Durum', 'Sorumlu'],
         excelColumns: [
           { header: 'Teklif No', key: 'quoteNo', width: 15 },
-          { header: 'Musteri', key: 'customer', width: 25 },
+          { header: 'Müşteri', key: 'customer', width: 25 },
           { header: 'Tarih', key: 'date', width: 12 },
           { header: 'Mod', key: 'mode', width: 12 },
           { header: 'Fiyat', key: 'price', width: 12 },
@@ -385,7 +385,7 @@ async function fetchReportData(reportType: string, query: any) {
             select: { status: true, price: true },
           });
           const totalQuotes = quotes.length;
-          const wonQuotes = quotes.filter((q) => q.status === 'Kazanildi').length;
+          const wonQuotes = quotes.filter((q) => q.status === 'Kazanıldı').length;
           const lostQuotes = quotes.filter((q) => q.status === 'Kaybedildi').length;
           const winRate = totalQuotes > 0 ? Math.round((wonQuotes / totalQuotes) * 100) : 0;
           const totalActivities = await prisma.activity.count({
@@ -408,11 +408,11 @@ async function fetchReportData(reportType: string, query: any) {
 
       return {
         title: 'Personel Performans Raporu',
-        columns: ['Personel', 'Toplam Teklif', 'Kazanilan', 'Kaybedilen', 'Kazanma %', 'Aktiviteler'],
+        columns: ['Personel', 'Toplam Teklif', 'Kazanılan', 'Kaybedilen', 'Kazanma %', 'Aktiviteler'],
         excelColumns: [
           { header: 'Personel', key: 'fullName', width: 25 },
           { header: 'Toplam Teklif', key: 'totalQuotes', width: 14 },
-          { header: 'Kazanilan', key: 'wonQuotes', width: 12 },
+          { header: 'Kazanılan', key: 'wonQuotes', width: 12 },
           { header: 'Kaybedilen', key: 'lostQuotes', width: 12 },
           { header: 'Kazanma %', key: 'winRate', width: 10 },
           { header: 'Aktiviteler', key: 'totalActivities', width: 12 },
@@ -439,21 +439,21 @@ async function fetchReportData(reportType: string, query: any) {
         isDeleted: false,
       };
       const [won, lost] = await Promise.all([
-        prisma.quotation.findMany({ where: { ...baseWhere, status: 'Kazanildi' }, include }),
+        prisma.quotation.findMany({ where: { ...baseWhere, status: 'Kazanıldı' }, include }),
         prisma.quotation.findMany({ where: { ...baseWhere, status: 'Kaybedildi' }, include }),
       ]);
 
       const allItems = [
-        ...won.map((q) => ({ ...q, _result: 'Kazanildi' })),
+        ...won.map((q) => ({ ...q, _result: 'Kazanıldı' })),
         ...lost.map((q) => ({ ...q, _result: 'Kaybedildi' })),
       ];
 
       return {
         title: 'Kazanma/Kaybetme Raporu',
-        columns: ['Teklif No', 'Musteri', 'Tarih', 'Fiyat', 'Para Birimi', 'Durum', 'Kayip Nedeni', 'Sorumlu'],
+        columns: ['Teklif No', 'Müşteri', 'Tarih', 'Fiyat', 'Para Birimi', 'Durum', 'Kayip Nedeni', 'Sorumlu'],
         excelColumns: [
           { header: 'Teklif No', key: 'quoteNo', width: 15 },
-          { header: 'Musteri', key: 'customer', width: 25 },
+          { header: 'Müşteri', key: 'customer', width: 25 },
           { header: 'Tarih', key: 'date', width: 12 },
           { header: 'Fiyat', key: 'price', width: 12 },
           { header: 'Para Birimi', key: 'currency', width: 10 },
@@ -514,12 +514,12 @@ async function fetchReportData(reportType: string, query: any) {
         .sort((a, b) => b.count - a.count);
 
       return {
-        title: 'Ulke ve Mod Hacim Raporu',
-        columns: ['Cikis Ulkesi', 'Varis Ulkesi', 'Teklif Sayisi', 'Toplam Deger'],
+        title: 'Ülke ve Mod Hacim Raporu',
+        columns: ['Çıkış Ülkesi', 'Varış Ülkesi', 'Teklif Sayısı', 'Toplam Deger'],
         excelColumns: [
-          { header: 'Cikis Ulkesi', key: 'origin', width: 18 },
-          { header: 'Varis Ulkesi', key: 'dest', width: 18 },
-          { header: 'Teklif Sayisi', key: 'count', width: 14 },
+          { header: 'Çıkış Ülkesi', key: 'origin', width: 18 },
+          { header: 'Varış Ülkesi', key: 'dest', width: 18 },
+          { header: 'Teklif Sayısı', key: 'count', width: 14 },
           { header: 'Toplam Deger', key: 'totalValue', width: 15 },
         ],
         rows: byCountry.map((c) => [

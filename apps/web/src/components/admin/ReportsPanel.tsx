@@ -14,8 +14,8 @@ interface ReportCard {
 const REPORT_CARDS: ReportCard[] = [
   {
     type: 'periodic-quotes',
-    title: 'Donemsel Teklif Raporu',
-    description: 'Belirli tarih araliginda olusturulan, kazanilan ve kaybedilen tekliflerin ozet raporu',
+    title: 'Dönemsel Teklif Raporu',
+    description: 'Belirli tarih araliginda olusturulan, kazanılan ve kaybedilen tekliflerin özet raporu',
     icon: 'description',
     iconColor: 'text-red-600',
     iconBg: 'bg-red-50',
@@ -23,14 +23,14 @@ const REPORT_CARDS: ReportCard[] = [
   {
     type: 'staff-performance',
     title: 'Personel Performans Raporu',
-    description: 'Satis temsilcilerinin musteri, teklif ve aktivite bazli performans karsilastirmasi',
+    description: 'Satış temsilcilerinin müşteri, teklif ve aktivite bazli performans karsilastirmasi',
     icon: 'leaderboard',
     iconColor: 'text-blue-600',
     iconBg: 'bg-blue-50',
   },
   {
     type: 'win-loss',
-    title: 'Kazanilan / Kaybedilen Analizi',
+    title: 'Kazanılan / Kaybedilen Analizi',
     description: 'Tekliflerin kazanilma ve kaybedilme oranlari ile trend analizi',
     icon: 'analytics',
     iconColor: 'text-emerald-600',
@@ -38,8 +38,8 @@ const REPORT_CARDS: ReportCard[] = [
   },
   {
     type: 'country-mode-volume',
-    title: 'Ulke / Mod Bazli Hacim',
-    description: 'Ulke ve tasima modu bazinda teklif hacimleri ve dagilim raporu',
+    title: 'Ülke / Mod Bazli Hacim',
+    description: 'Ülke ve taşıma modu bazinda teklif hacimleri ve dagilim raporu',
     icon: 'public',
     iconColor: 'text-purple-600',
     iconBg: 'bg-purple-50',
@@ -72,7 +72,7 @@ export function ReportsPanel({ filters }: ReportsPanelProps) {
     } catch (err) {
       console.error('Report export error:', err);
       const message =
-        err instanceof Error ? err.message : 'Bilinmeyen bir hata olustu';
+        err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu';
       setError(`Rapor indirilemedi: ${message}`);
       setTimeout(() => setError(null), 4000);
     } finally {

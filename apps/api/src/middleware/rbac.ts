@@ -6,7 +6,7 @@ export function rbac(...roles: string[]) {
       return res.status(401).json({ success: false, message: 'Yetkilendirme gerekli' });
     }
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ success: false, message: 'Bu islem icin yetkiniz yok' });
+      return res.status(403).json({ success: false, message: 'Bu işlem için yetkiniz yok' });
     }
     next();
   };

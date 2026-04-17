@@ -39,7 +39,7 @@ export default function QuoteListPage() {
             })),
         );
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
@@ -56,7 +56,7 @@ export default function QuoteListPage() {
       setQuotations(result.data);
       setTotal(result.total);
     } catch (err) {
-      setError('Teklifler yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Teklifler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ export default function QuoteListPage() {
           { label: 'Teklifler' },
         ]}
         title="Teklifler"
-        subtitle="Tum teklifleri yonetin ve takip edin"
+        subtitle="Tüm teklifleri yönetin ve takip edin"
         action={
           <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
             Yeni Teklif
@@ -117,7 +117,7 @@ export default function QuoteListPage() {
           description="Ilk teklifinizi olusturarak baslayabilirsiniz."
           action={
             <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
-              Yeni Teklif Olustur
+              Yeni Teklif Oluştur
             </Button>
           }
         />

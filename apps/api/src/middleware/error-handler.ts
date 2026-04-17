@@ -19,6 +19,6 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
   console.error('Unhandled error:', err);
   return res.status(500).json({
     success: false,
-    message: 'Sunucu hatasi olustu',
+    message: 'Sunucu hatasi oluştu',
   });
 }

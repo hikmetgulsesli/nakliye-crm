@@ -40,10 +40,10 @@ export function ConflictWarningModal({
           <Icon name="warning" className="text-amber-600" size="lg" />
         </div>
         <h2 className="text-xl font-bold text-red-600 mb-2">
-          Bu Musteri Zaten Kayitli Olabilir
+          Bu Müşteri Zaten Kayıtlı Olabilir
         </h2>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Sistemde benzer kayitlar bulundu:
+          Sistemde benzer kayıtlar bulundu:
         </p>
       </div>
 
@@ -86,10 +86,10 @@ export function ConflictWarningModal({
                 )}
               </div>
               <button
-                onClick={() => navigate(`/musteriler/${match.customerId}`)}
+                onClick={() => navigate(`/müşteriler/${match.customerId}`)}
                 className="text-sm text-primary font-medium hover:underline flex items-center gap-1 flex-shrink-0"
               >
-                Kaydi Ac
+                Kaydı Ac
                 <Icon name="open_in_new" size="sm" />
               </button>
             </div>
@@ -100,7 +100,7 @@ export function ConflictWarningModal({
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
         <Button variant="secondary" onClick={onClose}>
-          Iptal
+          İptal
         </Button>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">

@@ -25,7 +25,7 @@ export default function QuoteDetailPage() {
       const data = await quotationService.getById(quotationId);
       setQuotation(data);
     } catch (err) {
-      setError('Teklif bilgileri yuklenirken bir hata olustu.');
+      setError('Teklif bilgileri yüklenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function QuoteDetailPage() {
   }, [fetchQuotation, fetchRevisions]);
 
   function handleEdit() {
-    navigate(`/teklifler/${quotationId}/duzenle`);
+    navigate(`/teklifler/${quotationId}/düzenle`);
   }
 
   function handleDownloadPdf() {
@@ -90,7 +90,7 @@ export default function QuoteDetailPage() {
   if (!quotation) {
     return (
       <div className="text-center py-20">
-        <p className="text-slate-500 dark:text-slate-400">Teklif bulunamadi</p>
+        <p className="text-slate-500 dark:text-slate-400">Teklif bulunamadı</p>
       </div>
     );
   }

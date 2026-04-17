@@ -60,7 +60,7 @@ export async function update(req: Request, res: Response) {
 
   const existing = await prisma.lookupValue.findUnique({ where: { id } });
   if (!existing) {
-    throw new AppError('Deger bulunamadi', 404);
+    throw new AppError('Deger bulunamadı', 404);
   }
 
   const data: Record<string, unknown> = {};
@@ -80,7 +80,7 @@ export async function toggle(req: Request, res: Response) {
 
   const existing = await prisma.lookupValue.findUnique({ where: { id } });
   if (!existing) {
-    throw new AppError('Deger bulunamadi', 404);
+    throw new AppError('Deger bulunamadı', 404);
   }
 
   const lookup = await prisma.lookupValue.update({
@@ -107,5 +107,5 @@ export async function reorder(req: Request, res: Response) {
     )
   );
 
-  res.json({ success: true, message: 'Siralama guncellendi' });
+  res.json({ success: true, message: 'Siralama güncellendi' });
 }

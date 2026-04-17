@@ -20,7 +20,7 @@ export function Table<T extends Record<string, unknown>>({
   columns,
   data,
   onRowClick,
-  emptyMessage = 'Kayit bulunamadi',
+  emptyMessage = 'Kayıt bulunamadı',
   className,
 }: TableProps<T>) {
   return (

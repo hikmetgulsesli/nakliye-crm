@@ -67,13 +67,13 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
         <EmptyState
           icon="request_quote"
           title="Henuz teklif yok"
-          description="Bu musteriye ait teklif bulunamadi."
+          description="Bu müşteriye ait teklif bulunamadı."
           action={
             <Button
               icon="add"
               onClick={() => navigate(`/teklifler/yeni?customerId=${customerId}`)}
             >
-              Yeni Teklif Olustur
+              Yeni Teklif Oluştur
             </Button>
           }
         />

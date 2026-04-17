@@ -29,7 +29,7 @@ export default function QuoteCreatePage() {
             })),
         );
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
@@ -42,7 +42,7 @@ export default function QuoteCreatePage() {
       const quotation = await quotationService.create(data);
       navigate(`/teklifler/${quotation.id}`);
     } catch (err) {
-      setError('Teklif olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Teklif oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export default function QuoteCreatePage() {
           { label: 'Teklifler', href: '/teklifler' },
           { label: 'Yeni Teklif' },
         ]}
-        title="Yeni Teklif Olustur"
+        title="Yeni Teklif Oluştur"
         subtitle={`Yeni bir teklif olusturun`}
       />
 

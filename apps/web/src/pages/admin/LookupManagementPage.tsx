@@ -30,7 +30,7 @@ export default function LookupManagementPage() {
       }
       setAllValues(flat);
     } catch (err) {
-      setError('Liste degerleri yuklenirken bir hata olustu.');
+      setError('Liste degerleri yüklenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ export default function LookupManagementPage() {
       await lookupService.toggle(item.id);
       fetchLookups();
     } catch (err) {
-      setError('Deger silinirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Deger silinirken bir hata oluştu. Lütfen tekrar deneyin.');
     }
   }
 
@@ -88,7 +88,7 @@ export default function LookupManagementPage() {
       }
       fetchLookups();
     } catch (err) {
-      setError('Deger kaydedilirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Deger kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
     }
   }
 
@@ -125,7 +125,7 @@ export default function LookupManagementPage() {
       await lookupService.reorder(reorderItems);
       fetchLookups();
     } catch (err) {
-      setError('Siralama degistirilirken bir hata olustu.');
+      setError('Siralama degistirilirken bir hata oluştu.');
     }
   }
 
@@ -138,10 +138,10 @@ export default function LookupManagementPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Liste Yonetimi' },
+          { label: 'Liste Yönetimi' },
         ]}
-        title="Dinamik Liste Yonetimi"
-        subtitle="Sistem genelinde kullanilan liste degerlerini yonetin"
+        title="Dinamik Liste Yönetimi"
+        subtitle="Sistem genelinde kullanilan liste degerlerini yönetin"
       />
 
       {error && (
@@ -168,7 +168,7 @@ export default function LookupManagementPage() {
           <LookupValuesTable
             values={currentValues}
             categoryLabel={categoryLabel}
-            categoryDescription={`"${categoryLabel}" kategorisine ait tum degerler`}
+            categoryDescription={`"${categoryLabel}" kategorisine ait tüm degerler`}
             loading={loading}
             onAdd={handleAdd}
             onEdit={handleEdit}

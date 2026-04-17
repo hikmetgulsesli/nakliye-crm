@@ -29,7 +29,7 @@ export function auth() {
       req.user = payload;
       next();
     } catch {
-      return res.status(401).json({ success: false, message: 'Gecersiz veya suresi dolmus token' });
+      return res.status(401).json({ success: false, message: 'Gecersiz veya süresi dolmus token' });
     }
   };
 }

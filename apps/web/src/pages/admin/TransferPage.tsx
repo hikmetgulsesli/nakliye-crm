@@ -17,7 +17,7 @@ export default function TransferPage() {
         const result = await userService.getAll(1, 100);
         setUsers(result.data);
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       } finally {
         setLoading(false);
       }
@@ -31,7 +31,7 @@ export default function TransferPage() {
     userService.getAll(1, 100).then((result) => {
       setUsers(result.data);
     }).catch(() => {
-      setError('Devir islemi sonrasi kullanici listesi yenilenemedi.');
+      setError('Devir islemi sonrasi kullanıcı listesi yenilenemedi.');
     });
   }
 
@@ -50,15 +50,15 @@ export default function TransferPage() {
           { label: 'Dashboard', href: '/' },
           { label: 'Temsilci Devir' },
         ]}
-        title="Temsilci Devir Islemi"
-        subtitle="Musteri ve teklif sahipligini temsilciler arasinda aktarin"
+        title="Temsilci Devir İşlemi"
+        subtitle="Müşteri ve teklif sahipligini temsilciler arasinda aktarin"
         action={
           <Link
             to="/loglar"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-blue-700 transition-colors"
           >
             <Icon name="history" size="sm" />
-            Islem Gecmisi
+            İşlem Geçmişi
           </Link>
         }
       />

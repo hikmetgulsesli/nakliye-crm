@@ -15,8 +15,8 @@ const TRANSPORT_MODE_ICONS: Record<string, string> = {
 export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Iletisim Bilgileri */}
-      <Card title="Iletisim Bilgileri">
+      {/* İletişim Bilgileri */}
+      <Card title="İletişim Bilgileri">
         <div className="space-y-4">
           <InfoRow icon="person" label="Yetkili Kisi" value={customer.contactName} />
           <InfoRow icon="phone" label="Telefon" value={customer.phone} />
@@ -30,7 +30,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
         <div className="space-y-4">
           {/* Transport Modes */}
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Tasima Modlari</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Taşıma Modlari</p>
             <div className="flex flex-wrap gap-2">
               {customer.transportModes && customer.transportModes.length > 0 ? (
                 customer.transportModes.map((mode) => (
@@ -103,7 +103,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       <Card title="Sik Kullanilan Hatlar">
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Cikis Ulkeleri</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Çıkış Ülkeleri</p>
             <div className="flex flex-wrap gap-2">
               {customer.originCountries && customer.originCountries.length > 0 ? (
                 customer.originCountries.map((country) => (
@@ -122,7 +122,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Varis Ulkeleri</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Varış Ülkeleri</p>
             <div className="flex flex-wrap gap-2">
               {customer.destinationCountries &&
               customer.destinationCountries.length > 0 ? (
@@ -146,7 +146,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       {/* CRM Bilgileri */}
       <Card title="CRM Bilgileri">
         <div className="space-y-4">
-          <InfoRow icon="source" label="Musteri Kaynagi" value={customer.source} />
+          <InfoRow icon="source" label="Müşteri Kaynagi" value={customer.source} />
           <InfoRow icon="trending_up" label="Potansiyel" value={customer.potential} />
           {customer.notes && (
             <div>

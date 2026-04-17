@@ -8,11 +8,11 @@ export async function preview(req: Request, res: Response) {
   const targetUserId = req.body.targetUserId ?? req.body.toUserId;
 
   if (!sourceUserId || !targetUserId) {
-    throw new AppError('Kaynak ve hedef kullanici ID gerekli', 400);
+    throw new AppError('Kaynak ve hedef kullanıcı ID gerekli', 400);
   }
 
   if (sourceUserId === targetUserId) {
-    throw new AppError('Kaynak ve hedef kullanici ayni olamaz', 400);
+    throw new AppError('Kaynak ve hedef kullanıcı ayni olamaz', 400);
   }
 
   const [sourceUser, targetUser] = await Promise.all([
@@ -20,8 +20,8 @@ export async function preview(req: Request, res: Response) {
     prisma.user.findUnique({ where: { id: targetUserId }, select: { id: true, fullName: true } }),
   ]);
 
-  if (!sourceUser) throw new AppError('Kaynak kullanici bulunamadi', 404);
-  if (!targetUser) throw new AppError('Hedef kullanici bulunamadi', 404);
+  if (!sourceUser) throw new AppError('Kaynak kullanıcı bulunamadı', 404);
+  if (!targetUser) throw new AppError('Hedef kullanıcı bulunamadı', 404);
 
   const [customerCount, quotationCount, activityCount] = await Promise.all([
     prisma.customer.count({ where: { assignedUserId: sourceUserId, isDeleted: false } }),
@@ -49,11 +49,11 @@ export async function execute(req: Request, res: Response) {
   const targetUserId = req.body.targetUserId ?? req.body.toUserId;
 
   if (!sourceUserId || !targetUserId) {
-    throw new AppError('Kaynak ve hedef kullanici ID gerekli', 400);
+    throw new AppError('Kaynak ve hedef kullanıcı ID gerekli', 400);
   }
 
   if (sourceUserId === targetUserId) {
-    throw new AppError('Kaynak ve hedef kullanici ayni olamaz', 400);
+    throw new AppError('Kaynak ve hedef kullanıcı ayni olamaz', 400);
   }
 
   const [sourceUser, targetUser] = await Promise.all([
@@ -61,8 +61,8 @@ export async function execute(req: Request, res: Response) {
     prisma.user.findUnique({ where: { id: targetUserId }, select: { id: true, fullName: true } }),
   ]);
 
-  if (!sourceUser) throw new AppError('Kaynak kullanici bulunamadi', 404);
-  if (!targetUser) throw new AppError('Hedef kullanici bulunamadi', 404);
+  if (!sourceUser) throw new AppError('Kaynak kullanıcı bulunamadı', 404);
+  if (!targetUser) throw new AppError('Hedef kullanıcı bulunamadı', 404);
 
   // Execute transfer in a transaction
   const result = await prisma.$transaction(async (tx) => {
@@ -110,6 +110,6 @@ export async function execute(req: Request, res: Response) {
       targetUser,
       transferred: result,
     },
-    message: `${result.customers + result.quotations + result.activities} kayit basariyla devredildi`,
+    message: `${result.customers + result.quotations + result.activities} kayıt basariyla devredildi`,
   });
 }

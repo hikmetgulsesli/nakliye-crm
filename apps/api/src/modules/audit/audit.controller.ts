@@ -72,7 +72,7 @@ export async function exportCsv(req: Request, res: Response) {
     orderBy: { createdAt: 'desc' },
   });
 
-  const header = 'ID,Kullanici,Email,Kayit Tipi,Kayit ID,Aksiyon,Degisiklikler,Tarih';
+  const header = 'ID,Kullanıcı,Email,Kayıt Tipi,Kayıt ID,Aksiyon,Degisiklikler,Tarih';
   const escCsv = (val: string) => `"${String(val ?? '').replace(/"/g, '""')}"`;
 
   const rows = logs.map((log) =>

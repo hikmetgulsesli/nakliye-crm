@@ -36,7 +36,7 @@ export default function Header({ title }: HeaderProps) {
     (query: string) => {
       const trimmed = query.trim();
       if (trimmed) {
-        navigate(`/musteriler?search=${encodeURIComponent(trimmed)}`);
+        navigate(`/müşteriler?search=${encodeURIComponent(trimmed)}`);
       }
     },
     [navigate],
@@ -93,7 +93,7 @@ export default function Header({ title }: HeaderProps) {
           </span>
           <input
             type="text"
-            placeholder="Musteri, teklif veya sevkiyat ara..."
+            placeholder="Müşteri, teklif veya sevkiyat ara..."
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyDown={handleSearchKeyDown}
@@ -104,8 +104,8 @@ export default function Header({ title }: HeaderProps) {
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Acik temaya gec' : 'Koyu temaya gec'}
-          title={theme === 'dark' ? 'Acik tema' : 'Koyu tema'}
+          aria-label={theme === 'dark' ? 'Açık temaya gec' : 'Koyu temaya gec'}
+          title={theme === 'dark' ? 'Açık tema' : 'Koyu tema'}
           className="rounded-full p-2 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-800"
         >
           <span className="material-symbols-outlined text-slate-600 dark:text-slate-300">
@@ -135,10 +135,10 @@ export default function Header({ title }: HeaderProps) {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-              {user?.fullName || 'Kullanici'}
+              {user?.fullName || 'Kullanıcı'}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              {user?.role === 'ADMIN' ? 'Yonetici' : 'Kullanici'}
+              {user?.role === 'ADMIN' ? 'Yönetici' : 'Kullanıcı'}
             </p>
           </div>
           <div className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">

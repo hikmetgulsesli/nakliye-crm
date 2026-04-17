@@ -38,7 +38,7 @@ export default function UserManagementPage() {
       setUsers(filtered);
       setTotal(result.total);
     } catch (err) {
-      setError('Kullanicilar yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Kullanıcılar yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function UserManagementPage() {
       }
       fetchUsers();
     } catch (err) {
-      setError('Kullanici durumu degistirilirken bir hata olustu.');
+      setError('Kullanıcı durumu degistirilirken bir hata oluştu.');
     }
   }
 
@@ -86,7 +86,7 @@ export default function UserManagementPage() {
       }
       fetchUsers();
     } catch (err) {
-      setError('Kullanici kaydedilirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Kullanıcı kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
     }
   }
 
@@ -95,20 +95,20 @@ export default function UserManagementPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Kullanici Yonetimi' },
+          { label: 'Kullanıcı Yönetimi' },
         ]}
-        title="Kullanici Yonetimi"
-        subtitle="Sistem kullanicilarini yonetin ve yetkilendirin"
+        title="Kullanıcı Yönetimi"
+        subtitle="Sistem kullanicilarini yönetin ve yetkilendirin"
         action={
           <div className="flex items-center gap-3">
             <SearchInput
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Kullanici ara..."
+              placeholder="Kullanıcı ara..."
               className="w-64"
             />
             <Button icon="person_add" onClick={handleCreate}>
-              Yeni Kullanici
+              Yeni Kullanıcı
             </Button>
           </div>
         }
@@ -126,11 +126,11 @@ export default function UserManagementPage() {
       {!loading && users.length === 0 ? (
         <EmptyState
           icon="group"
-          title="Henuz kullanici eklenmemis"
-          description="Sisteme yeni kullanici ekleyerek baslayabilirsiniz."
+          title="Henuz kullanıcı eklenmemis"
+          description="Sisteme yeni kullanıcı ekleyerek baslayabilirsiniz."
           action={
             <Button icon="person_add" onClick={handleCreate}>
-              Yeni Kullanici Ekle
+              Yeni Kullanıcı Ekle
             </Button>
           }
         />

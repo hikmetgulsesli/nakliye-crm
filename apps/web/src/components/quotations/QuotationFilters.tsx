@@ -27,7 +27,7 @@ export function QuotationFilters({
 
   const statusOptions = [
     { value: 'Bekliyor', label: 'Bekliyor' },
-    { value: 'Kazanildi', label: 'Kazanildi' },
+    { value: 'Kazanıldı', label: 'Kazanıldı' },
     { value: 'Kaybedildi', label: 'Kaybedildi' },
   ];
   const transportModeOptions = getOptions('transport_mode');
@@ -45,7 +45,7 @@ export function QuotationFilters({
         {/* Search */}
         <div className="w-64">
           <SearchInput
-            placeholder="Teklif no veya musteri ara..."
+            placeholder="Teklif no veya müşteri ara..."
             value={filters.search || ''}
             onChange={(e) => handleChange('search', e.target.value)}
           />
@@ -54,7 +54,7 @@ export function QuotationFilters({
         {/* Date From */}
         <div className="w-40">
           <DatePicker
-            placeholder="Baslangic"
+            placeholder="Başlangıç"
             value={filters.dateFrom || ''}
             onChange={(e) => handleChange('dateFrom', e.target.value)}
           />
@@ -63,7 +63,7 @@ export function QuotationFilters({
         {/* Date To */}
         <div className="w-40">
           <DatePicker
-            placeholder="Bitis"
+            placeholder="Bitiş"
             value={filters.dateTo || ''}
             onChange={(e) => handleChange('dateTo', e.target.value)}
           />
@@ -83,7 +83,7 @@ export function QuotationFilters({
         <div className="w-40">
           <Select
             options={transportModeOptions}
-            placeholder="Tasima Modu"
+            placeholder="Taşıma Modu"
             value={filters.transportMode || ''}
             onChange={(e) => handleChange('transportMode', e.target.value)}
           />
@@ -103,7 +103,7 @@ export function QuotationFilters({
         <div className="w-40">
           <Select
             options={countryOptions}
-            placeholder="Cikis Ulkesi"
+            placeholder="Çıkış Ülkesi"
             value={filters.originCountry || ''}
             onChange={(e) => handleChange('originCountry', e.target.value)}
           />
@@ -113,7 +113,7 @@ export function QuotationFilters({
         <div className="w-40">
           <Select
             options={countryOptions}
-            placeholder="Varis Ulkesi"
+            placeholder="Varış Ülkesi"
             value={filters.destinationCountry || ''}
             onChange={(e) => handleChange('destinationCountry', e.target.value)}
           />

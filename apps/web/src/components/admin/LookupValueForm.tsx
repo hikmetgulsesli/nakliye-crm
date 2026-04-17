@@ -68,11 +68,11 @@ export function LookupValueForm({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? `Degeri Duzenle` : `${categoryLabel} - Yeni Deger`}
+      title={isEditing ? `Degeri Düzenle` : `${categoryLabel} - Yeni Deger`}
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Iptal
+            İptal
           </Button>
           <Button loading={saving} onClick={handleSubmit} icon={isEditing ? 'save' : 'add'}>
             {isEditing ? 'Kaydet' : 'Ekle'}
@@ -90,7 +90,7 @@ export function LookupValueForm({
             setError('');
           }}
           error={error}
-          placeholder="Ornek: Denizyolu"
+          placeholder="Örnek: Denizyolu"
           autoFocus
         />
 

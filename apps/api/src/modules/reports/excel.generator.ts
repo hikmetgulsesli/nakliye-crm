@@ -23,7 +23,7 @@ export async function generateExcelReport(
   // Date row
   worksheet.mergeCells(2, 1, 2, colCount);
   const dateCell = worksheet.getCell('A2');
-  dateCell.value = `Olusturulma: ${new Date().toLocaleDateString('tr-TR')}`;
+  dateCell.value = `Oluşturulma: ${new Date().toLocaleDateString('tr-TR')}`;
   dateCell.font = { size: 10, italic: true, color: { argb: 'FF666666' } };
   dateCell.alignment = { horizontal: 'center' };
 

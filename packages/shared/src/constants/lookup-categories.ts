@@ -17,17 +17,17 @@ export const LOOKUP_CATEGORIES = {
 export type LookupCategory = (typeof LOOKUP_CATEGORIES)[keyof typeof LOOKUP_CATEGORIES];
 
 export const LOOKUP_CATEGORY_LABELS: Record<string, string> = {
-  transport_mode: 'Tasima Modu',
+  transport_mode: 'Taşıma Modu',
   service_type: 'Servis Tipi',
   incoterm: 'Incoterms',
-  customer_source: 'Musteri Kaynagi',
-  customer_status: 'Musteri Durumu',
+  customer_source: 'Müşteri Kaynagi',
+  customer_status: 'Müşteri Durumu',
   potential_level: 'Potansiyel Seviyesi',
   quote_status: 'Teklif Durumu',
   loss_reason: 'Kaybedilme Nedeni',
   currency: 'Para Birimi',
   port: 'Liman / Nokta',
-  country: 'Ulke',
+  country: 'Ülke',
   activity_type: 'Aktivite Tipi',
   activity_outcome: 'Aktivite Sonucu',
 };

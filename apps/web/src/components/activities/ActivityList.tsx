@@ -11,13 +11,13 @@ interface ActivityListProps {
 const ACTIVITY_TYPE_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
   telefon: { icon: 'phone', color: 'bg-blue-500', label: 'Telefon' },
   eposta: { icon: 'email', color: 'bg-amber-500', label: 'E-posta' },
-  yuz_yuze: { icon: 'groups', color: 'bg-emerald-500', label: 'Yuz Yuze' },
+  yuz_yuze: { icon: 'groups', color: 'bg-emerald-500', label: 'Yüz Yuze' },
   video: { icon: 'videocam', color: 'bg-purple-500', label: 'Video' },
 };
 
 const OUTCOME_CONFIG: Record<string, { color: string; label: string }> = {
   olumlu: { color: 'text-emerald-600 bg-emerald-50', label: 'Olumlu' },
-  notr: { color: 'text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60', label: 'Notr' },
+  nötr: { color: 'text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60', label: 'Nötr' },
   olumsuz: { color: 'text-red-600 bg-red-50', label: 'Olumsuz' },
   teklif_istendi: { color: 'text-blue-600 bg-blue-50', label: 'Teklif Istendi' },
 };

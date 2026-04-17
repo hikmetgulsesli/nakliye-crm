@@ -98,7 +98,7 @@ export function generatePdfReport(
 <body>
   <div class="header">
     <span class="brand">NakliyeCRM</span>
-    <span class="generated">Olusturulma: ${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR')}</span>
+    <span class="generated">Oluşturulma: ${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR')}</span>
   </div>
   <h1 class="report-title">${escapeHtml(title)}</h1>
   ${dateInfo}
@@ -107,7 +107,7 @@ export function generatePdfReport(
     <tbody>${dataRows}</tbody>
   </table>
   <div class="footer">
-    NakliyeCRM Rapor Sistemi &bull; Toplam ${rows.length} kayit
+    NakliyeCRM Rapor Sistemi &bull; Toplam ${rows.length} kayıt
   </div>
 </body>
 </html>`;

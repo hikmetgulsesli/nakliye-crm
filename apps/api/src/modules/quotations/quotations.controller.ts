@@ -35,7 +35,7 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
-  // PRD v3: tum kullanicilar tum teklifleri gorebilir (seffaflik)
+  // PRD v3: tüm kullanıcılar tüm teklifleri görebilir (şeffaflık)
 
   const [data, total] = await Promise.all([
     prisma.quotation.findMany({
@@ -71,10 +71,10 @@ export async function getById(req: Request, res: Response) {
   });
 
   if (!quotation) {
-    throw new AppError('Teklif bulunamadi', 404);
+    throw new AppError('Teklif bulunamadı', 404);
   }
 
-  // PRD v3: tum kullanicilar tum teklifleri gorebilir
+  // PRD v3: tüm kullanıcılar tüm teklifleri görebilir
   res.json({ success: true, data: quotation });
 }
 
@@ -83,10 +83,10 @@ export async function getRevisions(req: Request, res: Response) {
 
   const quotation = await prisma.quotation.findFirst({ where: { id } });
   if (!quotation) {
-    throw new AppError('Teklif bulunamadi', 404);
+    throw new AppError('Teklif bulunamadı', 404);
   }
 
-  // PRD v3: revizyon gecmisi herkese acik
+  // PRD v3: revizyon geçmişi herkese açık
   const revisions = await prisma.quotationRevision.findMany({
     where: { quotationId: id },
     orderBy: { revisionNo: 'desc' },
@@ -106,7 +106,7 @@ export async function create(req: Request, res: Response) {
   // Verify customer exists
   const customer = await prisma.customer.findFirst({ where: { id: customerId } });
   if (!customer) {
-    throw new AppError('Musteri bulunamadi', 404);
+    throw new AppError('Müşteri bulunamadı', 404);
   }
 
   const quoteNo = await generateQuoteNumber();
@@ -158,11 +158,11 @@ export async function update(req: Request, res: Response) {
 
   const existing = await prisma.quotation.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Teklif bulunamadi', 404);
+    throw new AppError('Teklif bulunamadı', 404);
   }
 
   if (req.user!.role !== 'ADMIN' && existing.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu teklif icin yetkiniz yok', 403);
+    throw new AppError('Bu teklif için yetkiniz yok', 403);
   }
 
   const {
@@ -243,11 +243,11 @@ export async function remove(req: Request, res: Response) {
 
   const existing = await prisma.quotation.findFirst({ where: { id } });
   if (!existing) {
-    throw new AppError('Teklif bulunamadi', 404);
+    throw new AppError('Teklif bulunamadı', 404);
   }
 
   if (req.user!.role !== 'ADMIN' && existing.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu teklif icin yetkiniz yok', 403);
+    throw new AppError('Bu teklif için yetkiniz yok', 403);
   }
 
   await prisma.quotation.delete({ where: { id } });
@@ -269,7 +269,7 @@ export async function restore(req: Request, res: Response) {
     where: { id, isDeleted: true },
   });
   if (!existing) {
-    throw new AppError('Silinmis teklif bulunamadi', 404);
+    throw new AppError('Silinmiş teklif bulunamadı', 404);
   }
 
   const quotation = await prisma.quotation.update({

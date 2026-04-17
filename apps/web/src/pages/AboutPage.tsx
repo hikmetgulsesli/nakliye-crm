@@ -16,23 +16,23 @@ export default function AboutPage() {
           <div className="flex size-10 items-center justify-center rounded-full bg-[#e30a17]">
             <span className="material-symbols-outlined text-[22px] text-white">local_shipping</span>
           </div>
-          <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
+          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link to="/hakkimizda" className="text-sm font-medium text-white transition-colors">
-            Hakkimizda
+            Hakkımızda
           </Link>
           <Link to="/hizmetler" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
             Hizmetler
           </Link>
           <Link to="/iletisim" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Iletisim
+            İletişim
           </Link>
           <Link
             to="/login"
             className="rounded-lg bg-[#e30a17] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c00914]"
           >
-            Giris Yap
+            Giriş Yap
           </Link>
         </nav>
       </header>
@@ -46,9 +46,9 @@ export default function AboutPage() {
               <span className="material-symbols-outlined text-[40px] text-[#e30a17]">public</span>
             </div>
           </div>
-          <h1 className="text-4xl font-black text-white lg:text-5xl">Hakkimizda</h1>
+          <h1 className="text-4xl font-black text-white lg:text-5xl">Hakkımızda</h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Uluslararasi Nakliye CRM, lojistik sektorunde faaliyet gosteren firmalarin musteri, teklif ve
+            Uluslararası Nakliye CRM, lojistik sektorunde faaliyet gosteren firmalarin müşteri, teklif ve
             operasyon yonetimini kolaylastiran modern bir web uygulamasidir. Sektorun ihtiyaclarina ozel
             gelistirilmis cozumlerimizle isletmenizin verimliligini artiriyoruz.
           </p>
@@ -62,8 +62,8 @@ export default function AboutPage() {
             </div>
             <h2 className="text-xl font-bold text-white">Misyonumuz</h2>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              Lojistik sektorundeki firmalara, musteri iliskilerini guclendiren, operasyonel surecleri
-              hizlandiran ve karliligi artiran teknolojik cozumler sunmak. Her olcekteki nakliye firmasinin
+              Lojistik sektorundeki firmalara, müşteri iliskilerini guclendiren, operasyonel surecleri
+              hizlandiran ve karliligi artiran teknolojik çözümler sunmak. Her olcekteki nakliye firmasinin
               dijital donusumune onculuk ederek sektorun rekabet gucunu artirmayi hedefliyoruz.
             </p>
           </div>
@@ -73,8 +73,8 @@ export default function AboutPage() {
             </div>
             <h2 className="text-xl font-bold text-white">Vizyonumuz</h2>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              Turkiye ve bolge ulkelerinde uluslararasi nakliye sektorunun en cok tercih edilen CRM platformu
-              olmak. Yapay zeka destekli analizler, otomatik surec yonetimi ve entegre lojistik cozumleriyle
+              Türkiye ve bolge ulkelerinde uluslararası nakliye sektorunun en cok tercih edilen CRM platformu
+              olmak. Yapay zeka destekli analizler, otomatik surec yönetimi ve entegre lojistik cozumleriyle
               sektorun dijital gelecegini sekillendiriyoruz.
             </p>
           </div>
@@ -87,18 +87,18 @@ export default function AboutPage() {
             {[
               {
                 icon: 'groups',
-                title: 'Musteri Yonetimi',
-                desc: 'Tum musteri bilgilerinizi tek bir merkezde yonetin. Iletisim gecmisi, teklif takibi ve notlar ile eksiksiz musteri profilleri olusturun.',
+                title: 'Müşteri Yönetimi',
+                desc: 'Tüm müşteri bilgilerinizi tek bir merkezde yönetin. İletişim geçmişi, teklif takibi ve notlar ile eksiksiz müşteri profilleri olusturun.',
               },
               {
                 icon: 'request_quote',
                 title: 'Teklif Takibi',
-                desc: 'Otomatik teklif numaralama, revize takibi ve onay surecleri ile profesyonel teklif yonetimi. PDF ve Excel formatinda cikti alin.',
+                desc: 'Otomatik teklif numaralama, revize takibi ve onay surecleri ile profesyonel teklif yönetimi. PDF ve Excel formatinda cikti alin.',
               },
               {
                 icon: 'analytics',
                 title: 'Performans Analizi',
-                desc: 'Detayli raporlar ve gorsellestirmeler ile satis performansinizi takip edin. Donemsel karsilastirmalar ve trend analizleri yapin.',
+                desc: 'Detayli raporlar ve gorsellestirmeler ile satış performansinizi takip edin. Dönemsel karsilastirmalar ve trend analizleri yapın.',
               },
               {
                 icon: 'shield',
@@ -126,7 +126,7 @@ export default function AboutPage() {
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-300">
             NakliyeCRM, lojistik sektorunde uzun yillar deneyime sahip profesyoneller ve yazilim
             muhendislerinden olusan bir ekip tarafindan gelistirilmektedir. Istanbul merkezli ekibimiz,
-            sektorun ihtiyaclarini yakindan takip ederek surekli yenilikci cozumler uretmektedir.
+            sektorun ihtiyaçlarını yakından takip ederek sürekli yenilikci çözümler üretmektedir.
             Musterilerimize 7/24 teknik destek ve danismanlik hizmeti sunuyoruz.
           </p>
         </div>
@@ -135,13 +135,13 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-4">
             <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Kullanim Sartlari
+              Kullanım Şartları
             </Link>
             <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Gizlilik Politikasi
+              Gizlilik Politikası
             </Link>
           </div>
         </div>

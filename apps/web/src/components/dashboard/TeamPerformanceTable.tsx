@@ -32,13 +32,13 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
       {/* Header */}
       <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
         <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100">
-          Satis Temsilcisi Performansi
+          Satış Temsilcisi Performansı
         </h3>
         <button
           onClick={() => navigate('/kullanicilar')}
           className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors flex items-center gap-1"
         >
-          Tumunu Gor
+          Tümünü Gör
           <Icon name="chevron_right" size="sm" />
         </button>
       </div>
@@ -52,16 +52,16 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                 Temsilci
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Teklif Sayisi
+                Teklif Sayısı
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Kazanilan
+                Kazanılan
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Kazanma %
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Gorusulen Musteri
+                Görüşülen Müşteri
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Son Aktivite
@@ -98,12 +98,12 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                   </div>
                 </td>
 
-                {/* Teklif Sayisi */}
+                {/* Teklif Sayısı */}
                 <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
                   {member.quoteCount}
                 </td>
 
-                {/* Kazanilan */}
+                {/* Kazanılan */}
                 <td className="px-6 py-4 text-sm font-medium text-emerald-600">
                   {member.wonCount}
                 </td>
@@ -130,7 +130,7 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                   </div>
                 </td>
 
-                {/* Gorusulen Musteri */}
+                {/* Görüşülen Müşteri */}
                 <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                   {member.contactedCustomers}
                 </td>

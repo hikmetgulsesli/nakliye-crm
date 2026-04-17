@@ -14,7 +14,7 @@ const TABS = [
   { key: 'general', label: 'Genel Bilgiler' },
   { key: 'quotes', label: 'Teklifler' },
   { key: 'activities', label: 'Aktiviteler' },
-  { key: 'history', label: 'Gecmis' },
+  { key: 'history', label: 'Geçmiş' },
 ];
 
 export function CustomerDetailTabs({ customer }: CustomerDetailTabsProps) {

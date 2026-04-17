@@ -27,8 +27,8 @@ const TYPE_BADGE_MAP: Record<string, BadgeVariant> = {
   teklif: 'warning',
   Toplanti: 'neutral',
   toplanti: 'neutral',
-  Kazanildi: 'success',
-  kazanildi: 'success',
+  Kazanıldı: 'success',
+  kazanıldı: 'success',
   Kaybedildi: 'danger',
   kaybedildi: 'danger',
   Not: 'neutral',
@@ -64,7 +64,7 @@ export function RecentActivitiesWidget({
           onClick={() => navigate('/musteriler')}
           className="text-primary text-sm font-medium hover:underline"
         >
-          Tumunu Gor
+          Tümünü Gör
         </button>
       </div>
 
@@ -77,7 +77,7 @@ export function RecentActivitiesWidget({
                 Tarih
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Musteri
+                Müşteri
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Tip
@@ -108,7 +108,7 @@ export function RecentActivitiesWidget({
                   key={activity.id}
                   onClick={() => {
                     if (activity.customerId) {
-                      navigate(`/musteriler/${activity.customerId}`);
+                      navigate(`/müşteriler/${activity.customerId}`);
                     }
                   }}
                   className={cn(

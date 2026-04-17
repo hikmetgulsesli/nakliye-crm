@@ -12,13 +12,13 @@ export default function DashboardPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Ana Sayfa', href: '/' },
-          { label: isAdmin ? 'Genel Bakis' : 'Dashboard' },
+          { label: isAdmin ? 'Genel Bakış' : 'Dashboard' },
         ]}
-        title={isAdmin ? 'Genel Bakis' : 'Dashboard'}
+        title={isAdmin ? 'Genel Bakış' : 'Dashboard'}
         subtitle={
           isAdmin
-            ? 'Tum ekip ve satis performansini buradan takip edebilirsiniz.'
-            : `Hos geldiniz, ${user?.fullName || 'Kullanici'}.`
+            ? 'Tüm ekip ve satış performansini buradan takip edebilirsiniz.'
+            : `Hoş geldiniz, ${user?.fullName || 'Kullanıcı'}.`
         }
       />
 

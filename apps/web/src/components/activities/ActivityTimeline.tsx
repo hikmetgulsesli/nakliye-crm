@@ -10,13 +10,13 @@ interface ActivityTimelineProps {
 const ACTIVITY_TYPE_CONFIG: Record<string, { icon: string; bgColor: string; label: string }> = {
   telefon: { icon: 'phone', bgColor: 'bg-blue-500', label: 'Telefon Gorusmesi' },
   eposta: { icon: 'email', bgColor: 'bg-amber-500', label: 'E-posta' },
-  yuz_yuze: { icon: 'groups', bgColor: 'bg-emerald-500', label: 'Yuz Yuze Gorusme' },
-  video: { icon: 'videocam', bgColor: 'bg-purple-500', label: 'Video Gorusme' },
+  yuz_yuze: { icon: 'groups', bgColor: 'bg-emerald-500', label: 'Yüz Yuze Görüşme' },
+  video: { icon: 'videocam', bgColor: 'bg-purple-500', label: 'Video Görüşme' },
 };
 
 const OUTCOME_CONFIG: Record<string, { dotColor: string; label: string }> = {
   olumlu: { dotColor: 'bg-emerald-500', label: 'Olumlu' },
-  notr: { dotColor: 'bg-slate-400', label: 'Notr' },
+  nötr: { dotColor: 'bg-slate-400', label: 'Nötr' },
   olumsuz: { dotColor: 'bg-red-500', label: 'Olumsuz' },
   teklif_istendi: { dotColor: 'bg-blue-500', label: 'Teklif Istendi' },
 };
@@ -71,7 +71,7 @@ export function ActivityTimeline({ activities, loading = false }: ActivityTimeli
   if (activities.length === 0) {
     return (
       <div className="text-center py-10 text-slate-400 dark:text-slate-500 text-sm">
-        Henuz aktivite gecmisi yok
+        Henuz aktivite geçmişi yok
       </div>
     );
   }

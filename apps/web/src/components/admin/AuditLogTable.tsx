@@ -10,15 +10,15 @@ interface AuditLogTableProps {
 
 const ACTION_VARIANT_MAP: Record<string, { variant: 'info' | 'danger' | 'success' | 'warning' | 'neutral'; label: string }> = {
   CREATE: { variant: 'success', label: 'Olusturma' },
-  UPDATE: { variant: 'info', label: 'Guncelleme' },
+  UPDATE: { variant: 'info', label: 'Güncelleme' },
   DELETE: { variant: 'danger', label: 'Silme' },
   BULK_TRANSFER: { variant: 'warning', label: 'Toplu Devir' },
 };
 
 const RECORD_TYPE_MAP: Record<string, string> = {
-  Customer: 'Musteri',
+  Customer: 'Müşteri',
   Quotation: 'Teklif',
-  User: 'Kullanici',
+  User: 'Kullanıcı',
   LookupValue: 'Liste Degeri',
   Activity: 'Aktivite',
 };
@@ -27,8 +27,8 @@ function formatChangeSummary(changes: Record<string, { old: unknown; new: unknow
   if (!changes) return '-';
   const fields = Object.keys(changes);
   if (fields.length === 0) return '-';
-  if (fields.length === 1) return `${fields[0]} alani guncellendi`;
-  return `${fields.length} alan guncellendi (${fields.slice(0, 3).join(', ')}${fields.length > 3 ? '...' : ''})`;
+  if (fields.length === 1) return `${fields[0]} alani güncellendi`;
+  return `${fields.length} alan güncellendi (${fields.slice(0, 3).join(', ')}${fields.length > 3 ? '...' : ''})`;
 }
 
 export function AuditLogTable({ data, loading }: AuditLogTableProps) {
@@ -58,7 +58,7 @@ export function AuditLogTable({ data, loading }: AuditLogTableProps) {
     return (
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-12 text-center">
         <Icon name="history" size="xl" className="text-slate-300 mb-3" />
-        <p className="text-slate-400 dark:text-slate-500 text-sm">Log kaydi bulunamadi</p>
+        <p className="text-slate-400 dark:text-slate-500 text-sm">Log kaydı bulunamadı</p>
       </div>
     );
   }
@@ -74,19 +74,19 @@ export function AuditLogTable({ data, loading }: AuditLogTableProps) {
                   Tarih / Saat
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Kullanici
+                  Kullanıcı
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Islem
+                  İşlem
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Kayit Turu
+                  Kayıt Turu
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Kayit
+                  Kayıt
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Degisiklik Ozeti
+                  Değişiklik Ozeti
                 </th>
               </tr>
             </thead>

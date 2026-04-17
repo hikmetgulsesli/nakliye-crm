@@ -32,7 +32,7 @@ export default function AuditLogPage() {
           })),
         );
       } catch (err) {
-        setError('Kullanici listesi yuklenirken bir hata olustu.');
+        setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
       }
     }
     fetchUsers();
@@ -45,7 +45,7 @@ export default function AuditLogPage() {
       setLogs(result.data);
       setTotal(result.total);
     } catch (err) {
-      setError('Sistem loglari yuklenirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Sistem logları yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ export default function AuditLogPage() {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      setError('CSV dosyasi indirilirken bir hata olustu.');
+      setError('CSV dosyasi indirilirken bir hata oluştu.');
     }
   }
 
@@ -81,10 +81,10 @@ export default function AuditLogPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Sistem Loglari' },
+          { label: 'Sistem Logları' },
         ]}
-        title="Sistem Loglari Paneli"
-        subtitle="Tum sistem islemlerini takip edin ve denetleyin"
+        title="Sistem Logları Paneli"
+        subtitle="Tüm sistem islemlerini takip edin ve denetleyin"
         action={
           <Badge variant="info" size="md">
             AUDIT TRAIL
@@ -112,8 +112,8 @@ export default function AuditLogPage() {
       {!loading && logs.length === 0 ? (
         <EmptyState
           icon="history"
-          title="Henuz log kaydi bulunmuyor"
-          description="Sistem islemleri burada otomatik olarak kaydedilir."
+          title="Henuz log kaydı bulunmuyor"
+          description="Sistem işlemleri burada otomatik olarak kaydedilir."
         />
       ) : (
         <>

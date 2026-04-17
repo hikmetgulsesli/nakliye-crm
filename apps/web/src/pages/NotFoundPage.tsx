@@ -37,7 +37,7 @@ export default function NotFoundPage() {
               to="/musteriler"
               className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
             >
-              Musteriler
+              Müşteriler
             </Link>
             <Link
               to="/raporlar"
@@ -68,19 +68,19 @@ export default function NotFoundPage() {
 
           {/* Heading */}
           <h1 className="text-4xl font-bold font-display text-slate-900 dark:text-slate-100 mb-3">
-            Sayfa Bulunamadi
+            Sayfa Bulunamadı
           </h1>
 
           {/* Subtitle */}
           <p className="text-slate-500 dark:text-slate-400 text-lg mb-8 leading-relaxed">
-            Aradiginiz sayfa tasinmis, silinmis veya hic var olmamis olabilir.
-            Lutfen URL adresini kontrol edin veya ana sayfaya donun.
+            Aradiginiz sayfa taşınmış, silinmiş veya hiç var olmamış olabilir.
+            Lütfen URL adresini kontrol edin veya ana sayfaya dönün.
           </p>
 
           {/* Buttons */}
           <div className="flex items-center justify-center gap-4">
             <Button icon="home" onClick={() => navigate('/')}>
-              Ana Sayfaya Don
+              Ana Sayfaya Dön
             </Button>
             <Button
               variant="secondary"
@@ -96,7 +96,7 @@ export default function NotFoundPage() {
       {/* Footer */}
       <footer className="py-6 text-center border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <p className="text-sm text-slate-400 dark:text-slate-500">
-          &copy; {new Date().getFullYear()} Logistics CRM. Tum haklari saklidir.
+          &copy; {new Date().getFullYear()} Logistics CRM. Tüm hakları saklıdır.
         </p>
       </footer>
     </div>

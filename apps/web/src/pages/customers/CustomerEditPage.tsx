@@ -32,7 +32,7 @@ export default function CustomerEditPage() {
             })),
         );
       } catch (err: unknown) {
-        setError('Musteri bilgileri yuklenirken bir hata olustu.');
+        setError('Müşteri bilgileri yüklenirken bir hata oluştu.');
       } finally {
         setPageLoading(false);
       }
@@ -45,9 +45,9 @@ export default function CustomerEditPage() {
     setError(null);
     try {
       await customerService.update(Number(id), data);
-      navigate(`/musteriler/${id}`);
+      navigate(`/müşteriler/${id}`);
     } catch (err: unknown) {
-      setError('Musteri guncellenirken bir hata olustu. Lutfen tekrar deneyin.');
+      setError('Müşteri guncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -75,17 +75,17 @@ export default function CustomerEditPage() {
       <PageHeader
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
-          { label: 'Musteriler', href: '/musteriler' },
-          { label: customer?.companyName || '', href: `/musteriler/${id}` },
-          { label: 'Duzenle' },
+          { label: 'Müşteriler', href: '/musteriler' },
+          { label: customer?.companyName || '', href: `/müşteriler/${id}` },
+          { label: 'Düzenle' },
         ]}
-        title="Musteri Duzenle"
+        title="Müşteri Düzenle"
       />
 
       <CustomerForm
         initialData={customer}
         onSubmit={handleSubmit}
-        onCancel={() => navigate(`/musteriler/${id}`)}
+        onCancel={() => navigate(`/müşteriler/${id}`)}
         loading={loading}
         conflictWarning={error}
         users={users}

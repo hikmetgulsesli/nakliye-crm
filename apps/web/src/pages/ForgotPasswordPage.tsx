@@ -28,7 +28,7 @@ export default function ForgotPasswordPage() {
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { message?: string } } };
       setError(
-        axiosErr.response?.data?.message || 'Bir hata olustu. Lutfen tekrar deneyin.',
+        axiosErr.response?.data?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.',
       );
     }
   };
@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
       className="relative flex min-h-screen flex-col"
       style={{ fontFamily: "'Manrope', 'Inter', system-ui, sans-serif" }}
     >
-      {/* Background: ayni login sayfasi ile tutarli nakliye liman fotografi */}
+      {/* Background: ayni login sayfası ile tutarli nakliye liman fotografi */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/login-bg.jpg')" }}
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
               local_shipping
             </span>
           </div>
-          <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
+          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
         </Link>
 
         <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
@@ -75,10 +75,10 @@ export default function ForgotPasswordPage() {
           </div>
 
           <h1 className="text-center text-[28px] font-black leading-tight tracking-tight text-slate-900">
-            Sifremi Unuttum
+            Şifremi Unuttum
           </h1>
           <p className="mt-2 text-center text-sm text-slate-600">
-            E-posta adresinizi girin, sifre sifirlama linki gonderelim.
+            E-posta adresinizi girin, şifre sıfırlama linki gönderelim.
           </p>
 
           {/* Error */}
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
                   check_circle
                 </span>
                 <span className="leading-relaxed">
-                  Sifre sifirlama linki e-posta adresinize gonderildi.
+                  Şifre sıfırlama linki e-posta adresinize gönderildi.
                 </span>
               </div>
               <Link
@@ -109,7 +109,7 @@ export default function ForgotPasswordPage() {
                 <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-0.5">
                   arrow_back
                 </span>
-                <span>Giris Sayfasina Don</span>
+                <span>Giriş Sayfasına Dön</span>
               </Link>
             </div>
           ) : (
@@ -125,7 +125,7 @@ export default function ForgotPasswordPage() {
                   <input
                     type="email"
                     autoComplete="email"
-                    placeholder="ornek@sirket.com"
+                    placeholder="örnek@sirket.com"
                     className={cn(
                       'h-12 w-full rounded-xl border bg-slate-50 pl-11 pr-4 text-[15px] text-slate-900 transition-colors placeholder:text-slate-400',
                       'focus:outline-none focus:ring-4',
@@ -137,7 +137,7 @@ export default function ForgotPasswordPage() {
                       required: 'E-posta adresi zorunludur',
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: 'Gecerli bir e-posta adresi giriniz',
+                        message: 'Geçerli bir e-posta adresi giriniz',
                       },
                     })}
                   />
@@ -159,7 +159,7 @@ export default function ForgotPasswordPage() {
                   <div className="size-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 ) : (
                   <>
-                    <span>Sifre Sifirlama Linki Gonder</span>
+                    <span>Şifre Sıfırlama Linki Gönder</span>
                     <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
                       send
                     </span>
@@ -174,7 +174,7 @@ export default function ForgotPasswordPage() {
                 <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-0.5">
                   arrow_back
                 </span>
-                <span>Giris Sayfasina Don</span>
+                <span>Giriş Sayfasına Dön</span>
               </Link>
             </form>
           )}
@@ -184,7 +184,7 @@ export default function ForgotPasswordPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#0f172a]/80 backdrop-blur-md border-t border-white/10 px-8 py-4">
         <p className="text-center text-sm text-slate-200">
-          &copy; 2026 NakliyeCRM. Tum haklari saklidir.
+          &copy; 2026 NakliyeCRM. Tüm hakları saklıdır.
         </p>
       </footer>
     </div>

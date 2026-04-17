@@ -44,7 +44,7 @@ export async function markAsRead(req: Request, res: Response) {
   });
 
   if (!notification) {
-    throw new AppError('Bildirim bulunamadi', 404);
+    throw new AppError('Bildirim bulunamadı', 404);
   }
 
   const updated = await prisma.notification.update({
@@ -63,5 +63,5 @@ export async function markAllAsRead(req: Request, res: Response) {
     data: { isRead: true },
   });
 
-  res.json({ success: true, message: 'Tum bildirimler okundu olarak isaretlendi' });
+  res.json({ success: true, message: 'Tüm bildirimler okundu olarak isaretlendi' });
 }

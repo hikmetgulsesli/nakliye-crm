@@ -12,7 +12,7 @@ import type { Customer, CustomerCreateInput } from '@nakliye-crm/shared';
 
 // Extended form schema to handle multiple phones/emails
 const customerFormSchema = z.object({
-  companyName: z.string().min(2, 'Firma adi en az 2 karakter olmalidir'),
+  companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalidir'),
   contactName: z.string().optional(),
   phones: z.array(z.object({ value: z.string() })).min(1),
   emails: z.array(z.object({ value: z.string() })).min(1),
@@ -28,7 +28,7 @@ const customerFormSchema = z.object({
   potential: z.string().optional(),
   status: z.string().optional(),
   notes: z.string().optional(),
-  assignedUserId: z.number({ invalid_type_error: 'Temsilci secimi zorunludur' }).int().positive('Temsilci secimi zorunludur'),
+  assignedUserId: z.number({ invalid_type_error: 'Temsilci seçimi zorunludur' }).int().positive('Temsilci seçimi zorunludur'),
 });
 
 type CustomerFormData = z.infer<typeof customerFormSchema>;
@@ -140,7 +140,7 @@ export function CustomerForm({
         const phones = (watchedPhones || []).map((p) => p?.value || '').filter(Boolean).join(', ');
         const emails = (watchedEmails || []).map((e) => e?.value || '').filter(Boolean).join(', ');
         const matches = await customerService.conflictCheck(phones, emails, debouncedCompanyName);
-        // Duzenleme ise mevcut kaydi hariç tut
+        // Düzenleme ise mevcut kaydı hariç tut
         const filtered = initialData?.id
           ? matches.filter((m) => m.customerId !== initialData.id)
           : matches;
@@ -206,10 +206,10 @@ export function CustomerForm({
           </h2>
 
           <div className="space-y-4">
-            {/* Firma Adi */}
+            {/* Firma Adı */}
             <Input
-              label="Firma Adi"
-              placeholder="Firma adini giriniz"
+              label="Firma Adı"
+              placeholder="Firma adını giriniz"
               icon="business"
               error={errors.companyName?.message}
               {...register('companyName')}
@@ -219,12 +219,12 @@ export function CustomerForm({
             {conflictMatches.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 -mt-2">
                 <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
-                  Benzer kayitlar:
+                  Benzer kayıtlar:
                 </span>
                 {conflictMatches.map((match) => (
                   <span
                     key={match.customerId}
-                    title={`${match.matchType === 'phone' ? 'Telefon' : match.matchType === 'email' ? 'E-posta' : 'Firma adi'} eslesmesi`}
+                    title={`${match.matchType === 'phone' ? 'Telefon' : match.matchType === 'email' ? 'E-posta' : 'Firma adı'} eslesmesi`}
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-200 dark:border-amber-500/30"
                   >
                     <Icon name="warning" size="sm" className="text-amber-500 dark:text-amber-300 !text-[14px]" />
@@ -234,10 +234,10 @@ export function CustomerForm({
               </div>
             )}
 
-            {/* Yetkili Adi */}
+            {/* Yetkili Adı */}
             <Input
-              label="Yetkili Adi"
-              placeholder="Yetkili kisi adini giriniz"
+              label="Yetkili Adı"
+              placeholder="Yetkili kisi adını giriniz"
               icon="person"
               error={errors.contactName?.message}
               {...register('contactName')}
@@ -288,7 +288,7 @@ export function CustomerForm({
                 <div key={field.id} className="flex items-center gap-2 mb-2">
                   <div className="flex-1">
                     <Input
-                      placeholder="ornek@firma.com"
+                      placeholder="örnek@firma.com"
                       icon="mail"
                       error={errors.emails?.[index]?.value?.message}
                       {...register(`emails.${index}.value`)}
@@ -328,7 +328,7 @@ export function CustomerForm({
               name="showLocationDetails"
               render={({ field }) => (
                 <Checkbox
-                  label="Konum detaylarini goster"
+                  label="Konum detaylarini göster"
                   checked={field.value || false}
                   onChange={field.onChange}
                 />
@@ -344,10 +344,10 @@ export function CustomerForm({
           </h2>
 
           <div className="space-y-5">
-            {/* Tasima Modu - Button Group */}
+            {/* Taşıma Modu - Button Group */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                Tasima Modu
+                Taşıma Modu
               </label>
               <div className="flex flex-wrap gap-2">
                 {TRANSPORT_MODES.map((mode) => {
@@ -427,39 +427,39 @@ export function CustomerForm({
               />
             </div>
 
-            {/* Cikis Ulkeleri */}
+            {/* Çıkış Ülkeleri */}
             <Controller
               control={control}
               name="originCountries"
               render={({ field }) => (
                 <MultiSelect
-                  label="Cikis Ulkeleri"
+                  label="Çıkış Ülkeleri"
                   options={countryOptions}
                   value={field.value || []}
                   onChange={field.onChange}
-                  placeholder="Cikis ulkelerini seciniz"
+                  placeholder="Çıkış ulkelerini seciniz"
                 />
               )}
             />
 
-            {/* Varis Ulkeleri */}
+            {/* Varış Ülkeleri */}
             <Controller
               control={control}
               name="destinationCountries"
               render={({ field }) => (
                 <MultiSelect
-                  label="Varis Ulkeleri"
+                  label="Varış Ülkeleri"
                   options={countryOptions}
                   value={field.value || []}
                   onChange={field.onChange}
-                  placeholder="Varis ulkelerini seciniz"
+                  placeholder="Varış ulkelerini seciniz"
                 />
               )}
             />
 
-            {/* Musteri Kaynagi */}
+            {/* Müşteri Kaynagi */}
             <Select
-              label="Musteri Kaynagi"
+              label="Müşteri Kaynagi"
               options={sourceOptions}
               placeholder="Kaynak seciniz"
               error={errors.source?.message}
@@ -475,9 +475,9 @@ export function CustomerForm({
               {...register('potential')}
             />
 
-            {/* Musteri Durumu */}
+            {/* Müşteri Durumu */}
             <Select
-              label="Musteri Durumu"
+              label="Müşteri Durumu"
               options={statusOptions}
               placeholder="Durum seciniz"
               error={errors.status?.message}
@@ -501,7 +501,7 @@ export function CustomerForm({
             {/* Notlar */}
             <Textarea
               label="Notlar"
-              placeholder="Musteri hakkinda ek notlar..."
+              placeholder="Müşteri hakkinda ek notlar..."
               {...register('notes')}
             />
           </div>
@@ -511,7 +511,7 @@ export function CustomerForm({
       {/* Bottom action bar */}
       <div className="mt-6 flex items-center justify-end gap-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4">
         <Button variant="secondary" type="button" onClick={onCancel}>
-          Iptal
+          İptal
         </Button>
         <Button type="submit" icon="save" loading={loading}>
           Musteriyi Kaydet

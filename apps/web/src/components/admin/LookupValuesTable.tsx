@@ -84,10 +84,10 @@ export function LookupValuesTable({
                 Durum
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold">
-                Kullanan Kayit
+                Kullanan Kayıt
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-3 text-center font-semibold w-24">
-                Islemler
+                İşlemler
               </th>
             </tr>
           </thead>
@@ -152,7 +152,7 @@ export function LookupValuesTable({
                       <button
                         onClick={() => onEdit(item)}
                         className="p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:text-primary hover:bg-blue-50 transition-colors"
-                        title="Duzenle"
+                        title="Düzenle"
                       >
                         <Icon name="edit" size="sm" />
                       </button>

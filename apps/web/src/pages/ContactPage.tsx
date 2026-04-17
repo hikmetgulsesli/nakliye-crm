@@ -11,7 +11,7 @@ export default function ContactPage() {
     const errs: Record<string, string> = {};
     if (!form.name.trim()) errs.name = 'Ad Soyad zorunludur';
     if (!form.email.trim()) errs.email = 'E-posta zorunludur';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Gecerli bir e-posta giriniz';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Geçerli bir e-posta giriniz';
     if (!form.subject.trim()) errs.subject = 'Konu zorunludur';
     if (!form.message.trim()) errs.message = 'Mesaj zorunludur';
     else if (form.message.trim().length < 10) errs.message = 'Mesaj en az 10 karakter olmalidir';
@@ -58,23 +58,23 @@ export default function ContactPage() {
           <div className="flex size-10 items-center justify-center rounded-full bg-[#e30a17]">
             <span className="material-symbols-outlined text-[22px] text-white">local_shipping</span>
           </div>
-          <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
+          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link to="/hakkimizda" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Hakkimizda
+            Hakkımızda
           </Link>
           <Link to="/hizmetler" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
             Hizmetler
           </Link>
           <Link to="/iletisim" className="text-sm font-medium text-white transition-colors">
-            Iletisim
+            İletişim
           </Link>
           <Link
             to="/login"
             className="rounded-lg bg-[#e30a17] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c00914]"
           >
-            Giris Yap
+            Giriş Yap
           </Link>
         </nav>
       </header>
@@ -89,9 +89,9 @@ export default function ContactPage() {
                 <span className="material-symbols-outlined text-[40px] text-[#e30a17]">contact_mail</span>
               </div>
             </div>
-            <h1 className="text-4xl font-black text-white lg:text-5xl">Iletisim</h1>
+            <h1 className="text-4xl font-black text-white lg:text-5xl">İletişim</h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
-              Sorulariniz, onerileriniz veya is birligi talepleriniz icin bizimle iletisime gecin.
+              Sorulariniz, onerileriniz veya is birligi talepleriniz için bizimle iletisime gecin.
               Ekibimiz en kisa surede size donecektir.
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function ContactPage() {
               {
                 icon: 'location_on',
                 title: 'Adres',
-                value: 'Istanbul, Turkiye',
+                value: 'Istanbul, Türkiye',
                 sub: 'Levent, Besiktas',
               },
             ].map((c) => (
@@ -142,7 +142,7 @@ export default function ContactPage() {
               {submitted && (
                 <div className="mt-4 flex items-center gap-2 rounded-lg bg-green-500/20 px-4 py-3 text-sm text-green-300">
                   <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                  Mesajiniz basariyla gonderildi. En kisa surede size donecegiz.
+                  Mesajiniz basariyla gönderildi. En kisa surede size donecegiz.
                 </div>
               )}
 
@@ -166,7 +166,7 @@ export default function ContactPage() {
                     name="email"
                     value={form.email}
                     onChange={handleChange}
-                    placeholder="ornek@sirket.com"
+                    placeholder="örnek@sirket.com"
                     className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 ${
                       errors.email ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}
@@ -209,7 +209,7 @@ export default function ContactPage() {
                     <div className="size-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : (
                     <>
-                      Mesaj Gonder
+                      Mesaj Gönder
                       <span className="material-symbols-outlined text-[18px]">send</span>
                     </>
                   )}
@@ -255,13 +255,13 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tum haklari saklidir.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">&copy; 2026 NakliyeCRM. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-4">
             <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Kullanim Sartlari
+              Kullanım Şartları
             </Link>
             <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
-              Gizlilik Politikasi
+              Gizlilik Politikası
             </Link>
           </div>
         </div>

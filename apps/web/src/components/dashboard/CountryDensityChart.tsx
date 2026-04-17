@@ -36,7 +36,7 @@ export function CountryDensityChart({
       {/* Header */}
       <div className="px-6 pt-6 pb-4">
         <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">
-          Ulke Bazli Yogunluk
+          Ülke Bazli Yoğunluk
         </h3>
 
         {/* Toggle Buttons */}
@@ -50,7 +50,7 @@ export function CountryDensityChart({
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200',
             )}
           >
-            Cikis Ulkeleri
+            Çıkış Ülkeleri
           </button>
           <button
             onClick={() => setActiveTab('destination')}
@@ -61,7 +61,7 @@ export function CountryDensityChart({
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200',
             )}
           >
-            Varis Ulkeleri
+            Varış Ülkeleri
           </button>
         </div>
       </div>

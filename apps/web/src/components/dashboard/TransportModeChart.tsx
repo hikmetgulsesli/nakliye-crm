@@ -44,7 +44,7 @@ export function TransportModeChart({ data, className }: TransportModeChartProps)
       )}
     >
       <h3 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100 mb-6">
-        Tasima Modu Dagilimi
+        Taşıma Modu Dagilimi
       </h3>
 
       <div className="flex items-center gap-8">

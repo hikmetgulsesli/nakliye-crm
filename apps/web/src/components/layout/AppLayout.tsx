@@ -4,13 +4,13 @@ import Header from './Header';
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
-  '/musteriler': 'Musteriler',
-  '/musteriler/yeni': 'Yeni Musteri',
+  '/musteriler': 'Müşteriler',
+  '/musteriler/yeni': 'Yeni Müşteri',
   '/teklifler': 'Teklifler',
   '/teklifler/yeni': 'Yeni Teklif',
   '/raporlar': 'Raporlar',
-  '/kullanicilar': 'Kullanici Yonetimi',
-  '/liste-yonetimi': 'Sistem Ayarlari',
+  '/kullanicilar': 'Kullanıcı Yönetimi',
+  '/liste-yonetimi': 'Sistem Ayarları',
   '/loglar': 'Loglar',
   '/devir': 'Veri Devir',
   '/profil': 'Profil',
@@ -19,8 +19,8 @@ const pageTitles: Record<string, string> = {
 function resolveTitle(pathname: string): string {
   if (pageTitles[pathname]) return pageTitles[pathname];
 
-  // Check for dynamic routes like /musteriler/:id
-  if (/^\/musteriler\/.+$/.test(pathname)) return 'Musteri Detay';
+  // Check for dynamic routes like /müşteriler/:id
+  if (/^\/musteriler\/.+$/.test(pathname)) return 'Müşteri Detay';
   if (/^\/teklifler\/.+$/.test(pathname)) return 'Teklif Detay';
 
   return 'NakliyeCRM';

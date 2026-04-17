@@ -10,18 +10,18 @@ interface AuditLogFiltersProps {
 }
 
 const ACTION_OPTIONS = [
-  { value: '', label: 'Tum Islemler' },
+  { value: '', label: 'Tüm İşlemler' },
   { value: 'CREATE', label: 'Olusturma' },
-  { value: 'UPDATE', label: 'Guncelleme' },
+  { value: 'UPDATE', label: 'Güncelleme' },
   { value: 'DELETE', label: 'Silme' },
   { value: 'BULK_TRANSFER', label: 'Toplu Devir' },
 ];
 
 const RECORD_TYPE_OPTIONS = [
-  { value: '', label: 'Tum Turler' },
-  { value: 'Customer', label: 'Musteri' },
+  { value: '', label: 'Tüm Turler' },
+  { value: 'Customer', label: 'Müşteri' },
   { value: 'Quotation', label: 'Teklif' },
-  { value: 'User', label: 'Kullanici' },
+  { value: 'User', label: 'Kullanıcı' },
   { value: 'LookupValue', label: 'Liste Degeri' },
   { value: 'Activity', label: 'Aktivite' },
 ];
@@ -34,7 +34,7 @@ export function AuditLogFilters({
   users,
 }: AuditLogFiltersProps) {
   const userOptions = [
-    { value: '', label: 'Tum Kullanicilar' },
+    { value: '', label: 'Tüm Kullanıcılar' },
     ...users,
   ];
 
@@ -43,7 +43,7 @@ export function AuditLogFilters({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
         {/* KULLANICI */}
         <Select
-          label="Kullanici"
+          label="Kullanıcı"
           icon="person"
           value={filters.userId?.toString() ?? ''}
           onChange={(e) =>
@@ -57,7 +57,7 @@ export function AuditLogFilters({
 
         {/* ISLEM TIPI */}
         <Select
-          label="Islem Tipi"
+          label="İşlem Tipi"
           icon="bolt"
           value={filters.action ?? ''}
           onChange={(e) =>
@@ -71,7 +71,7 @@ export function AuditLogFilters({
 
         {/* KAYIT TURU */}
         <Select
-          label="Kayit Turu"
+          label="Kayıt Turu"
           icon="category"
           value={filters.recordType ?? ''}
           onChange={(e) =>
@@ -86,14 +86,14 @@ export function AuditLogFilters({
         {/* TARIH ARALIGI */}
         <div className="flex gap-2">
           <DatePicker
-            label="Baslangic"
+            label="Başlangıç"
             value={filters.startDate ?? ''}
             onChange={(e) =>
               onChange({ ...filters, startDate: e.target.value || undefined })
             }
           />
           <DatePicker
-            label="Bitis"
+            label="Bitiş"
             value={filters.endDate ?? ''}
             onChange={(e) =>
               onChange({ ...filters, endDate: e.target.value || undefined })

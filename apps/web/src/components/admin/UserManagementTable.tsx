@@ -42,7 +42,7 @@ export function UserManagementTable({
     return (
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-12 text-center">
         <Icon name="group" size="xl" className="text-slate-300 mb-3" />
-        <p className="text-slate-400 dark:text-slate-500 text-sm">Kullanici bulunamadi</p>
+        <p className="text-slate-400 dark:text-slate-500 text-sm">Kullanıcı bulunamadı</p>
       </div>
     );
   }
@@ -54,7 +54,7 @@ export function UserManagementTable({
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800/60">
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                Kullanici
+                Kullanıcı
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
                 E-posta
@@ -66,16 +66,16 @@ export function UserManagementTable({
                 Durum
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-center font-semibold">
-                Musteri
+                Müşteri
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-center font-semibold">
                 Teklif
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                Son Giris
+                Son Giriş
               </th>
               <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-center font-semibold">
-                Islemler
+                İşlemler
               </th>
             </tr>
           </thead>
@@ -95,7 +95,7 @@ export function UserManagementTable({
                         {user.fullName}
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
-                        {user.role === 'ADMIN' ? 'Yonetici' : 'Satis Temsilcisi'}
+                        {user.role === 'ADMIN' ? 'Yönetici' : 'Satış Temsilcisi'}
                       </p>
                     </div>
                   </div>
@@ -110,7 +110,7 @@ export function UserManagementTable({
                     variant={user.role === 'ADMIN' ? 'info' : 'neutral'}
                     size="sm"
                   >
-                    {user.role === 'ADMIN' ? 'Admin' : 'Kullanici'}
+                    {user.role === 'ADMIN' ? 'Admin' : 'Kullanıcı'}
                   </Badge>
                 </td>
 
@@ -161,7 +161,7 @@ export function UserManagementTable({
                     <button
                       onClick={() => onEdit(user)}
                       className="p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:text-primary hover:bg-blue-50 transition-colors"
-                      title="Duzenle"
+                      title="Düzenle"
                     >
                       <Icon name="edit" size="sm" />
                     </button>

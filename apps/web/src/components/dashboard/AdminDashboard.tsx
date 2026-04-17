@@ -12,7 +12,7 @@ import { dashboardService, type AdminDashboardData } from '@/services/dashboard.
 const PERIOD_TABS = [
   { key: 'this_week', label: 'Bu Hafta' },
   { key: 'this_month', label: 'Bu Ay' },
-  { key: 'last_month', label: 'Gecen Ay' },
+  { key: 'last_month', label: 'Geçen Ay' },
 ];
 
 function KPISkeletons() {
@@ -106,7 +106,7 @@ export function AdminDashboard() {
       const result = await dashboardService.getAdminDashboard(activePeriod);
       setData(result);
     } catch (err) {
-      setError('Dashboard verileri yuklenirken bir hata olustu.');
+      setError('Dashboard verileri yüklenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -138,7 +138,7 @@ export function AdminDashboard() {
         </div>
 
         <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
-          Yeni Teklif Olustur
+          Yeni Teklif Oluştur
         </Button>
       </div>
 

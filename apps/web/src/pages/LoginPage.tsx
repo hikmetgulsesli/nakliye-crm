@@ -37,7 +37,7 @@ export default function LoginPage() {
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { message?: string } } };
       setError(
-        axiosErr.response?.data?.message || 'Giris basarisiz. Bilgilerinizi kontrol ediniz.',
+        axiosErr.response?.data?.message || 'Giriş başarısız. Bilgilerinizi kontrol ediniz.',
       );
     }
   };
@@ -65,19 +65,19 @@ export default function LoginPage() {
               local_shipping
             </span>
           </div>
-          <span className="text-lg font-bold text-white">Uluslararasi Nakliye CRM</span>
+          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
         </div>
 
         {/* Nav links */}
         <nav className="flex items-center gap-6">
           <Link to="/hakkimizda" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Hakkimizda
+            Hakkımızda
           </Link>
           <Link to="/hizmetler" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
             Hizmetler
           </Link>
           <Link to="/iletisim" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
-            Iletisim
+            İletişim
           </Link>
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
             TR
@@ -99,10 +99,10 @@ export default function LoginPage() {
           </div>
 
           <h1 className="text-center text-[28px] font-black leading-tight tracking-tight text-slate-900">
-            Hos Geldiniz
+            Hoş Geldiniz
           </h1>
           <p className="mt-2 text-center text-sm text-slate-600">
-            Devam etmek icin hesabiniza giris yapin
+            Devam etmek için hesabınıza giriş yapın
           </p>
 
           {/* Error Message */}
@@ -129,7 +129,7 @@ export default function LoginPage() {
                 <input
                   type="email"
                   autoComplete="email"
-                  placeholder="ornek@sirket.com"
+                  placeholder="örnek@sirket.com"
                   className={cn(
                     'h-12 w-full rounded-xl border bg-slate-50 pl-11 pr-4 text-[15px] text-slate-900 transition-colors placeholder:text-slate-400',
                     'focus:outline-none focus:ring-4',
@@ -141,7 +141,7 @@ export default function LoginPage() {
                     required: 'E-posta adresi zorunludur',
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'Gecerli bir e-posta adresi giriniz',
+                      message: 'Geçerli bir e-posta adresi giriniz',
                     },
                   })}
                 />
@@ -157,7 +157,7 @@ export default function LoginPage() {
             {/* Password */}
             <div>
               <label className="mb-2 block text-[13px] font-semibold tracking-wide text-slate-800">
-                Sifre
+                Şifre
               </label>
               <div className="relative">
                 <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-500">
@@ -175,17 +175,17 @@ export default function LoginPage() {
                       : 'border-slate-200 focus:border-[#e30a17] focus:ring-[#e30a17]/15 focus:bg-white',
                   )}
                   {...register('password', {
-                    required: 'Sifre zorunludur',
+                    required: 'Şifre zorunludur',
                     minLength: {
                       value: 6,
-                      message: 'Sifre en az 6 karakter olmalidir',
+                      message: 'Şifre en az 6 karakter olmalidir',
                     },
                   })}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? 'Sifreyi gizle' : 'Sifreyi goster'}
+                  aria-label={showPassword ? 'Sifreyi gizle' : 'Sifreyi göster'}
                   className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
                 >
                   <span className="material-symbols-outlined text-[20px]">
@@ -210,14 +210,14 @@ export default function LoginPage() {
                   {...register('remember')}
                 />
                 <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900">
-                  Beni Hatirla
+                  Beni Hatırla
                 </span>
               </label>
               <Link
                 to="/sifremi-unuttum"
                 className="text-sm font-semibold text-[#e30a17] transition-colors hover:text-[#b40713]"
               >
-                Sifremi Unuttum
+                Şifremi Unuttum
               </Link>
             </div>
 
@@ -231,7 +231,7 @@ export default function LoginPage() {
                 <div className="size-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               ) : (
                 <>
-                  <span>Giris Yap</span>
+                  <span>Giriş Yap</span>
                   <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
                     arrow_forward
                   </span>
@@ -253,20 +253,20 @@ export default function LoginPage() {
       <footer className="relative z-10 bg-[#0f172a]/80 backdrop-blur-md border-t border-white/10 px-8 py-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-slate-200">
-            &copy; 2026 NakliyeCRM. Tum haklari saklidir.
+            &copy; 2026 NakliyeCRM. Tüm hakları saklıdır.
           </p>
           <div className="flex items-center gap-6">
             <Link
               to="/kullanim-sartlari"
               className="text-sm font-medium text-slate-200 hover:text-white transition-colors"
             >
-              Kullanim Sartlari
+              Kullanım Şartları
             </Link>
             <Link
               to="/gizlilik-politikasi"
               className="text-sm font-medium text-slate-200 hover:text-white transition-colors"
             >
-              Gizlilik Politikasi
+              Gizlilik Politikası
             </Link>
           </div>
         </div>

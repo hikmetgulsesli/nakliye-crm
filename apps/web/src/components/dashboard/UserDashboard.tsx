@@ -78,7 +78,7 @@ function ContentSkeleton() {
 
 export function UserDashboard() {
   const user = useAuthStore((s) => s.user);
-  const firstName = user?.fullName?.split(' ')[0] || 'Kullanici';
+  const firstName = user?.fullName?.split(' ')[0] || 'Kullanıcı';
 
   const [data, setData] = useState<UserDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ export function UserDashboard() {
       const result = await dashboardService.getUserDashboard();
       setData(result);
     } catch (err) {
-      setError('Dashboard verileri yuklenirken bir hata olustu.');
+      setError('Dashboard verileri yüklenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -109,7 +109,7 @@ export function UserDashboard() {
           Merhaba, {firstName} <span role="img" aria-label="wave">&#128075;</span>
         </h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Iste bugunku satis ozetiniz ve yapmaniz gerekenler.
+          Iste bugunku satış ozetiniz ve yapmaniz gerekenler.
         </p>
       </div>
 

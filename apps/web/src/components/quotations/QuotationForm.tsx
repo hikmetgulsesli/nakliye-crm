@@ -15,9 +15,9 @@ import type { Customer, Quotation } from '@nakliye-crm/shared';
 /* ------------------------------------------------------------------ */
 
 const quotationSchema = z.object({
-  customerId: z.number({ required_error: 'Musteri secimi zorunludur' }).min(1, 'Musteri secimi zorunludur'),
+  customerId: z.number({ required_error: 'Müşteri seçimi zorunludur' }).min(1, 'Müşteri seçimi zorunludur'),
   quoteDate: z.string().min(1, 'Teklif tarihi zorunludur'),
-  validityDate: z.string().min(1, 'Gecerlilik tarihi zorunludur'),
+  validityDate: z.string().min(1, 'Geçerlilik tarihi zorunludur'),
   transportMode: z.string().optional(),
   serviceType: z.string().optional(),
   originCountry: z.string().optional(),
@@ -30,7 +30,7 @@ const quotationSchema = z.object({
   priceNote: z.string().optional(),
   status: z.string().optional(),
   lossReason: z.string().optional(),
-  assignedUserId: z.number({ required_error: 'Temsilci secimi zorunludur' }).min(1, 'Temsilci secimi zorunludur'),
+  assignedUserId: z.number({ required_error: 'Temsilci seçimi zorunludur' }).min(1, 'Temsilci seçimi zorunludur'),
 });
 
 type QuotationFormData = z.infer<typeof quotationSchema>;
@@ -67,19 +67,19 @@ const CURRENCY_OPTIONS = [
 
 const STATUS_OPTIONS = [
   { value: 'Bekliyor', label: 'Bekliyor' },
-  { value: 'Kazanildi', label: 'Kazanildi' },
+  { value: 'Kazanıldı', label: 'Kazanıldı' },
   { value: 'Kaybedildi', label: 'Kaybedildi' },
 ];
 
 const COUNTRY_OPTIONS = [
-  { value: 'TR', label: '\u{1F1F9}\u{1F1F7} Turkiye' },
-  { value: 'CN', label: '\u{1F1E8}\u{1F1F3} Cin' },
+  { value: 'TR', label: '\u{1F1F9}\u{1F1F7} Türkiye' },
+  { value: 'CN', label: '\u{1F1E8}\u{1F1F3} Çin' },
   { value: 'US', label: '\u{1F1FA}\u{1F1F8} ABD' },
   { value: 'DE', label: '\u{1F1E9}\u{1F1EA} Almanya' },
-  { value: 'GB', label: '\u{1F1EC}\u{1F1E7} Ingiltere' },
+  { value: 'GB', label: '\u{1F1EC}\u{1F1E7} İngiltere' },
   { value: 'FR', label: '\u{1F1EB}\u{1F1F7} Fransa' },
-  { value: 'IT', label: '\u{1F1EE}\u{1F1F9} Italya' },
-  { value: 'ES', label: '\u{1F1EA}\u{1F1F8} Ispanya' },
+  { value: 'IT', label: '\u{1F1EE}\u{1F1F9} İtalya' },
+  { value: 'ES', label: '\u{1F1EA}\u{1F1F8} İspanya' },
   { value: 'NL', label: '\u{1F1F3}\u{1F1F1} Hollanda' },
   { value: 'BE', label: '\u{1F1E7}\u{1F1EA} Belcika' },
   { value: 'JP', label: '\u{1F1EF}\u{1F1F5} Japonya' },
@@ -207,10 +207,10 @@ export function QuotationForm({
         {/* ===== LEFT: Yuk Bilgileri ===== */}
         <Card title="Yuk Bilgileri">
           <div className="space-y-5">
-            {/* Bagli Musteri */}
+            {/* Bagli Müşteri */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Bagli Musteri
+                Bagli Müşteri
               </label>
               <div className="relative">
                 {selectedCustomer ? (
@@ -243,7 +243,7 @@ export function QuotationForm({
                   <div>
                     <Input
                       icon="search"
-                      placeholder="Musteri adi ile arama..."
+                      placeholder="Müşteri adı ile arama..."
                       value={customerSearch}
                       onChange={(e) => {
                         setCustomerSearch(e.target.value);
@@ -289,7 +289,7 @@ export function QuotationForm({
                 {...register('quoteDate')}
               />
               <DatePicker
-                label="Gecerlilik Tarihi"
+                label="Geçerlilik Tarihi"
                 error={errors.validityDate?.message}
                 {...register('validityDate')}
               />
@@ -298,7 +298,7 @@ export function QuotationForm({
             {/* Transport Mode button group */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                Tasima Modu
+                Taşıma Modu
               </label>
               <div className="flex gap-2">
                 {TRANSPORT_MODES.map((mode) => (
@@ -324,20 +324,20 @@ export function QuotationForm({
             <Select
               label="Servis Tipi"
               options={serviceTypeOptions}
-              placeholder="Servis tipi secin"
+              placeholder="Servis tipi seçin"
               {...register('serviceType')}
             />
 
             {/* Origin */}
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
-                Cikis Noktasi
+                Çıkış Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <Select
-                  label="Ulke"
+                  label="Ülke"
                   options={COUNTRY_OPTIONS}
-                  placeholder="Ulke secin"
+                  placeholder="Ülke seçin"
                   {...register('originCountry')}
                 />
                 <Input
@@ -351,17 +351,17 @@ export function QuotationForm({
             {/* Destination */}
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
-                Varis Noktasi
+                Varış Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <Select
-                  label="Ulke"
+                  label="Ülke"
                   options={COUNTRY_OPTIONS}
-                  placeholder="Ulke secin"
+                  placeholder="Ülke seçin"
                   {...register('destinationCountry')}
                 />
                 <Input
-                  label="Varis Noktasi (POD)"
+                  label="Varış Noktasi (POD)"
                   placeholder="Liman / Sehir"
                   {...register('pod')}
                 />
@@ -372,7 +372,7 @@ export function QuotationForm({
             <Select
               label="Incoterms"
               options={incotermOptions}
-              placeholder="Incoterm secin"
+              placeholder="Incoterm seçin"
               {...register('incoterm')}
             />
           </div>
@@ -430,7 +430,7 @@ export function QuotationForm({
             <Select
               label="Sonuc"
               options={STATUS_OPTIONS}
-              placeholder="Durum secin"
+              placeholder="Durum seçin"
               {...register('status')}
             />
 
@@ -462,7 +462,7 @@ export function QuotationForm({
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
                     >
                       <option value="" disabled>
-                        Temsilci secin
+                        Temsilci seçin
                       </option>
                       {users.map((u) => (
                         <option key={u.value} value={u.value}>
@@ -496,7 +496,7 @@ export function QuotationForm({
       {/* Bottom actions */}
       <div className="flex items-center justify-end gap-3 mt-6">
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Iptal
+          İptal
         </Button>
         <Button type="submit" icon="save" loading={loading}>
           Kaydet

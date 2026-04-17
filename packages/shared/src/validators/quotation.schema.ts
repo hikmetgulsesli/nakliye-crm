@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const quotationCreateSchema = z.object({
-  customerId: z.number().int().positive('Musteri secimi zorunludur'),
+  customerId: z.number().int().positive('Müşteri seçimi zorunludur'),
   quoteDate: z.string().min(1, 'Teklif tarihi zorunludur'),
-  validityDate: z.string().min(1, 'Gecerlilik tarihi zorunludur'),
+  validityDate: z.string().min(1, 'Geçerlilik tarihi zorunludur'),
   transportMode: z.string().optional(),
   serviceType: z.string().optional(),
   originCountry: z.string().optional(),
@@ -16,7 +16,7 @@ export const quotationCreateSchema = z.object({
   priceNote: z.string().optional(),
   status: z.string().optional(),
   lossReason: z.string().optional(),
-  assignedUserId: z.number().int().positive('Temsilci secimi zorunludur'),
+  assignedUserId: z.number().int().positive('Temsilci seçimi zorunludur'),
 });
 
 export const quotationUpdateSchema = quotationCreateSchema.partial();

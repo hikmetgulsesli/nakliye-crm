@@ -14,7 +14,7 @@ export function JsonDiffViewer({ changes, className }: JsonDiffViewerProps) {
   if (!changes || Object.keys(changes).length === 0) {
     return (
       <div className={`bg-slate-900 rounded-xl p-5 ${className ?? ''}`}>
-        <p className="text-slate-500 dark:text-slate-400 text-sm font-mono">Degisiklik detayi bulunmuyor</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm font-mono">Değişiklik detayi bulunmuyor</p>
       </div>
     );
   }
@@ -27,7 +27,7 @@ export function JsonDiffViewer({ changes, className }: JsonDiffViewerProps) {
           data_object
         </span>
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-          Teknik Degisiklik Detayi (JSON Diff)
+          Teknik Değişiklik Detayi (JSON Diff)
         </h4>
       </div>
 
