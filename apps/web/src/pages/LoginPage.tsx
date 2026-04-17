@@ -47,9 +47,14 @@ export default function LoginPage() {
       className="relative flex min-h-screen flex-col"
       style={{ fontFamily: "'Manrope', 'Inter', system-ui, sans-serif" }}
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] to-[#0f172a]" />
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Background: MiniMax ile uretilen nakliye liman fotografi */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/login-bg.jpg')" }}
+      />
+      {/* Soldan saga koyudan saydama gradient: yazilar okunur, sag taraftaki login card'i arkasinda detay kalir */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/55 to-[#0f172a]/70" />
+      <div className="absolute inset-0 bg-[#0f172a]/20" />
 
       {/* Top Header */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5">
@@ -222,16 +227,22 @@ export default function LoginPage() {
       </div>
 
       {/* Footer Bar */}
-      <footer className="relative z-10 bg-[#1e3a5f] px-8 py-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400 dark:text-slate-500">
+      <footer className="relative z-10 bg-[#0f172a]/80 backdrop-blur-md border-t border-white/10 px-8 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <p className="text-sm text-slate-200">
             &copy; 2026 NakliyeCRM. Tum haklari saklidir.
           </p>
-          <div className="flex items-center gap-4">
-            <Link to="/kullanim-sartlari" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
+          <div className="flex items-center gap-6">
+            <Link
+              to="/kullanim-sartlari"
+              className="text-sm font-medium text-slate-200 hover:text-white transition-colors"
+            >
               Kullanim Sartlari
             </Link>
-            <Link to="/gizlilik-politikasi" className="text-sm text-slate-400 dark:text-slate-500 hover:text-white transition-colors">
+            <Link
+              to="/gizlilik-politikasi"
+              className="text-sm font-medium text-slate-200 hover:text-white transition-colors"
+            >
               Gizlilik Politikasi
             </Link>
           </div>
