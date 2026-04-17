@@ -5,15 +5,15 @@ const lookupData: Record<string, string[]> = {
   transport_mode: ['Deniz', 'Hava', 'Kara', 'Kombine'],
   service_type: ['FCL', 'LCL', 'Parsiyel', 'Komple', 'Bulk', 'RoRo'],
   incoterm: ['FOB', 'EXW', 'FCA', 'DAP', 'CIF', 'CFR', 'DDP'],
-  customer_source: ['Referans', 'Soguk arama', 'Fuar', 'Dijital'],
-  customer_status: ['Aktif', 'Pasif', 'Soguk'],
-  potential_level: ['Dusuk', 'Orta', 'Yuksek'],
-  quote_status: ['Bekliyor', 'Kazanildi', 'Kaybedildi', 'Iptal'],
-  loss_reason: ['Fiyat', 'Rakip', 'Gecikmeli donus', 'Diger'],
+  customer_source: ['Referans', 'Soğuk arama', 'Fuar', 'Dijital'],
+  customer_status: ['Aktif', 'Pasif', 'Soğuk'],
+  potential_level: ['Düşük', 'Orta', 'Yüksek'],
+  quote_status: ['Bekliyor', 'Kazanıldı', 'Kaybedildi', 'İptal'],
+  loss_reason: ['Fiyat', 'Rakip', 'Gecikmeli dönüş', 'Diğer'],
   currency: ['USD', 'EUR', 'TRY'],
-  activity_type: ['Telefon', 'E-posta', 'Yuz Yuze', 'Video Gorusme'],
-  activity_outcome: ['Olumlu', 'Notr', 'Olumsuz', 'Teklif Istendi'],
-  country: ['Turkiye', 'Cin', 'Almanya', 'Italya', 'ABD', 'Ingiltere', 'Fransa', 'Ispanya', 'Hollanda'],
+  activity_type: ['Telefon', 'E-posta', 'Yüz Yüze', 'Video Görüşme'],
+  activity_outcome: ['Olumlu', 'Nötr', 'Olumsuz', 'Teklif İstendi'],
+  country: ['Türkiye', 'Çin', 'Almanya', 'İtalya', 'ABD', 'İngiltere', 'Fransa', 'İspanya', 'Hollanda'],
 };
 
 async function main() {
@@ -29,7 +29,7 @@ async function main() {
     create: {
       email: 'admin@nakliyecrm.com',
       passwordHash: adminPassword,
-      fullName: 'Sistem Yoneticisi',
+      fullName: 'Sistem Yöneticisi',
       role: 'ADMIN',
       phone: '+90 555 000 0001',
     },
@@ -37,8 +37,8 @@ async function main() {
   console.log(`Admin user created: ${admin.email}`);
 
   const salesReps = [
-    { email: 'ahmet@nakliyecrm.com', fullName: 'Ahmet Yilmaz', phone: '+90 555 000 0002' },
-    { email: 'ayse@nakliyecrm.com', fullName: 'Ayse Demir', phone: '+90 555 000 0003' },
+    { email: 'ahmet@nakliyecrm.com', fullName: 'Ahmet Yılmaz', phone: '+90 555 000 0002' },
+    { email: 'ayse@nakliyecrm.com', fullName: 'Ayşe Demir', phone: '+90 555 000 0003' },
     { email: 'mehmet@nakliyecrm.com', fullName: 'Mehmet Kaya', phone: '+90 555 000 0004' },
   ];
 
