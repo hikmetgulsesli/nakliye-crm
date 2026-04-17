@@ -28,7 +28,7 @@ export function CustomerTable({ data, loading }: CustomerTableProps) {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/müşteriler/${row.id}`);
+            navigate(`/musteriler/${row.id}`);
           }}
           className="text-primary font-bold hover:underline text-left"
         >
@@ -117,7 +117,7 @@ export function CustomerTable({ data, loading }: CustomerTableProps) {
       <Table<Customer & Record<string, unknown>>
         columns={columns}
         data={data as (Customer & Record<string, unknown>)[]}
-        onRowClick={(row) => navigate(`/müşteriler/${row.id}`)}
+        onRowClick={(row) => navigate(`/musteriler/${row.id}`)}
         emptyMessage="Müşteri bulunamadı"
       />
     </div>

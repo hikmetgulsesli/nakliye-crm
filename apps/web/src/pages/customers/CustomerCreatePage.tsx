@@ -60,7 +60,7 @@ export default function CustomerCreatePage() {
 
       // No conflict or force create - proceed
       const customer = await customerService.create(data);
-      navigate(`/müşteriler/${customer.id}`);
+      navigate(`/musteriler/${customer.id}`);
     } catch (err: unknown) {
       setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
@@ -77,7 +77,7 @@ export default function CustomerCreatePage() {
         forceCreate: true,
       });
       setShowConflictModal(false);
-      navigate(`/müşteriler/${customer.id}`);
+      navigate(`/musteriler/${customer.id}`);
     } catch (err) {
       setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {

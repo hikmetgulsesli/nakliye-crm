@@ -86,7 +86,7 @@ export function ConflictWarningModal({
                 )}
               </div>
               <button
-                onClick={() => navigate(`/müşteriler/${match.customerId}`)}
+                onClick={() => navigate(`/musteriler/${match.customerId}`)}
                 className="text-sm text-primary font-medium hover:underline flex items-center gap-1 flex-shrink-0"
               >
                 Kaydı Ac

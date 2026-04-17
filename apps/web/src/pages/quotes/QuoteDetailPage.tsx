@@ -50,7 +50,7 @@ export default function QuoteDetailPage() {
   }, [fetchQuotation, fetchRevisions]);
 
   function handleEdit() {
-    navigate(`/teklifler/${quotationId}/düzenle`);
+    navigate(`/teklifler/${quotationId}/duzenle`);
   }
 
   function handleDownloadPdf() {

@@ -108,7 +108,7 @@ export function RecentActivitiesWidget({
                   key={activity.id}
                   onClick={() => {
                     if (activity.customerId) {
-                      navigate(`/müşteriler/${activity.customerId}`);
+                      navigate(`/musteriler/${activity.customerId}`);
                     }
                   }}
                   className={cn(

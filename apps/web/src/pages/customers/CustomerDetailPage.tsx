@@ -161,7 +161,7 @@ export default function CustomerDetailPage() {
             <Button
               variant="secondary"
               icon="edit"
-              onClick={() => navigate(`/müşteriler/${customer.id}/düzenle`)}
+              onClick={() => navigate(`/musteriler/${customer.id}/duzenle`)}
             >
               Düzenle
             </Button>

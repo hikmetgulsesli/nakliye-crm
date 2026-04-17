@@ -18,7 +18,7 @@ const ALERT_ROUTES: Record<AlertData['type'], string> = {
   uncalled: '/musteriler',
   pending: '/teklifler?status=Bekliyor',
   expired: '/teklifler',
-  highPotential: '/müşteriler?potential=Yüksek',
+  highPotential: '/musteriler?potential=Yüksek',
 };
 
 const ALERT_CONFIG: Record<

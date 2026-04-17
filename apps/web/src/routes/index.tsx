@@ -125,7 +125,7 @@ export const router = createBrowserRouter([
           },
           // Müşteriler
           {
-            path: 'müşteriler',
+            path: 'musteriler',
             element: (
               <SuspenseWrapper>
                 <CustomerListPage />
@@ -133,7 +133,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'müşteriler/yeni',
+            path: 'musteriler/yeni',
             element: (
               <SuspenseWrapper>
                 <CustomerCreatePage />
@@ -141,7 +141,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'müşteriler/:id',
+            path: 'musteriler/:id',
             element: (
               <SuspenseWrapper>
                 <CustomerDetailPage />
@@ -149,7 +149,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'müşteriler/:id/düzenle',
+            path: 'musteriler/:id/duzenle',
             element: (
               <SuspenseWrapper>
                 <CustomerEditPage />
@@ -182,7 +182,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'teklifler/:id/düzenle',
+            path: 'teklifler/:id/duzenle',
             element: (
               <SuspenseWrapper>
                 <QuoteEditPage />
@@ -194,7 +194,7 @@ export const router = createBrowserRouter([
             element: <AdminRoute />,
             children: [
               {
-                path: 'kullanıcılar',
+                path: 'kullanicilar',
                 element: (
                   <SuspenseWrapper>
                     <UserManagementPage />
@@ -202,7 +202,7 @@ export const router = createBrowserRouter([
                 ),
               },
               {
-                path: 'liste-yönetimi',
+                path: 'liste-yonetimi',
                 element: (
                   <SuspenseWrapper>
                     <LookupManagementPage />

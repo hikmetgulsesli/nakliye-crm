@@ -45,7 +45,7 @@ export default function CustomerEditPage() {
     setError(null);
     try {
       await customerService.update(Number(id), data);
-      navigate(`/müşteriler/${id}`);
+      navigate(`/musteriler/${id}`);
     } catch (err: unknown) {
       setError('Müşteri guncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
@@ -76,7 +76,7 @@ export default function CustomerEditPage() {
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
           { label: 'Müşteriler', href: '/musteriler' },
-          { label: customer?.companyName || '', href: `/müşteriler/${id}` },
+          { label: customer?.companyName || '', href: `/musteriler/${id}` },
           { label: 'Düzenle' },
         ]}
         title="Müşteri Düzenle"
@@ -85,7 +85,7 @@ export default function CustomerEditPage() {
       <CustomerForm
         initialData={customer}
         onSubmit={handleSubmit}
-        onCancel={() => navigate(`/müşteriler/${id}`)}
+        onCancel={() => navigate(`/musteriler/${id}`)}
         loading={loading}
         conflictWarning={error}
         users={users}

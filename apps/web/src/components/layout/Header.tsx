@@ -36,7 +36,7 @@ export default function Header({ title }: HeaderProps) {
     (query: string) => {
       const trimmed = query.trim();
       if (trimmed) {
-        navigate(`/müşteriler?search=${encodeURIComponent(trimmed)}`);
+        navigate(`/musteriler?search=${encodeURIComponent(trimmed)}`);
       }
     },
     [navigate],

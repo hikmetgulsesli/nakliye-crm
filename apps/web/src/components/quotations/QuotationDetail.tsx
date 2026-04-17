@@ -64,7 +64,7 @@ export function QuotationDetail({
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
             {q.customer && (
               <Link
-                to={`/müşteriler/${q.customerId}`}
+                to={`/musteriler/${q.customerId}`}
                 className="flex items-center gap-1 text-primary hover:underline font-medium"
               >
                 <Icon name="business" size="sm" />
