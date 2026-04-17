@@ -8,6 +8,7 @@ export async function list(req: Request, res: Response) {
 
   if (req.query.userId) where.userId = parseInt(String(req.query.userId), 10);
   if (req.query.recordType) where.recordType = req.query.recordType;
+  if (req.query.recordId) where.recordId = parseInt(String(req.query.recordId), 10);
   if (req.query.action) where.action = req.query.action;
 
   if (req.query.dateFrom || req.query.dateTo) {

@@ -34,16 +34,36 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
-  const [data, total] = await Promise.all([
+  const [raw, total] = await Promise.all([
     prisma.user.findMany({
       where,
-      select: userSelect,
+      select: {
+        ...userSelect,
+        _count: {
+          select: {
+            assignedCustomers: { where: { isDeleted: false } },
+            assignedQuotations: { where: { isDeleted: false } },
+          },
+        },
+      },
       skip,
       take: pageSize,
       orderBy: { fullName: 'asc' },
     }),
     prisma.user.count({ where }),
   ]);
+
+  // Frontend'in bekledigi duzlestirme: customerCount, quotationCount
+  const data = raw.map((u) => {
+    const { _count, ...rest } = u as typeof u & {
+      _count: { assignedCustomers: number; assignedQuotations: number };
+    };
+    return {
+      ...rest,
+      customerCount: _count.assignedCustomers,
+      quotationCount: _count.assignedQuotations,
+    };
+  });
 
   res.json(paginatedResponse(data, total, { page, pageSize, skip }));
 }

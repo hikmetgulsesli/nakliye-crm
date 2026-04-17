@@ -12,8 +12,10 @@ const ACTION_CONFIG: Record<string, { icon: string; color: string; label: string
   CREATE: { icon: 'add_circle', color: 'text-emerald-500', label: 'Olusturuldu' },
   UPDATE: { icon: 'edit', color: 'text-blue-500', label: 'Guncellendi' },
   DELETE: { icon: 'delete', color: 'text-red-500', label: 'Silindi' },
+  RESTORE: { icon: 'restore', color: 'text-emerald-500', label: 'Geri alindi' },
   STATUS_CHANGE: { icon: 'swap_horiz', color: 'text-amber-500', label: 'Durum degisti' },
   ASSIGN: { icon: 'person_add', color: 'text-purple-500', label: 'Temsilci atandi' },
+  TRANSFER: { icon: 'swap_horiz', color: 'text-purple-500', label: 'Devredildi' },
 };
 
 function formatDateTime(dateStr: string): string {
@@ -39,7 +41,7 @@ export function CustomerHistoryTab({ customerId }: CustomerHistoryTabProps) {
   useEffect(() => {
     async function fetchLogs() {
       try {
-        const { data } = await api.get<PaginatedResponse<AuditLog>>('/audit-logs', {
+        const { data } = await api.get<PaginatedResponse<AuditLog>>('/audit', {
           params: { recordType: 'Customer', recordId: customerId, pageSize: 50 },
         });
         setLogs(data.data);
@@ -96,7 +98,7 @@ export function CustomerHistoryTab({ customerId }: CustomerHistoryTabProps) {
           return (
             <div
               key={log.id}
-              className="border border-slate-100 dark:border-slate-800 rounded-xl p-4 hover:bg-slate-50 dark:hover:bg-slate-800/40/50 transition-colors"
+              className="border border-slate-100 dark:border-slate-800 rounded-xl p-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors"
             >
               <div className="flex items-start gap-3">
                 <Icon name={config.icon} className={cn('mt-0.5', config.color)} />
