@@ -5,11 +5,14 @@ import * as usersController from './users.controller';
 
 const router = Router();
 
-router.use(auth(), rbac('ADMIN'));
+router.use(auth());
 
+// GET /users: tum auth'lu kullanicilar (temsilci filter, atama dropdown'i icin)
 router.get('/', usersController.list);
-router.post('/', usersController.create);
-router.patch('/:id', usersController.update);
-router.patch('/:id/deactivate', usersController.deactivate);
+
+// Yazma islemleri admin only
+router.post('/', rbac('ADMIN'), usersController.create);
+router.patch('/:id', rbac('ADMIN'), usersController.update);
+router.patch('/:id/deactivate', rbac('ADMIN'), usersController.deactivate);
 
 export { router as userRoutes };

@@ -22,12 +22,12 @@ export const auditService = {
     if (filters?.startDate) params.startDate = filters.startDate;
     if (filters?.endDate) params.endDate = filters.endDate;
 
-    const { data } = await api.get<PaginatedResponse<AuditLog>>('/audit-logs', { params });
+    const { data } = await api.get<PaginatedResponse<AuditLog>>('/audit', { params });
     return data;
   },
 
   async getByRecord(recordType: string, recordId: number): Promise<AuditLog[]> {
-    const { data } = await api.get<AuditLog[]>(`/audit-logs/record/${recordType}/${recordId}`);
+    const { data } = await api.get<AuditLog[]>(`/audit/record/${recordType}/${recordId}`);
     return data;
   },
 
@@ -39,7 +39,7 @@ export const auditService = {
     if (filters?.startDate) params.startDate = filters.startDate;
     if (filters?.endDate) params.endDate = filters.endDate;
 
-    const { data } = await api.get('/audit-logs/export/csv', {
+    const { data } = await api.get('/audit/export/csv', {
       params,
       responseType: 'blob',
     });
