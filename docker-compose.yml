@@ -25,9 +25,11 @@ services:
     environment:
       NODE_ENV: production
       PORT: 80
-      # DATABASE_URL: Dokploy / .env tarafindan verilir.
-      # embedded-db profile aktif olursa fallback olarak compose-ici postgres kullanilir.
-      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-nakliye}:${POSTGRES_PASSWORD:-nakliye}@db:5432/${POSTGRES_DB:-nakliye_crm}}
+      # DATABASE_URL zorunlu. Dokploy / .env tarafindan verilmeli.
+      # Embedded postgres kullanacaksaniz:
+      #   DATABASE_URL=postgresql://nakliye:nakliye@db:5432/nakliye_crm
+      #   docker compose --profile embedded-db up --build
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL env degiskeni zorunlu (Dokploy Environment sekmesinden ekleyin)}
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET env degiskeni zorunlu}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET env degiskeni zorunlu}
       CORS_ORIGIN: ${CORS_ORIGIN:-https://nakliye.setrox.com.tr}
