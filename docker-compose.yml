@@ -1,5 +1,8 @@
 services:
+  # External postgres kullananlarin buna ihtiyaci yok. Compose icinde lokal DB
+  # kurmak isterseniz: `docker compose --profile embedded-db up --build`
   db:
+    profiles: ["embedded-db"]
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
@@ -19,13 +22,12 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       NODE_ENV: production
       PORT: 80
-      DATABASE_URL: postgresql://${POSTGRES_USER:-nakliye}:${POSTGRES_PASSWORD:-nakliye}@db:5432/${POSTGRES_DB:-nakliye_crm}
+      # DATABASE_URL: Dokploy / .env tarafindan verilir.
+      # embedded-db profile aktif olursa fallback olarak compose-ici postgres kullanilir.
+      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-nakliye}:${POSTGRES_PASSWORD:-nakliye}@db:5432/${POSTGRES_DB:-nakliye_crm}}
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET env degiskeni zorunlu}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET env degiskeni zorunlu}
       CORS_ORIGIN: ${CORS_ORIGIN:-https://nakliye.setrox.com.tr}
