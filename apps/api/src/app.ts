@@ -1,4 +1,6 @@
 import 'express-async-errors';
+import path from 'path';
+import fs from 'fs';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -45,5 +47,23 @@ app.use('/api/notifications', notificationRoutes);
 
 // Error handler
 app.use(errorHandler);
+
+// Production: ayni container'da web static dosyalarini da serve et
+// Docker image'inda web build ciktisi /app/apps/web/dist'e kopyalanir
+if (env.nodeEnv === 'production') {
+  const webDistCandidates = [
+    path.resolve(process.cwd(), 'apps/web/dist'),
+    path.resolve(__dirname, '../../web/dist'),
+  ];
+  const webDist = webDistCandidates.find((p) => fs.existsSync(path.join(p, 'index.html')));
+
+  if (webDist) {
+    app.use(express.static(webDist));
+    // SPA fallback: /api disindaki tum GET istekleri index.html'e
+    app.get(/^(?!\/api\/).*/, (_req, res) => {
+      res.sendFile(path.join(webDist, 'index.html'));
+    });
+  }
+}
 
 export { app };

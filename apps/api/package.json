@@ -8,6 +8,7 @@
     "start": "bun run dist/index.js",
     "db:generate": "bunx prisma generate",
     "db:migrate": "bunx prisma migrate dev",
+    "db:deploy": "bunx prisma migrate deploy",
     "db:seed": "bun run prisma/seed.ts",
     "db:studio": "bunx prisma studio"
   },
