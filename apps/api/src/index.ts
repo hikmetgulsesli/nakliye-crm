@@ -6,9 +6,11 @@ initSentry();
 import { app } from './app';
 import { env } from './config/env';
 import { logger } from './config/logger';
-import { startNotificationScheduler } from './utils/notification-generator';
+import { startWorkers } from './workers';
 
 app.listen(env.port, () => {
   logger.info({ port: env.port, env: env.nodeEnv }, 'NakliyeCRM API calisiyor');
-  startNotificationScheduler();
+  startWorkers().catch((err) => {
+    logger.error({ err: err.message }, 'Worker baslatma hatasi');
+  });
 });

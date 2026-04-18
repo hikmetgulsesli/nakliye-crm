@@ -17,11 +17,28 @@ services:
       timeout: 5s
       retries: 10
 
+  # Redis - BullMQ job queue backend. Opsiyonel; USE_REDIS=false ile devre disi
+  # birakilabilir (in-process setInterval fallback).
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
     environment:
       NODE_ENV: production
       PORT: 80
@@ -34,10 +51,15 @@ services:
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET env degiskeni zorunlu}
       CORS_ORIGIN: ${CORS_ORIGIN:-https://nakliye.setrox.com.tr}
       DISABLE_SEED: ${DISABLE_SEED:-0}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      USE_REDIS: ${USE_REDIS:-true}
+      SENTRY_DSN: ${SENTRY_DSN:-}
     ports:
       # Host 3505 -> container 80 (local ve uzak sunucu ayni)
       - "${APP_PORT:-3505}:80"
 
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local
