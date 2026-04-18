@@ -37,6 +37,9 @@ import { portalRoutes } from './modules/portal/portal.routes';
 import { messageTemplatesRoutes } from './modules/message-templates/message-templates.routes';
 import { dailyPlanRoutes } from './modules/daily-plan/daily-plan.routes';
 import { customerContactsRoutes } from './modules/customer-contacts/contacts.routes';
+import { commissionRoutes } from './modules/commission/commission.routes';
+import { gamificationRoutes } from './modules/gamification/gamification.routes';
+import { goalsRoutes } from './modules/goals/goals.routes';
 import swaggerUi from 'swagger-ui-express';
 import { openapiSpec } from './config/openapi';
 
@@ -102,6 +105,9 @@ app.use('/api/portal', portalRoutes);
 app.use('/api/message-templates', messageTemplatesRoutes);
 app.use('/api/daily-plan', dailyPlanRoutes);
 app.use('/api/customer-contacts', customerContactsRoutes);
+app.use('/api/commission', commissionRoutes);
+app.use('/api/gamification', gamificationRoutes);
+app.use('/api/goals', goalsRoutes);
 
 // API documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {

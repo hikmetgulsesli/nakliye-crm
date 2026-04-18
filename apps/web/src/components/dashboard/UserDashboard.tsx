@@ -6,6 +6,9 @@ import { AlertWidgets } from './AlertWidgets';
 import { FollowUpWidget } from './FollowUpWidget';
 import { RecentActivitiesWidget } from './RecentActivitiesWidget';
 import { DailyPlanWidget } from './DailyPlanWidget';
+import { CommissionCard } from './CommissionCard';
+import { MyGoalsCard } from './MyGoalsCard';
+import { LeaderboardWidget } from './LeaderboardWidget';
 import { FeatureGate } from '@/components/features/FeatureGate';
 import { dashboardService, type UserDashboardData } from '@/services/dashboard.service';
 
@@ -155,6 +158,19 @@ export function UserDashboard() {
           <FeatureGate feature="daily_plan">
             <DailyPlanWidget />
           </FeatureGate>
+
+          {/* Motivasyon satiri: komisyon + hedefler + sıralama */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <FeatureGate feature="commission">
+              <CommissionCard />
+            </FeatureGate>
+            <FeatureGate feature="sales_goals">
+              <MyGoalsCard />
+            </FeatureGate>
+            <FeatureGate feature="gamification">
+              <LeaderboardWidget />
+            </FeatureGate>
+          </div>
 
           {/* Alert Widgets (2x2) */}
           <AlertWidgets alerts={data.alerts} />
