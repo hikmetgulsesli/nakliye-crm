@@ -40,6 +40,8 @@ import { customerContactsRoutes } from './modules/customer-contacts/contacts.rou
 import { commissionRoutes } from './modules/commission/commission.routes';
 import { gamificationRoutes } from './modules/gamification/gamification.routes';
 import { goalsRoutes } from './modules/goals/goals.routes';
+import { checkinRoutes } from './modules/checkin/checkin.routes';
+import { leadFormsRoutes } from './modules/lead-forms/lead-forms.routes';
 import swaggerUi from 'swagger-ui-express';
 import { openapiSpec } from './config/openapi';
 
@@ -108,6 +110,8 @@ app.use('/api/customer-contacts', customerContactsRoutes);
 app.use('/api/commission', commissionRoutes);
 app.use('/api/gamification', gamificationRoutes);
 app.use('/api/goals', goalsRoutes);
+app.use('/api/checkin', checkinRoutes);
+app.use('/api/lead-forms', leadFormsRoutes);
 
 // API documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {
