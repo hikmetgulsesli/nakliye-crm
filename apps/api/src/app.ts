@@ -34,6 +34,8 @@ import { timelineRoutes } from './modules/timeline/timeline.routes';
 import { whatsappRoutes } from './modules/whatsapp/whatsapp.routes';
 import { smsRoutes } from './modules/sms/sms.routes';
 import { portalRoutes } from './modules/portal/portal.routes';
+import { messageTemplatesRoutes } from './modules/message-templates/message-templates.routes';
+import { dailyPlanRoutes } from './modules/daily-plan/daily-plan.routes';
 import swaggerUi from 'swagger-ui-express';
 import { openapiSpec } from './config/openapi';
 
@@ -96,6 +98,8 @@ app.use('/api/timeline', timelineRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 app.use('/api/sms', smsRoutes);
 app.use('/api/portal', portalRoutes);
+app.use('/api/message-templates', messageTemplatesRoutes);
+app.use('/api/daily-plan', dailyPlanRoutes);
 
 // API documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {

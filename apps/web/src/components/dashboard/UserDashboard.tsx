@@ -5,6 +5,8 @@ import { KPICard } from '@/components/shared/KPICard';
 import { AlertWidgets } from './AlertWidgets';
 import { FollowUpWidget } from './FollowUpWidget';
 import { RecentActivitiesWidget } from './RecentActivitiesWidget';
+import { DailyPlanWidget } from './DailyPlanWidget';
+import { FeatureGate } from '@/components/features/FeatureGate';
 import { dashboardService, type UserDashboardData } from '@/services/dashboard.service';
 
 function KPISkeletons() {
@@ -148,6 +150,11 @@ export function UserDashboard() {
               />
             ))}
           </div>
+
+          {/* Daily Plan — bugün yapılacaklar */}
+          <FeatureGate feature="daily_plan">
+            <DailyPlanWidget />
+          </FeatureGate>
 
           {/* Alert Widgets (2x2) */}
           <AlertWidgets alerts={data.alerts} />

@@ -208,6 +208,24 @@ model SystemSetting {
   @@map("system_settings")
 }
 
+// Mesaj sablonu (WhatsApp/SMS/E-posta ortak) — {musteri_adi} gibi
+// degisken interpolasyonlu
+model MessageTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String
+  channel     String // whatsapp | sms | email
+  subject     String? // sadece email
+  body        String
+  variables   Json? // [{key: "musteri_adi", label: "Müşteri Adı"}]
+  isActive    Boolean  @default(true) @map("is_active")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([channel, isActive])
+  @@map("message_templates")
+}
+
 // Nakliye sevkiyat modulu — teklif "Kazanildi" olunca otomatik olusur
 model Shipment {
   id                 Int       @id @default(autoincrement())

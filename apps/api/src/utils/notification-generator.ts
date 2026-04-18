@@ -24,6 +24,7 @@ export async function generateNotifications(): Promise<void> {
     await notifyPendingQuotations(now, pendingDays);
     await notifyExpiredQuotations(now);
     await notifyHighPotentialNoQuote(now, highPotentialDays);
+    await notifyTodaysFollowups(now);
 
     console.log(`[Notifications] Generated at ${now.toISOString()}`);
   } catch (error) {
@@ -216,6 +217,43 @@ async function notifyHighPotentialNoQuote(now: Date, days: number) {
 }
 
 // ---------- Scheduler ----------
+
+// ---------- 5. Bugün planlanmıs follow-up'lar ----------
+
+async function notifyTodaysFollowups(now: Date) {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const followups = await prisma.activity.findMany({
+    where: {
+      isDeleted: false,
+      nextActionDate: { gte: today, lt: tomorrow },
+    },
+    include: { customer: { select: { id: true, companyName: true } } },
+  });
+
+  for (const f of followups) {
+    const existing = await prisma.notification.findFirst({
+      where: {
+        userId: f.createdById,
+        title: 'Bugün Follow-up',
+        message: { contains: `#${f.id}` },
+        createdAt: { gte: today },
+      },
+    });
+    if (existing) continue;
+    await prisma.notification.create({
+      data: {
+        userId: f.createdById,
+        type: 'info',
+        title: 'Bugün Follow-up',
+        message: `${f.customer?.companyName || 'Müşteri'} ile bugün görüşme planınız var [#${f.id}]`,
+        link: `/musteriler/${f.customerId}`,
+      },
+    });
+  }
+}
 
 let schedulerInterval: ReturnType<typeof setInterval> | null = null;
 
