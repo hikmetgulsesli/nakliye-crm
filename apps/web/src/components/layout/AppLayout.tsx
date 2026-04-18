@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { CommandPalette } from '@/components/search/CommandPalette';
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -34,6 +35,7 @@ export default function AppLayout() {
 
   return (
     <div className="flex min-h-screen">
+      <CommandPalette />
       {/* Sidebar - fixed */}
       <Sidebar />
 

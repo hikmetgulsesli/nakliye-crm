@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useNotificationStore } from '@/stores/notificationStore';
@@ -16,8 +15,6 @@ export default function Header({ title }: HeaderProps) {
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggle);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -31,44 +28,6 @@ export default function Header({ title }: HeaderProps) {
   const closeNotif = useCallback(() => {
     setNotifOpen(false);
   }, []);
-
-  const executeSearch = useCallback(
-    (query: string) => {
-      const trimmed = query.trim();
-      if (trimmed) {
-        navigate(`/musteriler?search=${encodeURIComponent(trimmed)}`);
-      }
-    },
-    [navigate],
-  );
-
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setSearchQuery(value);
-
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-
-      debounceRef.current = setTimeout(() => {
-        executeSearch(value);
-      }, 300);
-    },
-    [executeSearch],
-  );
-
-  const handleSearchKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        if (debounceRef.current) {
-          clearTimeout(debounceRef.current);
-        }
-        executeSearch(searchQuery);
-      }
-    },
-    [executeSearch, searchQuery],
-  );
 
   // Cleanup debounce on unmount
   useEffect(() => {
@@ -86,20 +45,25 @@ export default function Header({ title }: HeaderProps) {
 
       {/* Right: Search, Notifications, User */}
       <div className="flex items-center gap-4">
-        {/* Search */}
-        <div className="relative">
+        {/* Search — cmd+K trigger */}
+        <button
+          type="button"
+          onClick={() => {
+            // Dispatch keyboard event to open CommandPalette
+            document.dispatchEvent(
+              new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
+            );
+          }}
+          className="relative flex items-center w-96 rounded-full bg-slate-100 dark:bg-slate-800 py-2.5 pl-10 pr-14 text-sm text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+        >
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
             search
           </span>
-          <input
-            type="text"
-            placeholder="Müşteri, teklif veya sevkiyat ara..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchKeyDown}
-            className="w-96 rounded-full bg-slate-100 dark:bg-slate-800 py-2.5 pl-10 pr-4 text-sm text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:text-slate-400"
-          />
-        </div>
+          <span className="flex-1 text-left">Müşteri, teklif, sevkiyat ara...</span>
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 border border-slate-300 dark:border-slate-600 rounded px-1.5 py-0.5">
+            ⌘K
+          </kbd>
+        </button>
 
         {/* Theme Toggle */}
         <button

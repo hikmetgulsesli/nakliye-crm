@@ -26,6 +26,11 @@ import { shipmentsRoutes } from './modules/shipments/shipments.routes';
 import { documentsRoutes } from './modules/documents/documents.routes';
 import { exchangeRatesRoutes } from './modules/exchange-rates/exchange-rates.routes';
 import { ratesRoutes } from './modules/rates/rates.routes';
+import { searchRoutes } from './modules/search/search.routes';
+import { savedViewsRoutes } from './modules/saved-views/saved-views.routes';
+import { notesRoutes } from './modules/notes/notes.routes';
+import { bulkRoutes } from './modules/bulk/bulk.routes';
+import { timelineRoutes } from './modules/timeline/timeline.routes';
 
 const app = express();
 
@@ -78,6 +83,11 @@ app.use('/api/shipments', shipmentsRoutes);
 app.use('/api/documents', documentsRoutes);
 app.use('/api/exchange-rates', exchangeRatesRoutes);
 app.use('/api/rates', ratesRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/saved-views', savedViewsRoutes);
+app.use('/api/notes', notesRoutes);
+app.use('/api/bulk', bulkRoutes);
+app.use('/api/timeline', timelineRoutes);
 
 // Error handler
 app.use(errorHandler);

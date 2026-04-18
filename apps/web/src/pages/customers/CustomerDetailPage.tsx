@@ -5,6 +5,8 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { CustomerDetailTabs } from '@/components/customers/CustomerDetailTabs';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
+import { CustomerTimeline } from '@/components/customers/CustomerTimeline';
+import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
 import { customerService } from '@/services/customer.service';
 import type { Customer } from '@nakliye-crm/shared';
 
@@ -181,6 +183,16 @@ export default function CustomerDetailPage() {
       {/* Documents */}
       <div className="mt-6">
         <DocumentsPanel ownerType="customer" ownerId={customer.id} />
+      </div>
+
+      {/* Internal notes */}
+      <div className="mt-6">
+        <InternalNotesPanel ownerType="customer" ownerId={customer.id} />
+      </div>
+
+      {/* Unified timeline */}
+      <div className="mt-6">
+        <CustomerTimeline customerId={customer.id} />
       </div>
 
       {/* Delete Confirmation Modal */}
