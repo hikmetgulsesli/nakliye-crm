@@ -1,5 +1,8 @@
 import { logger } from '../config/logger';
 import { scheduleNotifications, startNotificationsWorker } from './notifications.worker';
+import { startEmailsWorker } from './emails.worker';
+import { scheduleDailyDigest, startDailyDigestWorker } from './daily-digest.worker';
+import { scheduleChurnRisk, startChurnRiskWorker } from './churn-risk.worker';
 import { closeAllQueues } from './queues';
 import { closeRedis } from '../config/redis';
 
@@ -21,6 +24,11 @@ export async function startWorkers(): Promise<void> {
   try {
     await scheduleNotifications();
     startNotificationsWorker();
+    startEmailsWorker();
+    await scheduleDailyDigest();
+    startDailyDigestWorker();
+    await scheduleChurnRisk();
+    startChurnRiskWorker();
     logger.info('Worker katmani baslatildi (BullMQ).');
   } catch (err) {
     logger.warn({ err: (err as Error).message }, 'Worker baslatma hatasi, in-process fallback kullaniliyor.');

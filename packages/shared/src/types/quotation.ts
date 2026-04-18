@@ -2,7 +2,7 @@ export interface Quotation {
   id: number;
   quoteNo: string;
   customerId: number;
-  customer?: { id: number; companyName: string };
+  customer?: { id: number; companyName: string; email?: string; phone?: string; contactName?: string | null };
   quoteDate: string;
   validityDate: string;
   transportMode?: string | null;

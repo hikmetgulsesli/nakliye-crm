@@ -21,6 +21,7 @@ import { auditRoutes } from './modules/audit/audit.routes';
 import { notificationRoutes } from './modules/notifications/notifications.routes';
 import { settingsRoutes } from './modules/settings/settings.routes';
 import { aiRoutes } from './modules/ai/ai.routes';
+import { emailsRoutes } from './modules/emails/emails.routes';
 
 const app = express();
 
@@ -68,6 +69,7 @@ app.use('/api/audit', auditRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/emails', emailsRoutes);
 
 // Error handler
 app.use(errorHandler);

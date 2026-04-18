@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Icon } from '@/components/ui';
 import { Avatar } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { RouteVisual } from '@/components/shared/RouteVisual';
 import { RevisionHistory } from './RevisionHistory';
+import { AIEmailDraftModal } from '@/components/ai/AIEmailDraftModal';
+import { WinProbabilityBadge } from '@/components/ai/WinProbabilityBadge';
 import type { Quotation, QuotationRevision } from '@nakliye-crm/shared';
 
 interface QuotationDetailProps {
@@ -51,14 +54,16 @@ export function QuotationDetail({
 }: QuotationDetailProps) {
   const q = quotation;
   const transportInfo = q.transportMode ? TRANSPORT_MODE_LABELS[q.transportMode.toLowerCase()] : null;
+  const [aiEmailOpen, setAiEmailOpen] = useState(false);
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3 mb-2 flex-wrap">
             <StatusBadge status={q.status} />
+            <WinProbabilityBadge quotationId={q.id} status={q.status} />
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
             {q.customer && (
@@ -91,6 +96,14 @@ export function QuotationDetail({
         <div className="flex items-center gap-3 flex-shrink-0">
           <Button
             variant="primary"
+            icon="auto_awesome"
+            onClick={() => setAiEmailOpen(true)}
+            className="!bg-primary hover:!bg-primary/90 !text-white"
+          >
+            AI E-posta Taslağı
+          </Button>
+          <Button
+            variant="primary"
             icon="edit"
             onClick={onEdit}
             className="!bg-emerald-500 hover:!bg-emerald-600 !shadow-emerald-500/20"
@@ -102,6 +115,15 @@ export function QuotationDetail({
           </Button>
         </div>
       </div>
+
+      {/* AI email draft modal */}
+      <AIEmailDraftModal
+        isOpen={aiEmailOpen}
+        onClose={() => setAiEmailOpen(false)}
+        quotationId={q.id}
+        customerEmail={q.customer?.email || ''}
+        customerName={q.customer?.companyName || 'Müşteri'}
+      />
 
       {/* Two cards side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

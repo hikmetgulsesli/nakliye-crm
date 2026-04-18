@@ -207,6 +207,20 @@ model SystemSetting {
   @@map("system_settings")
 }
 
+// Musteri kaybetme riski (nightly cron ile hesaplanir)
+model ChurnRisk {
+  id          Int      @id @default(autoincrement())
+  customerId  Int      @unique @map("customer_id")
+  score       Int // 0-100
+  level       String // 'low' | 'medium' | 'high' | 'critical'
+  signals     Json // [{name, impact, detail}]
+  computedAt  DateTime @default(now()) @map("computed_at")
+
+  @@index([score])
+  @@index([level])
+  @@map("churn_risk")
+}
+
 // AI API cagri kayitlari — cost tracking + analiz
 model AIUsage {
   id               Int      @id @default(autoincrement())

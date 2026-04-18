@@ -7,6 +7,7 @@ import { TeamPerformanceTable } from './TeamPerformanceTable';
 import { CountryDensityChart } from './CountryDensityChart';
 import { TransportModeChart } from './TransportModeChart';
 import { LossReasonsChart } from './LossReasonsChart';
+import { ChurnRiskWidget } from './ChurnRiskWidget';
 import { dashboardService, type AdminDashboardData } from '@/services/dashboard.service';
 
 const PERIOD_TABS = [
@@ -180,6 +181,9 @@ export function AdminDashboard() {
 
           {/* Team Performance Table */}
           <TeamPerformanceTable data={data.teamPerformance} />
+
+          {/* AI: Risk Altındaki Müşteriler */}
+          <ChurnRiskWidget limit={5} />
 
           {/* Bottom Row: 2 column grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

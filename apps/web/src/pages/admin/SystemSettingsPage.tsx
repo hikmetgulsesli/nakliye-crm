@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, Tabs, Button, Skeleton, Badge, Select } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { settingsService, type SettingsResponse, type AIUsageReport } from '@/services/settings.service';
+import { emailsService } from '@/services/emails.service';
 
 type TabKey = 'general' | 'ai' | 'integrations' | 'notifications' | 'usage';
 
@@ -108,9 +109,30 @@ interface TabProps {
 function GeneralTab({ data, save, saving }: TabProps) {
   const notifEnabled = data.settings['notifications.enabled'] !== false;
   const emailEnabled = data.settings['email.enabled'] === true;
+  const dailyDigestEnabled = data.settings['email.daily_digest'] === true;
+  const emailAvailable =
+    data.integrations.email.resendConfigured || data.integrations.email.smtpConfigured;
+
+  const [testState, setTestState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [testMsg, setTestMsg] = useState<string>('');
+
+  async function handleTestEmail() {
+    setTestState('sending');
+    setTestMsg('');
+    try {
+      const res = await emailsService.sendTest();
+      setTestState('sent');
+      setTestMsg(`Gönderildi (${res.provider})`);
+      setTimeout(() => setTestState('idle'), 5000);
+    } catch (err: unknown) {
+      setTestState('error');
+      setTestMsg((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Hata oluştu');
+    }
+  }
+
   return (
-    <Card title="Genel">
-      <div className="space-y-4">
+    <>
+      <Card title="Bildirimler">
         <ToggleRow
           label="Bildirim Scheduler"
           description="Otomatik bildirim üretimi (14 gün aranmayan müşteri, süresi dolmuş teklif vb.). Kapatılırsa cron çalışmaz."
@@ -118,17 +140,47 @@ function GeneralTab({ data, save, saving }: TabProps) {
           onChange={(v) => save('notifications.enabled', v)}
           saving={saving === 'notifications.enabled'}
         />
+      </Card>
+
+      <Card title="E-posta">
         <ToggleRow
           label="E-posta Gönderimi"
-          description="Transactional e-posta servisi (Resend/SMTP). Kapatılırsa günlük özet ve kritik uyarı e-postaları gönderilmez."
+          description="Transactional e-posta (Resend/SMTP). Kapatılırsa günlük özet ve kritik uyarı gönderilmez."
           enabled={emailEnabled}
           onChange={(v) => save('email.enabled', v)}
           saving={saving === 'email.enabled'}
-          disabled={!data.integrations.email.resendConfigured && !data.integrations.email.smtpConfigured}
+          disabled={!emailAvailable}
           disabledHint="Env'de RESEND_API_KEY veya SMTP_HOST ayarlanmadı."
         />
-      </div>
-    </Card>
+        <ToggleRow
+          label="Günlük Özet E-postası"
+          description="Her sabah 09:00'da admin'lere son 24 saatin özeti gönderilir."
+          enabled={dailyDigestEnabled}
+          onChange={(v) => save('email.daily_digest', v)}
+          saving={saving === 'email.daily_digest'}
+          disabled={!emailEnabled || !emailAvailable}
+          disabledHint={!emailEnabled ? 'Önce E-posta Gönderimi aktif edin.' : undefined}
+        />
+        <div className="flex items-center gap-3 pt-4">
+          <Button
+            variant="secondary"
+            size="sm"
+            icon="send"
+            onClick={handleTestEmail}
+            loading={testState === 'sending'}
+            disabled={!emailAvailable}
+          >
+            Test E-postası Gönder
+          </Button>
+          {testState === 'sent' && (
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">✓ {testMsg}</span>
+          )}
+          {testState === 'error' && (
+            <span className="text-sm text-red-600 dark:text-red-400">✗ {testMsg}</span>
+          )}
+        </div>
+      </Card>
+    </>
   );
 }
 

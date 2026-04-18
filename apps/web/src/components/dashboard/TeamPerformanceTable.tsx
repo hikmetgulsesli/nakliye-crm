@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Avatar, Icon } from '@/components/ui';
+import { CoachingPanel } from '@/components/ai/CoachingPanel';
 
 interface TeamMember {
   id: string;
@@ -21,6 +23,7 @@ interface TeamPerformanceTableProps {
 
 export function TeamPerformanceTable({ data, className }: TeamPerformanceTableProps) {
   const navigate = useNavigate();
+  const [coachingFor, setCoachingFor] = useState<{ id: number; name: string } | null>(null);
 
   return (
     <div
@@ -65,6 +68,9 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
               </th>
               <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Son Aktivite
+              </th>
+              <th className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">
+                AI
               </th>
             </tr>
           </thead>
@@ -139,11 +145,31 @@ export function TeamPerformanceTable({ data, className }: TeamPerformanceTablePr
                 <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                   {member.lastActivity}
                 </td>
+
+                {/* AI Koçluk butonu */}
+                <td className="px-6 py-4 text-right">
+                  <button
+                    onClick={() => setCoachingFor({ id: Number(member.id), name: member.name })}
+                    className="inline-flex items-center justify-center size-8 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+                    title="AI Koçluk Önerileri"
+                  >
+                    <Icon name="auto_awesome" size="sm" />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {coachingFor && (
+        <CoachingPanel
+          isOpen={!!coachingFor}
+          onClose={() => setCoachingFor(null)}
+          userId={coachingFor.id}
+          userName={coachingFor.name}
+        />
+      )}
     </div>
   );
 }
