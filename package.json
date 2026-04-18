@@ -13,6 +13,8 @@
     "db:migrate": "bun run --filter api db:migrate",
     "db:seed": "bun run --filter api db:seed",
     "db:generate": "bun run --filter api db:generate",
-    "db:studio": "bun run --filter api db:studio"
+    "db:studio": "bun run --filter api db:studio",
+    "test": "bun run --filter '*' test",
+    "typecheck": "bun run --filter '*' typecheck"
   }
 }
