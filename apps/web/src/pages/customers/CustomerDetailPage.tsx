@@ -6,7 +6,9 @@ import { StatusBadge } from '@/components/shared/StatusBadge';
 import { CustomerDetailTabs } from '@/components/customers/CustomerDetailTabs';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { CustomerTimeline } from '@/components/customers/CustomerTimeline';
+import { ContactsPanel } from '@/components/customers/ContactsPanel';
 import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
+import { FeatureGate } from '@/components/features/FeatureGate';
 import { customerService } from '@/services/customer.service';
 import type { Customer } from '@nakliye-crm/shared';
 
@@ -180,20 +182,33 @@ export default function CustomerDetailPage() {
       {/* Tabs */}
       <CustomerDetailTabs customer={customer} />
 
+      {/* Yetkili Contacts */}
+      <FeatureGate feature="customer_contacts">
+        <div className="mt-6">
+          <ContactsPanel customerId={customer.id} />
+        </div>
+      </FeatureGate>
+
       {/* Documents */}
-      <div className="mt-6">
-        <DocumentsPanel ownerType="customer" ownerId={customer.id} />
-      </div>
+      <FeatureGate feature="documents">
+        <div className="mt-6">
+          <DocumentsPanel ownerType="customer" ownerId={customer.id} />
+        </div>
+      </FeatureGate>
 
       {/* Internal notes */}
-      <div className="mt-6">
-        <InternalNotesPanel ownerType="customer" ownerId={customer.id} />
-      </div>
+      <FeatureGate feature="internal_notes">
+        <div className="mt-6">
+          <InternalNotesPanel ownerType="customer" ownerId={customer.id} />
+        </div>
+      </FeatureGate>
 
       {/* Unified timeline */}
-      <div className="mt-6">
-        <CustomerTimeline customerId={customer.id} />
-      </div>
+      <FeatureGate feature="customer_timeline">
+        <div className="mt-6">
+          <CustomerTimeline customerId={customer.id} />
+        </div>
+      </FeatureGate>
 
       {/* Delete Confirmation Modal */}
       <Modal

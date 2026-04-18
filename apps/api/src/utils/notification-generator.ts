@@ -25,6 +25,7 @@ export async function generateNotifications(): Promise<void> {
     await notifyExpiredQuotations(now);
     await notifyHighPotentialNoQuote(now, highPotentialDays);
     await notifyTodaysFollowups(now);
+    await notifyUpcomingBirthdays(now);
 
     console.log(`[Notifications] Generated at ${now.toISOString()}`);
   } catch (error) {
@@ -217,6 +218,51 @@ async function notifyHighPotentialNoQuote(now: Date, days: number) {
 }
 
 // ---------- Scheduler ----------
+
+// ---------- 6. Yaklasan dogum gunleri (3 gun kala) ----------
+
+async function notifyUpcomingBirthdays(now: Date) {
+  const contacts = await prisma.customerContact.findMany({
+    where: { birthdate: { not: null } },
+    include: { customer: { select: { id: true, companyName: true, assignedUserId: true } } },
+  });
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const oneDayAgo = new Date(today);
+  oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+  for (const c of contacts) {
+    const b = c.birthdate!;
+    const thisYear = new Date(now.getFullYear(), b.getMonth(), b.getDate());
+    const target = thisYear < today
+      ? new Date(now.getFullYear() + 1, b.getMonth(), b.getDate())
+      : thisYear;
+    const diffDays = Math.floor((target.getTime() - today.getTime()) / 86400000);
+
+    // 3 gun kala bildir (bir kere)
+    if (diffDays !== 3) continue;
+
+    const existing = await prisma.notification.findFirst({
+      where: {
+        userId: c.customer.assignedUserId,
+        title: 'Doğum Günü Yaklaşıyor',
+        message: { contains: `contact-${c.id}` },
+        createdAt: { gte: oneDayAgo },
+      },
+    });
+    if (existing) continue;
+
+    await prisma.notification.create({
+      data: {
+        userId: c.customer.assignedUserId,
+        type: 'info',
+        title: 'Doğum Günü Yaklaşıyor',
+        message: `${c.fullName} (${c.customer.companyName}) 3 gün içinde doğum günü [contact-${c.id}]`,
+        link: `/musteriler/${c.customerId}`,
+      },
+    });
+  }
+}
 
 // ---------- 5. Bugün planlanmıs follow-up'lar ----------
 

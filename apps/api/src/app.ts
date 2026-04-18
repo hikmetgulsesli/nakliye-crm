@@ -36,6 +36,7 @@ import { smsRoutes } from './modules/sms/sms.routes';
 import { portalRoutes } from './modules/portal/portal.routes';
 import { messageTemplatesRoutes } from './modules/message-templates/message-templates.routes';
 import { dailyPlanRoutes } from './modules/daily-plan/daily-plan.routes';
+import { customerContactsRoutes } from './modules/customer-contacts/contacts.routes';
 import swaggerUi from 'swagger-ui-express';
 import { openapiSpec } from './config/openapi';
 
@@ -100,6 +101,7 @@ app.use('/api/sms', smsRoutes);
 app.use('/api/portal', portalRoutes);
 app.use('/api/message-templates', messageTemplatesRoutes);
 app.use('/api/daily-plan', dailyPlanRoutes);
+app.use('/api/customer-contacts', customerContactsRoutes);
 
 // API documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {

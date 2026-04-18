@@ -82,6 +82,7 @@ model Customer {
   quotations Quotation[]
   activities Activity[]
   shipments  Shipment[]
+  contacts   CustomerContact[]
 
   @@map("customers")
 }
@@ -206,6 +207,26 @@ model SystemSetting {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("system_settings")
+}
+
+// Müşteri firmasında birden çok yetkili (contact kişi)
+model CustomerContact {
+  id              Int       @id @default(autoincrement())
+  customerId      Int       @map("customer_id")
+  customer        Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  fullName        String    @map("full_name")
+  role            String? // Operasyon / Muhasebe / Satın Alma vb.
+  phone           String?
+  email           String?
+  birthdate       DateTime? // gun.ay bazinda — yil opsiyonel ama tutuyoruz
+  notes           String?
+  isPrimary       Boolean   @default(false) @map("is_primary")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([customerId])
+  @@index([email])
+  @@map("customer_contacts")
 }
 
 // Mesaj sablonu (WhatsApp/SMS/E-posta ortak) — {musteri_adi} gibi
