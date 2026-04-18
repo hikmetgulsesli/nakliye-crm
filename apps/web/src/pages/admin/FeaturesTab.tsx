@@ -72,14 +72,13 @@ export function FeaturesTab() {
                   <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
                     {it.label}
                   </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    <code>features.{it.key}</code>
-                    {it.default === false && (
-                      <span className="ml-2 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800">
-                        varsayılan: kapalı
+                  {it.default === false && !it.enabled && (
+                    <div className="mt-1">
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                        Varsayılan kapalı
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
                 <button
                   type="button"
