@@ -4,6 +4,8 @@ import fs from 'fs';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import pinoHttp from 'pino-http';
+import { logger } from './config/logger';
 import { env } from './config/env';
 import { errorHandler } from './middleware/error-handler';
 import { authRoutes } from './modules/auth/auth.routes';
@@ -19,6 +21,24 @@ import { auditRoutes } from './modules/audit/audit.routes';
 import { notificationRoutes } from './modules/notifications/notifications.routes';
 
 const app = express();
+
+app.use(
+  pinoHttp({
+    logger,
+    customLogLevel: (_req, res, err) => {
+      if (err || res.statusCode >= 500) return 'error';
+      if (res.statusCode >= 400) return 'warn';
+      return 'info';
+    },
+    serializers: {
+      req: (req) => ({ method: req.method, url: req.url }),
+      res: (res) => ({ statusCode: res.statusCode }),
+    },
+    autoLogging: {
+      ignore: (req) => req.url === '/api/health',
+    },
+  }),
+);
 
 app.use(cors({
   origin: env.corsOrigin,

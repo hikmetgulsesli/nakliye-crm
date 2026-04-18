@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
+import { initSentry } from './config/sentry';
 import './index.css';
+
+initSentry();
 
 // FOUC onleme: persist'ten tema okuyup mount oncesi uygula
 try {
