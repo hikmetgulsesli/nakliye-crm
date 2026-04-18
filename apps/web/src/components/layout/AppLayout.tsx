@@ -8,6 +8,7 @@ const pageTitles: Record<string, string> = {
   '/musteriler/yeni': 'Yeni Müşteri',
   '/teklifler': 'Teklifler',
   '/teklifler/yeni': 'Yeni Teklif',
+  '/sevkiyatlar': 'Sevkiyatlar',
   '/raporlar': 'Raporlar',
   '/kullanicilar': 'Kullanıcı Yönetimi',
   '/liste-yonetimi': 'Liste Yönetimi',

@@ -81,6 +81,7 @@ model Customer {
 
   quotations Quotation[]
   activities Activity[]
+  shipments  Shipment[]
 
   @@map("customers")
 }
@@ -205,6 +206,172 @@ model SystemSetting {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("system_settings")
+}
+
+// Nakliye sevkiyat modulu — teklif "Kazanildi" olunca otomatik olusur
+model Shipment {
+  id                 Int       @id @default(autoincrement())
+  shipmentNo         String    @unique @map("shipment_no")
+  quotationId        Int?      @map("quotation_id")
+  customerId         Int       @map("customer_id")
+  customer           Customer  @relation(fields: [customerId], references: [id])
+  blNumber           String?   @map("bl_number")
+  awbNumber          String?   @map("awb_number")
+  transportMode      String?   @map("transport_mode")
+  serviceType        String?   @map("service_type")
+  originCountry      String?   @map("origin_country")
+  pol                String?
+  destinationCountry String?   @map("destination_country")
+  pod                String?
+  etd                DateTime?
+  eta                DateTime?
+  atd                DateTime?
+  ata                DateTime?
+  status             String    @default("booked")
+  customsStatus      String?   @map("customs_status")
+  notes              String?
+  assignedUserId     Int       @map("assigned_user_id")
+  createdById        Int       @map("created_by_id")
+  isDeleted          Boolean   @default(false) @map("is_deleted")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  containers Container[]
+  events     ShipmentEvent[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([assignedUserId])
+  @@map("shipments")
+}
+
+model Container {
+  id          Int      @id @default(autoincrement())
+  shipmentId  Int      @map("shipment_id")
+  shipment    Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  containerNo String   @map("container_no")
+  sealNo      String?  @map("seal_no")
+  type        String?
+  weightKg    Float?   @map("weight_kg")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([shipmentId])
+  @@map("containers")
+}
+
+model ShipmentEvent {
+  id          Int      @id @default(autoincrement())
+  shipmentId  Int      @map("shipment_id")
+  shipment    Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  eventType   String   @map("event_type")
+  fromStatus  String?  @map("from_status")
+  toStatus    String?  @map("to_status")
+  note        String?
+  location    String?
+  occurredAt  DateTime @map("occurred_at")
+  createdById Int      @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([shipmentId, occurredAt])
+  @@map("shipment_events")
+}
+
+model Document {
+  id           Int      @id @default(autoincrement())
+  ownerType    String   @map("owner_type")
+  ownerId      Int      @map("owner_id")
+  category     String
+  filename     String
+  storageKey   String   @map("storage_key")
+  contentType  String?  @map("content_type")
+  sizeBytes    Int      @map("size_bytes")
+  version      Int      @default(1)
+  uploadedById Int      @map("uploaded_by_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([ownerType, ownerId])
+  @@index([category])
+  @@map("documents")
+}
+
+model ExchangeRate {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  currency  String
+  buying    Float
+  selling   Float
+  source    String   @default("TCMB")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([date, currency])
+  @@index([currency, date])
+  @@map("exchange_rates")
+}
+
+model Carrier {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String?  @unique
+  modes     Json?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  rates Rate[]
+
+  @@map("carriers")
+}
+
+model Rate {
+  id                 Int       @id @default(autoincrement())
+  carrierId          Int       @map("carrier_id")
+  carrier            Carrier   @relation(fields: [carrierId], references: [id], onDelete: Cascade)
+  transportMode      String    @map("transport_mode")
+  serviceType        String?   @map("service_type")
+  originCountry      String?   @map("origin_country")
+  pol                String?
+  destinationCountry String?   @map("destination_country")
+  pod                String?
+  basePrice          Float     @map("base_price")
+  currency           String    @default("USD")
+  validFrom          DateTime  @map("valid_from")
+  validUntil         DateTime? @map("valid_until")
+  notes              String?
+  isActive           Boolean   @default(true) @map("is_active")
+  createdById        Int       @map("created_by_id")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@index([carrierId, transportMode])
+  @@index([originCountry, destinationCountry])
+  @@index([validFrom, validUntil])
+  @@map("rates")
+}
+
+model SavedView {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String
+  resource  String
+  filters   Json
+  isPinned  Boolean  @default(false) @map("is_pinned")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, resource])
+  @@map("saved_views")
+}
+
+model InternalNote {
+  id               Int      @id @default(autoincrement())
+  ownerType        String   @map("owner_type")
+  ownerId          Int      @map("owner_id")
+  authorId         Int      @map("author_id")
+  content          String
+  mentionedUserIds Int[]    @map("mentioned_user_ids")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([ownerType, ownerId])
+  @@map("internal_notes")
 }
 
 // Musteri kaybetme riski (nightly cron ile hesaplanir)

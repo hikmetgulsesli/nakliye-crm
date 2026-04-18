@@ -21,6 +21,8 @@ const AuditLogPage = lazy(() => import('../pages/admin/AuditLogPage'));
 const TransferPage = lazy(() => import('../pages/admin/TransferPage'));
 const ReportsPage = lazy(() => import('../pages/admin/ReportsPage'));
 const SystemSettingsPage = lazy(() => import('../pages/admin/SystemSettingsPage'));
+const ShipmentListPage = lazy(() => import('../pages/shipments/ShipmentListPage'));
+const ShipmentDetailPage = lazy(() => import('../pages/shipments/ShipmentDetailPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const AboutPage = lazy(() => import('../pages/AboutPage'));
@@ -187,6 +189,23 @@ export const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <QuoteEditPage />
+              </SuspenseWrapper>
+            ),
+          },
+          // Sevkiyatlar
+          {
+            path: 'sevkiyatlar',
+            element: (
+              <SuspenseWrapper>
+                <ShipmentListPage />
+              </SuspenseWrapper>
+            ),
+          },
+          {
+            path: 'sevkiyatlar/:id',
+            element: (
+              <SuspenseWrapper>
+                <ShipmentDetailPage />
               </SuspenseWrapper>
             ),
           },

@@ -235,6 +235,22 @@ export async function update(req: Request, res: Response) {
     changes,
   });
 
+  // Status "Kazanıldı" olduysa auto-create shipment
+  if (
+    changes?.status &&
+    changes.status.new === 'Kazanıldı' &&
+    changes.status.old !== 'Kazanıldı'
+  ) {
+    try {
+      const { createShipmentFromQuotation } = await import('../shipments/shipments.service');
+      await createShipmentFromQuotation(id, req.user!.userId);
+    } catch (err) {
+      // Shipment olusturma hatasi teklif guncellemesini engellemesin
+      const { logger } = await import('../../config/logger');
+      logger.warn({ err: (err as Error).message, quotationId: id }, 'Shipment auto-create basarisiz');
+    }
+  }
+
   res.json({ success: true, data: updated });
 }
 

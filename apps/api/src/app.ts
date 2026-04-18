@@ -22,6 +22,10 @@ import { notificationRoutes } from './modules/notifications/notifications.routes
 import { settingsRoutes } from './modules/settings/settings.routes';
 import { aiRoutes } from './modules/ai/ai.routes';
 import { emailsRoutes } from './modules/emails/emails.routes';
+import { shipmentsRoutes } from './modules/shipments/shipments.routes';
+import { documentsRoutes } from './modules/documents/documents.routes';
+import { exchangeRatesRoutes } from './modules/exchange-rates/exchange-rates.routes';
+import { ratesRoutes } from './modules/rates/rates.routes';
 
 const app = express();
 
@@ -70,6 +74,10 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/emails', emailsRoutes);
+app.use('/api/shipments', shipmentsRoutes);
+app.use('/api/documents', documentsRoutes);
+app.use('/api/exchange-rates', exchangeRatesRoutes);
+app.use('/api/rates', ratesRoutes);
 
 // Error handler
 app.use(errorHandler);

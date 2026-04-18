@@ -7,6 +7,7 @@ import { RouteVisual } from '@/components/shared/RouteVisual';
 import { RevisionHistory } from './RevisionHistory';
 import { AIEmailDraftModal } from '@/components/ai/AIEmailDraftModal';
 import { WinProbabilityBadge } from '@/components/ai/WinProbabilityBadge';
+import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import type { Quotation, QuotationRevision } from '@nakliye-crm/shared';
 
 interface QuotationDetailProps {
@@ -240,6 +241,9 @@ export function QuotationDetail({
           <RevisionHistory revisions={revisions} loading={revisionsLoading} />
         </div>
       </Card>
+
+      {/* Dokümanlar */}
+      <DocumentsPanel ownerType="quotation" ownerId={q.id} />
     </div>
   );
 }

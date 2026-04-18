@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
   { label: 'Dashboard', icon: 'dashboard', path: '/' },
   { label: 'Müşteriler', icon: 'people', path: '/musteriler' },
   { label: 'Teklifler', icon: 'description', path: '/teklifler' },
+  { label: 'Sevkiyatlar', icon: 'local_shipping', path: '/sevkiyatlar' },
   { label: 'Raporlar', icon: 'bar_chart_4_bars', path: '/raporlar', adminOnly: true },
   { label: 'Kullanıcı Yönetimi', icon: 'manage_accounts', path: '/kullanicilar', adminOnly: true },
   { label: 'Liste Yönetimi', icon: 'list', path: '/liste-yonetimi', adminOnly: true },
