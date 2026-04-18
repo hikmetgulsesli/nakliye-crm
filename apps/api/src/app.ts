@@ -31,6 +31,9 @@ import { savedViewsRoutes } from './modules/saved-views/saved-views.routes';
 import { notesRoutes } from './modules/notes/notes.routes';
 import { bulkRoutes } from './modules/bulk/bulk.routes';
 import { timelineRoutes } from './modules/timeline/timeline.routes';
+import { whatsappRoutes } from './modules/whatsapp/whatsapp.routes';
+import { smsRoutes } from './modules/sms/sms.routes';
+import { portalRoutes } from './modules/portal/portal.routes';
 
 const app = express();
 
@@ -88,6 +91,9 @@ app.use('/api/saved-views', savedViewsRoutes);
 app.use('/api/notes', notesRoutes);
 app.use('/api/bulk', bulkRoutes);
 app.use('/api/timeline', timelineRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/sms', smsRoutes);
+app.use('/api/portal', portalRoutes);
 
 // Error handler
 app.use(errorHandler);

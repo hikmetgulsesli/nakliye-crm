@@ -23,6 +23,8 @@ const ReportsPage = lazy(() => import('../pages/admin/ReportsPage'));
 const SystemSettingsPage = lazy(() => import('../pages/admin/SystemSettingsPage'));
 const ShipmentListPage = lazy(() => import('../pages/shipments/ShipmentListPage'));
 const ShipmentDetailPage = lazy(() => import('../pages/shipments/ShipmentDetailPage'));
+const PortalLoginPage = lazy(() => import('../pages/portal/PortalLoginPage'));
+const PortalDashboardPage = lazy(() => import('../pages/portal/PortalDashboardPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const AboutPage = lazy(() => import('../pages/AboutPage'));
@@ -100,6 +102,23 @@ export const router = createBrowserRouter([
     element: (
       <SuspenseWrapper>
         <PrivacyPage />
+      </SuspenseWrapper>
+    ),
+  },
+  // Portal — public (JWT localStorage)
+  {
+    path: '/portal/giris',
+    element: (
+      <SuspenseWrapper>
+        <PortalLoginPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: '/portal',
+    element: (
+      <SuspenseWrapper>
+        <PortalDashboardPage />
       </SuspenseWrapper>
     ),
   },
