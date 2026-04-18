@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "customers": "Müşteriler",
+    "quotations": "Teklifler",
+    "shipments": "Sevkiyatlar",
+    "reports": "Raporlar",
+    "users": "Kullanıcı Yönetimi",
+    "lookups": "Liste Yönetimi",
+    "settings": "Sistem Ayarları",
+    "logs": "Loglar",
+    "logout": "Çıkış Yap"
+  },
+  "common": {
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "create": "Oluştur",
+    "search": "Ara",
+    "loading": "Yükleniyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "yes": "Evet",
+    "no": "Hayır",
+    "back": "Geri",
+    "next": "İleri",
+    "close": "Kapat",
+    "total": "Toplam"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "email": "E-posta",
+    "password": "Şifre",
+    "forgotPassword": "Şifremi Unuttum",
+    "rememberMe": "Beni Hatırla"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "customers": "Customers",
+    "quotations": "Quotations",
+    "shipments": "Shipments",
+    "reports": "Reports",
+    "users": "User Management",
+    "lookups": "Lookups",
+    "settings": "System Settings",
+    "logs": "Audit Logs",
+    "logout": "Logout"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "yes": "Yes",
+    "no": "No",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "total": "Total"
+  },
+  "auth": {
+    "login": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password",
+    "rememberMe": "Remember Me"
+  }
+}

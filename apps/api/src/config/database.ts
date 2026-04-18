@@ -4,6 +4,22 @@ const prisma = new PrismaClient({
   log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 });
 
+// Real-time notification emit middleware — Notification create'ta
+// ilgili kullaniciya Socket.IO push
+prisma.$use(async (params, next) => {
+  const result = await next(params);
+  if (params.model === 'Notification' && params.action === 'create' && result) {
+    try {
+      const { emitToUser } = await import('../realtime/socket');
+      const r = result as { userId: number };
+      emitToUser(r.userId, 'notification:new', result);
+    } catch {
+      // socket yoksa sessiz gec
+    }
+  }
+  return result;
+});
+
 // Soft delete middleware - automatically filter out deleted records
 prisma.$use(async (params, next) => {
   const softDeleteModels = ['Customer', 'Quotation', 'Activity'];

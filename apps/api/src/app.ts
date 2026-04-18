@@ -34,6 +34,8 @@ import { timelineRoutes } from './modules/timeline/timeline.routes';
 import { whatsappRoutes } from './modules/whatsapp/whatsapp.routes';
 import { smsRoutes } from './modules/sms/sms.routes';
 import { portalRoutes } from './modules/portal/portal.routes';
+import swaggerUi from 'swagger-ui-express';
+import { openapiSpec } from './config/openapi';
 
 const app = express();
 
@@ -94,6 +96,12 @@ app.use('/api/timeline', timelineRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 app.use('/api/sms', smsRoutes);
 app.use('/api/portal', portalRoutes);
+
+// API documentation
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, {
+  customSiteTitle: 'Nakliye CRM API',
+}));
+app.get('/api/openapi.json', (_req, res) => res.json(openapiSpec));
 
 // Error handler
 app.use(errorHandler);

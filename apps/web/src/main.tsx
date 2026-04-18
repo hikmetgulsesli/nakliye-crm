@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 import { initSentry } from './config/sentry';
+import './i18n';
 import './index.css';
 
 initSentry();
