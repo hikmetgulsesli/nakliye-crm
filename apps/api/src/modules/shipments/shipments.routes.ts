@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { auth } from '../../middleware/auth';
 import { rbac } from '../../middleware/rbac';
+import { requireFeature } from '../../services/features.service';
 import * as c from './shipments.controller';
 
 const router = Router();
 
-router.use(auth());
+router.use(auth(), requireFeature('shipments'));
 
 router.get('/', c.list);
 router.get('/:id', c.getById);

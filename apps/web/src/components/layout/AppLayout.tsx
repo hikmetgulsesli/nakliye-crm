@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { CommandPalette } from '@/components/search/CommandPalette';
+import { useFeaturesStore, useFeature } from '@/stores/featuresStore';
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -32,10 +34,16 @@ function resolveTitle(pathname: string): string {
 export default function AppLayout() {
   const location = useLocation();
   const title = resolveTitle(location.pathname);
+  const fetchFeatures = useFeaturesStore((s) => s.fetch);
+  const cmdKEnabled = useFeature('command_palette');
+
+  useEffect(() => {
+    fetchFeatures();
+  }, [fetchFeatures]);
 
   return (
     <div className="flex min-h-screen">
-      <CommandPalette />
+      {cmdKEnabled && <CommandPalette />}
       {/* Sidebar - fixed */}
       <Sidebar />
 

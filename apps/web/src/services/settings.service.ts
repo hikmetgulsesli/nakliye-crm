@@ -52,6 +52,19 @@ export interface AIUsageReport {
   }>;
 }
 
+export interface FeatureItem {
+  key: string;
+  label: string;
+  enabled: boolean;
+  default: boolean;
+}
+
+export interface FeatureCategoryGroup {
+  category: string;
+  label: string;
+  items: FeatureItem[];
+}
+
 export const settingsService = {
   async getAll(): Promise<SettingsResponse> {
     const { data } = await api.get<SettingsResponse>('/settings');
@@ -64,6 +77,11 @@ export const settingsService = {
 
   async aiUsage(days = 30): Promise<AIUsageReport> {
     const { data } = await api.get<AIUsageReport>(`/settings/ai-usage?days=${days}`);
+    return data;
+  },
+
+  async listFeatures(): Promise<{ categories: FeatureCategoryGroup[] }> {
+    const { data } = await api.get<{ categories: FeatureCategoryGroup[] }>('/settings/features');
     return data;
   },
 };

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { auth } from '../../middleware/auth';
+import { requireFeature } from '../../services/features.service';
 import * as c from './documents.controller';
 
 const router = Router();
 
-router.use(auth());
+router.use(auth(), requireFeature('documents'));
 
 router.get('/', c.list);
 router.post('/request-upload', c.requestUpload);

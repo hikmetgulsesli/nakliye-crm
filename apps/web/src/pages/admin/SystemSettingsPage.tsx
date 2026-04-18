@@ -3,10 +3,12 @@ import { Card, Tabs, Button, Skeleton, Badge, Select } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { settingsService, type SettingsResponse, type AIUsageReport } from '@/services/settings.service';
 import { emailsService } from '@/services/emails.service';
+import { FeaturesTab } from './FeaturesTab';
 
-type TabKey = 'general' | 'ai' | 'integrations' | 'notifications' | 'usage';
+type TabKey = 'features' | 'general' | 'ai' | 'integrations' | 'notifications' | 'usage';
 
 const TABS = [
+  { key: 'features', label: 'Özellikler' },
   { key: 'general', label: 'Genel' },
   { key: 'ai', label: 'AI Sağlayıcılar' },
   { key: 'integrations', label: 'Entegrasyonlar' },
@@ -15,7 +17,7 @@ const TABS = [
 ] as const;
 
 export default function SystemSettingsPage() {
-  const [active, setActive] = useState<TabKey>('general');
+  const [active, setActive] = useState<TabKey>('features');
   const [data, setData] = useState<SettingsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -74,7 +76,9 @@ export default function SystemSettingsPage() {
         />
       </div>
 
-      {loading && !data ? (
+      {active === 'features' ? (
+        <FeaturesTab />
+      ) : loading && !data ? (
         <div className="space-y-4">
           <Skeleton variant="card" />
           <Skeleton variant="card" />

@@ -7,6 +7,7 @@ import {
 import { listProvidersStatus } from '../../services/ai';
 import { isStorageConfigured } from '../../services/storage.service';
 import { createAuditLog } from '../../utils/audit';
+import { FEATURES, CATEGORY_LABELS, getAllFeatures, type FeatureKey } from '../../services/features.service';
 
 /**
  * Sistem Ayarlari — tek bir controller altinda tum toggle + non-sensitive
@@ -85,9 +86,10 @@ export async function update(req: Request, res: Response) {
   if (!key || typeof key !== 'string') {
     return res.status(400).json({ success: false, message: 'key gerekli' });
   }
-  // Allow-list against known keys
+  // Allow-list: known settings + tum feature flag'ler
   const allowed = Object.values(KEYS) as string[];
-  if (!allowed.includes(key)) {
+  const featureKeys = Object.keys(FEATURES).map((f) => `features.${f}`);
+  if (!allowed.includes(key) && !featureKeys.includes(key)) {
     return res.status(400).json({ success: false, message: `Bilinmeyen ayar: ${key}` });
   }
   await setSetting(key, value, req.user?.userId);
@@ -101,6 +103,41 @@ export async function update(req: Request, res: Response) {
   });
 
   res.json({ success: true, data: { key, value } });
+}
+
+export async function listFeatures(_req: Request, res: Response) {
+  const values = await getAllFeatures();
+  const byCategory: Record<string, Array<{ key: FeatureKey; label: string; enabled: boolean; default: boolean }>> = {};
+  for (const [key, meta] of Object.entries(FEATURES) as Array<
+    [FeatureKey, { default: boolean; category: string; label: string }]
+  >) {
+    if (!byCategory[meta.category]) byCategory[meta.category] = [];
+    byCategory[meta.category].push({
+      key,
+      label: meta.label,
+      default: meta.default,
+      enabled: values[key],
+    });
+  }
+  res.json({
+    success: true,
+    data: {
+      categories: Object.entries(byCategory).map(([cat, items]) => ({
+        category: cat,
+        label: CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS] || cat,
+        items,
+      })),
+    },
+  });
+}
+
+/**
+ * Frontend'in hangi feature'lar aktif/pasif oldugunu tek seferde ogrenmesi
+ * icin basit endpoint (auth'lu herkese acik — sadece feature listesi, sirri yok).
+ */
+export async function getFeatureFlags(_req: Request, res: Response) {
+  const values = await getAllFeatures();
+  res.json({ success: true, data: values });
 }
 
 export async function aiUsageReport(req: Request, res: Response) {
