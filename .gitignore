@@ -10,3 +10,7 @@ build/
 prisma/*.db
 # Auto-generated declaration files from tsc
 apps/web/*.d.ts
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

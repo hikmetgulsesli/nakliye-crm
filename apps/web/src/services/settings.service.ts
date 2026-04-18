@@ -54,8 +54,8 @@ export interface AIUsageReport {
 
 export const settingsService = {
   async getAll(): Promise<SettingsResponse> {
-    const { data } = await api.get<{ success: true; data: SettingsResponse }>('/settings');
-    return data.data;
+    const { data } = await api.get<SettingsResponse>('/settings');
+    return data;
   },
 
   async update(key: string, value: unknown): Promise<void> {
@@ -63,9 +63,7 @@ export const settingsService = {
   },
 
   async aiUsage(days = 30): Promise<AIUsageReport> {
-    const { data } = await api.get<{ success: true; data: AIUsageReport }>(
-      `/settings/ai-usage?days=${days}`,
-    );
-    return data.data;
+    const { data } = await api.get<AIUsageReport>(`/settings/ai-usage?days=${days}`);
+    return data;
   },
 };

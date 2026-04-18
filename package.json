@@ -15,6 +15,12 @@
     "db:generate": "bun run --filter api db:generate",
     "db:studio": "bun run --filter api db:studio",
     "test": "bun run --filter '*' test",
-    "typecheck": "bun run --filter '*' typecheck"
+    "typecheck": "bun run --filter '*' typecheck",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:debug": "playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
   }
 }
