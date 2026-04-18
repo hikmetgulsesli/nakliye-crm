@@ -19,6 +19,8 @@ import { reportRoutes } from './modules/reports/reports.routes';
 import { transferRoutes } from './modules/transfers/transfers.routes';
 import { auditRoutes } from './modules/audit/audit.routes';
 import { notificationRoutes } from './modules/notifications/notifications.routes';
+import { settingsRoutes } from './modules/settings/settings.routes';
+import { aiRoutes } from './modules/ai/ai.routes';
 
 const app = express();
 
@@ -64,6 +66,8 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/transfers', transferRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Error handler
 app.use(errorHandler);

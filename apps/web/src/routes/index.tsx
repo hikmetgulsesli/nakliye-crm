@@ -20,6 +20,7 @@ const LookupManagementPage = lazy(() => import('../pages/admin/LookupManagementP
 const AuditLogPage = lazy(() => import('../pages/admin/AuditLogPage'));
 const TransferPage = lazy(() => import('../pages/admin/TransferPage'));
 const ReportsPage = lazy(() => import('../pages/admin/ReportsPage'));
+const SystemSettingsPage = lazy(() => import('../pages/admin/SystemSettingsPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const AboutPage = lazy(() => import('../pages/AboutPage'));
@@ -230,6 +231,14 @@ export const router = createBrowserRouter([
                 element: (
                   <SuspenseWrapper>
                     <ReportsPage />
+                  </SuspenseWrapper>
+                ),
+              },
+              {
+                path: 'ayarlar',
+                element: (
+                  <SuspenseWrapper>
+                    <SystemSettingsPage />
                   </SuspenseWrapper>
                 ),
               },

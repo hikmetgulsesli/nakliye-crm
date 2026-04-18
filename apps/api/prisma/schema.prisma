@@ -192,3 +192,39 @@ model Notification {
   @@index([userId, isRead])
   @@map("notifications")
 }
+
+// Admin UI'dan yonetilen sistem ayarlari. API key vb. hassas degerler env'de
+// tutulmaya devam eder; burada sadece "enabled/disabled", "default provider",
+// "threshold" gibi UI'dan degistirilebilir non-sensitive ayarlar.
+model SystemSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     Json
+  updatedBy Int?     @map("updated_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("system_settings")
+}
+
+// AI API cagri kayitlari — cost tracking + analiz
+model AIUsage {
+  id               Int      @id @default(autoincrement())
+  provider         String
+  model            String
+  task             String?
+  userId           Int?     @map("user_id")
+  promptTokens     Int      @map("prompt_tokens")
+  completionTokens Int      @map("completion_tokens")
+  totalTokens      Int      @map("total_tokens")
+  costUsd          Float    @map("cost_usd")
+  latencyMs        Int      @map("latency_ms")
+  success          Boolean  @default(true)
+  errorMessage     String?  @map("error_message")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([provider, createdAt])
+  @@index([task, createdAt])
+  @@index([userId, createdAt])
+  @@map("ai_usage")
+}

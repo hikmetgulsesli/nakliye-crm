@@ -15,7 +15,8 @@ const navItems: NavItem[] = [
   { label: 'Teklifler', icon: 'description', path: '/teklifler' },
   { label: 'Raporlar', icon: 'bar_chart_4_bars', path: '/raporlar', adminOnly: true },
   { label: 'Kullanıcı Yönetimi', icon: 'manage_accounts', path: '/kullanicilar', adminOnly: true },
-  { label: 'Sistem Ayarları', icon: 'settings', path: '/liste-yonetimi', adminOnly: true },
+  { label: 'Liste Yönetimi', icon: 'list', path: '/liste-yonetimi', adminOnly: true },
+  { label: 'Sistem Ayarları', icon: 'settings', path: '/ayarlar', adminOnly: true },
   { label: 'Loglar', icon: 'receipt_long', path: '/loglar', adminOnly: true },
 ];
 

@@ -1,4 +1,5 @@
 import { prisma } from '../config/database';
+import { getSetting } from '../services/system-settings.service';
 
 /**
  * Auto-generate notifications for various business conditions.
@@ -8,17 +9,21 @@ export async function generateNotifications(): Promise<void> {
   const now = new Date();
 
   try {
-    // 1. Customers not contacted for 14+ days
-    await notifyUncontactedCustomers(now);
+    // Ayarlar kapaliysa hicbir sey yapma.
+    const enabled = await getSetting<boolean>('notifications.enabled');
+    if (enabled === false) {
+      console.log('[Notifications] Scheduler ayardan kapatilmis, atlanti.');
+      return;
+    }
 
-    // 2. Quotations pending for 7+ days
-    await notifyPendingQuotations(now);
+    const uncontactedDays = (await getSetting<number>('notifications.uncontacted_days')) ?? 14;
+    const pendingDays = (await getSetting<number>('notifications.pending_quote_days')) ?? 7;
+    const highPotentialDays = (await getSetting<number>('notifications.high_potential_days')) ?? 30;
 
-    // 3. Expired quotations (validityDate passed)
+    await notifyUncontactedCustomers(now, uncontactedDays);
+    await notifyPendingQuotations(now, pendingDays);
     await notifyExpiredQuotations(now);
-
-    // 4. High-potential customers with no quote for 30+ days
-    await notifyHighPotentialNoQuote(now);
+    await notifyHighPotentialNoQuote(now, highPotentialDays);
 
     console.log(`[Notifications] Generated at ${now.toISOString()}`);
   } catch (error) {
@@ -28,16 +33,16 @@ export async function generateNotifications(): Promise<void> {
 
 // ---------- 1. 14+ gün aranmayan müşteriler ----------
 
-async function notifyUncontactedCustomers(now: Date) {
-  const fourteenDaysAgo = new Date(now);
-  fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+async function notifyUncontactedCustomers(now: Date, days: number) {
+  const threshold = new Date(now);
+  threshold.setDate(threshold.getDate() - days);
 
   const customers = await prisma.customer.findMany({
     where: {
       isDeleted: false,
       status: 'Aktif',
       OR: [
-        { lastContactDate: { lt: fourteenDaysAgo } },
+        { lastContactDate: { lt: threshold } },
         { lastContactDate: null },
       ],
     },
@@ -63,7 +68,7 @@ async function notifyUncontactedCustomers(now: Date) {
           userId: customer.assignedUserId,
           type: 'warning',
           title: 'Aranmayan Müşteri',
-          message: `${customer.companyName} - 14+ gundur aranmadi`,
+          message: `${customer.companyName} - ${days}+ gundur aranmadi`,
           link: `/customers/${customer.id}`,
         },
       });
@@ -73,14 +78,14 @@ async function notifyUncontactedCustomers(now: Date) {
 
 // ---------- 2. 7+ gün bekleyen teklifler ----------
 
-async function notifyPendingQuotations(now: Date) {
-  const sevenDaysAgo = new Date(now);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+async function notifyPendingQuotations(now: Date, days: number) {
+  const threshold = new Date(now);
+  threshold.setDate(threshold.getDate() - days);
 
   const quotations = await prisma.quotation.findMany({
     where: {
       status: 'Bekliyor',
-      createdAt: { lt: sevenDaysAgo },
+      createdAt: { lt: threshold },
       isDeleted: false,
     },
     select: {
@@ -110,7 +115,7 @@ async function notifyPendingQuotations(now: Date) {
           userId: q.assignedUserId,
           type: 'info',
           title: 'Bekleyen Teklif',
-          message: `${q.quoteNo} (${q.customer.companyName}) - 7+ gundur bekliyor`,
+          message: `${q.quoteNo} (${q.customer.companyName}) - ${days}+ gundur bekliyor`,
           link: `/quotations/${q.id}`,
         },
       });
@@ -167,16 +172,16 @@ async function notifyExpiredQuotations(now: Date) {
 
 // ---------- 4. Yüksek potansiyel + 30 gün teklif yok ----------
 
-async function notifyHighPotentialNoQuote(now: Date) {
-  const thirtyDaysAgo = new Date(now);
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+async function notifyHighPotentialNoQuote(now: Date, days: number) {
+  const threshold = new Date(now);
+  threshold.setDate(threshold.getDate() - days);
 
   const customers = await prisma.customer.findMany({
     where: {
       isDeleted: false,
       potential: 'Yüksek',
       OR: [
-        { lastQuoteDate: { lt: thirtyDaysAgo } },
+        { lastQuoteDate: { lt: threshold } },
         { lastQuoteDate: null },
       ],
     },
@@ -202,7 +207,7 @@ async function notifyHighPotentialNoQuote(now: Date) {
           userId: customer.assignedUserId,
           type: 'warning',
           title: 'Yüksek Potansiyel - Teklif Yok',
-          message: `${customer.companyName} - 30+ gundur teklif verilmedi`,
+          message: `${customer.companyName} - ${days}+ gundur teklif verilmedi`,
           link: `/customers/${customer.id}`,
         },
       });
