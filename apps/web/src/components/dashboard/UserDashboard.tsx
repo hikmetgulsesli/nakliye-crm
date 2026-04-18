@@ -9,6 +9,7 @@ import { DailyPlanWidget } from './DailyPlanWidget';
 import { CommissionCard } from './CommissionCard';
 import { MyGoalsCard } from './MyGoalsCard';
 import { LeaderboardWidget } from './LeaderboardWidget';
+import { SmartQueueWidget } from './SmartQueueWidget';
 import { FeatureGate } from '@/components/features/FeatureGate';
 import { dashboardService, type UserDashboardData } from '@/services/dashboard.service';
 
@@ -157,6 +158,11 @@ export function UserDashboard() {
           {/* Daily Plan — bugün yapılacaklar */}
           <FeatureGate feature="daily_plan">
             <DailyPlanWidget />
+          </FeatureGate>
+
+          {/* AI Smart Queue */}
+          <FeatureGate feature="smart_queue">
+            <SmartQueueWidget />
           </FeatureGate>
 
           {/* Motivasyon satiri: komisyon + hedefler + sıralama */}

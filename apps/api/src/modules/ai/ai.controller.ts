@@ -4,6 +4,9 @@ import { draftQuoteEmail } from '../../services/ai/tasks/draft-email';
 import { calculateWinProbability } from '../../services/ai/tasks/win-probability';
 import { computeChurnRisk, runChurnRiskBatch } from '../../services/ai/tasks/churn-risk';
 import { generateCoachingInsights } from '../../services/ai/tasks/coaching';
+import { getSmartQueue } from '../../services/ai/tasks/smart-queue';
+import { transcribeAudio } from '../../services/ai/tasks/voice-transcribe';
+import { getNegotiationAdvice } from '../../services/ai/tasks/negotiation-coach';
 import { prisma } from '../../config/database';
 import { AppError } from '../../middleware/error-handler';
 import type { AIMessage, AITaskName } from '@nakliye-crm/shared';
@@ -145,6 +148,52 @@ export async function churnRiskBatchRun(_req: Request, res: Response) {
 export async function coaching(req: Request, res: Response) {
   const userId = Number(req.params.userId);
   const result = await generateCoachingInsights(userId);
+  res.json({ success: true, data: result });
+}
+
+export async function smartQueue(req: Request, res: Response) {
+  const limit = Math.min(30, Number(req.query.limit ?? 10));
+  const items = await getSmartQueue(req.user!.userId, limit);
+  res.json({ success: true, data: items });
+}
+
+export async function voiceToActivity(req: Request, res: Response) {
+  const customerId = Number(req.body.customerId);
+  const filename = String(req.body.filename || 'audio.webm');
+  const language = String(req.body.language || 'tr');
+  // base64 audio
+  const base64 = String(req.body.audioBase64 || '').replace(/^data:.*;base64,/, '');
+  if (!base64) throw new AppError('audioBase64 gerekli', 400);
+  if (!customerId) throw new AppError('customerId gerekli', 400);
+  const buffer = Buffer.from(base64, 'base64');
+
+  const { text, durationSec } = await transcribeAudio(buffer, filename, language);
+
+  // Activity olusturmadan once dogrula
+  const customer = await prisma.customer.findUnique({ where: { id: customerId } });
+  if (!customer) throw new AppError('Müşteri bulunamadı', 404);
+
+  const activity = await prisma.activity.create({
+    data: {
+      customerId,
+      activityType: 'Ses Notu',
+      activityDate: new Date(),
+      notes: text,
+      durationMinutes: durationSec ? Math.round(durationSec / 60) : undefined,
+      createdById: req.user!.userId,
+    },
+  });
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: { lastContactDate: new Date() },
+  });
+
+  res.json({ success: true, data: { transcript: text, activityId: activity.id } });
+}
+
+export async function negotiationCoach(req: Request, res: Response) {
+  const quotationId = Number(req.params.quotationId);
+  const result = await getNegotiationAdvice(quotationId, req.user!.userId);
   res.json({ success: true, data: result });
 }
 
