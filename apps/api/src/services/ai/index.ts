@@ -113,6 +113,37 @@ async function recordUsage(u: UsageRecord): Promise<void> {
   }
 }
 
+import { getSecretStatus } from '../secrets.service';
+
+const PROVIDER_ENV_MAP: Record<AIProviderName, { secret: string; envVar: string }> = {
+  claude: { secret: 'anthropic_api_key', envVar: 'ANTHROPIC_API_KEY' },
+  openai: { secret: 'openai_api_key', envVar: 'OPENAI_API_KEY' },
+  minimax: { secret: 'minimax_api_key', envVar: 'MINIMAX_API_KEY' },
+  kimi: { secret: 'kimi_api_key', envVar: 'KIMI_API_KEY' },
+};
+
+export async function listProvidersStatusAsync(): Promise<Array<{
+  name: AIProviderName;
+  configured: boolean;
+  source: 'env' | 'db' | null;
+  lastFour: string | null;
+  defaultModel: string;
+}>> {
+  const out = [];
+  for (const name of Object.keys(PROVIDERS) as AIProviderName[]) {
+    const { secret, envVar } = PROVIDER_ENV_MAP[name];
+    const status = await getSecretStatus(secret, envVar);
+    out.push({
+      name,
+      configured: status.configured,
+      source: status.source,
+      lastFour: status.lastFour,
+      defaultModel: PROVIDERS[name].defaultModel,
+    });
+  }
+  return out;
+}
+
 export function listProvidersStatus(): Array<{
   name: AIProviderName;
   configured: boolean;

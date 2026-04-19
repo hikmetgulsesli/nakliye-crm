@@ -3,7 +3,26 @@ import api from '@/config/api';
 export interface AIProviderStatus {
   name: 'claude' | 'openai' | 'minimax' | 'kimi';
   configured: boolean;
+  source?: 'env' | 'db' | null;
+  lastFour?: string | null;
   defaultModel: string;
+}
+
+export interface SecretStatus {
+  name: string;
+  envVar: string;
+  label: string;
+  category: string;
+  configured: boolean;
+  source: 'env' | 'db' | null;
+  lastFour: string | null;
+  updatedAt: string | null;
+}
+
+export interface SecretCategoryGroup {
+  category: string;
+  label: string;
+  items: SecretStatus[];
 }
 
 export interface IntegrationsStatus {
@@ -82,6 +101,16 @@ export const settingsService = {
 
   async listFeatures(): Promise<{ categories: FeatureCategoryGroup[] }> {
     const { data } = await api.get<{ categories: FeatureCategoryGroup[] }>('/settings/features');
+    return data;
+  },
+
+  async listSecrets(): Promise<{ categories: SecretCategoryGroup[] }> {
+    const { data } = await api.get<{ categories: SecretCategoryGroup[] }>('/settings/secrets');
+    return data;
+  },
+
+  async updateSecret(name: string, value: string): Promise<SecretStatus> {
+    const { data } = await api.put<SecretStatus>('/settings/secrets', { name, value });
     return data;
   },
 };

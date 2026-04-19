@@ -4,13 +4,15 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { settingsService, type SettingsResponse, type AIUsageReport } from '@/services/settings.service';
 import { emailsService } from '@/services/emails.service';
 import { FeaturesTab } from './FeaturesTab';
+import { SecretsTab } from './SecretsTab';
 
-type TabKey = 'features' | 'general' | 'ai' | 'integrations' | 'notifications' | 'usage';
+type TabKey = 'features' | 'general' | 'ai' | 'secrets' | 'integrations' | 'notifications' | 'usage';
 
 const TABS = [
   { key: 'features', label: 'Özellikler' },
   { key: 'general', label: 'Genel' },
   { key: 'ai', label: 'AI Sağlayıcılar' },
+  { key: 'secrets', label: 'API Anahtarları' },
   { key: 'integrations', label: 'Entegrasyonlar' },
   { key: 'notifications', label: 'Bildirim Kuralları' },
   { key: 'usage', label: 'AI Kullanım' },
@@ -78,6 +80,8 @@ export default function SystemSettingsPage() {
 
       {active === 'features' ? (
         <FeaturesTab />
+      ) : active === 'secrets' ? (
+        <SecretsTab />
       ) : loading && !data ? (
         <div className="space-y-4">
           <Skeleton variant="card" />
@@ -214,7 +218,7 @@ function AITab({ data, save, saving }: TabProps) {
             onChange={(v) => save('ai.enabled', v)}
             saving={saving === 'ai.enabled'}
             disabled={configured.length === 0}
-            disabledHint="Hiçbir sağlayıcı yapılandırılmamış. Env'de ANTHROPIC_API_KEY, OPENAI_API_KEY, MINIMAX_API_KEY veya KIMI_API_KEY ayarlayın."
+            disabledHint="Hiçbir sağlayıcı yapılandırılmamış. Yan taraftaki 'API Anahtarları' tabından ekleyin."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -250,17 +254,26 @@ function AITab({ data, save, saving }: TabProps) {
                   Model: <code className="text-xs">{p.defaultModel}</code>
                 </div>
               </div>
-              {p.configured ? (
-                <Badge variant="success">Yapılandırılmış</Badge>
-              ) : (
-                <Badge variant="neutral">Yapılandırılmamış</Badge>
-              )}
+              <div className="text-right">
+                {p.configured ? (
+                  <>
+                    <Badge variant="success">Yapılandırılmış</Badge>
+                    {p.lastFour && (
+                      <div className="text-xs font-mono text-slate-500 mt-1">
+                        •••• {p.lastFour} ({p.source === 'env' ? 'env' : 'UI'})
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Badge variant="neutral">Yapılandırılmamış</Badge>
+                )}
+              </div>
             </div>
           ))}
         </div>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-4">
-          API key'ler güvenlik için sadece sunucu env'den okunur.
-          Dokploy Environment sekmesinden ekleyin.
+          🔐 API key'leri "API Anahtarları" tabından güvenli şekilde (AES-256 şifreli)
+          ekleyebilir, veya sunucu env'den tanımlayabilirsiniz. Env öncelikli çalışır.
         </p>
       </Card>
 

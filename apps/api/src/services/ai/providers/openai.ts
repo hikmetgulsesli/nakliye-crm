@@ -1,14 +1,18 @@
 import OpenAI from 'openai';
 import type { AIProvider, AIMessage, AIChatOptions, AIChatResult } from '@nakliye-crm/shared';
 import { estimateCost, defaultModel } from '../pricing';
+import { getSecret } from '../../secrets.service';
 
 let client: OpenAI | null = null;
+let cachedKey: string | null = null;
 
-function getClient(): OpenAI {
-  if (client) return client;
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error('OPENAI_API_KEY tanimli degil');
-  client = new OpenAI({ apiKey });
+async function getClient(): Promise<OpenAI> {
+  const apiKey = await getSecret('openai_api_key', 'OPENAI_API_KEY');
+  if (!apiKey) throw new Error('OpenAI API key yok — Sistem Ayarları > AI Sağlayıcılar ekranından ekleyin');
+  if (!client || cachedKey !== apiKey) {
+    client = new OpenAI({ apiKey });
+    cachedKey = apiKey;
+  }
   return client;
 }
 
@@ -26,7 +30,8 @@ export const openaiProvider: AIProvider = {
     const started = Date.now();
     const model = opts.model || this.defaultModel;
 
-    const res = await getClient().chat.completions.create({
+    const c = await getClient();
+    const res = await c.chat.completions.create({
       model,
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
       temperature: opts.temperature,

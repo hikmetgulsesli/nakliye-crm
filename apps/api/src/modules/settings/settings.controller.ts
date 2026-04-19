@@ -4,8 +4,15 @@ import {
   getManySettings,
   setSetting,
 } from '../../services/system-settings.service';
-import { listProvidersStatus } from '../../services/ai';
+import { listProvidersStatus, listProvidersStatusAsync } from '../../services/ai';
 import { isStorageConfigured } from '../../services/storage.service';
+import {
+  setSecret,
+  getSecretStatus,
+  listSecretStatus,
+  SECRET_NAMES,
+  SECRET_CATEGORIES,
+} from '../../services/secrets.service';
 import { createAuditLog } from '../../utils/audit';
 import { FEATURES, CATEGORY_LABELS, getAllFeatures, type FeatureKey } from '../../services/features.service';
 
@@ -45,8 +52,8 @@ export async function getAll(_req: Request, res: Response) {
   const keys = Object.values(KEYS);
   const values = await getManySettings(keys as unknown as string[]);
 
-  // Service health status (env-based, read-only)
-  const aiProviders = listProvidersStatus();
+  // Service health status (env + DB)
+  const aiProviders = await listProvidersStatusAsync();
   const integrations = {
     sentry: {
       backend: Boolean(process.env.SENTRY_DSN),
@@ -138,6 +145,50 @@ export async function listFeatures(_req: Request, res: Response) {
 export async function getFeatureFlags(_req: Request, res: Response) {
   const values = await getAllFeatures();
   res.json({ success: true, data: values });
+}
+
+export async function listSecrets(_req: Request, res: Response) {
+  const all = await listSecretStatus();
+  const byCategory: Record<string, typeof all> = {};
+  for (const s of all) {
+    if (!byCategory[s.category]) byCategory[s.category] = [];
+    byCategory[s.category].push(s);
+  }
+  res.json({
+    success: true,
+    data: {
+      categories: Object.entries(byCategory).map(([cat, items]) => ({
+        category: cat,
+        label: SECRET_CATEGORIES[cat] || cat,
+        items,
+      })),
+    },
+  });
+}
+
+export async function updateSecret(req: Request, res: Response) {
+  const { name, value } = req.body as { name: string; value: string };
+  if (!name) return res.status(400).json({ success: false, message: 'name gerekli' });
+
+  const allowed = SECRET_NAMES.map((s) => s.name) as readonly string[];
+  if (!allowed.includes(name)) {
+    return res.status(400).json({ success: false, message: `Bilinmeyen secret: ${name}` });
+  }
+
+  await setSecret(name, value || '', req.user?.userId);
+
+  await createAuditLog({
+    userId: req.user!.userId,
+    recordType: 'Secret',
+    recordId: 0,
+    action: value ? 'UPDATE' : 'DELETE',
+    changes: { [name]: { old: '***', new: value ? `***${value.slice(-4)}` : null } },
+  });
+
+  // Guncellenen durum
+  const meta = SECRET_NAMES.find((s) => s.name === name)!;
+  const status = await getSecretStatus(name, meta.envVar);
+  res.json({ success: true, data: { name, ...status } });
 }
 
 export async function aiUsageReport(req: Request, res: Response) {

@@ -1,19 +1,23 @@
 import OpenAI from 'openai';
 import type { AIProvider, AIMessage, AIChatOptions, AIChatResult } from '@nakliye-crm/shared';
 import { estimateCost, defaultModel } from '../pricing';
+import { getSecret } from '../../secrets.service';
 
 const BASE_URL = 'https://api.minimax.io/v1';
 
 let client: OpenAI | null = null;
+let cachedKey: string | null = null;
 
-function getClient(): OpenAI {
-  if (client) return client;
-  const apiKey = process.env.MINIMAX_API_KEY;
-  if (!apiKey) throw new Error('MINIMAX_API_KEY tanimli degil');
-  client = new OpenAI({
-    apiKey,
-    baseURL: process.env.MINIMAX_BASE_URL || BASE_URL,
-  });
+async function getClient(): Promise<OpenAI> {
+  const apiKey = await getSecret('minimax_api_key', 'MINIMAX_API_KEY');
+  if (!apiKey) throw new Error('MiniMax API key yok — Sistem Ayarları > AI Sağlayıcılar ekranından ekleyin');
+  if (!client || cachedKey !== apiKey) {
+    client = new OpenAI({
+      apiKey,
+      baseURL: process.env.MINIMAX_BASE_URL || BASE_URL,
+    });
+    cachedKey = apiKey;
+  }
   return client;
 }
 
@@ -31,7 +35,8 @@ export const minimaxProvider: AIProvider = {
     const started = Date.now();
     const model = opts.model || this.defaultModel;
 
-    const res = await getClient().chat.completions.create({
+    const c = await getClient();
+    const res = await c.chat.completions.create({
       model,
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
       temperature: opts.temperature,

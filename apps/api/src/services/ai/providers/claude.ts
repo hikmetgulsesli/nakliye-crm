@@ -1,14 +1,18 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { AIProvider, AIMessage, AIChatOptions, AIChatResult } from '@nakliye-crm/shared';
 import { estimateCost, defaultModel } from '../pricing';
+import { getSecret, getSecretStatus } from '../../secrets.service';
 
 let client: Anthropic | null = null;
+let cachedKey: string | null = null;
 
-function getClient(): Anthropic {
-  if (client) return client;
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY tanimli degil');
-  client = new Anthropic({ apiKey });
+async function getClient(): Promise<Anthropic> {
+  const apiKey = await getSecret('anthropic_api_key', 'ANTHROPIC_API_KEY');
+  if (!apiKey) throw new Error('Claude API key yok — Sistem Ayarları > AI Sağlayıcılar ekranından ekleyin');
+  if (!client || cachedKey !== apiKey) {
+    client = new Anthropic({ apiKey });
+    cachedKey = apiKey;
+  }
   return client;
 }
 
@@ -19,6 +23,8 @@ export const claudeProvider: AIProvider = {
   },
 
   isConfigured() {
+    // Async kontrol icin asilinda await gerek ama interface sync —
+    // quick check: env var. DB'de key varsa gerçek kontrol chat() sırasında olur.
     return Boolean(process.env.ANTHROPIC_API_KEY);
   },
 
@@ -31,7 +37,8 @@ export const claudeProvider: AIProvider = {
       .filter((m) => m.role !== 'system')
       .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
 
-    const res = await getClient().messages.create({
+    const c = await getClient();
+    const res = await c.messages.create({
       model,
       max_tokens: opts.maxTokens ?? 2048,
       temperature: opts.temperature,
