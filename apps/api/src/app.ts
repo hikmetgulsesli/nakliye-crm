@@ -52,6 +52,8 @@ app.use(
     logger,
     customLogLevel: (_req, res, err) => {
       if (err || res.statusCode >= 500) return 'error';
+      // 401/403 beklenen auth davranışı — sessiz
+      if (res.statusCode === 401 || res.statusCode === 403) return 'debug';
       if (res.statusCode >= 400) return 'warn';
       return 'info';
     },

@@ -26,6 +26,9 @@ export const useFeaturesStore = create<FeaturesState>((set, get) => ({
 
   fetch: async () => {
     if (get().loading) return;
+    // Token yoksa hic deneme — gereksiz 401 log'unu engelle
+    const { useAuthStore } = await import('./authStore');
+    if (!useAuthStore.getState().accessToken) return;
     set({ loading: true });
     try {
       const { data } = await api.get<Record<FeatureKey, boolean>>('/settings/feature-flags');
