@@ -1,5 +1,6 @@
 import { prisma } from '../config/database';
 import { getSetting } from '../services/system-settings.service';
+import { logger } from '../config/logger';
 
 /**
  * Auto-generate notifications for various business conditions.
@@ -12,7 +13,7 @@ export async function generateNotifications(): Promise<void> {
     // Ayarlar kapaliysa hicbir sey yapma.
     const enabled = await getSetting<boolean>('notifications.enabled');
     if (enabled === false) {
-      console.log('[Notifications] Scheduler ayardan kapatilmis, atlanti.');
+      logger.debug('Notification scheduler ayardan kapali, atlandi');
       return;
     }
 
@@ -27,9 +28,9 @@ export async function generateNotifications(): Promise<void> {
     await notifyTodaysFollowups(now);
     await notifyUpcomingBirthdays(now);
 
-    console.log(`[Notifications] Generated at ${now.toISOString()}`);
+    logger.debug({ at: now.toISOString() }, 'Notifications generated');
   } catch (error) {
-    console.error('[Notifications] Error generating notifications:', error);
+    logger.error({ err: (error as Error).message }, 'Notification generation error');
   }
 }
 
@@ -304,7 +305,7 @@ async function notifyTodaysFollowups(now: Date) {
 let schedulerInterval: ReturnType<typeof setInterval> | null = null;
 
 export function startNotificationScheduler(): void {
-  console.log('[Notifications] Scheduler started - running every 60 minutes');
+  logger.info('Notification scheduler (in-process) baslatildi — her 60 dk');
 
   // Run first check after 30 seconds (let DB connection stabilize)
   setTimeout(() => generateNotifications(), 30_000);
@@ -322,6 +323,6 @@ export function stopNotificationScheduler(): void {
   if (schedulerInterval) {
     clearInterval(schedulerInterval);
     schedulerInterval = null;
-    console.log('[Notifications] Scheduler stopped');
+    logger.debug('Notification scheduler durduruldu');
   }
 }

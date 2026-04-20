@@ -1,7 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  // Query log gurultusunu kes: sadece PRISMA_QUERY_LOG=true iken aktif.
+  log:
+    process.env.PRISMA_QUERY_LOG === 'true'
+      ? ['query', 'error', 'warn']
+      : ['error', 'warn'],
 });
 
 // Real-time notification emit middleware — Notification create'ta
