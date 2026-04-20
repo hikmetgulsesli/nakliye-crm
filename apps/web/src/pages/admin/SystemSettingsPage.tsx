@@ -118,6 +118,8 @@ function GeneralTab({ data, save, saving }: TabProps) {
   const notifEnabled = data.settings['notifications.enabled'] !== false;
   const emailEnabled = data.settings['email.enabled'] === true;
   const dailyDigestEnabled = data.settings['email.daily_digest'] === true;
+  const redisEnabled = data.settings['infrastructure.redis_enabled'] !== false;
+  const imapEnabled = data.settings['imap.enabled'] === true;
   const emailAvailable =
     data.integrations.email.resendConfigured || data.integrations.email.smtpConfigured;
 
@@ -140,6 +142,25 @@ function GeneralTab({ data, save, saving }: TabProps) {
 
   return (
     <>
+      <Card title="Altyapı">
+        <ToggleRow
+          label="Redis / BullMQ"
+          description="Arka plan iş kuyruğu (bildirimler, e-posta, TCMB, IMAP, AI cron). Kapatılırsa sistem in-process setInterval'a düşer — Redis yoksa bu önerilir."
+          enabled={redisEnabled}
+          onChange={(v) => save('infrastructure.redis_enabled', v)}
+          saving={saving === 'infrastructure.redis_enabled'}
+        />
+        <ToggleRow
+          label="IMAP Senkronizasyonu"
+          description="Her 5 dakikada bir mail kutusundan gelen mesajları müşteri kartına bağlar. Redis + IMAP credentials gerekir."
+          enabled={imapEnabled}
+          onChange={(v) => save('imap.enabled', v)}
+          saving={saving === 'imap.enabled'}
+          disabled={!redisEnabled}
+          disabledHint={!redisEnabled ? 'Önce Redis açık olmalı.' : undefined}
+        />
+      </Card>
+
       <Card title="Bildirimler">
         <ToggleRow
           label="Bildirim Scheduler"
@@ -367,8 +388,12 @@ function IntegrationsTab({ data }: { data: SettingsResponse }) {
       <Card title="Altyapı">
         <IntegrationRow
           name="Redis + BullMQ"
-          description="Arka plan iş kuyruğu. Env: REDIS_URL, USE_REDIS"
-          configured={integrations.redis.configured}
+          description={
+            integrations.redis.enabled === false
+              ? 'Kapalı (in-process fallback). Genel tabından açabilirsiniz.'
+              : `Aktif. ${integrations.redis.url || 'env REDIS_URL'}`
+          }
+          configured={integrations.redis.enabled !== false}
         />
         <IntegrationRow
           name="Object Storage (R2/S3)"

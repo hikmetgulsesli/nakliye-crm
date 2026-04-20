@@ -46,6 +46,9 @@ const KEYS = {
   smsEnabled: 'sms.enabled',
   // Exchange rate (TCMB)
   exchangeRatesEnabled: 'exchange_rates.enabled',
+  // Infrastructure
+  redisEnabled: 'infrastructure.redis_enabled',
+  imapEnabled: 'imap.enabled',
 } as const;
 
 export async function getAll(_req: Request, res: Response) {
@@ -60,6 +63,8 @@ export async function getAll(_req: Request, res: Response) {
     },
     redis: {
       configured: Boolean(process.env.REDIS_URL) || process.env.USE_REDIS !== 'false',
+      enabled: values[KEYS.redisEnabled] !== false,
+      url: process.env.REDIS_URL || 'redis://localhost:6379',
     },
     storage: {
       configured: isStorageConfigured(),
@@ -100,6 +105,12 @@ export async function update(req: Request, res: Response) {
     return res.status(400).json({ success: false, message: `Bilinmeyen ayar: ${key}` });
   }
   await setSetting(key, value, req.user?.userId);
+
+  // Redis toggle kapatildiysa baglantiyi hemen kes
+  if (key === 'infrastructure.redis_enabled' && value === false) {
+    const { closeRedis } = await import('../../config/redis');
+    await closeRedis();
+  }
 
   await createAuditLog({
     userId: req.user!.userId,

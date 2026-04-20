@@ -27,7 +27,7 @@ export interface SecretCategoryGroup {
 
 export interface IntegrationsStatus {
   sentry: { backend: boolean };
-  redis: { configured: boolean };
+  redis: { configured: boolean; enabled?: boolean; url?: string };
   storage: {
     configured: boolean;
     endpoint: string | null;

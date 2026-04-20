@@ -6,18 +6,16 @@ import { scheduleChurnRisk, startChurnRiskWorker } from './churn-risk.worker';
 import { scheduleTcmb, startTcmbWorker } from './tcmb.worker';
 import { scheduleImap, startImapWorker } from './imap.worker';
 import { closeAllQueues } from './queues';
-import { closeRedis } from '../config/redis';
-
-const USE_REDIS = process.env.USE_REDIS !== 'false';
+import { closeRedis, isRedisEnabled } from '../config/redis';
 
 /**
  * Start all background workers + repeatable jobs.
- * Falls back to in-process setInterval if Redis is unavailable.
+ * Falls back to in-process setInterval if Redis is unavailable/disabled.
  */
 export async function startWorkers(): Promise<void> {
-  if (!USE_REDIS) {
-    logger.info('USE_REDIS=false, BullMQ worker kapali (dev fallback).');
-    // Legacy fallback: in-process scheduler
+  const enabled = await isRedisEnabled();
+  if (!enabled) {
+    logger.info('Redis kapalı (env veya ayardan) — in-process scheduler ile devam.');
     const { startNotificationScheduler } = await import('../utils/notification-generator');
     startNotificationScheduler();
     return;
