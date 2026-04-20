@@ -4,6 +4,8 @@ import { logger } from './logger';
 let client: IORedis | null = null;
 let givenUp = false;
 let logThrottle = 0;
+let connectivityCache: { ok: boolean; at: number } | null = null;
+const CONNECTIVITY_TTL_MS = 60_000;
 
 /**
  * Redis acik mi kontrolu — env, SystemSetting, runtime kill-switch birlikte.
@@ -20,6 +22,50 @@ export async function isRedisEnabled(): Promise<boolean> {
   }
 }
 
+/**
+ * Boot'ta veya setting degistiginde CANLI bir kisa test —
+ * 2 saniye timeout, log spam yapmaz. Sonuc 60sn cache.
+ * Basarisizsa false doner, BullMQ worker'lari baslamaz.
+ */
+export async function testRedisConnectivity(force = false): Promise<boolean> {
+  if (!force && connectivityCache && Date.now() - connectivityCache.at < CONNECTIVITY_TTL_MS) {
+    return connectivityCache.ok;
+  }
+  const url = process.env.REDIS_URL || 'redis://localhost:6379';
+  const testClient = new IORedis(url, {
+    lazyConnect: true,
+    maxRetriesPerRequest: 1,
+    connectTimeout: 2000,
+    retryStrategy: () => null,
+    reconnectOnError: () => false,
+    enableReadyCheck: false,
+  });
+  testClient.on('error', () => {}); // log bombasi onleme
+
+  try {
+    await testClient.connect();
+    await testClient.ping();
+    connectivityCache = { ok: true, at: Date.now() };
+    testClient.disconnect();
+    return true;
+  } catch {
+    connectivityCache = { ok: false, at: Date.now() };
+    try {
+      testClient.disconnect();
+    } catch {
+      // ignore
+    }
+    return false;
+  }
+}
+
+/** connectivityCache'i invalidate et (setting degistiginde cagirilir) */
+export function invalidateRedisConnectivityCache(): void {
+  connectivityCache = null;
+  givenUp = false;
+  logThrottle = 0;
+}
+
 export function getRedis(): IORedis {
   if (client) return client;
 
@@ -28,7 +74,6 @@ export function getRedis(): IORedis {
     maxRetriesPerRequest: null,
     enableReadyCheck: true,
     lazyConnect: false,
-    // Toplam 8 deneme, sonra pes et (sürekli yeniden bağlanma loopunu durdurur)
     retryStrategy(times) {
       if (givenUp) return null;
       if (times > 8) {
@@ -47,7 +92,6 @@ export function getRedis(): IORedis {
   });
 
   client.on('error', (err) => {
-    // Throttle: her 10 hatada 1 kere logla (flood önleme)
     if (logThrottle % 10 === 0) {
       logger.warn({ err: err.message, suppressed: logThrottle }, 'Redis hata');
     }
@@ -77,7 +121,7 @@ export async function closeRedis(): Promise<void> {
   }
 }
 
-/** UI tarafından çağırılır: toggle sonrası bağlantıyı kes. */
 export async function forceCloseRedis(): Promise<void> {
   await closeRedis();
+  invalidateRedisConnectivityCache();
 }

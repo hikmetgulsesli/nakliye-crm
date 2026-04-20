@@ -6,7 +6,13 @@ import { scheduleChurnRisk, startChurnRiskWorker } from './churn-risk.worker';
 import { scheduleTcmb, startTcmbWorker } from './tcmb.worker';
 import { scheduleImap, startImapWorker } from './imap.worker';
 import { closeAllQueues } from './queues';
-import { closeRedis, isRedisEnabled } from '../config/redis';
+import { closeRedis, isRedisEnabled, testRedisConnectivity } from '../config/redis';
+
+async function startFallback(reason: string) {
+  logger.info({ reason }, 'BullMQ kapali — in-process scheduler baslatiliyor');
+  const { startNotificationScheduler } = await import('../utils/notification-generator');
+  startNotificationScheduler();
+}
 
 /**
  * Start all background workers + repeatable jobs.
@@ -15,9 +21,18 @@ import { closeRedis, isRedisEnabled } from '../config/redis';
 export async function startWorkers(): Promise<void> {
   const enabled = await isRedisEnabled();
   if (!enabled) {
-    logger.info('Redis kapalı (env veya ayardan) — in-process scheduler ile devam.');
-    const { startNotificationScheduler } = await import('../utils/notification-generator');
-    startNotificationScheduler();
+    await startFallback('Redis ayardan kapalı');
+    return;
+  }
+
+  // 2sn timeout'lu tek test — Redis gerçekten erişilebilir mi?
+  const reachable = await testRedisConnectivity(true);
+  if (!reachable) {
+    logger.warn(
+      'Redis erişilemiyor (2sn timeout) — in-process fallback. ' +
+        'Redis başlatın veya Sistem Ayarları > Genel > Redis kapatın (log kirliliğini önler).',
+    );
+    await startFallback('Redis erişilemiyor');
     return;
   }
 
@@ -36,8 +51,7 @@ export async function startWorkers(): Promise<void> {
     logger.info('Worker katmani baslatildi (BullMQ).');
   } catch (err) {
     logger.warn({ err: (err as Error).message }, 'Worker baslatma hatasi, in-process fallback kullaniliyor.');
-    const { startNotificationScheduler } = await import('../utils/notification-generator');
-    startNotificationScheduler();
+    await startFallback('Worker hatası');
   }
 }
 
