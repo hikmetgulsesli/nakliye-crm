@@ -11,6 +11,10 @@ prisma/*.db
 # Redis local dump
 dump.rdb
 **/dump.rdb
+# Local IDE/agent caches
+.claude/
+# Claude design handoff bundle (referans materyaller, kodun bir parcasi degil)
+claude-design/
 # Auto-generated declaration files from tsc
 apps/web/*.d.ts
 # Playwright

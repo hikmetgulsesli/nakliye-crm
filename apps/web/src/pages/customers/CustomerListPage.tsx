@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Pagination, Icon } from '@/components/ui';
+import { Button, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { SavedViewsTabs, type SavedView } from '@/components/shared/SavedViewsTabs';
 import { CustomerTable } from '@/components/customers/CustomerTable';
 import { CustomerFilters } from '@/components/customers/CustomerFilters';
 import { customerService, type CustomerFilters as CustomerFiltersType } from '@/services/customer.service';
@@ -11,22 +12,23 @@ import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuthStore } from '@/stores/authStore';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
-import { cn } from '@/utils/cn';
 import type { Customer } from '@nakliye-crm/shared';
 
 const EMPTY_FILTERS: CustomerFiltersType = {};
 
+type ViewId = 'all' | 'high' | 'mine' | 'deleted';
+
 export default function CustomerListPage() {
   const navigate = useNavigate();
   const isAdmin = useAuthStore((s) => s.isAdmin());
-  const { currentUserId, onlyMine, setOnlyMine } = useOnlyMinePref('customers');
+  const { isUser, currentUserId, onlyMine, setOnlyMine } = useOnlyMinePref('customers');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [appliedFilters, setAppliedFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [showDeleted, setShowDeleted] = useState(false);
+  const [activeView, setActiveView] = useState<ViewId>(isUser && onlyMine ? 'mine' : 'all');
   const [restoringId, setRestoringId] = useState<number | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
@@ -40,10 +42,7 @@ export default function CustomerListPage() {
         setUsers(
           result.data
             .filter((u) => u.isActive)
-            .map((u) => ({
-              value: u.id.toString(),
-              label: u.fullName,
-            })),
+            .map((u) => ({ value: u.id.toString(), label: u.fullName })),
         );
       } catch (err) {
         setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
@@ -52,21 +51,28 @@ export default function CustomerListPage() {
     fetchUsers();
   }, []);
 
+  const showDeleted = activeView === 'deleted';
+
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
     try {
       const filtersToApply: CustomerFiltersType = { ...appliedFilters };
-      // Use debounced search for auto-search
-      if (debouncedSearch) {
-        filtersToApply.search = debouncedSearch;
-      }
-      if (showDeleted) {
+      if (debouncedSearch) filtersToApply.search = debouncedSearch;
+
+      // Saved view'a gore filter override
+      if (activeView === 'deleted') {
         filtersToApply.deleted = true;
       }
-      // "Sadece kendi kayıtlarım" işaretliyse, tüm rollerde geçerli
-      if (onlyMine && currentUserId) {
+      if (activeView === 'high') {
+        filtersToApply.potential = 'Yüksek';
+      }
+      if (activeView === 'mine' && currentUserId) {
+        filtersToApply.assignedUserId = currentUserId;
+      } else if (onlyMine && currentUserId && activeView !== 'deleted') {
+        // checkbox tercihi de ek katman
         filtersToApply.assignedUserId = currentUserId;
       }
+
       const result = await customerService.getAll(page, pageSize, filtersToApply);
       setCustomers(result.data);
       setTotal(result.total);
@@ -75,7 +81,7 @@ export default function CustomerListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, showDeleted, onlyMine, currentUserId, setTotal]);
+  }, [page, pageSize, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchCustomers();
@@ -93,12 +99,6 @@ export default function CustomerListPage() {
     }
   }
 
-  function toggleDeletedView(next: boolean) {
-    if (next === showDeleted) return;
-    setShowDeleted(next);
-    setPage(1);
-  }
-
   function handleApplyFilters() {
     setAppliedFilters({ ...filters });
     setPage(1);
@@ -109,6 +109,26 @@ export default function CustomerListPage() {
     setAppliedFilters(EMPTY_FILTERS);
     setPage(1);
   }
+
+  function handleViewChange(id: string) {
+    setActiveView(id as ViewId);
+    setPage(1);
+  }
+
+  const views = useMemo<SavedView[]>(() => {
+    const list: SavedView[] = [
+      { id: 'all', label: 'Tümü' },
+      { id: 'high', label: 'Yüksek potansiyel', color: 'var(--success)' },
+    ];
+    if (currentUserId) {
+      list.push({ id: 'mine', label: 'Benim müşterilerim', color: 'var(--accent)' });
+    }
+    if (isAdmin) {
+      list.push({ id: 'deleted', label: 'Silinmiş', color: 'var(--warning)' });
+    }
+    // Aktif view'in count'u: pagination total
+    return list.map((v) => (v.id === activeView ? { ...v, count: total } : v));
+  }, [currentUserId, isAdmin, activeView, total]);
 
   return (
     <div>
@@ -139,75 +159,54 @@ export default function CustomerListPage() {
         </div>
       )}
 
-      {isAdmin && (
-        <div className="mb-4 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <button
-            type="button"
-            onClick={() => toggleDeletedView(false)}
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
-              !showDeleted
-                ? 'bg-primary/10 text-primary'
-                : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800',
-            )}
-          >
-            <Icon name="group" size="sm" />
-            Aktif Müşteriler
-          </button>
-          <button
-            type="button"
-            onClick={() => toggleDeletedView(true)}
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
-              showDeleted
-                ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-200'
-                : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800',
-            )}
-          >
-            <Icon name="delete" size="sm" />
-            Silinmiş Müşteriler
-          </button>
-        </div>
-      )}
-
-      {!showDeleted && (
-        <CustomerFilters
-          filters={filters}
-          onChange={setFilters}
-          onApply={handleApplyFilters}
-          onClear={handleClearFilters}
-          users={users}
-          showOnlyMine
-          onlyMine={onlyMine}
-          onOnlyMineChange={(next) => {
-            setOnlyMine(next);
-            setPage(1);
-          }}
-          hideAssignedUserSelect={onlyMine}
+      <div className="overflow-hidden rounded-lg border border-token-border bg-token-bg-panel">
+        <SavedViewsTabs
+          views={views}
+          activeId={activeView}
+          onChange={handleViewChange}
         />
-      )}
 
-      {!loading && customers.length === 0 ? (
-        showDeleted ? (
-          <EmptyState
-            icon="delete"
-            title="Silinmiş müşteri bulunamadı"
-            description="Geri yüklenecek bir kayit yok."
-          />
+        {!showDeleted && (
+          <div className="border-b border-token-border bg-token-bg-panel p-3">
+            <CustomerFilters
+              filters={filters}
+              onChange={setFilters}
+              onApply={handleApplyFilters}
+              onClear={handleClearFilters}
+              users={users}
+              showOnlyMine
+              onlyMine={onlyMine}
+              onOnlyMineChange={(next) => {
+                setOnlyMine(next);
+                setPage(1);
+              }}
+              hideAssignedUserSelect={onlyMine || activeView === 'mine'}
+            />
+          </div>
+        )}
+
+        {!loading && customers.length === 0 ? (
+          <div className="bg-token-bg-panel">
+            {showDeleted ? (
+              <EmptyState
+                icon="delete"
+                title="Silinmiş müşteri bulunamadı"
+                description="Geri yüklenecek bir kayit yok."
+              />
+            ) : (
+              <EmptyState
+                icon="group"
+                title="Henuz müşteri eklenmemis"
+                description="Ilk müşterinizi ekleyerek baslayabilirsiniz."
+                action={
+                  <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
+                    Yeni Müşteri Ekle
+                  </Button>
+                }
+              />
+            )}
+          </div>
         ) : (
-          <EmptyState
-            icon="group"
-            title="Henuz müşteri eklenmemis"
-            description="Ilk müşterinizi ekleyerek baslayabilirsiniz."
-            action={
-              <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
-                Yeni Müşteri Ekle
-              </Button>
-            }
-          />
-        )
-      ) : (
-        <>
           <CustomerTable
             data={customers}
             loading={loading}
@@ -215,17 +214,18 @@ export default function CustomerListPage() {
             onRestore={showDeleted ? handleRestore : undefined}
             restoringId={restoringId}
           />
+        )}
+      </div>
 
-          {/* Pagination */}
-          <div className="mt-4">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              totalItems={total}
-              onPageChange={setPage}
-            />
-          </div>
-        </>
+      {customers.length > 0 && (
+        <div className="mt-4">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={total}
+            onPageChange={setPage}
+          />
+        </div>
       )}
     </div>
   );

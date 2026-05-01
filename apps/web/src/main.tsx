@@ -8,16 +8,24 @@ import './index.css';
 
 initSentry();
 
-// FOUC onleme: persist'ten tema okuyup mount oncesi uygula
+// FOUC onleme: persist'ten tema/aksan/yogunluk okuyup mount oncesi uygula
 try {
   const stored = localStorage.getItem('nakliye-crm-theme');
   const parsed = stored ? JSON.parse(stored) : null;
+  const root = document.documentElement;
+
   const theme: 'light' | 'dark' =
     parsed?.state?.theme ??
     (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  if (theme === 'dark') document.documentElement.classList.add('dark');
+  const accent: 'blue' | 'magenta' | 'lime' = parsed?.state?.accent ?? 'blue';
+  const density: 'comfortable' | 'compact' = parsed?.state?.density ?? 'comfortable';
+
+  if (theme === 'dark') root.classList.add('dark');
+  root.dataset.theme = theme;
+  root.dataset.accent = accent;
+  root.dataset.density = density;
 } catch {
-  // ignore, default = light
+  // ignore, default = light/blue/comfortable
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

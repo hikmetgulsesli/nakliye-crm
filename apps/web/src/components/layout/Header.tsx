@@ -1,19 +1,53 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useNotificationStore } from '@/stores/notificationStore';
 import { useThemeStore } from '@/stores/themeStore';
+import { Icon } from '@/components/ui';
 import NotificationDropdown from './NotificationDropdown';
+import { TweaksDropdown } from './TweaksDropdown';
 
-interface HeaderProps {
-  title: string;
+const PAGE_LABELS: Record<string, string> = {
+  '/': 'Dashboard',
+  '/musteriler': 'Müşteriler',
+  '/teklifler': 'Teklifler',
+  '/sevkiyatlar': 'Sevkiyatlar',
+  '/raporlar': 'Raporlar',
+  '/kullanicilar': 'Kullanıcı Yönetimi',
+  '/liste-yonetimi': 'Liste Yönetimi',
+  '/ayarlar': 'Sistem Ayarları',
+  '/loglar': 'Loglar',
+  '/devir': 'Veri Devir',
+  '/profil': 'Profilim',
+};
+
+function deriveCrumbs(pathname: string): string[] {
+  // Statik eslestirme
+  if (PAGE_LABELS[pathname]) return ['Çalışma alanı', PAGE_LABELS[pathname]];
+
+  // Dinamik route'lar
+  if (/^\/musteriler\/yeni$/.test(pathname)) return ['Çalışma alanı', 'Müşteriler', 'Yeni'];
+  if (/^\/musteriler\/[^/]+\/duzenle$/.test(pathname))
+    return ['Çalışma alanı', 'Müşteriler', 'Düzenle'];
+  if (/^\/musteriler\/[^/]+$/.test(pathname)) return ['Çalışma alanı', 'Müşteriler', 'Detay'];
+  if (/^\/teklifler\/yeni$/.test(pathname)) return ['Çalışma alanı', 'Teklifler', 'Yeni'];
+  if (/^\/teklifler\/[^/]+\/duzenle$/.test(pathname))
+    return ['Çalışma alanı', 'Teklifler', 'Düzenle'];
+  if (/^\/teklifler\/[^/]+$/.test(pathname)) return ['Çalışma alanı', 'Teklifler', 'Detay'];
+  if (/^\/sevkiyatlar\/yeni$/.test(pathname)) return ['Çalışma alanı', 'Sevkiyatlar', 'Yeni'];
+  if (/^\/sevkiyatlar\/[^/]+$/.test(pathname)) return ['Çalışma alanı', 'Sevkiyatlar', 'Detay'];
+
+  return ['Çalışma alanı'];
 }
 
-export default function Header({ title }: HeaderProps) {
+export default function Header() {
   const { user } = useAuthStore();
   const { unreadCount, fetch: fetchNotifications } = useNotificationStore();
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggle);
+  const location = useLocation();
+  const crumbs = deriveCrumbs(location.pathname);
   const [notifOpen, setNotifOpen] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -21,98 +55,104 @@ export default function Header({ title }: HeaderProps) {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  const toggleNotif = useCallback(() => {
-    setNotifOpen((prev) => !prev);
-  }, []);
+  const toggleNotif = useCallback(() => setNotifOpen((p) => !p), []);
+  const closeNotif = useCallback(() => setNotifOpen(false), []);
 
-  const closeNotif = useCallback(() => {
-    setNotifOpen(false);
-  }, []);
-
-  // Cleanup debounce on unmount
   useEffect(() => {
     return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
+      if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
 
+  const initials = (user?.fullName ?? 'U')
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 dark:border-slate-800 dark:bg-slate-900">
-      {/* Left: Page Title */}
-      <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{title}</h2>
-
-      {/* Right: Search, Notifications, User */}
-      <div className="flex items-center gap-4">
-        {/* Search — cmd+K trigger */}
-        <button
-          type="button"
-          onClick={() => {
-            // Dispatch keyboard event to open CommandPalette
-            document.dispatchEvent(
-              new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
-            );
-          }}
-          className="relative flex items-center w-96 rounded-full bg-slate-100 dark:bg-slate-800 py-2.5 pl-10 pr-14 text-sm text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-        >
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400 dark:text-slate-500">
-            search
+    <header
+      className="sticky top-0 z-10 flex shrink-0 items-center gap-3 border-b border-token-border bg-token-bg-elev px-4"
+      style={{ height: 'var(--topbar-h)' }}
+    >
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-[13px] text-token-muted">
+        {crumbs.map((c, i) => (
+          <span key={`${c}-${i}`} className="flex items-center gap-1.5">
+            {i > 0 && <span className="text-token-subtle">/</span>}
+            <span
+              className={cn(
+                i === crumbs.length - 1 ? 'font-medium text-token-text' : '',
+              )}
+            >
+              {c}
+            </span>
           </span>
-          <span className="flex-1 text-left">Müşteri, teklif, sevkiyat ara...</span>
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 border border-slate-300 dark:border-slate-600 rounded px-1.5 py-0.5">
-            ⌘K
-          </kbd>
-        </button>
+        ))}
+      </nav>
 
-        {/* Theme Toggle */}
+      {/* Search trigger (Cmd+K) */}
+      <button
+        type="button"
+        onClick={() => {
+          document.dispatchEvent(
+            new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
+          );
+        }}
+        className="ml-auto flex items-center gap-2 rounded-md border border-token-border bg-token-bg-subtle px-2.5 py-1.5 text-[13px] text-token-muted transition-colors hover:border-token-border-strong hover:bg-token-bg-hover"
+        style={{ minWidth: 280 }}
+      >
+        <Icon name="search" size="sm" className="!text-[14px]" />
+        <span className="flex-1 text-left">Ara, gez, çalıştır...</span>
+        <kbd className="rounded border border-token-border bg-token-bg-elev px-1 py-0.5 font-mono text-[10px]">
+          ⌘K
+        </kbd>
+      </button>
+
+      {/* Right actions */}
+      <div className="flex items-center gap-1">
         <button
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Açık temaya gec' : 'Koyu temaya gec'}
+          aria-label={theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç'}
           title={theme === 'dark' ? 'Açık tema' : 'Koyu tema'}
-          className="rounded-full p-2 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-800"
+          className="grid size-8 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
         >
-          <span className="material-symbols-outlined text-slate-600 dark:text-slate-300">
-            {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-          </span>
+          <Icon name={theme === 'dark' ? 'light_mode' : 'dark_mode'} size="sm" />
         </button>
 
-        {/* Notification Bell */}
+        <TweaksDropdown />
+
         <div className="relative">
           <button
             onClick={toggleNotif}
             aria-label="Bildirimler"
             className={cn(
-              'relative rounded-full p-2 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-800',
-              notifOpen && 'bg-slate-100 dark:bg-slate-800',
+              'relative grid size-8 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
+              notifOpen && 'bg-token-bg-hover text-token-text',
             )}
           >
-            <span className="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+            <Icon name="notifications" size="sm" />
             {unreadCount > 0 && (
-              <span className="absolute right-2 top-2 size-2 rounded-full border-2 border-white bg-red-500 dark:border-slate-900" />
+              <span
+                className="absolute right-1.5 top-1.5 size-1.5 rounded-full"
+                style={{ background: 'var(--magenta)' }}
+              />
             )}
           </button>
           <NotificationDropdown open={notifOpen} onClose={closeNotif} />
         </div>
 
-        {/* User */}
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-              {user?.fullName || 'Kullanıcı'}
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {user?.role === 'ADMIN' ? 'Yönetici' : 'Kullanıcı'}
-            </p>
-          </div>
-          <div className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
-            {user?.fullName
-              ?.split(' ')
-              .map((n) => n[0])
-              .join('')
-              .slice(0, 2)
-              .toUpperCase() || 'U'}
-          </div>
+        <div className="mx-1 h-5 w-px bg-token-border" />
+
+        <div
+          className="grid size-7 place-items-center rounded-full text-[11px] font-semibold text-white"
+          style={{
+            background: 'linear-gradient(135deg, var(--magenta), var(--accent))',
+          }}
+          title={user?.fullName ?? ''}
+        >
+          {initials}
         </div>
       </div>
     </header>

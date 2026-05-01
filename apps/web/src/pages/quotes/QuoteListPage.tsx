@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { SavedViewsTabs, type SavedView } from '@/components/shared/SavedViewsTabs';
 import { QuotationTable } from '@/components/quotations/QuotationTable';
 import { QuotationFilters } from '@/components/quotations/QuotationFilters';
 import { quotationService, type QuotationFilters as QuotationFiltersType } from '@/services/quotation.service';
@@ -14,6 +15,14 @@ import type { Quotation } from '@nakliye-crm/shared';
 
 const EMPTY_FILTERS: QuotationFiltersType = {};
 
+type ViewId = 'all' | 'pending' | 'won' | 'lost' | 'mine';
+
+const VIEW_TO_STATUS: Partial<Record<ViewId, string>> = {
+  pending: 'Bekliyor',
+  won: 'Kazanıldı',
+  lost: 'Kaybedildi',
+};
+
 function filtersFromSearchParams(params: URLSearchParams): QuotationFiltersType {
   const out: QuotationFiltersType = {};
   const status = params.get('status');
@@ -23,6 +32,14 @@ function filtersFromSearchParams(params: URLSearchParams): QuotationFiltersType 
   if (transportMode) out.transportMode = transportMode;
   if (assignedUserId) out.assignedUserId = Number(assignedUserId);
   return out;
+}
+
+function detectInitialView(params: URLSearchParams): ViewId {
+  const status = params.get('status');
+  if (status === 'Bekliyor') return 'pending';
+  if (status === 'Kazanıldı') return 'won';
+  if (status === 'Kaybedildi') return 'lost';
+  return 'all';
 }
 
 export default function QuoteListPage() {
@@ -36,11 +53,11 @@ export default function QuoteListPage() {
   const [appliedFilters, setAppliedFilters] = useState<QuotationFiltersType>(initialFromUrl);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<ViewId>(detectInitialView(searchParams));
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
   const debouncedSearch = useDebounce(filters.search, 400);
 
-  // Fetch users for filter dropdown
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -48,10 +65,7 @@ export default function QuoteListPage() {
         setUsers(
           result.data
             .filter((u) => u.isActive)
-            .map((u) => ({
-              value: u.id.toString(),
-              label: u.fullName,
-            })),
+            .map((u) => ({ value: u.id.toString(), label: u.fullName })),
         );
       } catch (err) {
         setError('Kullanıcı listesi yüklenirken bir hata oluştu.');
@@ -64,12 +78,18 @@ export default function QuoteListPage() {
     setLoading(true);
     try {
       const filtersToApply: QuotationFiltersType = { ...appliedFilters };
-      if (debouncedSearch) {
-        filtersToApply.search = debouncedSearch;
-      }
-      if (onlyMine && currentUserId) {
+      if (debouncedSearch) filtersToApply.search = debouncedSearch;
+
+      // View override
+      const viewStatus = VIEW_TO_STATUS[activeView];
+      if (viewStatus) filtersToApply.status = viewStatus;
+
+      const useMine =
+        activeView === 'mine' || (onlyMine && activeView === 'all');
+      if (useMine && currentUserId) {
         filtersToApply.assignedUserId = currentUserId;
       }
+
       const result = await quotationService.getAll(page, pageSize, filtersToApply);
       setQuotations(result.data);
       setTotal(result.total);
@@ -78,7 +98,7 @@ export default function QuoteListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, onlyMine, currentUserId, setTotal]);
+  }, [page, pageSize, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchQuotations();
@@ -94,6 +114,24 @@ export default function QuoteListPage() {
     setAppliedFilters(EMPTY_FILTERS);
     setPage(1);
   }
+
+  function handleViewChange(id: string) {
+    setActiveView(id as ViewId);
+    setPage(1);
+  }
+
+  const views = useMemo<SavedView[]>(() => {
+    const list: SavedView[] = [
+      { id: 'all', label: 'Tümü' },
+      { id: 'pending', label: 'Bekliyor', color: 'var(--warning)' },
+      { id: 'won', label: 'Kazanıldı', color: 'var(--success)' },
+      { id: 'lost', label: 'Kaybedildi', color: 'var(--danger)' },
+    ];
+    if (currentUserId) {
+      list.push({ id: 'mine', label: 'Benim tekliflerim', color: 'var(--accent)' });
+    }
+    return list.map((v) => (v.id === activeView ? { ...v, count: total } : v));
+  }, [currentUserId, activeView, total]);
 
   return (
     <div>
@@ -112,54 +150,63 @@ export default function QuoteListPage() {
       />
 
       {error && (
-        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
-          <span className="text-sm text-red-700">{error}</span>
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between dark:bg-red-500/10 dark:border-red-500/30">
+          <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
           <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
             <span className="material-symbols-outlined text-sm">close</span>
           </button>
         </div>
       )}
 
-      <QuotationFilters
-        filters={filters}
-        onChange={setFilters}
-        onApply={handleApplyFilters}
-        onClear={handleClearFilters}
-        users={users}
-        showOnlyMine
-        onlyMine={onlyMine}
-        onOnlyMineChange={(next) => {
-          setOnlyMine(next);
-          setPage(1);
-        }}
-        hideAssignedUserSelect={onlyMine}
-      />
-
-      {!loading && quotations.length === 0 ? (
-        <EmptyState
-          icon="description"
-          title="Henuz teklif olusturulmamis"
-          description="Ilk teklifinizi olusturarak baslayabilirsiniz."
-          action={
-            <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
-              Yeni Teklif Oluştur
-            </Button>
-          }
+      <div className="overflow-hidden rounded-lg border border-token-border bg-token-bg-panel">
+        <SavedViewsTabs
+          views={views}
+          activeId={activeView}
+          onChange={handleViewChange}
         />
-      ) : (
-        <>
-          <QuotationTable data={quotations} loading={loading} />
 
-          {/* Pagination */}
-          <div className="mt-4">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              totalItems={total}
-              onPageChange={setPage}
-            />
-          </div>
-        </>
+        <div className="border-b border-token-border bg-token-bg-panel p-3">
+          <QuotationFilters
+            filters={filters}
+            onChange={setFilters}
+            onApply={handleApplyFilters}
+            onClear={handleClearFilters}
+            users={users}
+            showOnlyMine
+            onlyMine={onlyMine}
+            onOnlyMineChange={(next) => {
+              setOnlyMine(next);
+              setPage(1);
+            }}
+            hideAssignedUserSelect={onlyMine || activeView === 'mine'}
+          />
+        </div>
+
+        {!loading && quotations.length === 0 ? (
+          <EmptyState
+            icon="description"
+            title="Henuz teklif olusturulmamis"
+            description="Ilk teklifinizi olusturarak baslayabilirsiniz."
+            action={
+              <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
+                Yeni Teklif Oluştur
+              </Button>
+            }
+          />
+        ) : (
+          <QuotationTable data={quotations} loading={loading} />
+        )}
+      </div>
+
+      {quotations.length > 0 && (
+        <div className="mt-4">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={total}
+            onPageChange={setPage}
+          />
+        </div>
       )}
     </div>
   );
