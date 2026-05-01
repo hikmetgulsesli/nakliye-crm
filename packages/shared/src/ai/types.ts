@@ -5,6 +5,7 @@ export type AITaskName =
   | 'win-probability'
   | 'churn-risk'
   | 'coaching'
+  | 'customer-summary'
   | 'summarize'
   | 'custom';
 

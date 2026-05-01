@@ -28,6 +28,12 @@ router.post(
   ai.negotiationCoach,
 );
 
+router.get(
+  '/customers/:customerId/summary',
+  requireFeature('ai_customer_summary'),
+  ai.customerSummary,
+);
+
 router.get('/churn-risk', requireFeature('churn_risk'), ai.churnRiskList);
 router.post(
   '/churn-risk/customers/:customerId/compute',

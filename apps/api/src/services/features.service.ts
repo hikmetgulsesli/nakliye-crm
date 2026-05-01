@@ -26,6 +26,7 @@ export const FEATURES = {
   smart_queue: { default: true, category: 'ai', label: 'AI Akıllı Sıralama (Bugün Bunlarla Konuş)' },
   voice_memo: { default: false, category: 'ai', label: 'Ses Notu → Transcript (Whisper)' },
   ai_negotiation_coach: { default: true, category: 'ai', label: 'AI Müzakere Koçu' },
+  ai_customer_summary: { default: true, category: 'ai', label: 'AI Müşteri Özeti' },
 
   // ========= İletişim Kanalları =========
   whatsapp: { default: false, category: 'channels', label: 'WhatsApp Gönderimi' },

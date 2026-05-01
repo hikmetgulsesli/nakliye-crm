@@ -197,6 +197,13 @@ export async function negotiationCoach(req: Request, res: Response) {
   res.json({ success: true, data: result });
 }
 
+export async function customerSummary(req: Request, res: Response) {
+  const customerId = Number(req.params.customerId);
+  const { getCustomerSummary } = await import('../../services/ai/tasks/customer-summary');
+  const result = await getCustomerSummary(customerId, req.user!.userId);
+  res.json({ success: true, data: result });
+}
+
 export async function status(_req: Request, res: Response) {
   try {
     const provider = await resolveProvider();

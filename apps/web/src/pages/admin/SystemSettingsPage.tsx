@@ -5,6 +5,7 @@ import { settingsService, type SettingsResponse, type AIUsageReport } from '@/se
 import { emailsService } from '@/services/emails.service';
 import { FeaturesTab } from './FeaturesTab';
 import { SecretsTab } from './SecretsTab';
+import { AIConnectionTest } from '@/components/admin/AIConnectionTest';
 
 type TabKey = 'features' | 'general' | 'ai' | 'secrets' | 'integrations' | 'notifications' | 'usage';
 
@@ -257,6 +258,8 @@ function AITab({ data, save, saving }: TabProps) {
               saving={saving === 'ai.default.provider'}
             />
           </div>
+
+          <AIConnectionTest disabled={configured.length === 0 || !aiEnabled} />
         </div>
       </Card>
 

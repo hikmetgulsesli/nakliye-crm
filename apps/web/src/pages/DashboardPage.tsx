@@ -1,6 +1,8 @@
 import { useAuthStore } from '@/stores/authStore';
 import { AdminDashboard } from '@/components/dashboard/AdminDashboard';
 import { UserDashboard } from '@/components/dashboard/UserDashboard';
+import { AISignalsStrip } from '@/components/dashboard/AISignalsStrip';
+import { FeatureGate } from '@/components/features/FeatureGate';
 import { Button } from '@/components/ui';
 
 function getGreeting(now: Date): string {
@@ -57,6 +59,11 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+
+      {/* AI sinyaller stripi — feature flag'e bagli, hata durumunda sessizce gizlenir */}
+      <FeatureGate feature="smart_queue">
+        <AISignalsStrip />
+      </FeatureGate>
 
       {isAdmin ? <AdminDashboard /> : <UserDashboard />}
     </div>
