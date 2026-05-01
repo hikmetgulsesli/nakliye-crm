@@ -8,6 +8,9 @@ build/
 .vite/
 *.tsbuildinfo
 prisma/*.db
+# Redis local dump
+dump.rdb
+**/dump.rdb
 # Auto-generated declaration files from tsc
 apps/web/*.d.ts
 # Playwright
