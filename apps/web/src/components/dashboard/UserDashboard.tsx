@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui';
 import { KPICard } from '@/components/shared/KPICard';
 import { AlertWidgets } from './AlertWidgets';
@@ -83,9 +82,6 @@ function ContentSkeleton() {
 }
 
 export function UserDashboard() {
-  const user = useAuthStore((s) => s.user);
-  const firstName = user?.fullName?.split(' ')[0] || 'Kullanıcı';
-
   const [data, setData] = useState<UserDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -109,15 +105,7 @@ export function UserDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Greeting */}
-      <div>
-        <h1 className="text-3xl font-bold font-display text-slate-900 dark:text-slate-100 tracking-tight">
-          Merhaba, {firstName} <span role="img" aria-label="wave">&#128075;</span>
-        </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Iste bugunku satış ozetiniz ve yapmaniz gerekenler.
-        </p>
-      </div>
+      {/* Greeting DashboardPage'de uretiliyor — burada tekrar etmiyoruz */}
 
       {/* Error State */}
       {error && (

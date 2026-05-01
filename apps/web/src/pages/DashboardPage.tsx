@@ -11,17 +11,15 @@ function getGreeting(now: Date): string {
   return 'İyi akşamlar';
 }
 
-function formatDateLong(d: Date): string {
-  return d.toLocaleDateString('tr-TR', {
+function formatStamp(d: Date): string {
+  // Örn: "Cuma, 02 Mayıs · 22:46"
+  const date = d.toLocaleDateString('tr-TR', {
     weekday: 'long',
-    day: 'numeric',
+    day: '2-digit',
     month: 'long',
-    year: 'numeric',
   });
-}
-
-function formatTime(d: Date): string {
-  return d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  const time = d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  return `${date} · ${time}`;
 }
 
 export default function DashboardPage() {
@@ -32,26 +30,29 @@ export default function DashboardPage() {
 
   return (
     <div>
-      {/* Greeting header — tasarimdaki Dashboard ust bilgisi */}
+      {/* Greeting header — sade: tarih+saat kucuk, isim buyuk, alt aciklama yok */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="text-[12px] font-medium text-token-muted">
-            {formatDateLong(now)} · {formatTime(now)}
-          </div>
+          <div className="text-[12px] font-medium text-token-muted">{formatStamp(now)}</div>
           <h1 className="mt-1 text-[22px] font-semibold tracking-tight text-token-text">
             {getGreeting(now)}, {firstName} 👋
           </h1>
-          <p className="mt-1 text-[13px] text-token-muted">
-            {isAdmin
-              ? 'Tüm ekip ve satış performansını buradan takip edebilirsiniz.'
-              : 'Bugünün takipleri, açık tekliflerin ve aktif sevkiyatların burada.'}
-          </p>
         </div>
         <div className="flex flex-shrink-0 items-center gap-2">
-          <Button variant="secondary" icon="refresh" size="sm" onClick={() => window.location.reload()}>
+          <Button
+            variant="secondary"
+            icon="refresh"
+            size="sm"
+            onClick={() => window.location.reload()}
+          >
             Yenile
           </Button>
-          <Button variant="primary" icon="add" size="sm" onClick={() => (window.location.href = '/teklifler/yeni')}>
+          <Button
+            variant="primary"
+            icon="add"
+            size="sm"
+            onClick={() => (window.location.href = '/teklifler/yeni')}
+          >
             Yeni teklif
           </Button>
         </div>
