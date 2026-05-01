@@ -112,6 +112,11 @@ export default function QuoteDetailPage() {
         revisionsLoading={revisionsLoading}
         onEdit={handleEdit}
         onDownloadPdf={handleDownloadPdf}
+        onStatusChanged={(newStatus) => {
+          setQuotation((prev) => (prev ? { ...prev, status: newStatus } : prev));
+          // Revisions yenile cunku audit log'a yeni satir dustu
+          fetchRevisions();
+        }}
       />
     </div>
   );

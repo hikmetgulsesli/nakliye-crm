@@ -2,14 +2,24 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Card, Icon } from '@/components/ui';
 import { Avatar } from '@/components/ui';
-import { StatusBadge } from '@/components/shared/StatusBadge';
 import { RouteVisual } from '@/components/shared/RouteVisual';
 import { RevisionHistory } from './RevisionHistory';
 import { AIEmailDraftModal } from '@/components/ai/AIEmailDraftModal';
 import { WinProbabilityBadge } from '@/components/ai/WinProbabilityBadge';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
+import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
+import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
+import { FeatureGate } from '@/components/features/FeatureGate';
 import { shipmentService } from '@/services/shipment.service';
+import { quotationService } from '@/services/quotation.service';
 import type { Quotation, QuotationRevision } from '@nakliye-crm/shared';
+
+const STATUS_OPTIONS = [
+  { value: 'Bekliyor', label: 'Bekliyor', pillClass: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300' },
+  { value: 'Kazanıldı', label: 'Kazanıldı', pillClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300' },
+  { value: 'Kaybedildi', label: 'Kaybedildi', pillClass: 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300' },
+  { value: 'İptal', label: 'İptal', pillClass: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
+];
 
 interface QuotationDetailProps {
   quotation: Quotation;
@@ -17,6 +27,8 @@ interface QuotationDetailProps {
   revisionsLoading?: boolean;
   onEdit: () => void;
   onDownloadPdf: () => void;
+  /** Status inline degistiginde parent state'i guncellesin */
+  onStatusChanged?: (newStatus: string) => void;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -53,6 +65,7 @@ export function QuotationDetail({
   revisionsLoading,
   onEdit,
   onDownloadPdf,
+  onStatusChanged,
 }: QuotationDetailProps) {
   const q = quotation;
   const navigate = useNavigate();
@@ -97,7 +110,14 @@ export function QuotationDetail({
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2 flex-wrap">
-            <StatusBadge status={q.status} />
+            <InlineEditSelect
+              value={q.status}
+              options={STATUS_OPTIONS}
+              onSave={async (next) => {
+                await quotationService.update(q.id, { status: next });
+                onStatusChanged?.(next);
+              }}
+            />
             <WinProbabilityBadge quotationId={q.id} status={q.status} />
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
@@ -244,7 +264,14 @@ export function QuotationDetail({
               </div>
               <div>
                 <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Durum</p>
-                <StatusBadge status={q.status} />
+                <InlineEditSelect
+                  value={q.status}
+                  options={STATUS_OPTIONS}
+                  onSave={async (next) => {
+                    await quotationService.update(q.id, { status: next });
+                    onStatusChanged?.(next);
+                  }}
+                />
               </div>
             </div>
 
@@ -278,6 +305,11 @@ export function QuotationDetail({
           </div>
         </Card>
       </div>
+
+      {/* İç notlar — teklif uzerine takim icinde */}
+      <FeatureGate feature="internal_notes">
+        <InternalNotesPanel ownerType="quotation" ownerId={q.id} />
+      </FeatureGate>
 
       {/* Revize Geçmişi */}
       <Card title="Revize Geçmişi" noPadding>

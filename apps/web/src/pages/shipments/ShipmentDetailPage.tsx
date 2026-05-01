@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { Button, Card, Icon, Skeleton, Select, Modal } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
+import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
+import { FeatureGate } from '@/components/features/FeatureGate';
 import {
   shipmentService,
   type Shipment,
@@ -150,6 +152,13 @@ export default function ShipmentDetailPage() {
           </table>
         )}
       </Card>
+
+      {/* İç notlar — operasyon ekibi takim notu */}
+      <FeatureGate feature="internal_notes">
+        <div className="mb-6">
+          <InternalNotesPanel ownerType="shipment" ownerId={s.id} />
+        </div>
+      </FeatureGate>
 
       {/* Documents */}
       <div className="mb-6">
