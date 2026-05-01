@@ -100,6 +100,10 @@ export function CommandPalette() {
       />
       <Command
         label="Global search"
+        // Backend zaten ILIKE ile filtreliyor — cmdk'nin client-side fuzzy
+        // matcher'i quoteNo / shipmentNo gibi alanlari "test" sorgusuna
+        // match edemediginden kategorileri gizliyordu.
+        shouldFilter={false}
         className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
       >
         <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
