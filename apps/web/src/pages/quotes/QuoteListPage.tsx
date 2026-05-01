@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Pagination } from '@/components/ui';
+import { Button, Icon, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { SavedViewsTabs, type SavedView } from '@/components/shared/SavedViewsTabs';
+import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
+import { SaveViewModal } from '@/components/shared/SaveViewModal';
 import { QuotationTable } from '@/components/quotations/QuotationTable';
 import { QuotationFilters } from '@/components/quotations/QuotationFilters';
 import { quotationService, type QuotationFilters as QuotationFiltersType } from '@/services/quotation.service';
@@ -11,7 +12,9 @@ import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
+import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import type { Quotation } from '@nakliye-crm/shared';
+import type { SavedView } from '@/services/saved-views.service';
 
 const EMPTY_FILTERS: QuotationFiltersType = {};
 
@@ -54,6 +57,9 @@ export default function QuoteListPage() {
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<ViewId>(detectInitialView(searchParams));
+  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
   const debouncedSearch = useDebounce(filters.search, 400);
@@ -73,6 +79,10 @@ export default function QuoteListPage() {
     }
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    fetchSavedViewsIfNeeded();
+  }, [fetchSavedViewsIfNeeded]);
 
   const fetchQuotations = useCallback(async () => {
     setLoading(true);
@@ -129,11 +139,21 @@ export default function QuoteListPage() {
 
   function handleViewChange(id: string) {
     setActiveView(id as ViewId);
+    setActiveUserViewId(undefined);
     setPage(1);
   }
 
-  const views = useMemo<SavedView[]>(() => {
-    const list: SavedView[] = [
+  function handleUserViewSelect(view: SavedView) {
+    const f = view.filters as QuotationFiltersType;
+    setFilters(f);
+    setAppliedFilters(f);
+    setActiveView('all');
+    setActiveUserViewId(view.id);
+    setPage(1);
+  }
+
+  const views = useMemo<BuiltInView[]>(() => {
+    const list: BuiltInView[] = [
       { id: 'all', label: 'Tümü' },
       { id: 'pending', label: 'Bekliyor', color: 'var(--warning)' },
       { id: 'won', label: 'Kazanıldı', color: 'var(--success)' },
@@ -175,6 +195,27 @@ export default function QuoteListPage() {
           views={views}
           activeId={activeView}
           onChange={handleViewChange}
+          resource="quotations"
+          activeUserViewId={activeUserViewId}
+          onUserViewSelect={handleUserViewSelect}
+          trailing={
+            <button
+              type="button"
+              onClick={() => setSaveModalOpen(true)}
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-token-muted hover:bg-token-bg-hover hover:text-token-text"
+            >
+              <Icon name="bookmark_add" size="sm" className="!text-[14px]" />
+              Görünümü kaydet
+            </button>
+          }
+        />
+
+        <SaveViewModal
+          open={saveModalOpen}
+          onClose={() => setSaveModalOpen(false)}
+          resource="quotations"
+          filters={appliedFilters as Record<string, unknown>}
+          onSaved={(id) => setActiveUserViewId(id)}
         />
 
         <div className="border-b border-token-border bg-token-bg-panel p-3">

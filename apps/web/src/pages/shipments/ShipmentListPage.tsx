@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Skeleton, EmptyState, Select } from '@/components/ui';
+import { Button, Icon, Skeleton, EmptyState, Select } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { SearchInput } from '@/components/ui/SearchInput';
-import { SavedViewsTabs, type SavedView } from '@/components/shared/SavedViewsTabs';
+import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
+import { SaveViewModal } from '@/components/shared/SaveViewModal';
 import {
   shipmentService,
   type Shipment,
@@ -12,7 +13,9 @@ import {
 } from '@/services/shipment.service';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
+import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import { cn } from '@/utils/cn';
+import type { SavedView } from '@/services/saved-views.service';
 
 type ViewId = 'all' | 'active' | 'transit' | 'delivered' | 'mine';
 
@@ -32,7 +35,14 @@ export default function ShipmentListPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [activeView, setActiveView] = useState<ViewId>('all');
+  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const debounced = useDebounce(search, 400);
+
+  useEffect(() => {
+    fetchSavedViewsIfNeeded();
+  }, [fetchSavedViewsIfNeeded]);
 
   async function fetchData() {
     setLoading(true);
@@ -64,8 +74,8 @@ export default function ShipmentListPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced, statusFilter, onlyMine, currentUserId, activeView]);
 
-  const views = useMemo<SavedView[]>(() => {
-    const list: SavedView[] = [
+  const views = useMemo<BuiltInView[]>(() => {
+    const list: BuiltInView[] = [
       { id: 'all', label: 'Tümü' },
       { id: 'active', label: 'Aktif', color: 'var(--info)' },
       { id: 'transit', label: 'Transit', color: 'var(--warning)' },
@@ -93,7 +103,37 @@ export default function ShipmentListPage() {
         <SavedViewsTabs
           views={views}
           activeId={activeView}
-          onChange={(id) => setActiveView(id as ViewId)}
+          onChange={(id) => {
+            setActiveView(id as ViewId);
+            setActiveUserViewId(undefined);
+          }}
+          resource="shipments"
+          activeUserViewId={activeUserViewId}
+          onUserViewSelect={(view: SavedView) => {
+            const f = view.filters as { search?: string; status?: string };
+            setSearch(f.search ?? '');
+            setStatusFilter(f.status ?? '');
+            setActiveView('all');
+            setActiveUserViewId(view.id);
+          }}
+          trailing={
+            <button
+              type="button"
+              onClick={() => setSaveModalOpen(true)}
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-token-muted hover:bg-token-bg-hover hover:text-token-text"
+            >
+              <Icon name="bookmark_add" size="sm" className="!text-[14px]" />
+              Görünümü kaydet
+            </button>
+          }
+        />
+
+        <SaveViewModal
+          open={saveModalOpen}
+          onClose={() => setSaveModalOpen(false)}
+          resource="shipments"
+          filters={{ search, status: statusFilter, onlyMine }}
+          onSaved={(id) => setActiveUserViewId(id)}
         />
 
         <div className="border-b border-token-border bg-token-bg-panel p-3">

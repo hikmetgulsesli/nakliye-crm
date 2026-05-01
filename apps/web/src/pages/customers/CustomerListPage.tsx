@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Pagination } from '@/components/ui';
+import { Button, Icon, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { SavedViewsTabs, type SavedView } from '@/components/shared/SavedViewsTabs';
+import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
+import { SaveViewModal } from '@/components/shared/SaveViewModal';
 import { CustomerTable } from '@/components/customers/CustomerTable';
 import { CustomerFilters } from '@/components/customers/CustomerFilters';
 import { customerService, type CustomerFilters as CustomerFiltersType } from '@/services/customer.service';
@@ -12,7 +13,9 @@ import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuthStore } from '@/stores/authStore';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
+import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import type { Customer } from '@nakliye-crm/shared';
+import type { SavedView } from '@/services/saved-views.service';
 
 const EMPTY_FILTERS: CustomerFiltersType = {};
 
@@ -29,6 +32,9 @@ export default function CustomerListPage() {
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<ViewId>(isUser && onlyMine ? 'mine' : 'all');
+  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const [restoringId, setRestoringId] = useState<number | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
@@ -50,6 +56,11 @@ export default function CustomerListPage() {
     }
     fetchUsers();
   }, []);
+
+  // Saved views'i bir kez cek
+  useEffect(() => {
+    fetchSavedViewsIfNeeded();
+  }, [fetchSavedViewsIfNeeded]);
 
   const showDeleted = activeView === 'deleted';
 
@@ -124,11 +135,22 @@ export default function CustomerListPage() {
 
   function handleViewChange(id: string) {
     setActiveView(id as ViewId);
+    setActiveUserViewId(undefined);
     setPage(1);
   }
 
-  const views = useMemo<SavedView[]>(() => {
-    const list: SavedView[] = [
+  function handleUserViewSelect(view: SavedView) {
+    // Kullanici görünümü filtreleri uygula
+    const f = view.filters as CustomerFiltersType;
+    setFilters(f);
+    setAppliedFilters(f);
+    setActiveView('all');
+    setActiveUserViewId(view.id);
+    setPage(1);
+  }
+
+  const views = useMemo<BuiltInView[]>(() => {
+    const list: BuiltInView[] = [
       { id: 'all', label: 'Tümü' },
       { id: 'high', label: 'Yüksek potansiyel', color: 'var(--success)' },
     ];
@@ -176,6 +198,27 @@ export default function CustomerListPage() {
           views={views}
           activeId={activeView}
           onChange={handleViewChange}
+          resource="customers"
+          activeUserViewId={activeUserViewId}
+          onUserViewSelect={handleUserViewSelect}
+          trailing={
+            <button
+              type="button"
+              onClick={() => setSaveModalOpen(true)}
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-token-muted hover:bg-token-bg-hover hover:text-token-text"
+            >
+              <Icon name="bookmark_add" size="sm" className="!text-[14px]" />
+              Görünümü kaydet
+            </button>
+          }
+        />
+
+        <SaveViewModal
+          open={saveModalOpen}
+          onClose={() => setSaveModalOpen(false)}
+          resource="customers"
+          filters={appliedFilters as Record<string, unknown>}
+          onSaved={(id) => setActiveUserViewId(id)}
         />
 
         {!showDeleted && (

@@ -1,9 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
+import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import { Icon } from '@/components/ui';
 import api from '@/config/api';
+import type { SavedView, SavedViewResource } from '@/services/saved-views.service';
+
+const RESOURCE_PATHS: Record<SavedViewResource, string> = {
+  customers: '/musteriler',
+  quotations: '/teklifler',
+  shipments: '/sevkiyatlar',
+  activities: '/aktiviteler',
+};
+
+const RESOURCE_DOT: Record<SavedViewResource, string> = {
+  customers: 'var(--accent)',
+  quotations: 'var(--magenta)',
+  shipments: 'var(--info)',
+  activities: 'var(--warning)',
+};
+
+function viewToHref(view: SavedView): string {
+  const base = RESOURCE_PATHS[view.resource];
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(view.filters ?? {})) {
+    if (value === undefined || value === null || value === '') continue;
+    if (typeof value === 'object') continue;
+    params.set(key, String(value));
+  }
+  // Url marker: hangi saved view aktif (sayfa okuyabilir)
+  params.set('view', String(view.id));
+  return `${base}?${params.toString()}`;
+}
 
 interface NavItem {
   label: string;
@@ -39,6 +68,13 @@ export default function Sidebar() {
   const { user, logout, isAdmin } = useAuthStore();
   const admin = isAdmin();
   const [counts, setCounts] = useState<Counts | null>(null);
+  const allSavedViews = useSavedViewsStore((s) => s.all);
+  const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
+  const pinnedViews = useMemo(() => allSavedViews.filter((v) => v.isPinned), [allSavedViews]);
+
+  useEffect(() => {
+    fetchSavedViewsIfNeeded();
+  }, [fetchSavedViewsIfNeeded]);
 
   // Hafif sayilar — sidebar'da gostermek icin paginated total'lari cek (page=1, pageSize=1)
   useEffect(() => {
@@ -213,31 +249,25 @@ export default function Sidebar() {
           </>
         )}
 
-        {/* Saved views — placeholder; ileride saved_views API'sinden doldurulacak */}
-        <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
-          Kaydedilen görünümler
-        </div>
-        <Link
-          to="/teklifler?status=Bekliyor"
-          className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
-        >
-          <span className="text-magenta">●</span>
-          <span className="flex-1">Bekleyen teklifler</span>
-        </Link>
-        <Link
-          to="/musteriler"
-          className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
-        >
-          <span className="text-warning">●</span>
-          <span className="flex-1">Sadece kendi müşterilerim</span>
-        </Link>
-        <Link
-          to="/sevkiyatlar"
-          className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
-        >
-          <span className="text-info">●</span>
-          <span className="flex-1">Aktif sevkiyatlar</span>
-        </Link>
+        {/* Kullanicinin sabitledigi kaydedilmis görünümler */}
+        {pinnedViews.length > 0 && (
+          <>
+            <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
+              Kaydedilen görünümler
+            </div>
+            {pinnedViews.map((view) => (
+              <Link
+                key={view.id}
+                to={viewToHref(view)}
+                title={`${view.name} · ${view.resource}`}
+                className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
+              >
+                <span style={{ color: RESOURCE_DOT[view.resource] }}>●</span>
+                <span className="flex-1 truncate">{view.name}</span>
+              </Link>
+            ))}
+          </>
+        )}
       </nav>
 
       {/* Footer: user + logout */}
