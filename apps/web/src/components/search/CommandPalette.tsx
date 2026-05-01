@@ -32,12 +32,30 @@ export function CommandPalette() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Ortak kapanis: state'i sifirla — bir sonraki acilis temiz baslar.
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    setQuery('');
+    setResults(null);
+  }, []);
+
   // Ctrl+K / Cmd+K ile ac
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setOpen((o) => !o);
+        setOpen((o) => {
+          // Ac'arken state'i temizle ki eski sonuclar gozukmesin
+          if (!o) {
+            setQuery('');
+            setResults(null);
+          }
+          return !o;
+        });
+      } else if (e.key === 'Escape') {
+        // cmdk kendi Escape handler'i var, biz de state'i temizleyelim
+        setQuery('');
+        setResults(null);
       }
     }
     document.addEventListener('keydown', onKey);
@@ -66,6 +84,7 @@ export function CommandPalette() {
     (path: string) => {
       setOpen(false);
       setQuery('');
+      setResults(null);
       navigate(path);
     },
     [navigate],
@@ -77,7 +96,7 @@ export function CommandPalette() {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={() => setOpen(false)}
+        onClick={handleClose}
       />
       <Command
         label="Global search"

@@ -99,6 +99,18 @@ export default function CustomerListPage() {
     }
   }
 
+  async function handleInlineUpdate(id: number, patch: { status?: string; potential?: string }) {
+    setCustomers((prev) =>
+      prev.map((c) => (c.id === id ? ({ ...c, ...patch } as Customer) : c)),
+    );
+    try {
+      await customerService.update(id, patch);
+    } catch (err) {
+      await fetchCustomers();
+      throw err;
+    }
+  }
+
   function handleApplyFilters() {
     setAppliedFilters({ ...filters });
     setPage(1);
@@ -213,6 +225,7 @@ export default function CustomerListPage() {
             mode={showDeleted ? 'deleted' : 'active'}
             onRestore={showDeleted ? handleRestore : undefined}
             restoringId={restoringId}
+            onInlineUpdate={!showDeleted ? handleInlineUpdate : undefined}
           />
         )}
       </div>

@@ -2,11 +2,21 @@ import { useNavigate } from 'react-router-dom';
 import { Table, Badge } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { RouteVisual } from '@/components/shared/RouteVisual';
+import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
 import type { Quotation } from '@nakliye-crm/shared';
+
+const QUOTE_STATUS_OPTIONS = [
+  { value: 'Bekliyor', label: 'Bekliyor', pillClass: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300' },
+  { value: 'Kazanıldı', label: 'Kazanıldı', pillClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300' },
+  { value: 'Kaybedildi', label: 'Kaybedildi', pillClass: 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300' },
+  { value: 'İptal', label: 'İptal', pillClass: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
+];
 
 interface QuotationTableProps {
   data: Quotation[];
   loading?: boolean;
+  /** Tıkla-değiştir hücreleri için callback. Verilmezse status sadece okunur StatusBadge. */
+  onInlineUpdate?: (id: number, patch: { status?: string }) => Promise<void>;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -32,7 +42,7 @@ function getCurrencyVariant(currency?: string | null): CurrencyVariant {
   return 'warning';
 }
 
-export function QuotationTable({ data, loading }: QuotationTableProps) {
+export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTableProps) {
   const navigate = useNavigate();
 
   const columns = [
@@ -105,7 +115,16 @@ export function QuotationTable({ data, loading }: QuotationTableProps) {
     {
       key: 'status',
       label: 'DURUM',
-      render: (row: Quotation) => <StatusBadge status={row.status} />,
+      render: (row: Quotation) =>
+        onInlineUpdate ? (
+          <InlineEditSelect
+            value={row.status}
+            options={QUOTE_STATUS_OPTIONS}
+            onSave={(next) => onInlineUpdate(row.id, { status: next })}
+          />
+        ) : (
+          <StatusBadge status={row.status} />
+        ),
     },
     {
       key: 'assignedUser',

@@ -104,6 +104,18 @@ export default function QuoteListPage() {
     fetchQuotations();
   }, [fetchQuotations]);
 
+  async function handleInlineUpdate(id: number, patch: { status?: string }) {
+    // Optimistic: tabloyu hemen guncelle
+    setQuotations((prev) => prev.map((q) => (q.id === id ? { ...q, ...patch } : q)));
+    try {
+      await quotationService.update(id, patch);
+    } catch (err) {
+      // Revert + sade hata
+      await fetchQuotations();
+      throw err;
+    }
+  }
+
   function handleApplyFilters() {
     setAppliedFilters({ ...filters });
     setPage(1);
@@ -194,7 +206,11 @@ export default function QuoteListPage() {
             }
           />
         ) : (
-          <QuotationTable data={quotations} loading={loading} />
+          <QuotationTable
+            data={quotations}
+            loading={loading}
+            onInlineUpdate={handleInlineUpdate}
+          />
         )}
       </div>
 

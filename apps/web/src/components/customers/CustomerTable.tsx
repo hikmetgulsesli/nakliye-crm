@@ -1,7 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { Table, Icon } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
 import type { Customer } from '@nakliye-crm/shared';
+
+const CUSTOMER_STATUS_OPTIONS = [
+  { value: 'Aktif', label: 'Aktif', pillClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300' },
+  { value: 'Pasif', label: 'Pasif', pillClass: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
+  { value: 'Soğuk', label: 'Soğuk', pillClass: 'bg-blue-100 text-blue-800 dark:bg-blue-500/15 dark:text-blue-300' },
+];
+
+const CUSTOMER_POTENTIAL_OPTIONS = [
+  { value: 'Yüksek', label: 'Yüksek', pillClass: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300' },
+  { value: 'Orta', label: 'Orta', pillClass: 'bg-blue-100 text-blue-800 dark:bg-blue-500/15 dark:text-blue-300' },
+  { value: 'Düşük', label: 'Düşük', pillClass: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' },
+];
 
 interface CustomerTableProps {
   data: Customer[];
@@ -9,6 +22,8 @@ interface CustomerTableProps {
   mode?: 'active' | 'deleted';
   onRestore?: (id: number) => void;
   restoringId?: number | null;
+  /** Tıkla-değiştir hücreleri için callback */
+  onInlineUpdate?: (id: number, patch: { status?: string; potential?: string }) => Promise<void>;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -26,6 +41,7 @@ export function CustomerTable({
   mode = 'active',
   onRestore,
   restoringId,
+  onInlineUpdate,
 }: CustomerTableProps) {
   const navigate = useNavigate();
   const isDeleted = mode === 'deleted';
@@ -68,13 +84,33 @@ export function CustomerTable({
     {
       key: 'status',
       label: 'DURUM',
-      render: (row: Customer) => <StatusBadge status={row.status} />,
+      render: (row: Customer) =>
+        onInlineUpdate && !isDeleted ? (
+          <InlineEditSelect
+            value={row.status}
+            options={CUSTOMER_STATUS_OPTIONS}
+            onSave={(next) => onInlineUpdate(row.id, { status: next })}
+          />
+        ) : (
+          <StatusBadge status={row.status} />
+        ),
     },
     {
       key: 'potential',
       label: 'POTANSIYEL',
       render: (row: Customer) =>
-        row.potential ? <StatusBadge status={row.potential} /> : <span className="text-slate-400 dark:text-slate-500">-</span>,
+        onInlineUpdate && !isDeleted ? (
+          <InlineEditSelect
+            value={row.potential ?? ''}
+            options={CUSTOMER_POTENTIAL_OPTIONS}
+            onSave={(next) => onInlineUpdate(row.id, { potential: next })}
+            renderLabel={(opt, raw) => (raw ? opt?.label ?? raw : <span className="text-slate-400">Seç</span>)}
+          />
+        ) : row.potential ? (
+          <StatusBadge status={row.potential} />
+        ) : (
+          <span className="text-slate-400 dark:text-slate-500">-</span>
+        ),
     },
     {
       key: 'assignedUser',
