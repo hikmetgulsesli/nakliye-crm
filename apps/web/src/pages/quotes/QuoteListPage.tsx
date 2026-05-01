@@ -84,6 +84,18 @@ export default function QuoteListPage() {
     fetchSavedViewsIfNeeded();
   }, [fetchSavedViewsIfNeeded]);
 
+  // Sidebar saved view nav'inda URL degisir; mount'lu sayfa tekrar bootstrap
+  useEffect(() => {
+    const next = filtersFromSearchParams(searchParams);
+    setFilters(next);
+    setAppliedFilters(next);
+    const vId = searchParams.get('view');
+    setActiveUserViewId(vId ? Number(vId) : undefined);
+    setActiveView(detectInitialView(searchParams));
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const fetchQuotations = useCallback(async () => {
     setLoading(true);
     try {
@@ -214,7 +226,16 @@ export default function QuoteListPage() {
           open={saveModalOpen}
           onClose={() => setSaveModalOpen(false)}
           resource="quotations"
-          filters={appliedFilters as Record<string, unknown>}
+          filters={(() => {
+            const eff: Record<string, unknown> = { ...appliedFilters };
+            if (debouncedSearch) eff.search = debouncedSearch;
+            const viewStatus = VIEW_TO_STATUS[activeView];
+            if (viewStatus) eff.status = viewStatus;
+            if ((activeView === 'mine' || (onlyMine && activeView === 'all')) && currentUserId) {
+              eff.assignedUserId = currentUserId;
+            }
+            return eff;
+          })()}
           onSaved={(id) => setActiveUserViewId(id)}
         />
 

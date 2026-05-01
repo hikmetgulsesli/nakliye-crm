@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Icon, Skeleton, EmptyState, Select } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { SearchInput } from '@/components/ui/SearchInput';
@@ -28,14 +28,18 @@ const ACTIVE_STATUSES = new Set(['booked', 'loading', 'in_transit', 'at_destinat
 
 export default function ShipmentListPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { onlyMine, setOnlyMine, currentUserId } = useOnlyMinePref('shipments');
   const [items, setItems] = useState<Shipment[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') ?? '');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') ?? '');
   const [activeView, setActiveView] = useState<ViewId>('all');
-  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
+  const initialViewId = searchParams.get('view');
+  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>(
+    initialViewId ? Number(initialViewId) : undefined,
+  );
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const debounced = useDebounce(search, 400);
@@ -43,6 +47,15 @@ export default function ShipmentListPage() {
   useEffect(() => {
     fetchSavedViewsIfNeeded();
   }, [fetchSavedViewsIfNeeded]);
+
+  // Sidebar saved view nav'inda URL degisirse state'i tekrar bootstrap et.
+  useEffect(() => {
+    setSearch(searchParams.get('search') ?? '');
+    setStatusFilter(searchParams.get('status') ?? '');
+    const vId = searchParams.get('view');
+    setActiveUserViewId(vId ? Number(vId) : undefined);
+    if (vId) setActiveView('all');
+  }, [searchParams]);
 
   async function fetchData() {
     setLoading(true);

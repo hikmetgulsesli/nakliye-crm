@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Icon, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -21,18 +21,53 @@ const EMPTY_FILTERS: CustomerFiltersType = {};
 
 type ViewId = 'all' | 'high' | 'mine' | 'deleted';
 
+const FILTER_KEYS: (keyof CustomerFiltersType)[] = [
+  'search',
+  'status',
+  'potential',
+  'transportMode',
+  'serviceType',
+  'originCountry',
+  'destinationCountry',
+  'incoterm',
+  'source',
+  'startDate',
+  'endDate',
+  'deleted',
+];
+
+function filtersFromSearchParams(params: URLSearchParams): CustomerFiltersType {
+  const out: Record<string, unknown> = {};
+  for (const key of FILTER_KEYS) {
+    const v = params.get(key);
+    if (v === null) continue;
+    if (key === 'deleted') out[key] = v === 'true';
+    else out[key] = v;
+  }
+  const aid = params.get('assignedUserId');
+  if (aid) out.assignedUserId = Number(aid);
+  return out as CustomerFiltersType;
+}
+
 export default function CustomerListPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const isAdmin = useAuthStore((s) => s.isAdmin());
   const { isUser, currentUserId, onlyMine, setOnlyMine } = useOnlyMinePref('customers');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
-  const [appliedFilters, setAppliedFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
+  const initialFromUrl = useMemo(() => filtersFromSearchParams(searchParams), []);
+  const [filters, setFilters] = useState<CustomerFiltersType>(initialFromUrl);
+  const [appliedFilters, setAppliedFilters] = useState<CustomerFiltersType>(initialFromUrl);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<ViewId>(isUser && onlyMine ? 'mine' : 'all');
-  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
+  const [activeView, setActiveView] = useState<ViewId>(
+    initialFromUrl.deleted ? 'deleted' : isUser && onlyMine ? 'mine' : 'all',
+  );
+  const initialViewId = searchParams.get('view');
+  const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>(
+    initialViewId ? Number(initialViewId) : undefined,
+  );
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const [restoringId, setRestoringId] = useState<number | null>(null);
@@ -61,6 +96,20 @@ export default function CustomerListPage() {
   useEffect(() => {
     fetchSavedViewsIfNeeded();
   }, [fetchSavedViewsIfNeeded]);
+
+  // Sidebar'dan saved view tıklandıkça URL degisir; component zaten mount'lu
+  // oldugu icin state'i URL'e gore tekrar bootstrap edelim.
+  useEffect(() => {
+    const next = filtersFromSearchParams(searchParams);
+    setFilters(next);
+    setAppliedFilters(next);
+    const vId = searchParams.get('view');
+    setActiveUserViewId(vId ? Number(vId) : undefined);
+    if (next.deleted) setActiveView('deleted');
+    else if (vId) setActiveView('all');
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const showDeleted = activeView === 'deleted';
 
@@ -217,7 +266,21 @@ export default function CustomerListPage() {
           open={saveModalOpen}
           onClose={() => setSaveModalOpen(false)}
           resource="customers"
-          filters={appliedFilters as Record<string, unknown>}
+          // Built-in tab turevsel filterlari + onlyMine'i dahil et ki
+          // kaydedilen görünüm gercekten görünen sonucu yansitsin.
+          filters={(() => {
+            const eff: Record<string, unknown> = { ...appliedFilters };
+            if (debouncedSearch) eff.search = debouncedSearch;
+            if (activeView === 'high') eff.potential = 'Yüksek';
+            if (activeView === 'deleted') eff.deleted = true;
+            if (
+              (activeView === 'mine' || (onlyMine && activeView !== 'deleted')) &&
+              currentUserId
+            ) {
+              eff.assignedUserId = currentUserId;
+            }
+            return eff;
+          })()}
           onSaved={(id) => setActiveUserViewId(id)}
         />
 
