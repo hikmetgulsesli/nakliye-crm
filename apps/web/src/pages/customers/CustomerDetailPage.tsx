@@ -9,6 +9,7 @@ import { CustomerTimeline } from '@/components/customers/CustomerTimeline';
 import { ContactsPanel } from '@/components/customers/ContactsPanel';
 import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
 import { CustomerAISummary } from '@/components/ai/CustomerAISummary';
+import { VoiceNoteCapture } from '@/components/ai/VoiceNoteCapture';
 import { FeatureGate } from '@/components/features/FeatureGate';
 import { customerService } from '@/services/customer.service';
 import type { Customer } from '@nakliye-crm/shared';
@@ -210,6 +211,13 @@ export default function CustomerDetailPage() {
       <FeatureGate feature="ai_customer_summary">
         <div className="mb-6">
           <CustomerAISummary customerId={customer.id} autoLoad={false} />
+        </div>
+      </FeatureGate>
+
+      {/* Sesli not — Whisper ile transkripsiyon, otomatik activity */}
+      <FeatureGate feature="voice_memo">
+        <div className="mb-6">
+          <VoiceNoteCapture customerId={customer.id} />
         </div>
       </FeatureGate>
 

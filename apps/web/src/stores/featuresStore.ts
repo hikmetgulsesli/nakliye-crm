@@ -4,7 +4,7 @@ import api from '@/config/api';
 export type FeatureKey =
   | 'customers' | 'quotations' | 'activities'
   | 'shipments' | 'documents' | 'exchange_rates' | 'rates'
-  | 'ai_email_draft' | 'win_probability' | 'churn_risk' | 'coaching' | 'smart_queue' | 'voice_memo' | 'ai_negotiation_coach'
+  | 'ai_email_draft' | 'win_probability' | 'churn_risk' | 'coaching' | 'smart_queue' | 'voice_memo' | 'ai_negotiation_coach' | 'ai_customer_summary' | 'ai_assistant_panel'
   | 'whatsapp' | 'sms' | 'email_send' | 'imap_sync' | 'message_templates' | 'click_to_call'
   | 'daily_plan' | 'followup_reminders' | 'customer_contacts' | 'birthdays' | 'geo_checkin'
   | 'commission' | 'gamification' | 'sales_goals'

@@ -124,9 +124,76 @@ export function CommandPalette() {
         </div>
         <Command.List className="max-h-[400px] overflow-y-auto p-2">
           {!results && !loading && (
-            <div className="py-8 text-center text-sm text-slate-500">
-              En az 2 karakter yazın
-            </div>
+            <>
+              <Command.Group heading="Hızlı eylemler">
+                <Command.Item
+                  value="yeni teklif olustur"
+                  onSelect={() => go('/teklifler/yeni')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="add" size="sm" className="text-slate-400" />
+                  <span className="flex-1">Yeni teklif oluştur</span>
+                  <kbd className="text-[10px] text-slate-400 border border-slate-200 dark:border-slate-700 rounded px-1">N Q</kbd>
+                </Command.Item>
+                <Command.Item
+                  value="yeni musteri ekle"
+                  onSelect={() => go('/musteriler/yeni')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="person_add" size="sm" className="text-slate-400" />
+                  <span className="flex-1">Yeni müşteri ekle</span>
+                  <kbd className="text-[10px] text-slate-400 border border-slate-200 dark:border-slate-700 rounded px-1">N C</kbd>
+                </Command.Item>
+                <Command.Item
+                  value="yeni sevkiyat olustur"
+                  onSelect={() => go('/sevkiyatlar/yeni')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="local_shipping" size="sm" className="text-slate-400" />
+                  <span className="flex-1">Yeni sevkiyat oluştur</span>
+                  <kbd className="text-[10px] text-slate-400 border border-slate-200 dark:border-slate-700 rounded px-1">N S</kbd>
+                </Command.Item>
+              </Command.Group>
+
+              <Command.Group heading="AI & Otomasyon">
+                <Command.Item
+                  value="bugun konusulacaklar smart queue"
+                  onSelect={() => go('/')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="auto_awesome" size="sm" className="text-magenta" />
+                  <span className="flex-1">Bugün konuşulacaklar (AI önceliklendirme)</span>
+                </Command.Item>
+                <Command.Item
+                  value="risk altindaki musteriler churn"
+                  onSelect={() => go('/musteriler?potential=Yüksek')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="warning" size="sm" className="text-amber-500" />
+                  <span className="flex-1">Yüksek potansiyelli müşteriler</span>
+                </Command.Item>
+                <Command.Item
+                  value="bekleyen teklifler"
+                  onSelect={() => go('/teklifler?status=Bekliyor')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="hourglass_top" size="sm" className="text-slate-400" />
+                  <span className="flex-1">Bekleyen teklifler</span>
+                </Command.Item>
+                <Command.Item
+                  value="ai sagleyici ayarlari"
+                  onSelect={() => go('/ayarlar')}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                >
+                  <Icon name="tune" size="sm" className="text-slate-400" />
+                  <span className="flex-1">AI sağlayıcı ayarları</span>
+                </Command.Item>
+              </Command.Group>
+
+              <div className="px-3 py-2 text-[11px] text-slate-400">
+                Veya müşteri / teklif / sevkiyat aramak için yazmaya başla.
+              </div>
+            </>
           )}
           {results && (
             <>

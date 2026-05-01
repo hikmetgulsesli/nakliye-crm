@@ -41,7 +41,11 @@ function deriveCrumbs(pathname: string): string[] {
   return ['Çalışma alanı'];
 }
 
-export default function Header() {
+interface HeaderProps {
+  onOpenAI?: () => void;
+}
+
+export default function Header({ onOpenAI }: HeaderProps = {}) {
   const { user } = useAuthStore();
   const { unreadCount, fetch: fetchNotifications } = useNotificationStore();
   const theme = useThemeStore((s) => s.theme);
@@ -112,6 +116,25 @@ export default function Header() {
 
       {/* Right actions */}
       <div className="flex items-center gap-1">
+        {onOpenAI && (
+          <button
+            type="button"
+            onClick={onOpenAI}
+            title="CRM Asistanı (⌘J)"
+            aria-label="CRM Asistanı"
+            className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-white shadow-sm transition-opacity hover:opacity-90"
+            style={{
+              background: 'linear-gradient(135deg, var(--accent), var(--magenta))',
+            }}
+          >
+            <Icon name="auto_awesome" size="sm" className="!text-[14px]" />
+            <span className="hidden lg:inline">Asistan</span>
+            <kbd className="ml-0.5 rounded border border-white/30 bg-white/15 px-1 font-mono text-[9px]">
+              ⌘J
+            </kbd>
+          </button>
+        )}
+
         <button
           onClick={toggleTheme}
           aria-label={theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç'}
