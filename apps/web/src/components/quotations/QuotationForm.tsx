@@ -7,6 +7,7 @@ import { Avatar } from '@/components/ui';
 import { useLookups } from '@/hooks/useLookups';
 import { useDebounce } from '@/hooks/useDebounce';
 import { customerService } from '@/services/customer.service';
+import { useAuthStore } from '@/stores/authStore';
 import { cn } from '@/utils/cn';
 import type { Customer, Quotation } from '@nakliye-crm/shared';
 
@@ -25,7 +26,12 @@ const quotationSchema = z.object({
   destinationCountry: z.string().optional(),
   pod: z.string().optional(),
   incoterm: z.string().optional(),
-  price: z.number().optional(),
+  // Backend price'ı Decimal olarak string serialize ediyor; gelen "95" gibi
+  // degerleri number'a coerce et, bos string undefined kalsin.
+  price: z.preprocess(
+    (v) => (v === '' || v === null || v === undefined ? undefined : Number(v)),
+    z.number().optional(),
+  ),
   currency: z.string().optional(),
   priceNote: z.string().optional(),
   status: z.string().optional(),
@@ -47,6 +53,7 @@ interface QuotationFormProps {
   loading?: boolean;
   users: { value: string; label: string }[];
   refId?: string;
+  formId?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -106,10 +113,14 @@ export function QuotationForm({
   loading = false,
   users,
   refId,
+  formId = 'quotation-form',
 }: QuotationFormProps) {
   const { getOptions } = useLookups();
   const serviceTypeOptions = getOptions('service_type');
   const incotermOptions = getOptions('incoterm');
+  const currentUser = useAuthStore((s) => s.user);
+  const isAdmin = currentUser?.role === 'ADMIN';
+  const currentUserId = currentUser?.id ? Number(currentUser.id) : 0;
 
   const {
     register,
@@ -136,7 +147,8 @@ export function QuotationForm({
       priceNote: defaultValues?.priceNote ?? '',
       status: defaultValues?.status ?? 'Bekliyor',
       lossReason: defaultValues?.lossReason ?? '',
-      assignedUserId: defaultValues?.assignedUserId ?? 0,
+      assignedUserId:
+        defaultValues?.assignedUserId ?? (isAdmin ? 0 : currentUserId),
     },
   });
 
@@ -182,7 +194,7 @@ export function QuotationForm({
   /* ---- Render ---- */
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form id={formId} onSubmit={handleSubmit(onSubmit)}>
       {/* Ref ID + Draft save link */}
       {(refId || onSaveDraft) && (
         <div className="flex items-center justify-between mb-4">
@@ -416,6 +428,9 @@ export function QuotationForm({
                   </select>
                 </div>
               </div>
+              {errors.price && (
+                <p className="mt-1.5 text-sm text-red-500">{errors.price.message}</p>
+              )}
             </div>
 
             {/* Price Note */}
@@ -451,40 +466,57 @@ export function QuotationForm({
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Atanan Temsilci
               </label>
-              <Controller
-                name="assignedUserId"
-                control={control}
-                render={({ field }) => (
-                  <div className="space-y-2">
-                    <select
-                      className="w-full h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
-                    >
-                      <option value="" disabled>
-                        Temsilci seçin
-                      </option>
-                      {users.map((u) => (
-                        <option key={u.value} value={u.value}>
-                          {u.label}
+              {isAdmin ? (
+                <Controller
+                  name="assignedUserId"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <select
+                        className="w-full h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-slate-100 px-4 appearance-none transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                        value={field.value || ''}
+                        onChange={(e) =>
+                          field.onChange(e.target.value ? Number(e.target.value) : 0)
+                        }
+                      >
+                        <option value="" disabled>
+                          Temsilci seçin
                         </option>
-                      ))}
-                    </select>
-                    {/* Avatar preview */}
-                    {field.value > 0 && (
-                      <div className="flex items-center gap-2 mt-2">
-                        <Avatar
-                          name={users.find((u) => u.value === field.value.toString())?.label}
-                          size="sm"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 font-medium">
-                          {users.find((u) => u.value === field.value.toString())?.label}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              />
+                        {users.map((u) => (
+                          <option key={u.value} value={u.value}>
+                            {u.label}
+                          </option>
+                        ))}
+                      </select>
+                      {field.value > 0 && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Avatar
+                            name={users.find((u) => u.value === field.value.toString())?.label}
+                            size="sm"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-slate-300 font-medium">
+                            {users.find((u) => u.value === field.value.toString())?.label}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                />
+              ) : (
+                <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
+                  <Icon name="lock" size="sm" className="text-slate-400 dark:text-slate-500" />
+                  <Avatar
+                    name={defaultValues?.assignedUser?.fullName ?? currentUser?.fullName ?? '-'}
+                    size="sm"
+                  />
+                  <span className="font-medium">
+                    {defaultValues?.assignedUser?.fullName ?? currentUser?.fullName ?? '-'}
+                  </span>
+                  <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">
+                    Yalnizca yöneticiler degistirebilir
+                  </span>
+                </div>
+              )}
               {errors.assignedUserId && (
                 <p className="mt-1.5 text-sm text-red-500">{errors.assignedUserId.message}</p>
               )}
