@@ -12,6 +12,7 @@ export async function list(req: Request, res: Response) {
   if (req.query.status) where.status = String(req.query.status);
   if (req.query.customerId) where.customerId = Number(req.query.customerId);
   if (req.query.assignedUserId) where.assignedUserId = Number(req.query.assignedUserId);
+  if (req.query.quotationId) where.quotationId = Number(req.query.quotationId);
   if (req.query.search) {
     const s = String(req.query.search);
     where.OR = [

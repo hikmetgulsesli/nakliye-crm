@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Card, Icon } from '@/components/ui';
 import { Avatar } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
@@ -8,6 +8,7 @@ import { RevisionHistory } from './RevisionHistory';
 import { AIEmailDraftModal } from '@/components/ai/AIEmailDraftModal';
 import { WinProbabilityBadge } from '@/components/ai/WinProbabilityBadge';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
+import { shipmentService } from '@/services/shipment.service';
 import type { Quotation, QuotationRevision } from '@nakliye-crm/shared';
 
 interface QuotationDetailProps {
@@ -54,8 +55,41 @@ export function QuotationDetail({
   onDownloadPdf,
 }: QuotationDetailProps) {
   const q = quotation;
+  const navigate = useNavigate();
   const transportInfo = q.transportMode ? TRANSPORT_MODE_LABELS[q.transportMode.toLowerCase()] : null;
   const [aiEmailOpen, setAiEmailOpen] = useState(false);
+  const [existingShipmentId, setExistingShipmentId] = useState<number | null>(null);
+
+  const isWon = q.status === 'Kazanıldı';
+
+  // Kazanildi tekliflerde mevcut sevkiyat var mi kontrol et
+  useEffect(() => {
+    if (!isWon) {
+      setExistingShipmentId(null);
+      return;
+    }
+    let cancelled = false;
+    shipmentService
+      .list(1, 1, { quotationId: q.id })
+      .then((res) => {
+        if (cancelled) return;
+        setExistingShipmentId(res.total > 0 ? res.data[0].id : null);
+      })
+      .catch(() => {
+        if (!cancelled) setExistingShipmentId(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isWon, q.id]);
+
+  function handleShipmentAction() {
+    if (existingShipmentId) {
+      navigate(`/sevkiyatlar/${existingShipmentId}`);
+    } else {
+      navigate(`/sevkiyatlar/yeni?quotationId=${q.id}`);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -94,7 +128,17 @@ export function QuotationDetail({
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-3 flex-shrink-0">
+        <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
+          {isWon && (
+            <Button
+              variant="primary"
+              icon={existingShipmentId ? 'open_in_new' : 'local_shipping'}
+              onClick={handleShipmentAction}
+              className="!bg-blue-500 hover:!bg-blue-600 !shadow-blue-500/20"
+            >
+              {existingShipmentId ? 'Sevkiyatı Görüntüle' : 'Sevkiyat Oluştur'}
+            </Button>
+          )}
           <Button
             variant="primary"
             icon="auto_awesome"

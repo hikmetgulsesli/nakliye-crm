@@ -10,9 +10,11 @@ import {
   STATUS_COLORS,
 } from '@/services/shipment.service';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
 
 export default function ShipmentListPage() {
   const navigate = useNavigate();
+  const { onlyMine, setOnlyMine, currentUserId } = useOnlyMinePref('shipments');
   const [items, setItems] = useState<Shipment[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,7 @@ export default function ShipmentListPage() {
       const res = await shipmentService.list(1, 50, {
         search: debounced || undefined,
         status: statusFilter || undefined,
+        assignedUserId: onlyMine && currentUserId ? currentUserId : undefined,
       });
       setItems(res.data);
       setTotal(res.total);
@@ -37,7 +40,7 @@ export default function ShipmentListPage() {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounced, statusFilter]);
+  }, [debounced, statusFilter, onlyMine, currentUserId]);
 
   return (
     <div>
@@ -52,21 +55,34 @@ export default function ShipmentListPage() {
       />
 
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 mb-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <SearchInput
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="BL/AWB/Sevkiyat no ara..."
-          />
-          <Select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            options={[
-              { value: '', label: 'Tüm durumlar' },
-              ...Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label })),
-            ]}
-          />
-          <div className="text-right text-sm text-slate-500 dark:text-slate-400 flex items-center justify-end">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          <div className="md:col-span-5">
+            <SearchInput
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="BL/AWB/Sevkiyat no ara..."
+            />
+          </div>
+          <div className="md:col-span-3">
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              options={[
+                { value: '', label: 'Tüm durumlar' },
+                ...Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label })),
+              ]}
+            />
+          </div>
+          <label className="md:col-span-3 inline-flex cursor-pointer select-none items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800">
+            <input
+              type="checkbox"
+              checked={onlyMine}
+              onChange={(e) => setOnlyMine(e.target.checked)}
+              className="size-4 rounded border-slate-300 text-primary focus:ring-2 focus:ring-primary/40 dark:border-slate-600"
+            />
+            <span className="whitespace-nowrap">Sadece kendi sevkiyatlarım</span>
+          </label>
+          <div className="md:col-span-1 text-right text-sm text-slate-500 dark:text-slate-400">
             Toplam: {total}
           </div>
         </div>

@@ -23,6 +23,7 @@ const ReportsPage = lazy(() => import('../pages/admin/ReportsPage'));
 const SystemSettingsPage = lazy(() => import('../pages/admin/SystemSettingsPage'));
 const ShipmentListPage = lazy(() => import('../pages/shipments/ShipmentListPage'));
 const ShipmentDetailPage = lazy(() => import('../pages/shipments/ShipmentDetailPage'));
+const ShipmentFormPage = lazy(() => import('../pages/shipments/ShipmentFormPage'));
 const PortalLoginPage = lazy(() => import('../pages/portal/PortalLoginPage'));
 const PortalDashboardPage = lazy(() => import('../pages/portal/PortalDashboardPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
@@ -217,6 +218,14 @@ export const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <ShipmentListPage />
+              </SuspenseWrapper>
+            ),
+          },
+          {
+            path: 'sevkiyatlar/yeni',
+            element: (
+              <SuspenseWrapper>
+                <ShipmentFormPage />
               </SuspenseWrapper>
             ),
           },

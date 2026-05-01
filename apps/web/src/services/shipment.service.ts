@@ -55,6 +55,7 @@ export interface ShipmentFilters {
   status?: string;
   customerId?: number;
   assignedUserId?: number;
+  quotationId?: number;
   search?: string;
 }
 
