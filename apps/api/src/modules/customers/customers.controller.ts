@@ -4,10 +4,17 @@ import { AppError } from '../../middleware/error-handler';
 import { parsePagination, paginatedResponse } from '../../utils/pagination';
 import { createAuditLog } from '../../utils/audit';
 import { computeDiff } from '../../utils/diff';
+import { logCustomerUpdateActivity } from '../../utils/activity-from-update';
 
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
   const where: Record<string, unknown> = {};
+
+  // ADMIN ?deleted=true ile sadece silinmiş kayıtları listeleyebilir (geri yükleme için).
+  // Soft-delete middleware where.isDeleted set edilmişse override etmez.
+  if (req.query.deleted === 'true' && req.user?.role === 'ADMIN') {
+    where.isDeleted = true;
+  }
 
   if (req.query.status) where.status = req.query.status;
   if (req.query.potential) where.potential = req.query.potential;
@@ -104,6 +111,10 @@ export async function create(req: Request, res: Response) {
     status, notes, assignedUserId,
   } = req.body;
 
+  // USER kendi adına kayıt açar; ADMIN istediği temsilciye atayabilir.
+  const effectiveAssignedUserId =
+    req.user!.role === 'ADMIN' && assignedUserId ? assignedUserId : req.user!.userId;
+
   const customer = await prisma.customer.create({
     data: {
       companyName,
@@ -121,7 +132,7 @@ export async function create(req: Request, res: Response) {
       potential,
       status: status || 'Aktif',
       notes,
-      assignedUserId: assignedUserId || req.user!.userId,
+      assignedUserId: effectiveAssignedUserId,
       createdById: req.user!.userId,
     },
     include: {
@@ -147,9 +158,8 @@ export async function update(req: Request, res: Response) {
     throw new AppError('Müşteri bulunamadı', 404);
   }
 
-  if (req.user!.role !== 'ADMIN' && existing.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu müşteri için yetkiniz yok', 403);
-  }
+  // Tüm USER'lar her müşteriyi düzenleyebilir; başkasının kaydında değişiklik
+  // yaparlarsa müşterinin aktivite akışına otomatik kayıt düşer (aşağıda).
 
   const {
     companyName, contactName, phone, email, address,
@@ -195,6 +205,20 @@ export async function update(req: Request, res: Response) {
     action: 'UPDATE',
     changes,
   });
+
+  // Sahibi olmayan biri (ADMIN dahil) düzenlediyse aktivite akışına iz bırak.
+  if (existing.assignedUserId !== req.user!.userId) {
+    const editor = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { fullName: true },
+    });
+    await logCustomerUpdateActivity({
+      customerId: id,
+      changes,
+      byUserId: req.user!.userId,
+      byUserName: editor?.fullName,
+    });
+  }
 
   res.json({ success: true, data: customer });
 }

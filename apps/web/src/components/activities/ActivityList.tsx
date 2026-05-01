@@ -13,6 +13,11 @@ const ACTIVITY_TYPE_CONFIG: Record<string, { icon: string; color: string; label:
   eposta: { icon: 'email', color: 'bg-amber-500', label: 'E-posta' },
   yuz_yuze: { icon: 'groups', color: 'bg-emerald-500', label: 'Yüz Yuze' },
   video: { icon: 'videocam', color: 'bg-purple-500', label: 'Video' },
+  'Sistem Güncellemesi': {
+    icon: 'history',
+    color: 'bg-slate-500',
+    label: 'Sistem Güncellemesi',
+  },
 };
 
 const OUTCOME_CONFIG: Record<string, { color: string; label: string }> = {

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
+import { splitMultiValue } from '@nakliye-crm/shared';
 
 interface ConflictResult {
   customerId: number;
@@ -62,63 +63,72 @@ export async function checkConflicts(req: Request, res: Response) {
     }
   }
 
-  // 2. Exact phone match
+  // 2. Exact phone match (her bir parça için ayrı sorgu)
   if (phone) {
-    const normalizedPhone = String(phone).replace(/[\s\-\(\)]/g, '');
-    const phoneMatches = await prisma.customer.findMany({
-      where: {
-        phone: { contains: normalizedPhone },
-        isDeleted: false,
-      },
-      include: {
-        assignedUser: { select: { fullName: true } },
-      },
-    });
+    const phoneParts = splitMultiValue(String(phone))
+      .map((p) => p.replace(/[\s\-()]/g, ''))
+      .filter((p) => p.length >= 10);
 
-    for (const c of phoneMatches) {
-      if (!matches.find((m) => m.customerId === c.id)) {
-        matches.push({
-          customerId: c.id,
-          companyName: c.companyName,
-          contactName: c.contactName,
-          phone: c.phone,
-          email: c.email,
-          assignedUserId: c.assignedUserId,
-          assignedUserName: c.assignedUser.fullName,
-          lastContactDate: c.lastContactDate,
-          matchType: 'phone',
-          similarity: 100,
-        });
+    if (phoneParts.length > 0) {
+      const phoneMatches = await prisma.customer.findMany({
+        where: {
+          OR: phoneParts.map((p) => ({ phone: { contains: p } })),
+          isDeleted: false,
+        },
+        include: {
+          assignedUser: { select: { fullName: true } },
+        },
+      });
+
+      for (const c of phoneMatches) {
+        if (!matches.find((m) => m.customerId === c.id)) {
+          matches.push({
+            customerId: c.id,
+            companyName: c.companyName,
+            contactName: c.contactName,
+            phone: c.phone,
+            email: c.email,
+            assignedUserId: c.assignedUserId,
+            assignedUserName: c.assignedUser.fullName,
+            lastContactDate: c.lastContactDate,
+            matchType: 'phone',
+            similarity: 100,
+          });
+        }
       }
     }
   }
 
-  // 3. Case-insensitive email match
+  // 3. Case-insensitive email match (her bir parça için ayrı sorgu)
   if (email) {
-    const emailMatches = await prisma.customer.findMany({
-      where: {
-        email: { equals: String(email), mode: 'insensitive' },
-        isDeleted: false,
-      },
-      include: {
-        assignedUser: { select: { fullName: true } },
-      },
-    });
+    const emailParts = splitMultiValue(String(email));
 
-    for (const c of emailMatches) {
-      if (!matches.find((m) => m.customerId === c.id)) {
-        matches.push({
-          customerId: c.id,
-          companyName: c.companyName,
-          contactName: c.contactName,
-          phone: c.phone,
-          email: c.email,
-          assignedUserId: c.assignedUserId,
-          assignedUserName: c.assignedUser.fullName,
-          lastContactDate: c.lastContactDate,
-          matchType: 'email',
-          similarity: 100,
-        });
+    if (emailParts.length > 0) {
+      const emailMatches = await prisma.customer.findMany({
+        where: {
+          OR: emailParts.map((p) => ({ email: { contains: p, mode: 'insensitive' as const } })),
+          isDeleted: false,
+        },
+        include: {
+          assignedUser: { select: { fullName: true } },
+        },
+      });
+
+      for (const c of emailMatches) {
+        if (!matches.find((m) => m.customerId === c.id)) {
+          matches.push({
+            customerId: c.id,
+            companyName: c.companyName,
+            contactName: c.contactName,
+            phone: c.phone,
+            email: c.email,
+            assignedUserId: c.assignedUserId,
+            assignedUserName: c.assignedUser.fullName,
+            lastContactDate: c.lastContactDate,
+            matchType: 'email',
+            similarity: 100,
+          });
+        }
       }
     }
   }

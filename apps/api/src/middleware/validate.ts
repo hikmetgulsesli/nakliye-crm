@@ -11,6 +11,7 @@ export function validate(schema: ZodSchema) {
         if (!errors[path]) errors[path] = [];
         errors[path].push(err.message);
       });
+      req.log.warn({ path: req.path, errors }, 'validation failed');
       return res.status(400).json({ success: false, message: 'Validasyon hatasi', errors });
     }
     req.body = result.data;

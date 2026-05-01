@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { Table } from '@/components/ui';
+import { Table, Icon } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import type { Customer } from '@nakliye-crm/shared';
 
 interface CustomerTableProps {
   data: Customer[];
   loading?: boolean;
+  mode?: 'active' | 'deleted';
+  onRestore?: (id: number) => void;
+  restoringId?: number | null;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -17,24 +20,36 @@ function formatDate(dateStr?: string | null): string {
   });
 }
 
-export function CustomerTable({ data, loading }: CustomerTableProps) {
+export function CustomerTable({
+  data,
+  loading,
+  mode = 'active',
+  onRestore,
+  restoringId,
+}: CustomerTableProps) {
   const navigate = useNavigate();
+  const isDeleted = mode === 'deleted';
 
   const columns = [
     {
       key: 'companyName',
       label: 'FIRMA ADI',
-      render: (row: Customer) => (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/musteriler/${row.id}`);
-          }}
-          className="text-primary font-bold hover:underline text-left"
-        >
-          {row.companyName}
-        </button>
-      ),
+      render: (row: Customer) =>
+        isDeleted ? (
+          <span className="text-slate-700 dark:text-slate-300 font-medium line-through decoration-slate-300 dark:decoration-slate-600">
+            {row.companyName}
+          </span>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/musteriler/${row.id}`);
+            }}
+            className="text-primary font-bold hover:underline text-left"
+          >
+            {row.companyName}
+          </button>
+        ),
     },
     {
       key: 'contactName',
@@ -90,6 +105,30 @@ export function CustomerTable({ data, loading }: CustomerTableProps) {
     },
   ];
 
+  if (isDeleted && onRestore) {
+    columns.push({
+      key: 'actions',
+      label: 'AKSIYON',
+      render: (row: Customer) => {
+        const isRestoring = restoringId === row.id;
+        return (
+          <button
+            type="button"
+            disabled={isRestoring}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRestore(row.id);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-60 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20"
+          >
+            <Icon name="restore" size="sm" />
+            {isRestoring ? 'Geri Yukleniyor...' : 'Geri Yükle'}
+          </button>
+        );
+      },
+    });
+  }
+
   if (loading) {
     return (
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -117,8 +156,8 @@ export function CustomerTable({ data, loading }: CustomerTableProps) {
       <Table<Customer & Record<string, unknown>>
         columns={columns}
         data={data as (Customer & Record<string, unknown>)[]}
-        onRowClick={(row) => navigate(`/musteriler/${row.id}`)}
-        emptyMessage="Müşteri bulunamadı"
+        onRowClick={isDeleted ? undefined : (row) => navigate(`/musteriler/${row.id}`)}
+        emptyMessage={isDeleted ? 'Silinmiş müşteri bulunamadı' : 'Müşteri bulunamadı'}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import { parsePagination, paginatedResponse } from '../../utils/pagination';
 import { generateQuoteNumber } from '../../utils/quote-number';
 import { computeDiff } from '../../utils/diff';
 import { createAuditLog } from '../../utils/audit';
+import { logQuotationUpdateActivity } from '../../utils/activity-from-update';
 
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
@@ -111,6 +112,10 @@ export async function create(req: Request, res: Response) {
 
   const quoteNo = await generateQuoteNumber();
 
+  // USER kendi adına kayıt açar; ADMIN istediği temsilciye atayabilir.
+  const effectiveAssignedUserId =
+    req.user!.role === 'ADMIN' && assignedUserId ? assignedUserId : req.user!.userId;
+
   const quotation = await prisma.quotation.create({
     data: {
       quoteNo,
@@ -128,7 +133,7 @@ export async function create(req: Request, res: Response) {
       currency: currency || 'USD',
       priceNote,
       status: status || 'Bekliyor',
-      assignedUserId: assignedUserId || req.user!.userId,
+      assignedUserId: effectiveAssignedUserId,
       createdById: req.user!.userId,
     },
     include: {
@@ -161,9 +166,8 @@ export async function update(req: Request, res: Response) {
     throw new AppError('Teklif bulunamadı', 404);
   }
 
-  if (req.user!.role !== 'ADMIN' && existing.assignedUserId !== req.user!.userId) {
-    throw new AppError('Bu teklif için yetkiniz yok', 403);
-  }
+  // Tüm USER'lar her teklifi düzenleyebilir; başkasının kaydında değişiklik
+  // yaparlarsa müşterinin aktivite akışına otomatik kayıt düşer (aşağıda).
 
   const {
     quoteDate, validityDate, transportMode, serviceType,
@@ -234,6 +238,21 @@ export async function update(req: Request, res: Response) {
     action: 'UPDATE',
     changes,
   });
+
+  // Sahibi olmayan biri düzenlediyse müşterinin aktivite akışına iz bırak.
+  if (existing.assignedUserId !== req.user!.userId) {
+    const editor = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { fullName: true },
+    });
+    await logQuotationUpdateActivity({
+      customerId: existing.customerId,
+      changes,
+      byUserId: req.user!.userId,
+      byUserName: editor?.fullName,
+      quoteNo: existing.quoteNo,
+    });
+  }
 
   // Status "Kazanıldı" olduysa auto-create shipment
   if (

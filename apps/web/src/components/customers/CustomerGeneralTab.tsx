@@ -1,5 +1,6 @@
 import { Card, Icon } from '@/components/ui';
 import type { Customer } from '@nakliye-crm/shared';
+import { splitMultiValue } from '@nakliye-crm/shared';
 
 interface CustomerGeneralTabProps {
   customer: Customer;
@@ -19,8 +20,8 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       <Card title="İletişim Bilgileri">
         <div className="space-y-4">
           <InfoRow icon="person" label="Yetkili Kisi" value={customer.contactName} />
-          <InfoRow icon="phone" label="Telefon" value={customer.phone} />
-          <InfoRow icon="mail" label="E-posta" value={customer.email} />
+          <MultiInfoRow icon="phone" label="Telefon" value={customer.phone} />
+          <MultiInfoRow icon="mail" label="E-posta" value={customer.email} />
           <InfoRow icon="location_on" label="Adres" value={customer.address} />
         </div>
       </Card>
@@ -199,6 +200,44 @@ function InfoRow({
         <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
           {value || <span className="text-slate-400 dark:text-slate-500">Belirtilmemis</span>}
         </p>
+      </div>
+    </div>
+  );
+}
+
+function MultiInfoRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: string;
+  label: string;
+  value?: string | null;
+}) {
+  const parts = value ? splitMultiValue(value) : [];
+  return (
+    <div className="flex items-start gap-3">
+      <div className="flex items-center justify-center size-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5">
+        <Icon name={icon} size="sm" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
+        {parts.length === 0 ? (
+          <p className="text-sm font-medium">
+            <span className="text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+          </p>
+        ) : (
+          <ul className="space-y-0.5">
+            {parts.map((part, idx) => (
+              <li
+                key={`${part}-${idx}`}
+                className="text-sm font-medium text-slate-900 dark:text-slate-100 break-all"
+              >
+                {part}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

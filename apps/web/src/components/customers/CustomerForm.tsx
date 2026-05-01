@@ -8,14 +8,52 @@ import { cn } from '@/utils/cn';
 import { useLookups } from '@/hooks/useLookups';
 import { useDebounce } from '@/hooks/useDebounce';
 import { customerService, type ConflictMatch } from '@/services/customer.service';
+import { useAuthStore } from '@/stores/authStore';
 import type { Customer, CustomerCreateInput } from '@nakliye-crm/shared';
+import { splitMultiValue } from '@nakliye-crm/shared';
+
+function toFieldArray(input?: string | null): { value: string }[] {
+  if (!input) return [{ value: '' }];
+  const parts = splitMultiValue(input);
+  return parts.length > 0 ? parts.map((value) => ({ value })) : [{ value: '' }];
+}
 
 // Extended form schema to handle multiple phones/emails
 const customerFormSchema = z.object({
   companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalidir'),
   contactName: z.string().optional(),
-  phones: z.array(z.object({ value: z.string() })).min(1),
-  emails: z.array(z.object({ value: z.string() })).min(1),
+  phones: z
+    .array(
+      z.object({
+        value: z
+          .string()
+          .refine(
+            (v) => v.trim().length === 0 || v.replace(/[\s\-()]/g, '').length >= 10,
+            'Geçerli bir telefon numarasi giriniz',
+          ),
+      }),
+    )
+    .min(1)
+    .refine(
+      (arr) => arr.some((p) => p.value.trim().length > 0),
+      { message: 'En az bir telefon numarasi giriniz', path: ['0', 'value'] },
+    ),
+  emails: z
+    .array(
+      z.object({
+        value: z
+          .string()
+          .refine(
+            (v) => v.trim().length === 0 || z.string().email().safeParse(v.trim()).success,
+            'Geçerli bir e-posta adresi giriniz',
+          ),
+      }),
+    )
+    .min(1)
+    .refine(
+      (arr) => arr.some((e) => e.value.trim().length > 0),
+      { message: 'En az bir e-posta adresi giriniz', path: ['0', 'value'] },
+    ),
   address: z.string().optional(),
   showLocationDetails: z.boolean().optional(),
   transportModes: z.array(z.string()).optional(),
@@ -40,6 +78,7 @@ interface CustomerFormProps {
   loading?: boolean;
   conflictWarning?: string | null;
   users: { value: string; label: string }[];
+  formId?: string;
 }
 
 const TRANSPORT_MODES = [
@@ -56,8 +95,11 @@ export function CustomerForm({
   loading = false,
   conflictWarning,
   users,
+  formId = 'customer-form',
 }: CustomerFormProps) {
   const { getOptions } = useLookups();
+  const currentUser = useAuthStore((s) => s.user);
+  const isAdmin = currentUser?.role === 'ADMIN';
 
   const serviceTypeOptions = getOptions('service_type');
   const incotermOptions = getOptions('incoterm');
@@ -78,12 +120,8 @@ export function CustomerForm({
     defaultValues: {
       companyName: initialData?.companyName || '',
       contactName: initialData?.contactName || '',
-      phones: initialData?.phone
-        ? [{ value: initialData.phone }]
-        : [{ value: '' }],
-      emails: initialData?.email
-        ? [{ value: initialData.email }]
-        : [{ value: '' }],
+      phones: toFieldArray(initialData?.phone),
+      emails: toFieldArray(initialData?.email),
       address: initialData?.address || '',
       showLocationDetails: false,
       transportModes: initialData?.transportModes || [],
@@ -96,7 +134,13 @@ export function CustomerForm({
       potential: initialData?.potential || '',
       status: initialData?.status || 'Aktif',
       notes: initialData?.notes || '',
-      assignedUserId: initialData?.assignedUserId || (undefined as unknown as number),
+      assignedUserId:
+        initialData?.assignedUserId ??
+        (isAdmin
+          ? (undefined as unknown as number)
+          : currentUser?.id
+            ? Number(currentUser.id)
+            : (undefined as unknown as number)),
     },
   });
 
@@ -189,7 +233,7 @@ export function CustomerForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form id={formId} onSubmit={handleSubmit(handleFormSubmit)}>
       {/* Conflict warning banner */}
       {conflictWarning && (
         <div className="mb-6 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 dark:bg-amber-500/10 dark:border-amber-500/30">
@@ -485,18 +529,35 @@ export function CustomerForm({
             />
 
             {/* Atanan Temsilci */}
-            <Select
-              label="Atanan Temsilci"
-              options={users}
-              placeholder="Temsilci seciniz"
-              error={errors.assignedUserId?.message}
-              value={watch('assignedUserId')?.toString() || ''}
-              onChange={(e) =>
-                setValue('assignedUserId', Number(e.target.value), {
-                  shouldValidate: true,
-                })
-              }
-            />
+            {isAdmin ? (
+              <Select
+                label="Atanan Temsilci"
+                options={users}
+                placeholder="Temsilci seciniz"
+                error={errors.assignedUserId?.message}
+                value={watch('assignedUserId')?.toString() || ''}
+                onChange={(e) =>
+                  setValue('assignedUserId', Number(e.target.value), {
+                    shouldValidate: true,
+                  })
+                }
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  Atanan Temsilci
+                </label>
+                <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
+                  <Icon name="lock" size="sm" className="text-slate-400 dark:text-slate-500" />
+                  <span className="font-medium">
+                    {initialData?.assignedUser?.fullName ?? currentUser?.fullName ?? '-'}
+                  </span>
+                  <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">
+                    Yalnizca yöneticiler degistirebilir
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Notlar */}
             <Textarea

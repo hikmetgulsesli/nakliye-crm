@@ -19,6 +19,7 @@ export interface CustomerFilters {
   source?: string;
   startDate?: string;
   endDate?: string;
+  deleted?: boolean;
 }
 
 export interface ConflictMatch {
@@ -54,6 +55,7 @@ export const customerService = {
     if (filters?.source) params.source = filters.source;
     if (filters?.startDate) params.startDate = filters.startDate;
     if (filters?.endDate) params.endDate = filters.endDate;
+    if (filters?.deleted) params.deleted = 'true';
 
     const { data } = await api.get<PaginatedResponse<Customer>>('/customers', { params });
     return data;

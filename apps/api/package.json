@@ -10,6 +10,7 @@
     "db:migrate": "bunx prisma migrate dev",
     "db:deploy": "bunx prisma migrate deploy",
     "db:seed": "bun run prisma/seed.ts",
+    "db:seed:demo": "bun run prisma/seed-demo.ts",
     "db:studio": "bunx prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",
