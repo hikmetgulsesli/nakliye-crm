@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card, Button, Icon, Skeleton } from '@/components/ui';
 import api from '@/config/api';
 
@@ -16,13 +16,22 @@ interface Note {
 interface InternalNotesPanelProps {
   ownerType: 'customer' | 'quotation' | 'shipment';
   ownerId: number;
+  /** URL hash veya parent isteğiyle textarea'yı odaklamak icin tetikleyici */
+  focusSignal?: number;
 }
 
-export function InternalNotesPanel({ ownerType, ownerId }: InternalNotesPanelProps) {
+export function InternalNotesPanel({ ownerType, ownerId, focusSignal }: InternalNotesPanelProps) {
   const [notes, setNotes] = useState<Note[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [content, setContent] = useState('');
   const [saving, setSaving] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (focusSignal === undefined) return;
+    const t = window.setTimeout(() => textareaRef.current?.focus(), 50);
+    return () => window.clearTimeout(t);
+  }, [focusSignal]);
 
   async function fetchNotes() {
     setLoading(true);
@@ -63,6 +72,7 @@ export function InternalNotesPanel({ ownerType, ownerId }: InternalNotesPanelPro
     <Card title="İç Notlar">
       <div className="mb-4">
         <textarea
+          ref={textareaRef}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Not yazın... @isim ile ekip üyesini etiketleyin"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Icon, Modal, Skeleton } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
@@ -24,11 +24,29 @@ function formatDate(dateStr?: string | null): string {
 export default function CustomerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [noteFocusSignal, setNoteFocusSignal] = useState<number | undefined>(undefined);
+
+  // Hash veya buton tetiklemesinde "İç Notlar"a kaydir + textarea odakla
+  function focusInternalNotes() {
+    const el = document.getElementById('internal-notes');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setNoteFocusSignal((n) => (n ?? 0) + 1);
+  }
+
+  // URL hash #internal-notes ise ayni akisi tetikle (ornegin global search'ten gelis)
+  useEffect(() => {
+    if (!customer) return;
+    if (location.hash === '#internal-notes') {
+      const t = window.setTimeout(focusInternalNotes, 100);
+      return () => window.clearTimeout(t);
+    }
+  }, [customer, location.hash]);
 
   useEffect(() => {
     async function fetchCustomer() {
@@ -161,6 +179,14 @@ export default function CustomerDetailPage() {
           {/* Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <Button
+              variant="primary"
+              icon="edit_note"
+              onClick={focusInternalNotes}
+              className="!bg-blue-500 hover:!bg-blue-600 !text-white !shadow-blue-500/20"
+            >
+              Not Ekle
+            </Button>
+            <Button
               variant="secondary"
               icon="edit"
               onClick={() => navigate(`/musteriler/${customer.id}/duzenle`)}
@@ -189,17 +215,21 @@ export default function CustomerDetailPage() {
         </div>
       </FeatureGate>
 
+      {/* Internal notes — once geliyor cunku gunluk operasyonda en sik kullanilan */}
+      <FeatureGate feature="internal_notes">
+        <div id="internal-notes" className="mt-6 scroll-mt-24">
+          <InternalNotesPanel
+            ownerType="customer"
+            ownerId={customer.id}
+            focusSignal={noteFocusSignal}
+          />
+        </div>
+      </FeatureGate>
+
       {/* Documents */}
       <FeatureGate feature="documents">
         <div className="mt-6">
           <DocumentsPanel ownerType="customer" ownerId={customer.id} />
-        </div>
-      </FeatureGate>
-
-      {/* Internal notes */}
-      <FeatureGate feature="internal_notes">
-        <div className="mt-6">
-          <InternalNotesPanel ownerType="customer" ownerId={customer.id} />
         </div>
       </FeatureGate>
 

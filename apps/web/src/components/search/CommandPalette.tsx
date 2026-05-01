@@ -112,15 +112,57 @@ export function CommandPalette() {
                   {results.customers.map((c) => (
                     <Command.Item
                       key={`c-${c.id}`}
+                      value={`musteri ${c.companyName} ${c.contactName ?? ''}`}
                       onSelect={() => go(`/musteriler/${c.id}`)}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
+                      className="group flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer data-[selected=true]:bg-slate-100 dark:data-[selected=true]:bg-slate-800 text-sm"
                     >
                       <Icon name="business" size="sm" className="text-slate-400" />
-                      <div className="flex-1">
-                        <div className="font-medium">{c.companyName}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{c.companyName}</div>
                         {c.contactName && (
-                          <div className="text-xs text-slate-500">{c.contactName}</div>
+                          <div className="text-xs text-slate-500 truncate">{c.contactName}</div>
                         )}
+                      </div>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 group-data-[selected=true]:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          title="Görüşme notu ekle"
+                          aria-label="Görüşme notu ekle"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            go(`/musteriler/${c.id}#internal-notes`);
+                          }}
+                          className="rounded-md p-1.5 text-slate-500 hover:bg-primary/10 hover:text-primary"
+                        >
+                          <Icon name="edit_note" size="sm" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Teklif oluştur"
+                          aria-label="Teklif oluştur"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            go(`/teklifler/yeni?customerId=${c.id}`);
+                          }}
+                          className="rounded-md p-1.5 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300"
+                        >
+                          <Icon name="request_quote" size="sm" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Firma bilgilerini düzenle"
+                          aria-label="Firma bilgilerini düzenle"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            go(`/musteriler/${c.id}/duzenle`);
+                          }}
+                          className="rounded-md p-1.5 text-slate-500 hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-500/10 dark:hover:text-amber-300"
+                        >
+                          <Icon name="edit" size="sm" />
+                        </button>
                       </div>
                     </Command.Item>
                   ))}
