@@ -8,10 +8,28 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   icon?: string;
   options: { value: string; label: string }[];
   placeholder?: string;
+  /**
+   * Placeholder option'unu disabled yapar. Form alani zorunluysa true ver,
+   * filtre alani gibi "tum kayitlar" anlamina geliyorsa false (varsayilan).
+   */
+  placeholderDisabled?: boolean;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, icon, options, placeholder, className, id, ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      icon,
+      options,
+      placeholder,
+      placeholderDisabled = false,
+      className,
+      id,
+      ...props
+    },
+    ref,
+  ) => {
     const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
@@ -44,7 +62,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             {...props}
           >
             {placeholder && (
-              <option value="" disabled>
+              <option value="" disabled={placeholderDisabled}>
                 {placeholder}
               </option>
             )}
