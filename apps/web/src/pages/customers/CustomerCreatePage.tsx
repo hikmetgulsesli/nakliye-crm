@@ -1,11 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { FormActions } from '@/components/shared/FormActions';
 import { CustomerForm } from '@/components/customers/CustomerForm';
 import { ConflictWarningModal } from '@/components/customers/ConflictWarningModal';
 import { customerService, type ConflictMatch } from '@/services/customer.service';
 import { userService } from '@/services/user.service';
 import type { CustomerCreateInput } from '@nakliye-crm/shared';
+import axios from 'axios';
+
+function extractErrorMessage(err: unknown): string {
+  const fallback = 'Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.';
+  if (axios.isAxiosError(err)) {
+    const data = err.response?.data as
+      | { message?: string; errors?: Record<string, string[]> }
+      | undefined;
+    if (data?.errors && Object.keys(data.errors).length > 0) {
+      const fieldLabels: Record<string, string> = {
+        companyName: 'Firma adı',
+        contactName: 'Yetkili adı',
+        phone: 'Telefon',
+        email: 'E-posta',
+        assignedUserId: 'Atanan temsilci',
+        address: 'Adres',
+      };
+      const lines = Object.entries(data.errors).map(([path, msgs]) => {
+        const label = fieldLabels[path] ?? path;
+        return `${label}: ${msgs.join(', ')}`;
+      });
+      return `${data.message ?? 'Validasyon hatası'} — ${lines.join(' | ')}`;
+    }
+    if (data?.message) return data.message;
+  }
+  return fallback;
+}
 
 export default function CustomerCreatePage() {
   const navigate = useNavigate();
@@ -62,7 +90,7 @@ export default function CustomerCreatePage() {
       const customer = await customerService.create(data);
       navigate(`/musteriler/${customer.id}`);
     } catch (err: unknown) {
-      setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+      setConflictWarning(extractErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -94,6 +122,13 @@ export default function CustomerCreatePage() {
           { label: 'Yeni Müşteri Ekle' },
         ]}
         title="Yeni Müşteri Ekle"
+        action={
+          <FormActions
+            formId="customer-form"
+            onCancel={() => navigate('/musteriler')}
+            loading={loading}
+          />
+        }
       />
 
       <CustomerForm

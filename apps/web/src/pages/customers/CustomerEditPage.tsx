@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { FormActions } from '@/components/shared/FormActions';
 import { CustomerForm } from '@/components/customers/CustomerForm';
 import { customerService } from '@/services/customer.service';
 import { userService } from '@/services/user.service';
@@ -80,6 +81,13 @@ export default function CustomerEditPage() {
           { label: 'Düzenle' },
         ]}
         title="Müşteri Düzenle"
+        action={
+          <FormActions
+            formId="customer-form"
+            onCancel={() => navigate(`/musteriler/${id}`)}
+            loading={loading}
+          />
+        }
       />
 
       <CustomerForm

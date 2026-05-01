@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Pagination } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -9,16 +9,31 @@ import { quotationService, type QuotationFilters as QuotationFiltersType } from 
 import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
 import type { Quotation } from '@nakliye-crm/shared';
 
 const EMPTY_FILTERS: QuotationFiltersType = {};
 
+function filtersFromSearchParams(params: URLSearchParams): QuotationFiltersType {
+  const out: QuotationFiltersType = {};
+  const status = params.get('status');
+  const transportMode = params.get('transportMode');
+  const assignedUserId = params.get('assignedUserId');
+  if (status) out.status = status;
+  if (transportMode) out.transportMode = transportMode;
+  if (assignedUserId) out.assignedUserId = Number(assignedUserId);
+  return out;
+}
+
 export default function QuoteListPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { currentUserId, onlyMine, setOnlyMine } = useOnlyMinePref('quotations');
   const [quotations, setQuotations] = useState<Quotation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<QuotationFiltersType>(EMPTY_FILTERS);
-  const [appliedFilters, setAppliedFilters] = useState<QuotationFiltersType>(EMPTY_FILTERS);
+  const initialFromUrl = filtersFromSearchParams(searchParams);
+  const [filters, setFilters] = useState<QuotationFiltersType>(initialFromUrl);
+  const [appliedFilters, setAppliedFilters] = useState<QuotationFiltersType>(initialFromUrl);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
@@ -48,9 +63,12 @@ export default function QuoteListPage() {
   const fetchQuotations = useCallback(async () => {
     setLoading(true);
     try {
-      const filtersToApply = { ...appliedFilters };
+      const filtersToApply: QuotationFiltersType = { ...appliedFilters };
       if (debouncedSearch) {
         filtersToApply.search = debouncedSearch;
+      }
+      if (onlyMine && currentUserId) {
+        filtersToApply.assignedUserId = currentUserId;
       }
       const result = await quotationService.getAll(page, pageSize, filtersToApply);
       setQuotations(result.data);
@@ -60,7 +78,7 @@ export default function QuoteListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, setTotal]);
+  }, [page, pageSize, appliedFilters, debouncedSearch, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchQuotations();
@@ -108,6 +126,13 @@ export default function QuoteListPage() {
         onApply={handleApplyFilters}
         onClear={handleClearFilters}
         users={users}
+        showOnlyMine
+        onlyMine={onlyMine}
+        onOnlyMineChange={(next) => {
+          setOnlyMine(next);
+          setPage(1);
+        }}
+        hideAssignedUserSelect={onlyMine}
       />
 
       {!loading && quotations.length === 0 ? (

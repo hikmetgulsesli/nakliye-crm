@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Pagination } from '@/components/ui';
+import { Button, Pagination, Icon } from '@/components/ui';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { CustomerTable } from '@/components/customers/CustomerTable';
@@ -9,18 +9,25 @@ import { customerService, type CustomerFilters as CustomerFiltersType } from '@/
 import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useAuthStore } from '@/stores/authStore';
+import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
+import { cn } from '@/utils/cn';
 import type { Customer } from '@nakliye-crm/shared';
 
 const EMPTY_FILTERS: CustomerFiltersType = {};
 
 export default function CustomerListPage() {
   const navigate = useNavigate();
+  const isAdmin = useAuthStore((s) => s.isAdmin());
+  const { currentUserId, onlyMine, setOnlyMine } = useOnlyMinePref('customers');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [appliedFilters, setAppliedFilters] = useState<CustomerFiltersType>(EMPTY_FILTERS);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleted, setShowDeleted] = useState(false);
+  const [restoringId, setRestoringId] = useState<number | null>(null);
   const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
 
   const debouncedSearch = useDebounce(filters.search, 400);
@@ -48,10 +55,17 @@ export default function CustomerListPage() {
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
     try {
-      const filtersToApply = { ...appliedFilters };
+      const filtersToApply: CustomerFiltersType = { ...appliedFilters };
       // Use debounced search for auto-search
       if (debouncedSearch) {
         filtersToApply.search = debouncedSearch;
+      }
+      if (showDeleted) {
+        filtersToApply.deleted = true;
+      }
+      // "Sadece kendi kayıtlarım" işaretliyse, tüm rollerde geçerli
+      if (onlyMine && currentUserId) {
+        filtersToApply.assignedUserId = currentUserId;
       }
       const result = await customerService.getAll(page, pageSize, filtersToApply);
       setCustomers(result.data);
@@ -61,11 +75,29 @@ export default function CustomerListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, setTotal]);
+  }, [page, pageSize, appliedFilters, debouncedSearch, showDeleted, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchCustomers();
   }, [fetchCustomers]);
+
+  async function handleRestore(id: number) {
+    setRestoringId(id);
+    try {
+      await customerService.restore(id);
+      await fetchCustomers();
+    } catch (err) {
+      setError('Müşteri geri yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+    } finally {
+      setRestoringId(null);
+    }
+  }
+
+  function toggleDeletedView(next: boolean) {
+    if (next === showDeleted) return;
+    setShowDeleted(next);
+    setPage(1);
+  }
 
   function handleApplyFilters() {
     setAppliedFilters({ ...filters });
@@ -107,28 +139,82 @@ export default function CustomerListPage() {
         </div>
       )}
 
-      <CustomerFilters
-        filters={filters}
-        onChange={setFilters}
-        onApply={handleApplyFilters}
-        onClear={handleClearFilters}
-        users={users}
-      />
+      {isAdmin && (
+        <div className="mb-4 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <button
+            type="button"
+            onClick={() => toggleDeletedView(false)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+              !showDeleted
+                ? 'bg-primary/10 text-primary'
+                : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800',
+            )}
+          >
+            <Icon name="group" size="sm" />
+            Aktif Müşteriler
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleDeletedView(true)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+              showDeleted
+                ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-200'
+                : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800',
+            )}
+          >
+            <Icon name="delete" size="sm" />
+            Silinmiş Müşteriler
+          </button>
+        </div>
+      )}
+
+      {!showDeleted && (
+        <CustomerFilters
+          filters={filters}
+          onChange={setFilters}
+          onApply={handleApplyFilters}
+          onClear={handleClearFilters}
+          users={users}
+          showOnlyMine
+          onlyMine={onlyMine}
+          onOnlyMineChange={(next) => {
+            setOnlyMine(next);
+            setPage(1);
+          }}
+          hideAssignedUserSelect={onlyMine}
+        />
+      )}
 
       {!loading && customers.length === 0 ? (
-        <EmptyState
-          icon="group"
-          title="Henuz müşteri eklenmemis"
-          description="Ilk müşterinizi ekleyerek baslayabilirsiniz."
-          action={
-            <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
-              Yeni Müşteri Ekle
-            </Button>
-          }
-        />
+        showDeleted ? (
+          <EmptyState
+            icon="delete"
+            title="Silinmiş müşteri bulunamadı"
+            description="Geri yüklenecek bir kayit yok."
+          />
+        ) : (
+          <EmptyState
+            icon="group"
+            title="Henuz müşteri eklenmemis"
+            description="Ilk müşterinizi ekleyerek baslayabilirsiniz."
+            action={
+              <Button icon="add" onClick={() => navigate('/musteriler/yeni')}>
+                Yeni Müşteri Ekle
+              </Button>
+            }
+          />
+        )
       ) : (
         <>
-          <CustomerTable data={customers} loading={loading} />
+          <CustomerTable
+            data={customers}
+            loading={loading}
+            mode={showDeleted ? 'deleted' : 'active'}
+            onRestore={showDeleted ? handleRestore : undefined}
+            restoringId={restoringId}
+          />
 
           {/* Pagination */}
           <div className="mt-4">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { FormActions } from '@/components/shared/FormActions';
 import { QuotationForm } from '@/components/quotations/QuotationForm';
 import { quotationService } from '@/services/quotation.service';
 import { userService } from '@/services/user.service';
@@ -81,6 +82,13 @@ export default function QuoteEditPage() {
         ]}
         title="Teklif Düzenle"
         subtitle={quotation?.quoteNo ? `${quotation.quoteNo} numarali teklifi duzenliyorsunuz` : ''}
+        action={
+          <FormActions
+            formId="quotation-form"
+            onCancel={() => navigate(`/teklifler/${id}`)}
+            loading={loading}
+          />
+        }
       />
 
       {error && (
