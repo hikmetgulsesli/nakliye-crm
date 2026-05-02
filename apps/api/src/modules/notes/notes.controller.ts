@@ -4,9 +4,13 @@ import { AppError } from '../../middleware/error-handler';
 
 const VALID_OWNER_TYPES = ['customer', 'quotation', 'shipment'];
 
-function extractMentions(content: string): string[] {
-  const matches = content.matchAll(/@([a-zA-Z0-9_ğüşıöçĞÜŞİÖÇ.]+)/g);
-  return Array.from(new Set([...matches].map((m) => m[1])));
+// "@Ahmet Yilmaz" gibi cok kelimeli isimleri de yakalar; en fazla 3 kelimeli ad-soyad.
+// Turkce karakterler dahil; nokta ad kisaltmalari icin (Ahmet Y.).
+const MENTION_REGEX = /@([A-Za-zÇĞİıÖŞÜçğıöşü.]+(?:\s+[A-Za-zÇĞİıÖŞÜçğıöşü.]+){0,2})/g;
+
+function extractMentionTokens(content: string): string[] {
+  const matches = content.matchAll(MENTION_REGEX);
+  return Array.from(new Set([...matches].map((m) => m[1].trim())));
 }
 
 export async function list(req: Request, res: Response) {
@@ -20,7 +24,6 @@ export async function list(req: Request, res: Response) {
     take: 100,
   });
 
-  // Include author
   const authorIds = [...new Set(notes.map((n) => n.authorId))];
   const authors = await prisma.user.findMany({
     where: { id: { in: authorIds } },
@@ -33,28 +36,41 @@ export async function list(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-  const { ownerType, ownerId, content } = req.body as {
+  const {
+    ownerType,
+    ownerId,
+    content,
+    mentionedUserIds: bodyMentionIds,
+  } = req.body as {
     ownerType: string;
     ownerId: number;
     content: string;
+    mentionedUserIds?: number[];
   };
   if (!content?.trim()) throw new AppError('content zorunlu', 400);
   if (!VALID_OWNER_TYPES.includes(ownerType)) throw new AppError('Gecersiz ownerType', 400);
 
-  // @mention kullanicilarini cozumle
-  const mentionNames = extractMentions(content);
-  let mentionedUserIds: number[] = [];
-  if (mentionNames.length > 0) {
+  // Frontend autocomplete'ten gelen ID'ler birincil kaynaktir; metinden regex parse
+  // fallback olarak (eski client veya elle yazilan ad icin) calisir.
+  const explicitIds = Array.isArray(bodyMentionIds)
+    ? bodyMentionIds.filter((n) => Number.isInteger(n) && n > 0)
+    : [];
+
+  let resolvedFromText: number[] = [];
+  const tokens = extractMentionTokens(content);
+  if (tokens.length > 0) {
     const users = await prisma.user.findMany({
       where: {
-        OR: mentionNames.map((n) => ({
+        OR: tokens.map((n) => ({
           fullName: { contains: n, mode: 'insensitive' as const },
         })),
       },
       select: { id: true },
     });
-    mentionedUserIds = users.map((u) => u.id);
+    resolvedFromText = users.map((u) => u.id);
   }
+
+  const mentionedUserIds = Array.from(new Set([...explicitIds, ...resolvedFromText]));
 
   const note = await prisma.internalNote.create({
     data: {
@@ -66,23 +82,30 @@ export async function create(req: Request, res: Response) {
     },
   });
 
-  // Bildirim olustur
-  if (mentionedUserIds.length > 0) {
+  // Bildirim olustur — kendine etiket yapanlar atilir.
+  // createMany Prisma middleware'i tetiklemedigi icin tek tek create ediyoruz;
+  // boylece database.ts'deki Notification create middleware'i Socket.IO emit yapar.
+  const targets = mentionedUserIds.filter((uid) => uid !== req.user!.userId);
+  if (targets.length > 0) {
     const author = await prisma.user.findUnique({
       where: { id: req.user!.userId },
       select: { fullName: true },
     });
-    await prisma.notification.createMany({
-      data: mentionedUserIds
-        .filter((uid) => uid !== req.user!.userId)
-        .map((uid) => ({
-          userId: uid,
-          type: 'info',
-          title: 'Notta etiketlendiniz',
-          message: `${author?.fullName} sizi bir notta etiketledi: ${content.slice(0, 80)}`,
-          link: `/${ownerType === 'customer' ? 'musteriler' : ownerType === 'quotation' ? 'teklifler' : 'sevkiyatlar'}/${ownerId}`,
-        })),
-    });
+    const link = `/${ownerType === 'customer' ? 'musteriler' : ownerType === 'quotation' ? 'teklifler' : 'sevkiyatlar'}/${ownerId}#internal-notes`;
+    const message = `${author?.fullName ?? 'Bir kullanici'} sizi bir notta etiketledi: ${content.slice(0, 80)}`;
+    await Promise.all(
+      targets.map((uid) =>
+        prisma.notification.create({
+          data: {
+            userId: uid,
+            type: 'info',
+            title: 'Notta etiketlendiniz',
+            message,
+            link,
+          },
+        }),
+      ),
+    );
   }
 
   res.status(201).json({ success: true, data: note });

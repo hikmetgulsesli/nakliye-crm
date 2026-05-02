@@ -18,12 +18,25 @@ interface NotificationState {
   fetch: () => Promise<void>;
   markRead: (id: string) => Promise<void>;
   markAllRead: () => Promise<void>;
+  /** Socket.IO 'notification:new' geldiginde cagrilir; ust uste eklenir, sayac artar. */
+  pushFromSocket: (n: Notification) => void;
 }
 
 export const useNotificationStore = create<NotificationState>()((set, _get) => ({
   notifications: [],
   unreadCount: 0,
   isLoading: false,
+
+  pushFromSocket: (n: Notification) => {
+    set((state) => {
+      // Ayni id zaten varsa tekrar ekleme (cift emit/refresh durumu)
+      if (state.notifications.some((x) => x.id === n.id)) return state;
+      return {
+        notifications: [n, ...state.notifications].slice(0, 100),
+        unreadCount: state.unreadCount + (n.isRead ? 0 : 1),
+      };
+    });
+  },
 
   fetch: async () => {
     set({ isLoading: true });

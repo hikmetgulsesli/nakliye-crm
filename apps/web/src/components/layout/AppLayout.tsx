@@ -5,6 +5,7 @@ import Header from './Header';
 import { CommandPalette } from '@/components/search/CommandPalette';
 import { AIPanel } from '@/components/ai/AIPanel';
 import { useFeaturesStore, useFeature } from '@/stores/featuresStore';
+import { initRealtime } from '@/config/socket';
 
 export default function AppLayout() {
   const fetchFeatures = useFeaturesStore((s) => s.fetch);
@@ -13,6 +14,9 @@ export default function AppLayout() {
 
   useEffect(() => {
     fetchFeatures();
+    // Realtime baglanti — auth token'a abone, login/logout otomatik takip eder.
+    // Idempotent: ayni tokenla tekrar cagrilirsa yeni baglanti acmaz.
+    initRealtime();
   }, [fetchFeatures]);
 
   // Ctrl/Cmd+J ile AI panel aç/kapa
