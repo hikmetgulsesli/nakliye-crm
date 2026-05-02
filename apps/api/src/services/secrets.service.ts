@@ -62,11 +62,17 @@ function settingKey(name: string): string {
  * Hassas degeri guvenli sakla. Bos string silme anlamina gelir.
  */
 export async function setSecret(name: string, plaintext: string, userId?: number): Promise<void> {
-  if (!plaintext || plaintext.trim() === '') {
+  // Kopyala-yapistirinda gozle gorunmeyen whitespace/zero-width karakterler
+  // sizabilir. API key'lerin basinda/sonunda gercek bosluk olmaz; otomatik
+  // temizle ki "401 Invalid Authentication" tuzagina dusulmesin.
+  // ​-‏ = ZWSP/ZWNJ/ZWJ/LRM/RLM, ﻿ = BOM
+  const INVISIBLE = new RegExp('^[\\s\\u200B-\\u200F\\uFEFF]+|[\\s\\u200B-\\u200F\\uFEFF]+$', 'g');
+  const cleaned = (plaintext ?? '').replace(INVISIBLE, '');
+  if (!cleaned) {
     await setSetting(settingKey(name), null, userId);
     return;
   }
-  const enc = encrypt(plaintext);
+  const enc = encrypt(cleaned);
   await setSetting(settingKey(name), enc as unknown as object, userId);
 }
 
@@ -132,6 +138,7 @@ export const SECRET_NAMES = [
   { name: 'openai_api_key', envVar: 'OPENAI_API_KEY', label: 'OpenAI API Key', category: 'ai' },
   { name: 'minimax_api_key', envVar: 'MINIMAX_API_KEY', label: 'MiniMax API Key', category: 'ai' },
   { name: 'kimi_api_key', envVar: 'KIMI_API_KEY', label: 'Kimi (Moonshot) API Key', category: 'ai' },
+  { name: 'groq_api_key', envVar: 'GROQ_API_KEY', label: 'Groq API Key', category: 'ai' },
   // Email
   { name: 'resend_api_key', envVar: 'RESEND_API_KEY', label: 'Resend API Key (e-posta)', category: 'email' },
   { name: 'smtp_host', envVar: 'SMTP_HOST', label: 'SMTP Host', category: 'email' },

@@ -221,6 +221,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   openai: 'OpenAI (GPT)',
   minimax: 'MiniMax',
   kimi: 'Kimi (Moonshot)',
+  groq: 'Groq (LPU)',
 };
 
 function AITab({ data, save, saving }: TabProps) {

@@ -10,6 +10,7 @@ import { claudeProvider } from './providers/claude';
 import { openaiProvider } from './providers/openai';
 import { minimaxProvider } from './providers/minimax';
 import { kimiProvider } from './providers/kimi';
+import { groqProvider } from './providers/groq';
 import { prisma } from '../../config/database';
 import { logger } from '../../config/logger';
 import { getSetting } from '../system-settings.service';
@@ -19,6 +20,7 @@ const PROVIDERS: Record<AIProviderName, AIProvider> = {
   openai: openaiProvider,
   minimax: minimaxProvider,
   kimi: kimiProvider,
+  groq: groqProvider,
 };
 
 export const ALL_PROVIDERS = PROVIDERS;
@@ -120,6 +122,7 @@ const PROVIDER_ENV_MAP: Record<AIProviderName, { secret: string; envVar: string 
   openai: { secret: 'openai_api_key', envVar: 'OPENAI_API_KEY' },
   minimax: { secret: 'minimax_api_key', envVar: 'MINIMAX_API_KEY' },
   kimi: { secret: 'kimi_api_key', envVar: 'KIMI_API_KEY' },
+  groq: { secret: 'groq_api_key', envVar: 'GROQ_API_KEY' },
 };
 
 export async function listProvidersStatusAsync(): Promise<Array<{

@@ -1,4 +1,4 @@
-export type AIProviderName = 'claude' | 'openai' | 'minimax' | 'kimi';
+export type AIProviderName = 'claude' | 'openai' | 'minimax' | 'kimi' | 'groq';
 
 export type AITaskName =
   | 'draft-email'

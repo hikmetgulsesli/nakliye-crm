@@ -24,6 +24,14 @@ const PRICING: Record<string, { input: number; output: number }> = {
   'moonshot-v1-8k': { input: 1.65, output: 1.65 },
   'moonshot-v1-32k': { input: 3.3, output: 3.3 },
   'moonshot-v1-128k': { input: 8.25, output: 8.25 },
+  // Groq (LPU inference, very low latency)
+  'llama-3.1-8b-instant': { input: 0.05, output: 0.08 },
+  'llama-3.3-70b-versatile': { input: 0.59, output: 0.79 },
+  'llama-3.1-70b': { input: 0.59, output: 0.79 },
+  'meta-llama/llama-4-scout-17b-16e-instruct': { input: 0.11, output: 0.34 },
+  'qwen/qwen3-32b': { input: 0.29, output: 0.59 },
+  'openai/gpt-oss-20b': { input: 0.075, output: 0.3 },
+  'openai/gpt-oss-120b': { input: 0.15, output: 0.6 },
 };
 
 export function estimateCost(model: string, inputTokens: number, outputTokens: number): number {
@@ -44,5 +52,7 @@ export function defaultModel(provider: AIProviderName): string {
       return process.env.MINIMAX_DEFAULT_MODEL || 'MiniMax-Text-01';
     case 'kimi':
       return process.env.KIMI_DEFAULT_MODEL || 'moonshot-v1-32k';
+    case 'groq':
+      return process.env.GROQ_DEFAULT_MODEL || 'llama-3.3-70b-versatile';
   }
 }

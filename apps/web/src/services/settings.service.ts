@@ -1,7 +1,7 @@
 import api from '@/config/api';
 
 export interface AIProviderStatus {
-  name: 'claude' | 'openai' | 'minimax' | 'kimi';
+  name: 'claude' | 'openai' | 'minimax' | 'kimi' | 'groq';
   configured: boolean;
   source?: 'env' | 'db' | null;
   lastFour?: string | null;
