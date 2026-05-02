@@ -53,11 +53,30 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
   const location = useLocation();
   const crumbs = deriveCrumbs(location.pathname);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [ringing, setRinging] = useState(false);
+  const prevUnreadRef = useRef(unreadCount);
+  const ringTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  // Okunmamis sayisi artarsa zili 1 sn salla — yeni bildirim geldigine isaret
+  useEffect(() => {
+    if (unreadCount > prevUnreadRef.current) {
+      setRinging(true);
+      if (ringTimerRef.current) clearTimeout(ringTimerRef.current);
+      ringTimerRef.current = setTimeout(() => setRinging(false), 1000);
+    }
+    prevUnreadRef.current = unreadCount;
+  }, [unreadCount]);
+
+  useEffect(() => {
+    return () => {
+      if (ringTimerRef.current) clearTimeout(ringTimerRef.current);
+    };
+  }, []);
 
   const toggleNotif = useCallback(() => setNotifOpen((p) => !p), []);
   const closeNotif = useCallback(() => setNotifOpen(false), []);
@@ -149,18 +168,50 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
         <div className="relative">
           <button
             onClick={toggleNotif}
-            aria-label="Bildirimler"
+            aria-label={
+              unreadCount > 0
+                ? `${unreadCount} okunmamış bildirim`
+                : 'Bildirimler'
+            }
             className={cn(
               'relative grid size-8 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
               notifOpen && 'bg-token-bg-hover text-token-text',
+              unreadCount > 0 && !notifOpen && 'text-token-text',
             )}
           >
-            <Icon name="notifications" size="sm" />
+            {/* Zil ikonu — yeni geldiginde sallanma origin top-center */}
+            <span
+              className={cn(
+                'inline-block transition-transform',
+                ringing && 'origin-top animate-bell-ring',
+              )}
+            >
+              <Icon
+                name={unreadCount > 0 ? 'notifications_active' : 'notifications'}
+                size="sm"
+              />
+            </span>
+
+            {/* Yeni geldiginde dis halka pulse */}
+            {ringing && (
+              <span
+                className="pointer-events-none absolute inset-0 rounded-md ring-2 animate-bell-pulse"
+                style={{ borderColor: 'var(--magenta)', boxShadow: '0 0 0 2px var(--magenta)' }}
+                aria-hidden
+              />
+            )}
+
+            {/* Sayi badge'i */}
             {unreadCount > 0 && (
               <span
-                className="absolute right-1.5 top-1.5 size-1.5 rounded-full"
+                className={cn(
+                  'absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-token-bg-elev',
+                  ringing && 'animate-bell-ring origin-bottom',
+                )}
                 style={{ background: 'var(--magenta)' }}
-              />
+              >
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
             )}
           </button>
           <NotificationDropdown open={notifOpen} onClose={closeNotif} />
