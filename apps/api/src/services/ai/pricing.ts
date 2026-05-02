@@ -16,6 +16,8 @@ const PRICING: Record<string, { input: number; output: number }> = {
   'gpt-4o': { input: 2.5, output: 10 },
   'gpt-4-turbo': { input: 10, output: 30 },
   // MiniMax (USD approx; converted from CNY reference ~2024-2025)
+  'MiniMax-M1': { input: 0.4, output: 2.2 },
+  'MiniMax-Text-01': { input: 0.2, output: 1.1 },
   'abab6.5s': { input: 0.2, output: 0.8 },
   'abab7': { input: 0.4, output: 1.6 },
   // Kimi (Moonshot)
@@ -39,7 +41,7 @@ export function defaultModel(provider: AIProviderName): string {
     case 'openai':
       return process.env.OPENAI_DEFAULT_MODEL || 'gpt-4o-mini';
     case 'minimax':
-      return process.env.MINIMAX_DEFAULT_MODEL || 'abab6.5s-chat';
+      return process.env.MINIMAX_DEFAULT_MODEL || 'MiniMax-Text-01';
     case 'kimi':
       return process.env.KIMI_DEFAULT_MODEL || 'moonshot-v1-32k';
   }

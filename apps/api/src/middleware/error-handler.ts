@@ -23,8 +23,14 @@ export function errorHandler(err: Error, req: Request, res: Response, _next: Nex
     tags: { path: req.path, method: req.method },
     user: req.user ? { id: String(req.user.userId), email: req.user.email } : undefined,
   });
+  // Dev/staging'de gercek mesaji da yolla — production'da gizli kalir.
+  const devDetails =
+    process.env.NODE_ENV !== 'production'
+      ? { detail: err.message, name: err.name }
+      : {};
   return res.status(500).json({
     success: false,
     message: 'Sunucu hatasi oluştu',
+    ...devDetails,
   });
 }

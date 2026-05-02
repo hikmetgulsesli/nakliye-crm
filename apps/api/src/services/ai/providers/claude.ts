@@ -22,10 +22,9 @@ export const claudeProvider: AIProvider = {
     return defaultModel('claude');
   },
 
-  isConfigured() {
-    // Async kontrol icin asilinda await gerek ama interface sync —
-    // quick check: env var. DB'de key varsa gerçek kontrol chat() sırasında olur.
-    return Boolean(process.env.ANTHROPIC_API_KEY);
+  async isConfigured() {
+    const key = await getSecret('anthropic_api_key', 'ANTHROPIC_API_KEY');
+    return Boolean(key);
   },
 
   async chat(messages: AIMessage[], opts: AIChatOptions = {}): Promise<AIChatResult> {

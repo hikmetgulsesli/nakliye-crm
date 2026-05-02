@@ -27,8 +27,13 @@ export const kimiProvider: AIProvider = {
     return defaultModel('kimi');
   },
 
-  isConfigured() {
-    return Boolean(process.env.KIMI_API_KEY || process.env.MOONSHOT_API_KEY);
+  async isConfigured() {
+    // Hem KIMI_API_KEY hem de MOONSHOT_API_KEY env adlari kabul edilir
+    const key =
+      (await getSecret('kimi_api_key', 'KIMI_API_KEY')) ||
+      process.env.MOONSHOT_API_KEY ||
+      null;
+    return Boolean(key);
   },
 
   async chat(messages: AIMessage[], opts: AIChatOptions = {}): Promise<AIChatResult> {

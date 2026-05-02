@@ -22,8 +22,9 @@ export const openaiProvider: AIProvider = {
     return defaultModel('openai');
   },
 
-  isConfigured() {
-    return Boolean(process.env.OPENAI_API_KEY);
+  async isConfigured() {
+    const key = await getSecret('openai_api_key', 'OPENAI_API_KEY');
+    return Boolean(key);
   },
 
   async chat(messages: AIMessage[], opts: AIChatOptions = {}): Promise<AIChatResult> {

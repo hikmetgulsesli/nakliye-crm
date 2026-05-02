@@ -27,8 +27,9 @@ export const minimaxProvider: AIProvider = {
     return defaultModel('minimax');
   },
 
-  isConfigured() {
-    return Boolean(process.env.MINIMAX_API_KEY);
+  async isConfigured() {
+    const key = await getSecret('minimax_api_key', 'MINIMAX_API_KEY');
+    return Boolean(key);
   },
 
   async chat(messages: AIMessage[], opts: AIChatOptions = {}): Promise<AIChatResult> {

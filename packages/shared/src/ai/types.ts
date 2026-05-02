@@ -42,5 +42,5 @@ export interface AIProvider {
   readonly name: AIProviderName;
   readonly defaultModel: string;
   chat(messages: AIMessage[], opts?: AIChatOptions): Promise<AIChatResult>;
-  isConfigured(): boolean;
+  isConfigured(): Promise<boolean>;
 }

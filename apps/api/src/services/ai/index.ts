@@ -29,22 +29,22 @@ export async function resolveProvider(task?: AITaskName): Promise<AIProvider> {
     const taskSetting = await getSetting<string>(`ai.task.${task}.provider`);
     if (taskSetting && taskSetting in PROVIDERS) {
       const p = PROVIDERS[taskSetting as AIProviderName];
-      if (p.isConfigured()) return p;
+      if (await p.isConfigured()) return p;
     }
   }
   // 2) Global default from DB settings
   const defaultProvider = await getSetting<string>('ai.default.provider');
   if (defaultProvider && defaultProvider in PROVIDERS) {
     const p = PROVIDERS[defaultProvider as AIProviderName];
-    if (p.isConfigured()) return p;
+    if (await p.isConfigured()) return p;
   }
   // 3) Env fallback
   const envDefault = (process.env.AI_PROVIDER as AIProviderName | undefined) || 'claude';
   const p = PROVIDERS[envDefault];
-  if (p?.isConfigured()) return p;
+  if (p && (await p.isConfigured())) return p;
   // 4) First configured provider
   for (const name of Object.keys(PROVIDERS) as AIProviderName[]) {
-    if (PROVIDERS[name].isConfigured()) return PROVIDERS[name];
+    if (await PROVIDERS[name].isConfigured()) return PROVIDERS[name];
   }
   throw new Error('Hicbir AI saglayicisi yapilandirilmamis (API key eksik).');
 }
@@ -144,14 +144,19 @@ export async function listProvidersStatusAsync(): Promise<Array<{
   return out;
 }
 
-export function listProvidersStatus(): Array<{
-  name: AIProviderName;
-  configured: boolean;
-  defaultModel: string;
-}> {
-  return (Object.keys(PROVIDERS) as AIProviderName[]).map((n) => ({
-    name: n,
-    configured: PROVIDERS[n].isConfigured(),
-    defaultModel: PROVIDERS[n].defaultModel,
-  }));
+export async function listProvidersStatus(): Promise<
+  Array<{
+    name: AIProviderName;
+    configured: boolean;
+    defaultModel: string;
+  }>
+> {
+  const names = Object.keys(PROVIDERS) as AIProviderName[];
+  return Promise.all(
+    names.map(async (n) => ({
+      name: n,
+      configured: await PROVIDERS[n].isConfigured(),
+      defaultModel: PROVIDERS[n].defaultModel,
+    })),
+  );
 }
