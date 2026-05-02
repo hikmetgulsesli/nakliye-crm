@@ -54,23 +54,45 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
   const crumbs = deriveCrumbs(location.pathname);
   const [notifOpen, setNotifOpen] = useState(false);
   const [ringing, setRinging] = useState(false);
+  // Yeni bildirim geldikten sonra kullanici zili (dropdown'i) actiysa "acknowledged".
+  // Acknowledged degilken her 5 sn'de bir periyodik sallanir; aktiginda susar.
+  const [acknowledged, setAcknowledged] = useState(true);
   const prevUnreadRef = useRef(unreadCount);
   const ringTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function triggerRing() {
+    setRinging(true);
+    if (ringTimerRef.current) clearTimeout(ringTimerRef.current);
+    ringTimerRef.current = setTimeout(() => setRinging(false), 1000);
+  }
 
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  // Okunmamis sayisi artarsa zili 1 sn salla — yeni bildirim geldigine isaret
+  // Okunmamis sayisi artarsa zili sallar + "acknowledged"i sifirlar; tiklanana kadar
+  // periyodik effect bunu canli tutar.
   useEffect(() => {
     if (unreadCount > prevUnreadRef.current) {
-      setRinging(true);
-      if (ringTimerRef.current) clearTimeout(ringTimerRef.current);
-      ringTimerRef.current = setTimeout(() => setRinging(false), 1000);
+      triggerRing();
+      setAcknowledged(false);
     }
     prevUnreadRef.current = unreadCount;
   }, [unreadCount]);
+
+  // Dropdown bir kez acildiysa kullanici farkina vardi sayilir → susar.
+  useEffect(() => {
+    if (notifOpen) setAcknowledged(true);
+  }, [notifOpen]);
+
+  // Periyodik dikkat cekme: okunmamis var, acknowledged degil ve dropdown kapali iken
+  // her 5 sn'de bir 1 sn sallanir. unreadCount=0 olunca veya tiklaninca durur.
+  useEffect(() => {
+    if (unreadCount === 0 || acknowledged || notifOpen) return;
+    const id = window.setInterval(triggerRing, 5000);
+    return () => window.clearInterval(id);
+  }, [unreadCount, acknowledged, notifOpen]);
 
   useEffect(() => {
     return () => {
