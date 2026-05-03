@@ -50,6 +50,14 @@ export default function DashboardPage() {
             Yenile
           </Button>
           <Button
+            variant="secondary"
+            icon="person_add"
+            size="sm"
+            onClick={() => (window.location.href = '/musteriler/yeni')}
+          >
+            Müşteri Ekle
+          </Button>
+          <Button
             variant="primary"
             icon="add"
             size="sm"

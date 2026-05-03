@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui';
 import { KPICard } from '@/components/shared/KPICard';
@@ -98,7 +97,6 @@ export function AdminDashboard() {
   const [data, setData] = useState<AdminDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -119,7 +117,7 @@ export function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Filter Tabs + Action */}
+      {/* Filter Tabs */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1 bg-slate-200/50 p-1 rounded-xl">
           {PERIOD_TABS.map((tab) => (
@@ -137,10 +135,6 @@ export function AdminDashboard() {
             </button>
           ))}
         </div>
-
-        <Button icon="add" onClick={() => navigate('/teklifler/yeni')}>
-          Yeni Teklif Oluştur
-        </Button>
       </div>
 
       {/* Error State */}

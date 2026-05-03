@@ -3,6 +3,8 @@ import { cn } from '@/utils/cn';
 interface Tab {
   key: string;
   label: string;
+  icon?: string;
+  badge?: string | number | null;
 }
 
 interface TabsProps {
@@ -15,9 +17,10 @@ interface TabsProps {
 export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
   return (
     <div className={cn('border-b border-slate-200 dark:border-slate-800', className)}>
-      <nav className="flex gap-6 -mb-px" role="tablist">
+      <nav className="flex gap-2 sm:gap-3 -mb-px" role="tablist">
         {tabs.map((tab) => {
           const isActive = tab.key === activeTab;
+          const showBadge = tab.badge !== undefined && tab.badge !== null && tab.badge !== '';
           return (
             <button
               key={tab.key}
@@ -25,13 +28,38 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
               aria-selected={isActive}
               onClick={() => onChange(tab.key)}
               className={cn(
-                'pb-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap',
+                'inline-flex items-center gap-2 px-3 sm:px-4 pt-2.5 pb-2.5 text-sm font-medium transition-colors border-b-2 whitespace-nowrap rounded-t-md',
                 isActive
-                  ? 'text-primary border-primary dark:text-primary-300 dark:border-primary-400'
-                  : 'text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600',
+                  ? 'text-primary border-primary bg-primary/5 dark:text-primary-300 dark:border-primary-400 dark:bg-primary-400/10'
+                  : 'text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/50',
               )}
             >
-              {tab.label}
+              {tab.icon && (
+                <span
+                  className={cn(
+                    'material-symbols-outlined text-[20px] leading-none',
+                    isActive
+                      ? 'text-primary dark:text-primary-300'
+                      : 'text-slate-400 dark:text-slate-500',
+                  )}
+                  aria-hidden="true"
+                >
+                  {tab.icon}
+                </span>
+              )}
+              <span>{tab.label}</span>
+              {showBadge && (
+                <span
+                  className={cn(
+                    'inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-semibold leading-none',
+                    isActive
+                      ? 'bg-primary text-white dark:bg-primary-400 dark:text-slate-900'
+                      : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
+                  )}
+                >
+                  {tab.badge}
+                </span>
+              )}
             </button>
           );
         })}
