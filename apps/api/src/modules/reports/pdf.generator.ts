@@ -1,124 +1,177 @@
+import PDFDocument from 'pdfkit';
+import vfsModule from 'pdfmake/build/vfs_fonts';
+
 /**
- * PDF-like report generator - produces a print-friendly HTML document
+ * pdfkit ile gercek PDF uretir. Roboto ttf font'unu pdfmake'in
+ * yerlesik vfs paketinden okuyup registerFont ile yukluyoruz —
+ * Turkce karakterleri (ş ç ğ ü ö ı İ vs.) sorunsuz render eder.
  */
-export function generatePdfReport(
+
+const vfsAny = vfsModule as unknown as Record<string, string>;
+
+let cachedFonts: { regular: Buffer; bold: Buffer } | null = null;
+function getFonts() {
+  if (cachedFonts) return cachedFonts;
+  const reg = vfsAny['Roboto-Regular.ttf'];
+  const bold = vfsAny['Roboto-Medium.ttf'];
+  if (!reg || !bold) {
+    throw new Error('pdfmake/build/vfs_fonts icinde Roboto font bulunamadi');
+  }
+  cachedFonts = {
+    regular: Buffer.from(reg, 'base64'),
+    bold: Buffer.from(bold, 'base64'),
+  };
+  return cachedFonts;
+}
+
+export async function generatePdfReport(
   title: string,
   columns: string[],
   rows: string[][],
-  dateRange?: { startDate: string; endDate: string }
-): Buffer {
-  const dateInfo = dateRange
-    ? `<p class="date-range">${dateRange.startDate} - ${dateRange.endDate}</p>`
-    : '';
+  dateRange?: { startDate: string; endDate: string },
+): Promise<Buffer> {
+  const fonts = getFonts();
+  const isLandscape = columns.length > 6;
+  const margin = 36;
+  const pageWidth = isLandscape ? 842 : 595; // A4
+  const pageHeight = isLandscape ? 595 : 842;
 
-  const headerRow = columns.map((col) => `<th>${escapeHtml(col)}</th>`).join('');
-  const dataRows = rows
-    .map(
-      (row) =>
-        `<tr>${row.map((cell) => `<td>${escapeHtml(cell ?? '')}</td>`).join('')}</tr>`
-    )
-    .join('');
+  const doc = new PDFDocument({
+    size: 'A4',
+    layout: isLandscape ? 'landscape' : 'portrait',
+    margin,
+    info: { Title: title, Creator: 'NakliyeCRM', Producer: 'NakliyeCRM' },
+  });
 
-  const html = `<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)} - NakliyeCRM</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #333;
-      padding: 24px;
-      background: #fff;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px solid #1976d2;
-      padding-bottom: 12px;
-      margin-bottom: 24px;
-    }
-    .brand {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1976d2;
-    }
-    .report-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .date-range {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 16px;
-    }
-    .generated {
-      font-size: 12px;
-      color: #999;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 16px;
-      font-size: 13px;
-    }
-    th {
-      background: #1976d2;
-      color: #fff;
-      padding: 10px 12px;
-      text-align: left;
-      font-weight: 600;
-    }
-    td {
-      padding: 8px 12px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    tr:nth-child(even) { background: #f5f5f5; }
-    tr:hover { background: #e3f2fd; }
-    .footer {
-      margin-top: 32px;
-      padding-top: 12px;
-      border-top: 1px solid #e0e0e0;
-      font-size: 11px;
-      color: #999;
-      text-align: center;
-    }
-    @media print {
-      body { padding: 0; }
-      .header { border-bottom-width: 2px; }
-      tr:hover { background: inherit; }
-      tr:nth-child(even) { background: #f9f9f9; }
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <span class="brand">NakliyeCRM</span>
-    <span class="generated">Oluşturulma: ${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR')}</span>
-  </div>
-  <h1 class="report-title">${escapeHtml(title)}</h1>
-  ${dateInfo}
-  <table>
-    <thead><tr>${headerRow}</tr></thead>
-    <tbody>${dataRows}</tbody>
-  </table>
-  <div class="footer">
-    NakliyeCRM Rapor Sistemi &bull; Toplam ${rows.length} kayıt
-  </div>
-</body>
-</html>`;
+  doc.registerFont('Roboto', fonts.regular);
+  doc.registerFont('Roboto-Bold', fonts.bold);
+  doc.font('Roboto');
 
-  return Buffer.from(html, 'utf-8');
-}
+  const chunks: Buffer[] = [];
+  doc.on('data', (c: Buffer) => chunks.push(c));
+  const done = new Promise<Buffer>((resolve, reject) => {
+    doc.on('end', () => resolve(Buffer.concat(chunks)));
+    doc.on('error', reject);
+  });
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  // ---------------- Header ----------------
+  doc
+    .fillColor('#1976d2')
+    .font('Roboto-Bold')
+    .fontSize(14)
+    .text('NakliyeCRM', margin, margin, { continued: false });
+
+  doc
+    .fillColor('#888')
+    .font('Roboto')
+    .fontSize(9)
+    .text(
+      `Oluşturulma: ${new Date().toLocaleString('tr-TR')}`,
+      margin,
+      margin,
+      { align: 'right', width: pageWidth - margin * 2 },
+    );
+
+  // ---------------- Title ----------------
+  doc
+    .fillColor('#000')
+    .font('Roboto-Bold')
+    .fontSize(16)
+    .text(title, margin, margin + 28);
+
+  if (dateRange) {
+    doc
+      .fillColor('#666')
+      .font('Roboto')
+      .fontSize(10)
+      .text(`${dateRange.startDate} – ${dateRange.endDate}`, margin, margin + 50);
+  }
+
+  // ---------------- Table ----------------
+  const tableTop = margin + (dateRange ? 78 : 60);
+  const usableWidth = pageWidth - margin * 2;
+  const colWidth = usableWidth / Math.max(1, columns.length);
+  const rowHeight = 22;
+  const cellPad = 4;
+
+  function drawHeaderRow(y: number) {
+    doc.rect(margin, y, usableWidth, rowHeight).fill('#1976d2');
+    doc.fillColor('#fff').font('Roboto-Bold').fontSize(9);
+    columns.forEach((col, i) => {
+      doc.text(
+        col,
+        margin + i * colWidth + cellPad,
+        y + cellPad + 2,
+        { width: colWidth - cellPad * 2, height: rowHeight - cellPad * 2, ellipsis: true },
+      );
+    });
+  }
+
+  function drawRow(values: string[], y: number, alt: boolean) {
+    if (alt) {
+      doc.rect(margin, y, usableWidth, rowHeight).fill('#f5f5f5');
+    }
+    doc.fillColor('#000').font('Roboto').fontSize(9);
+    values.forEach((cell, i) => {
+      doc.text(
+        String(cell ?? ''),
+        margin + i * colWidth + cellPad,
+        y + cellPad + 2,
+        { width: colWidth - cellPad * 2, height: rowHeight - cellPad * 2, ellipsis: true },
+      );
+    });
+    // Bottom border
+    doc
+      .strokeColor('#e0e0e0')
+      .lineWidth(0.5)
+      .moveTo(margin, y + rowHeight)
+      .lineTo(margin + usableWidth, y + rowHeight)
+      .stroke();
+  }
+
+  let y = tableTop;
+  drawHeaderRow(y);
+  y += rowHeight;
+
+  rows.forEach((row, idx) => {
+    // Sayfa sonuna gelince yeni sayfa ac
+    if (y + rowHeight > pageHeight - margin - 30) {
+      doc.addPage({
+        size: 'A4',
+        layout: isLandscape ? 'landscape' : 'portrait',
+        margin,
+      });
+      y = margin;
+      drawHeaderRow(y);
+      y += rowHeight;
+    }
+    drawRow(row, y, idx % 2 === 1);
+    y += rowHeight;
+  });
+
+  // ---------------- Footer ----------------
+  // Tum sayfalara footer
+  const range = doc.bufferedPageRange();
+  for (let i = range.start; i < range.start + range.count; i++) {
+    doc.switchToPage(i);
+    doc
+      .fillColor('#999')
+      .font('Roboto')
+      .fontSize(8)
+      .text(
+        `Toplam ${rows.length} kayıt`,
+        margin,
+        pageHeight - margin - 10,
+        { width: usableWidth / 2 },
+      )
+      .text(
+        `${i + 1}/${range.count}`,
+        margin + usableWidth / 2,
+        pageHeight - margin - 10,
+        { width: usableWidth / 2, align: 'right' },
+      );
+  }
+
+  doc.end();
+  return done;
 }

@@ -604,9 +604,9 @@ export async function exportReport(req: Request, res: Response) {
   };
 
   if (type === 'pdf') {
-    const buffer = generatePdfReport(data.title, data.columns, data.rows, dateRange);
-    const filename = `${reportType}-${Date.now()}.html`;
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    const buffer = await generatePdfReport(data.title, data.columns, data.rows, dateRange);
+    const filename = `${reportType}-${Date.now()}.pdf`;
+    res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     return res.send(buffer);
   }
