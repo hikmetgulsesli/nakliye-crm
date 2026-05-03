@@ -21,6 +21,18 @@ export async function list(req: Request, res: Response) {
       { awbNumber: { contains: s, mode: 'insensitive' } },
     ];
   }
+  // createdAt aralik filtresi (ISO YYYY-MM-DD). Inclusive: bitis tarihinin
+  // sonuna kadar; UI'daki tarih aralik filtresinden gelir.
+  if (req.query.startDate || req.query.endDate) {
+    const range: Record<string, Date> = {};
+    if (req.query.startDate) range.gte = new Date(String(req.query.startDate));
+    if (req.query.endDate) {
+      const end = new Date(String(req.query.endDate));
+      end.setHours(23, 59, 59, 999);
+      range.lte = end;
+    }
+    where.createdAt = range;
+  }
 
   const [data, total] = await Promise.all([
     prisma.shipment.findMany({

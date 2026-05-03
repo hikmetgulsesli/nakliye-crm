@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
 import { SaveViewModal } from '@/components/shared/SaveViewModal';
+import { DateRangeQuickFilter } from '@/components/shared/DateRangeQuickFilter';
 import {
   shipmentService,
   type Shipment,
@@ -35,6 +36,12 @@ export default function ShipmentListPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get('search') ?? '');
   const [statusFilter, setStatusFilter] = useState(searchParams.get('status') ?? '');
+  const [startDate, setStartDate] = useState<string | undefined>(
+    searchParams.get('startDate') ?? undefined,
+  );
+  const [endDate, setEndDate] = useState<string | undefined>(
+    searchParams.get('endDate') ?? undefined,
+  );
   const [activeView, setActiveView] = useState<ViewId>('all');
   const initialViewId = searchParams.get('view');
   const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>(
@@ -52,6 +59,8 @@ export default function ShipmentListPage() {
   useEffect(() => {
     setSearch(searchParams.get('search') ?? '');
     setStatusFilter(searchParams.get('status') ?? '');
+    setStartDate(searchParams.get('startDate') ?? undefined);
+    setEndDate(searchParams.get('endDate') ?? undefined);
     const vId = searchParams.get('view');
     setActiveUserViewId(vId ? Number(vId) : undefined);
     if (vId) setActiveView('all');
@@ -68,6 +77,8 @@ export default function ShipmentListPage() {
         // saved view oncelikli; ek manuel status filtre korunsun
         status: viewStatus ?? statusFilter ?? undefined,
         assignedUserId: useMine && currentUserId ? currentUserId : undefined,
+        startDate,
+        endDate,
       });
       let data = res.data;
       // "Aktif" view: birkac status'u toplayan turetilmis filter — backend tek
@@ -85,7 +96,7 @@ export default function ShipmentListPage() {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounced, statusFilter, onlyMine, currentUserId, activeView]);
+  }, [debounced, statusFilter, onlyMine, currentUserId, activeView, startDate, endDate]);
 
   const views = useMemo<BuiltInView[]>(() => {
     const list: BuiltInView[] = [
@@ -149,7 +160,7 @@ export default function ShipmentListPage() {
           onSaved={(id) => setActiveUserViewId(id)}
         />
 
-        <div className="border-b border-token-border bg-token-bg-panel p-3">
+        <div className="space-y-3 border-b border-token-border bg-token-bg-panel p-3">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-12 items-center">
             <div className="md:col-span-5">
               <SearchInput
@@ -181,6 +192,15 @@ export default function ShipmentListPage() {
               Toplam: {total}
             </div>
           </div>
+
+          <DateRangeQuickFilter
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(s, e) => {
+              setStartDate(s);
+              setEndDate(e);
+            }}
+          />
         </div>
 
         {loading ? (

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { SearchInput, Select, Button, DatePicker, Icon } from '@/components/ui';
+import { SearchInput, Select, Button, Icon } from '@/components/ui';
 import { useLookups } from '@/hooks/useLookups';
 import {
   FilterDrawer,
@@ -7,6 +7,7 @@ import {
   FilterField,
 } from '@/components/shared/FilterDrawer';
 import { ActiveFiltersChips, type ActiveFilter } from '@/components/shared/ActiveFiltersChips';
+import { DateRangeQuickFilter } from '@/components/shared/DateRangeQuickFilter';
 import { cn } from '@/utils/cn';
 import type { QuotationFilters as QuotationFiltersType } from '@/services/quotation.service';
 
@@ -125,20 +126,7 @@ export function QuotationFilters({
         onRemove: () => set('assignedUserId', undefined),
       });
     }
-    if (filters.dateFrom)
-      out.push({
-        key: 'dateFrom',
-        label: 'Başlangıç',
-        value: filters.dateFrom,
-        onRemove: () => set('dateFrom', undefined),
-      });
-    if (filters.dateTo)
-      out.push({
-        key: 'dateTo',
-        label: 'Bitiş',
-        value: filters.dateTo,
-        onRemove: () => set('dateTo', undefined),
-      });
+    // Tarih chip'leri burada yok — ust bar'daki DateRangeQuickFilter zaten gosteriyor.
     return out;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, users, hideAssignedUserSelect]);
@@ -152,45 +140,53 @@ export function QuotationFilters({
 
   return (
     <div className="mb-6 space-y-3">
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div className="min-w-[260px] flex-1">
-          <SearchInput
-            placeholder="Teklif no veya müşteri ara..."
-            value={filters.search || ''}
-            onChange={(e) => set('search', e.target.value)}
-          />
+      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="min-w-[260px] flex-1">
+            <SearchInput
+              placeholder="Teklif no veya müşteri ara..."
+              value={filters.search || ''}
+              onChange={(e) => set('search', e.target.value)}
+            />
+          </div>
+
+          {showOnlyMine && (
+            <label className="inline-flex cursor-pointer select-none items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800">
+              <input
+                type="checkbox"
+                checked={onlyMine}
+                onChange={(e) => onOnlyMineChange?.(e.target.checked)}
+                className="size-4 rounded border-slate-300 text-primary focus:ring-2 focus:ring-primary/40 dark:border-slate-600"
+              />
+              <span className="whitespace-nowrap">Sadece kendi tekliflerim</span>
+            </label>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            className={cn(
+              'inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors',
+              activeCount > 0
+                ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/15'
+                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800',
+            )}
+          >
+            <Icon name="tune" size="sm" />
+            Filtreler
+            {activeCount > 0 && (
+              <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-white">
+                {activeCount}
+              </span>
+            )}
+          </button>
         </div>
 
-        {showOnlyMine && (
-          <label className="inline-flex cursor-pointer select-none items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800">
-            <input
-              type="checkbox"
-              checked={onlyMine}
-              onChange={(e) => onOnlyMineChange?.(e.target.checked)}
-              className="size-4 rounded border-slate-300 text-primary focus:ring-2 focus:ring-primary/40 dark:border-slate-600"
-            />
-            <span className="whitespace-nowrap">Sadece kendi tekliflerim</span>
-          </label>
-        )}
-
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(true)}
-          className={cn(
-            'inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors',
-            activeCount > 0
-              ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/15'
-              : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800',
-          )}
-        >
-          <Icon name="tune" size="sm" />
-          Filtreler
-          {activeCount > 0 && (
-            <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-white">
-              {activeCount}
-            </span>
-          )}
-        </button>
+        <DateRangeQuickFilter
+          startDate={filters.dateFrom}
+          endDate={filters.dateTo}
+          onChange={(dateFrom, dateTo) => onChange({ ...filters, dateFrom, dateTo })}
+        />
       </div>
 
       {activeCount > 0 && (
@@ -296,62 +292,7 @@ export function QuotationFilters({
             />
           </FilterField>
         </FilterGroup>
-
-        <FilterGroup title="Tarih Aralığı">
-          <div className="grid grid-cols-2 gap-3">
-            <FilterField label="Başlangıç">
-              <DatePicker
-                placeholder="Başlangıç"
-                value={filters.dateFrom || ''}
-                onChange={(e) => set('dateFrom', e.target.value)}
-              />
-            </FilterField>
-            <FilterField label="Bitiş">
-              <DatePicker
-                placeholder="Bitiş"
-                value={filters.dateTo || ''}
-                onChange={(e) => set('dateTo', e.target.value)}
-              />
-            </FilterField>
-          </div>
-          <DatePresets
-            onPick={(start, end) => {
-              onChange({ ...filters, dateFrom: start, dateTo: end });
-            }}
-          />
-        </FilterGroup>
       </FilterDrawer>
-    </div>
-  );
-}
-
-function isoDay(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-function DatePresets({ onPick }: { onPick: (start: string, end: string) => void }) {
-  const today = new Date();
-  const presets: { label: string; daysBack: number }[] = [
-    { label: 'Son 7 gün', daysBack: 7 },
-    { label: 'Son 30 gün', daysBack: 30 },
-    { label: 'Son 90 gün', daysBack: 90 },
-  ];
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {presets.map((p) => (
-        <button
-          key={p.label}
-          type="button"
-          onClick={() => {
-            const start = new Date(today);
-            start.setDate(today.getDate() - p.daysBack);
-            onPick(isoDay(start), isoDay(today));
-          }}
-          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition-colors hover:border-primary/40 hover:text-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-        >
-          {p.label}
-        </button>
-      ))}
     </div>
   );
 }

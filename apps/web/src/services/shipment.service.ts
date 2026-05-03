@@ -57,6 +57,8 @@ export interface ShipmentFilters {
   assignedUserId?: number;
   quotationId?: number;
   search?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const shipmentService = {
