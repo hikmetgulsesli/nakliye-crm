@@ -28,6 +28,21 @@ export async function list(req: Request, res: Response) {
     if (req.query.dateTo) (where.quoteDate as Record<string, unknown>).lte = new Date(String(req.query.dateTo));
   }
 
+  // "N+ gundur bekleyen" — dashboard alarm tiklamasi icin
+  if (req.query.olderThanDays) {
+    const days = parseInt(String(req.query.olderThanDays), 10);
+    if (!Number.isNaN(days) && days > 0) {
+      const threshold = new Date();
+      threshold.setDate(threshold.getDate() - days);
+      where.createdAt = { ...(where.createdAt as Record<string, unknown> | undefined), lt: threshold };
+    }
+  }
+
+  // "Suresi dolan teklifler" — validityDate gecmis olanlar
+  if (req.query.expired === 'true' || req.query.expired === '1') {
+    where.validityDate = { lt: new Date() };
+  }
+
   if (req.query.search) {
     const search = String(req.query.search);
     where.OR = [

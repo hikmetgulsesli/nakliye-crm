@@ -31,9 +31,20 @@ function filtersFromSearchParams(params: URLSearchParams): QuotationFiltersType 
   const status = params.get('status');
   const transportMode = params.get('transportMode');
   const assignedUserId = params.get('assignedUserId');
+  const dateFrom = params.get('dateFrom');
+  const dateTo = params.get('dateTo');
+  const olderThanDays = params.get('olderThanDays');
+  const expired = params.get('expired');
   if (status) out.status = status;
   if (transportMode) out.transportMode = transportMode;
   if (assignedUserId) out.assignedUserId = Number(assignedUserId);
+  if (dateFrom) out.dateFrom = dateFrom;
+  if (dateTo) out.dateTo = dateTo;
+  if (olderThanDays) {
+    const n = Number(olderThanDays);
+    if (!Number.isNaN(n)) out.olderThanDays = n;
+  }
+  if (expired === '1' || expired === 'true') out.expired = true;
   return out;
 }
 
@@ -92,9 +103,25 @@ export default function QuoteListPage() {
     const vId = searchParams.get('view');
     setActiveUserViewId(vId ? Number(vId) : undefined);
     setActiveView(detectInitialView(searchParams));
+    // Dashboard alarm linklerinden gelen onlyMine=1 hook tercihini override eder
+    const onlyMineParam = searchParams.get('onlyMine');
+    if (onlyMineParam === '1' || onlyMineParam === 'true') {
+      setOnlyMine(true);
+    }
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // Tarih bar artik drawer disinda anlik calisiyor — dateFrom/dateTo
+  // degisince appliedFilters'a otomatik aktar.
+  useEffect(() => {
+    setAppliedFilters((prev) => ({
+      ...prev,
+      dateFrom: filters.dateFrom,
+      dateTo: filters.dateTo,
+    }));
+    setPage(1);
+  }, [filters.dateFrom, filters.dateTo]);
 
   const fetchQuotations = useCallback(async () => {
     setLoading(true);
@@ -106,8 +133,10 @@ export default function QuoteListPage() {
       const viewStatus = VIEW_TO_STATUS[activeView];
       if (viewStatus) filtersToApply.status = viewStatus;
 
-      const useMine =
-        activeView === 'mine' || (onlyMine && activeView === 'all');
+      // "Sadece benim" cubuk her tab'da gecerli olmali — Bekliyor/Kazanildi/
+      // Kaybedildi sekmelerine girilse de checkbox'i kapatmadigimiz surece
+      // filtre uygulanmaya devam eder.
+      const useMine = activeView === 'mine' || onlyMine;
       if (useMine && currentUserId) {
         filtersToApply.assignedUserId = currentUserId;
       }
@@ -231,7 +260,7 @@ export default function QuoteListPage() {
             if (debouncedSearch) eff.search = debouncedSearch;
             const viewStatus = VIEW_TO_STATUS[activeView];
             if (viewStatus) eff.status = viewStatus;
-            if ((activeView === 'mine' || (onlyMine && activeView === 'all')) && currentUserId) {
+            if ((activeView === 'mine' || onlyMine) && currentUserId) {
               eff.assignedUserId = currentUserId;
             }
             return eff;

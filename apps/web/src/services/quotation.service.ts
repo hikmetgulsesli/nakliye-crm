@@ -19,6 +19,8 @@ export interface QuotationFilters {
   destinationCountry?: string;
   serviceType?: string;
   incoterm?: string;
+  olderThanDays?: number;
+  expired?: boolean;
 }
 
 export const quotationService = {
@@ -39,6 +41,8 @@ export const quotationService = {
     if (filters?.destinationCountry) params.destinationCountry = filters.destinationCountry;
     if (filters?.serviceType) params.serviceType = filters.serviceType;
     if (filters?.incoterm) params.incoterm = filters.incoterm;
+    if (filters?.olderThanDays) params.olderThanDays = filters.olderThanDays;
+    if (filters?.expired) params.expired = '1';
 
     const { data } = await api.get<PaginatedResponse<Quotation>>('/quotations', { params });
     return data;

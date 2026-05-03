@@ -46,6 +46,20 @@ export async function list(req: Request, res: Response) {
     if (req.query.dateTo) (where.createdAt as Record<string, unknown>).lte = new Date(String(req.query.dateTo));
   }
 
+  // "X+ gundur aranmayan" — dashboard alarmindan tiklamayla acilir
+  if (req.query.uncontactedDays) {
+    const days = parseInt(String(req.query.uncontactedDays), 10);
+    if (!Number.isNaN(days) && days > 0) {
+      const threshold = new Date();
+      threshold.setDate(threshold.getDate() - days);
+      where.OR = [
+        ...(Array.isArray(where.OR) ? (where.OR as unknown[]) : []),
+        { lastContactDate: { lt: threshold } },
+        { lastContactDate: null },
+      ];
+    }
+  }
+
   if (req.query.search) {
     const search = String(req.query.search);
     where.OR = [

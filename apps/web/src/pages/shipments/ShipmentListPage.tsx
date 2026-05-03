@@ -69,8 +69,9 @@ export default function ShipmentListPage() {
   async function fetchData() {
     setLoading(true);
     try {
-      const useMine =
-        activeView === 'mine' || (onlyMine && activeView === 'all');
+      // "Sadece benim sevkiyatlarim" tum tab'larda (Tumu/Aktif/Transit/Teslim)
+      // gecerli olmali — checkbox'i kapatmadigimiz surece filtre korunur.
+      const useMine = activeView === 'mine' || onlyMine;
       const viewStatus = VIEW_TO_STATUS[activeView];
       const res = await shipmentService.list(1, 50, {
         search: debounced || undefined,

@@ -14,11 +14,13 @@ interface AlertWidgetsProps {
   className?: string;
 }
 
+// Backend KPI sorgulari "kendi musterilerim" / "kendi tekliflerim" baz aliyor;
+// liste sayfasinda da ayni filtre acik gelsin diye onlyMine=1 zorlu.
 const ALERT_ROUTES: Record<AlertData['type'], string> = {
-  uncalled: '/musteriler',
-  pending: '/teklifler?status=Bekliyor',
-  expired: '/teklifler',
-  highPotential: '/musteriler?potential=Yüksek',
+  uncalled: '/musteriler?uncontactedDays=14&status=Aktif&onlyMine=1',
+  pending: '/teklifler?status=Bekliyor&olderThanDays=7&onlyMine=1',
+  expired: '/teklifler?expired=1&status=Bekliyor&onlyMine=1',
+  highPotential: '/musteriler?potential=Yüksek&onlyMine=1',
 };
 
 const ALERT_CONFIG: Record<

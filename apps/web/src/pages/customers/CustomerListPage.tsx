@@ -33,6 +33,7 @@ const FILTER_KEYS: (keyof CustomerFiltersType)[] = [
   'source',
   'startDate',
   'endDate',
+  'uncontactedDays',
   'deleted',
 ];
 
@@ -42,7 +43,10 @@ function filtersFromSearchParams(params: URLSearchParams): CustomerFiltersType {
     const v = params.get(key);
     if (v === null) continue;
     if (key === 'deleted') out[key] = v === 'true';
-    else out[key] = v;
+    else if (key === 'uncontactedDays') {
+      const n = Number(v);
+      if (!Number.isNaN(n)) out[key] = n;
+    } else out[key] = v;
   }
   const aid = params.get('assignedUserId');
   if (aid) out.assignedUserId = Number(aid);
@@ -105,11 +109,27 @@ export default function CustomerListPage() {
     setAppliedFilters(next);
     const vId = searchParams.get('view');
     setActiveUserViewId(vId ? Number(vId) : undefined);
+    // Dashboard alarm linklerinden gelen onlyMine=1 hook tercihini override eder
+    const onlyMineParam = searchParams.get('onlyMine');
+    if (onlyMineParam === '1' || onlyMineParam === 'true') {
+      setOnlyMine(true);
+    }
     if (next.deleted) setActiveView('deleted');
     else if (vId) setActiveView('all');
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // Tarih bar artik drawer disinda anlik calisiyor — startDate/endDate
+  // degisince appliedFilters'a otomatik aktar (drawer "Uygula" beklemeden).
+  useEffect(() => {
+    setAppliedFilters((prev) => ({
+      ...prev,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+    }));
+    setPage(1);
+  }, [filters.startDate, filters.endDate]);
 
   const showDeleted = activeView === 'deleted';
 

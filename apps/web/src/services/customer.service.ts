@@ -19,6 +19,7 @@ export interface CustomerFilters {
   source?: string;
   startDate?: string;
   endDate?: string;
+  uncontactedDays?: number;
   deleted?: boolean;
 }
 
@@ -53,8 +54,11 @@ export const customerService = {
     if (filters?.destinationCountry) params.destinationCountry = filters.destinationCountry;
     if (filters?.incoterm) params.incoterm = filters.incoterm;
     if (filters?.source) params.source = filters.source;
-    if (filters?.startDate) params.startDate = filters.startDate;
-    if (filters?.endDate) params.endDate = filters.endDate;
+    // Backend customer route'u dateFrom/dateTo bekliyor; tipi UI tarafinda
+    // startDate/endDate olarak tutuyoruz (DateRangeQuickFilter konvansiyonu).
+    if (filters?.startDate) params.dateFrom = filters.startDate;
+    if (filters?.endDate) params.dateTo = filters.endDate;
+    if (filters?.uncontactedDays) params.uncontactedDays = filters.uncontactedDays;
     if (filters?.deleted) params.deleted = 'true';
 
     const { data } = await api.get<PaginatedResponse<Customer>>('/customers', { params });
