@@ -55,7 +55,13 @@ export async function getSmartQueue(userId: number, limit = 10): Promise<SmartQu
   const openMap = new Map(openQuotes.map((r) => [r.customerId, r._count._all]));
   const riskMap = new Map(churnRisks.map((r) => [r.customerId, r]));
 
-  const items: SmartQueueItem[] = customers.map((c) => {
+  // Bugun konusulan musterileri AI onerisinden cikar — kullanici "bunlarla
+  // konus" denildigini "konustugum musteri tekrar gelmesin" olarak bekliyor.
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const items: SmartQueueItem[] = customers
+    .filter((c) => !c.lastContactDate || new Date(c.lastContactDate) < todayStart)
+    .map((c) => {
     let score = 0;
     const reasons: string[] = [];
 

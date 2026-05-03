@@ -71,15 +71,16 @@ export async function inbound(req: Request, res: Response) {
     await prisma.activity.create({
       data: {
         customerId: customer.id,
-        activityType: 'WhatsApp',
+        activityType: 'WhatsApp (gelen)',
         activityDate: new Date(),
         notes: `[WA gelen] ${payload.Body || ''}`,
         createdById: customer.assignedUserId,
       },
     });
+    // Gelen mesaj "biz aktif aksiyon aldik" sinyali degil; lastInboundAt'e yaz.
     await prisma.customer.update({
       where: { id: customer.id },
-      data: { lastContactDate: new Date() },
+      data: { lastInboundAt: new Date() },
     });
   }
 

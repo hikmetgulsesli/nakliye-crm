@@ -4,6 +4,15 @@ import { AppError } from '../../middleware/error-handler';
 import { parsePagination, paginatedResponse } from '../../utils/pagination';
 import { createAuditLog } from '../../utils/audit';
 
+// Bu tipler "musteriye ulasildi" anlamina gelmez — gelen kanallar veya
+// cevapsiz cagri. Activity yine olusur, ama lastContactDate yerine
+// lastInboundAt'i tetikler.
+const NON_REACHED_TYPES = new Set<string>([
+  'Telefon (cevapsız)',
+  'E-posta (gelen)',
+  'WhatsApp (gelen)',
+]);
+
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
   const where: Record<string, unknown> = {};
@@ -88,11 +97,34 @@ export async function create(req: Request, res: Response) {
     },
   });
 
-  // Auto-update customer's lastContactDate
+  // "Bizim aktif aksiyon aldigimiz ve gercekten musteriye ulastigimiz"
+  // aktiviteler lastContactDate'i guncellesin. Cevapsiz cagri ve gelen
+  // mesajlar lastInboundAt sayilir; KPI ve aranmayan-musteri alarmini
+  // bozmamasi icin ayri tutuyoruz.
+  const isReached = !NON_REACHED_TYPES.has(activityType);
   await prisma.customer.update({
     where: { id: customerId },
-    data: { lastContactDate: new Date(activityDate) },
+    data: isReached
+      ? { lastContactDate: new Date(activityDate) }
+      : { lastInboundAt: new Date(activityDate) },
   });
+
+  // Gercek bir gorusme yapildiysa, ayni musterinin bugun veya gecmiste
+  // planlanmis bekleyen follow-up'larinin nextActionDate'ini sifirla —
+  // "Bugun bunlarla konus" listesinde tekrar gorunmesin.
+  if (isReached) {
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    await prisma.activity.updateMany({
+      where: {
+        customerId,
+        isDeleted: false,
+        id: { not: activity.id },
+        nextActionDate: { lte: todayEnd, not: null },
+      },
+      data: { nextActionDate: null },
+    });
+  }
 
   await createAuditLog({
     userId: req.user!.userId,

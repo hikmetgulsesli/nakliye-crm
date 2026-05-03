@@ -72,6 +72,7 @@ model Customer {
   assignedUserId       Int       @map("assigned_user_id")
   assignedUser         User      @relation("AssignedUser", fields: [assignedUserId], references: [id])
   lastContactDate      DateTime? @map("last_contact_date")
+  lastInboundAt        DateTime? @map("last_inbound_at")
   lastQuoteDate        DateTime? @map("last_quote_date")
   createdById          Int       @map("created_by")
   createdBy            User      @relation("CreatedByUser", fields: [createdById], references: [id])

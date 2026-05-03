@@ -4,6 +4,7 @@ import { Button, Icon, Modal, Skeleton } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { CustomerDetailTabs } from '@/components/customers/CustomerDetailTabs';
+import { QuickLogPopover } from '@/components/customers/QuickLogPopover';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { CustomerTimeline } from '@/components/customers/CustomerTimeline';
 import { ContactsPanel } from '@/components/customers/ContactsPanel';
@@ -33,6 +34,7 @@ export default function CustomerDetailPage() {
   const [deleting, setDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [noteFocusSignal, setNoteFocusSignal] = useState<number | undefined>(undefined);
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
 
   // Hash veya buton tetiklemesinde "İç Notlar"a kaydir + textarea odakla
   function focusInternalNotes() {
@@ -180,13 +182,36 @@ export default function CustomerDetailPage() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="relative">
+              <Button
+                variant="primary"
+                icon="bolt"
+                onClick={() => setQuickLogOpen((v) => !v)}
+                className="!bg-emerald-500 hover:!bg-emerald-600 !text-white !shadow-emerald-500/20"
+              >
+                Hızlı Log
+              </Button>
+              <QuickLogPopover
+                customerId={customer.id}
+                open={quickLogOpen}
+                onClose={() => setQuickLogOpen(false)}
+                onSaved={async () => {
+                  // lastContactDate ve teklif/aktivite sayilari yenilensin
+                  try {
+                    const fresh = await customerService.getById(customer.id);
+                    setCustomer(fresh);
+                  } catch {
+                    /* ignore — sayfa yine de calismaya devam etsin */
+                  }
+                }}
+              />
+            </div>
             <Button
-              variant="primary"
+              variant="secondary"
               icon="edit_note"
               onClick={focusInternalNotes}
-              className="!bg-blue-500 hover:!bg-blue-600 !text-white !shadow-blue-500/20"
             >
-              Not Ekle
+              İç Not
             </Button>
             <Button
               variant="secondary"

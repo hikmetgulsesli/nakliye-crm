@@ -97,17 +97,17 @@ export async function syncImapOnce(): Promise<{ scanned: number; linked: number 
           await prisma.activity.create({
             data: {
               customerId: c.id,
-              activityType: 'E-posta',
+              activityType: 'E-posta (gelen)',
               activityDate: parsed.date || new Date(),
               notes: `${parsed.subject || '(Konusuz)'}\n\n${parsed.text?.slice(0, 500) || ''}\n\n[${key}]`,
               outcome: null,
               createdById: c.assignedUserId,
             },
           });
-          // Son gorusme tarihi guncelle
+          // Gelen mail "biz aktif aksiyon aldik" sinyali degil; lastInboundAt'e yaz.
           await prisma.customer.update({
             where: { id: c.id },
-            data: { lastContactDate: parsed.date || new Date() },
+            data: { lastInboundAt: parsed.date || new Date() },
           });
           linked++;
         }
