@@ -72,7 +72,7 @@ async function notifyUncontactedCustomers(now: Date, days: number) {
           type: 'warning',
           title: 'Aranmayan Müşteri',
           message: `${customer.companyName} - ${days}+ gundur aranmadi`,
-          link: `/customers/${customer.id}`,
+          link: `/musteriler/${customer.id}`,
         },
       });
     }
@@ -119,7 +119,7 @@ async function notifyPendingQuotations(now: Date, days: number) {
           type: 'info',
           title: 'Bekleyen Teklif',
           message: `${q.quoteNo} (${q.customer.companyName}) - ${days}+ gundur bekliyor`,
-          link: `/quotations/${q.id}`,
+          link: `/teklifler/${q.id}`,
         },
       });
     }
@@ -166,7 +166,7 @@ async function notifyExpiredQuotations(now: Date) {
           type: 'error',
           title: 'Süresi Dolmus Teklif',
           message: `${q.quoteNo} (${q.customer.companyName}) - Geçerlilik süresi doldu`,
-          link: `/quotations/${q.id}`,
+          link: `/teklifler/${q.id}`,
         },
       });
     }
@@ -211,7 +211,7 @@ async function notifyHighPotentialNoQuote(now: Date, days: number) {
           type: 'warning',
           title: 'Yüksek Potansiyel - Teklif Yok',
           message: `${customer.companyName} - ${days}+ gundur teklif verilmedi`,
-          link: `/customers/${customer.id}`,
+          link: `/musteriler/${customer.id}`,
         },
       });
     }

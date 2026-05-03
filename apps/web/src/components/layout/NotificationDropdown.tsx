@@ -21,6 +21,21 @@ function timeAgo(dateStr: string): string {
   return `${days} gün önce`;
 }
 
+/**
+ * Bildirim link'ini gezinilebilir Turkce path'e normalize eder.
+ * Eski kayitlarda /customers/, /quotations/, /shipments/ gibi Ingilizce
+ * path'ler kalmis olabilir; frontend rotalari sadece Turkce karsiliklari
+ * tanidigi icin bunlari donusturuyoruz.
+ */
+function normalizeLink(link?: string | null): string | null {
+  if (!link) return null;
+  if (!link.startsWith('/')) return null;
+  return link
+    .replace(/^\/customers(\/|$)/, '/musteriler$1')
+    .replace(/^\/quotations(\/|$)/, '/teklifler$1')
+    .replace(/^\/shipments(\/|$)/, '/sevkiyatlar$1');
+}
+
 interface NotificationDropdownProps {
   open: boolean;
   onClose: () => void;
@@ -70,15 +85,22 @@ export default function NotificationDropdown({ open, onClose }: NotificationDrop
         ) : (
           notifications.map((n) => {
             const style = iconMap[n.type] || iconMap.info;
+            const target = normalizeLink(n.link);
             return (
               <button
                 key={n.id}
                 onClick={() => {
                   if (!n.isRead) markRead(n.id);
+                  if (target) {
+                    onClose();
+                    navigate(target);
+                  }
                 }}
+                title={target ? `Aç: ${target}` : undefined}
                 className={cn(
                   'flex w-full items-start gap-3 px-5 py-4 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40 dark:bg-slate-800/60 dark:hover:bg-slate-800/60',
                   !n.isRead && 'bg-primary/5 dark:bg-primary/10',
+                  target && 'cursor-pointer',
                 )}
               >
                 {/* Icon */}
@@ -102,7 +124,17 @@ export default function NotificationDropdown({ open, onClose }: NotificationDrop
                     )}
                   </div>
                   <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{n.message}</p>
-                  <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{timeAgo(n.createdAt)}</p>
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    <p className="text-xs text-slate-400 dark:text-slate-500">{timeAgo(n.createdAt)}</p>
+                    {target && (
+                      <span className="inline-flex items-center gap-0.5 text-[11px] font-medium text-primary dark:text-primary-300">
+                        Aç
+                        <span className="material-symbols-outlined text-[14px] leading-none">
+                          arrow_forward
+                        </span>
+                      </span>
+                    )}
+                  </div>
                 </div>
               </button>
             );
@@ -115,7 +147,7 @@ export default function NotificationDropdown({ open, onClose }: NotificationDrop
         <button
           onClick={() => {
             onClose();
-            navigate('/');
+            navigate('/bildirimler');
           }}
           className="text-sm font-medium text-primary hover:text-primary-700 dark:text-primary-300 dark:hover:text-primary-200"
         >

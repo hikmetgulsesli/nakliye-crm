@@ -27,6 +27,7 @@ const ShipmentFormPage = lazy(() => import('../pages/shipments/ShipmentFormPage'
 const PortalLoginPage = lazy(() => import('../pages/portal/PortalLoginPage'));
 const PortalDashboardPage = lazy(() => import('../pages/portal/PortalDashboardPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
+const NotificationsPage = lazy(() => import('../pages/NotificationsPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const AboutPage = lazy(() => import('../pages/AboutPage'));
 const ServicesPage = lazy(() => import('../pages/ServicesPage'));
@@ -234,6 +235,15 @@ export const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <ShipmentDetailPage />
+              </SuspenseWrapper>
+            ),
+          },
+          // Bildirimler
+          {
+            path: 'bildirimler',
+            element: (
+              <SuspenseWrapper>
+                <NotificationsPage />
               </SuspenseWrapper>
             ),
           },
