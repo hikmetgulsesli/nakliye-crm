@@ -20,11 +20,28 @@ export function SmartQueueWidget() {
   const clickToCall = useFeature('click_to_call');
 
   useEffect(() => {
-    api
-      .get<Item[]>('/ai/smart-queue?limit=8')
-      .then((res) => setItems(res.data))
-      .catch(() => setItems([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    function load() {
+      setLoading(true);
+      api
+        .get<Item[]>('/ai/smart-queue?limit=8')
+        .then((res) => {
+          if (!cancelled) setItems(res.data);
+        })
+        .catch(() => {
+          if (!cancelled) setItems([]);
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }
+    load();
+    const onActivityLogged = () => load();
+    window.addEventListener('activity:logged', onActivityLogged);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('activity:logged', onActivityLogged);
+    };
   }, []);
 
   if (loading)

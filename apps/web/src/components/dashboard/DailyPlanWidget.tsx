@@ -48,11 +48,30 @@ export function DailyPlanWidget() {
   const clickToCall = useFeature('click_to_call');
 
   useEffect(() => {
-    api
-      .get<DailyPlanData>('/daily-plan/today')
-      .then((res) => setData(res.data))
-      .catch(() => setData(null))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    function load() {
+      setLoading(true);
+      api
+        .get<DailyPlanData>('/daily-plan/today')
+        .then((res) => {
+          if (!cancelled) setData(res.data);
+        })
+        .catch(() => {
+          if (!cancelled) setData(null);
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }
+    load();
+    // Quick Log kaydedildiginde, customer.lastContactDate guncellenmis olur;
+    // 14+ gun aranmayanlar listesi vs. degisir — refetch et.
+    const onActivityLogged = () => load();
+    window.addEventListener('activity:logged', onActivityLogged);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('activity:logged', onActivityLogged);
+    };
   }, []);
 
   const phoneHref = (phone: string) =>

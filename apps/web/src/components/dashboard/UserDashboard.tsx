@@ -101,6 +101,10 @@ export function UserDashboard() {
 
   useEffect(() => {
     fetchData();
+    // Quick Log gibi aktivite tetikleyicileri sonrasi KPI'lari yenile.
+    const onActivityLogged = () => fetchData();
+    window.addEventListener('activity:logged', onActivityLogged);
+    return () => window.removeEventListener('activity:logged', onActivityLogged);
   }, []);
 
   return (
