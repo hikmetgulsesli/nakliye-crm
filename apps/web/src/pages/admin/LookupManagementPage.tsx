@@ -144,6 +144,8 @@ export default function LookupManagementPage() {
         subtitle="Sistem genelinde kullanilan liste degerlerini yönetin"
       />
 
+      <BehaviorInfoBanner />
+
       {error && (
         <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center justify-between">
           <span className="text-sm text-red-700">{error}</span>
@@ -190,6 +192,69 @@ export default function LookupManagementPage() {
         nextSortOrder={nextSortOrder}
         onSubmit={handleFormSubmit}
       />
+    </div>
+  );
+}
+
+const BANNER_DISMISSED_KEY = 'nakliye-lookup-banner-dismissed';
+
+function BehaviorInfoBanner() {
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(BANNER_DISMISSED_KEY) === '1';
+  });
+
+  if (dismissed) return null;
+
+  return (
+    <div className="mb-6 rounded-2xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+      <div className="flex items-start gap-3">
+        <span className="material-symbols-outlined text-blue-600 dark:text-blue-300">
+          info
+        </span>
+        <div className="flex-1 text-sm text-blue-900 dark:text-blue-100">
+          <div className="font-semibold mb-2">Liste yönetimi nasıl çalışır?</div>
+          <ul className="space-y-1.5 text-[13px] leading-relaxed list-disc list-inside">
+            <li>
+              <strong>Yeni değer ekle:</strong> hemen formlarda görünür hale gelir.
+            </li>
+            <li>
+              <strong>Mevcut değeri yeniden adlandır:</strong> sadece etiket düzeltir;
+              <strong> eski kayıtlar eski değeriyle kalır</strong>. Tarihsel sayım korunur,
+              raporlar geriye dönük bozulmaz.
+            </li>
+            <li>
+              <strong>Değeri sil / pasifleştir:</strong> yeni formlarda görünmez ama
+              bağlı kayıtlar etkilenmez (raporlarda "ölü etiket" olarak sayılmaya
+              devam eder).
+            </li>
+            <li>
+              <strong>Toplu güncelleme</strong> gerekirse sistem yöneticisinden
+              migration script isteyin
+              (<code className="text-[12px] bg-white/60 dark:bg-slate-900/40 px-1 rounded">
+                apps/api/scripts/cleanup-loss-reasons.ts
+              </code>{' '}
+              örneği gibi).
+            </li>
+          </ul>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setDismissed(true);
+            try {
+              localStorage.setItem(BANNER_DISMISSED_KEY, '1');
+            } catch {
+              /* ignore */
+            }
+          }}
+          className="text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
+          aria-label="Bilgilendirmeyi kapat"
+          title="Bir daha gösterme"
+        >
+          <span className="material-symbols-outlined">close</span>
+        </button>
+      </div>
     </div>
   );
 }
