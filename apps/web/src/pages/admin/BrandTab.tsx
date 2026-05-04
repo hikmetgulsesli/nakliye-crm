@@ -242,17 +242,37 @@ function AssetUploader({
   async function handleFile(file: File) {
     setBusy(true);
     setErr(null);
+    let stage = 'upload-url';
     try {
       const { key, uploadUrl } = await requestAssetUpload(type, file.name, file.type);
+
+      stage = 'r2-put';
       const putRes = await fetch(uploadUrl, {
         method: 'PUT',
         headers: { 'Content-Type': file.type },
         body: file,
       });
-      if (!putRes.ok) throw new Error(`Upload basarisiz (HTTP ${putRes.status})`);
+      if (!putRes.ok) {
+        const body = await putRes.text().catch(() => '');
+        throw new Error(
+          `R2'ye yükleme reddedildi (HTTP ${putRes.status}). ${body.slice(0, 200)}`,
+        );
+      }
+
+      stage = 'confirm';
       await confirmAsset(type, key);
     } catch (e: unknown) {
-      setErr((e as Error).message || 'Yükleme hatası');
+      const err = e as { response?: { status?: number }; message?: string };
+      const status = err.response?.status;
+      let prefix = '';
+      if (stage === 'upload-url') {
+        prefix = status === 404 ? '[Backend yok — Redeploy gerekli] ' : '[Yükleme adresi alınamadı] ';
+      } else if (stage === 'r2-put') {
+        prefix = '[R2 yazma reddedildi] ';
+      } else if (stage === 'confirm') {
+        prefix = status === 404 ? '[Backend yok — Redeploy gerekli] ' : '[Kayıt onaylanamadı] ';
+      }
+      setErr(prefix + (err.message || 'Yükleme hatası'));
     } finally {
       setBusy(false);
       if (fileRef.current) fileRef.current.value = '';
