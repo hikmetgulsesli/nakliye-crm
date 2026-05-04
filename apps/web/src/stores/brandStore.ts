@@ -178,11 +178,22 @@ export const useBrandStore = create<BrandState>()((set, get) => ({
   },
 
   requestAssetUpload: async (type, filename, contentType) => {
-    const { data } = await api.post<{ key: string; uploadUrl: string; method: 'PUT' }>(
-      '/brand/asset/upload-url',
-      { type, filename, contentType },
-    );
-    return data;
+    const { data } = await api.post<unknown>('/brand/asset/upload-url', {
+      type,
+      filename,
+      contentType,
+    });
+    // Cache'lenmis eski client'larda body.data nested gelebilir; her iki sekli destekle
+    const payload =
+      data && typeof data === 'object' && 'key' in data
+        ? (data as { key: string; uploadUrl: string; method: 'PUT' })
+        : (data as { data?: { key: string; uploadUrl: string; method: 'PUT' } } | null)?.data;
+    if (!payload || !payload.key || !payload.uploadUrl) {
+      throw new Error(
+        'Sunucudan beklenen yükleme adresi alınamadı. Sayfayı sert yenileyip tekrar deneyin (Ctrl+Shift+R).',
+      );
+    }
+    return payload;
   },
 
   confirmAsset: async (type, key) => {
