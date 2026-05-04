@@ -9,7 +9,27 @@ const lookupData: Record<string, string[]> = {
   customer_status: ['Aktif', 'Pasif', 'Soğuk'],
   potential_level: ['Düşük', 'Orta', 'Yüksek'],
   quote_status: ['Bekliyor', 'Kazanıldı', 'Kaybedildi', 'İptal'],
-  loss_reason: ['Fiyat', 'Rakip', 'Gecikmeli dönüş', 'Diğer'],
+  loss_reason: [
+    // Fiyat & Bütçe
+    'Fiyat yüksek',
+    'Daha düşük teklif aldı',
+    'Bütçe yetmedi / proje iptal',
+    // Servis & Operasyon
+    'Transit süresi uzun',
+    'Kapasite / ekipman yok',
+    'Lane / güzergah kapsamımızda yok',
+    // Süreç & İletişim
+    'Geç dönüş yapıldı',
+    'Evrak / dokümantasyon yetersiz',
+    // Rakip
+    'Mevcut tedarikçide kaldı',
+    'Rakip daha kapsamlı çözüm',
+    // Müşteri kaynaklı
+    'Proje ertelendi / iptal',
+    'Spek değişti / kendi taşıyacak',
+    // Diğer
+    'Diğer',
+  ],
   currency: ['USD', 'EUR', 'TRY'],
   activity_type: [
     'Telefon',

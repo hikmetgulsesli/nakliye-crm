@@ -155,6 +155,57 @@ export function QuotationForm({
   const watchStatus = watch('status');
   const watchTransportMode = watch('transportMode');
 
+  /* ---- Loss Reason: lookup'tan checkbox listesi + "Diğer" serbest text ---- */
+  const lossReasonOptions = getOptions('loss_reason');
+  const [selectedLossReasons, setSelectedLossReasons] = useState<string[]>([]);
+  const [otherLossText, setOtherLossText] = useState('');
+
+  // Mevcut lossReason CSV string'ini ilk render'da parse et: bilinen değerler
+  // checkbox'lara, "Diğer: <metin>" varsa textarea'ya yansir.
+  useEffect(() => {
+    const raw = (defaultValues?.lossReason || '').trim();
+    if (!raw) {
+      setSelectedLossReasons([]);
+      setOtherLossText('');
+      return;
+    }
+    const parts = raw.split(',').map((p) => p.trim()).filter(Boolean);
+    const known: string[] = [];
+    let other = '';
+    const knownValues = lossReasonOptions.map((o) => o.value);
+    for (const p of parts) {
+      if (/^Diğer\s*:/i.test(p)) {
+        other = p.replace(/^Diğer\s*:\s*/i, '').trim();
+        if (!known.includes('Diğer')) known.push('Diğer');
+      } else if (knownValues.includes(p)) {
+        if (!known.includes(p)) known.push(p);
+      } else {
+        // Bilinmeyen serbest deger -> Diğer text'ine ekle
+        other = other ? `${other}; ${p}` : p;
+        if (!known.includes('Diğer')) known.push('Diğer');
+      }
+    }
+    setSelectedLossReasons(known);
+    setOtherLossText(other);
+  }, [defaultValues, lossReasonOptions]);
+
+  function toggleLossReason(value: string) {
+    setSelectedLossReasons((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+    );
+  }
+
+  function buildLossReasonCsv(): string {
+    if (selectedLossReasons.length === 0) return '';
+    return selectedLossReasons
+      .map((r) =>
+        r === 'Diğer' && otherLossText.trim()
+          ? `Diğer: ${otherLossText.trim()}`
+          : r,
+      )
+      .join(', ');
+  }
+
   /* ---- Customer search ---- */
   const [customerSearch, setCustomerSearch] = useState('');
   const [customerResults, setCustomerResults] = useState<Customer[]>([]);
@@ -194,7 +245,16 @@ export function QuotationForm({
   /* ---- Render ---- */
 
   return (
-    <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={handleSubmit((data) => {
+        // Kaybedildi degilse loss reason'i temizle; aksi halde checkbox+textarea
+        // birlesimi CSV olarak yaz.
+        const finalLoss =
+          data.status === 'Kaybedildi' ? buildLossReasonCsv() : '';
+        onSubmit({ ...data, lossReason: finalLoss });
+      })}
+    >
       {/* Ref ID + Draft save link */}
       {(refId || onSaveDraft) && (
         <div className="flex items-center justify-between mb-4">
@@ -452,12 +512,50 @@ export function QuotationForm({
             {/* Loss Reason - only when Kaybedildi */}
             {watchStatus === 'Kaybedildi' && (
               <div className="animate-in fade-in slide-in-from-top-2 duration-200">
-                <Textarea
-                  label="Kaybedilme Nedeni"
-                  placeholder="Teklifi kaybetme nedeninizi aciklayiniz..."
-                  rows={3}
-                  {...register('lossReason')}
-                />
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  Kaybedilme Nedeni
+                </label>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  Bir veya birden fazla neden seçebilirsin. "Diğer" işaretlersen
+                  altta açıklama alanı çıkar.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 p-2">
+                  {lossReasonOptions.map((o) => {
+                    const checked = selectedLossReasons.includes(o.value);
+                    return (
+                      <label
+                        key={o.value}
+                        className={cn(
+                          'flex items-center gap-2 rounded-lg px-2.5 py-1.5 cursor-pointer text-sm transition-colors',
+                          checked
+                            ? 'bg-primary/10 text-primary'
+                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300',
+                        )}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleLossReason(o.value)}
+                          className="size-4 rounded border-slate-300 text-primary focus:ring-2 focus:ring-primary/40 dark:border-slate-600"
+                        />
+                        <span>{o.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {selectedLossReasons.includes('Diğer') && (
+                  <div className="mt-3">
+                    <Textarea
+                      label="Detay (Diğer)"
+                      placeholder="Lütfen kaybetme detayını açıklayın..."
+                      rows={2}
+                      value={otherLossText}
+                      onChange={(e) => setOtherLossText(e.target.value)}
+                    />
+                  </div>
+                )}
+                {/* Hidden field — submit'te buildLossReasonCsv() set ediliyor */}
+                <input type="hidden" {...register('lossReason')} />
               </div>
             )}
 
