@@ -34,12 +34,32 @@ interface StorageConfig {
 let cachedClient: S3Client | null = null;
 let cachedConfig: StorageConfig | null = null;
 
+/**
+ * Endpoint'i temizle: trailing slash, bucket adi sonek, eksik protokol
+ * gibi yaygin yanlislari kullanici girisinden temizle.
+ */
+function normalizeEndpoint(raw: string, bucket: string): string {
+  let s = raw.trim();
+  if (!s) return s;
+  if (!/^https?:\/\//i.test(s)) s = `https://${s}`;
+  s = s.replace(/\/+$/, ''); // trailing slash
+  // Bazen kullanicilar Cloudflare'in 'S3 API' ekraninda gosterilen
+  // 'https://<account>.r2.cloudflarestorage.com/<bucket>' degerini
+  // dogrudan endpoint'e yapistirir; bucket sonekini kaldir.
+  const bucketSuffix = `/${bucket}`;
+  if (bucket && s.toLowerCase().endsWith(bucketSuffix.toLowerCase())) {
+    s = s.slice(0, -bucketSuffix.length);
+  }
+  return s;
+}
+
 async function readConfig(): Promise<StorageConfig | null> {
-  const endpoint = await getSecret('s3_endpoint', 'S3_ENDPOINT');
+  const rawEndpoint = await getSecret('s3_endpoint', 'S3_ENDPOINT');
   const bucket = await getSecret('s3_bucket', 'S3_BUCKET');
   const accessKeyId = await getSecret('s3_access_key_id', 'S3_ACCESS_KEY_ID');
   const secretAccessKey = await getSecret('s3_secret_access_key', 'S3_SECRET_ACCESS_KEY');
-  if (!endpoint || !bucket || !accessKeyId || !secretAccessKey) return null;
+  if (!rawEndpoint || !bucket || !accessKeyId || !secretAccessKey) return null;
+  const endpoint = normalizeEndpoint(rawEndpoint, bucket);
   return { endpoint, bucket, accessKeyId, secretAccessKey };
 }
 
