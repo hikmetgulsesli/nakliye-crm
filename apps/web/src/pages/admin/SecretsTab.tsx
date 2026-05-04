@@ -87,10 +87,23 @@ function StorageConnectionTest() {
       }
     } catch (err: unknown) {
       setState('error');
-      setMessage(
-        (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-          'Bağlantı testi başarısız',
-      );
+      const e = err as {
+        response?: { status?: number; data?: { message?: string } };
+        message?: string;
+      };
+      const apiMsg = e.response?.data?.message;
+      const status = e.response?.status;
+      if (apiMsg) {
+        setMessage(apiMsg);
+      } else if (status === 404) {
+        setMessage(
+          'Endpoint sunucuda yok (HTTP 404). Yeni kod henüz deploy edilmemiş olabilir — Dokploy redeploy yapıp sayfayı sert yenileyin (Ctrl+Shift+R).',
+        );
+      } else if (status) {
+        setMessage(`Sunucu hatası (HTTP ${status}). ${e.message || ''}`.trim());
+      } else {
+        setMessage(`Bağlantı testi başarısız. ${e.message || 'Bilinmeyen hata'}`);
+      }
     }
   }
 
