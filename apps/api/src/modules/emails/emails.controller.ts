@@ -13,7 +13,7 @@ export async function sendTest(req: Request, res: Response) {
   if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
 
   const baseUrl = process.env.APP_BASE_URL || 'https://nakliye.setrox.com.tr';
-  const tpl = testEmailTemplate({
+  const tpl = await testEmailTemplate({
     recipientName: user.fullName,
     triggeredBy: user.email,
     baseUrl,
@@ -67,7 +67,7 @@ export async function sendDailyDigest(req: Request, res: Response) {
 
     if (uncontacted + pending + expired === 0) continue;
 
-    const tpl = dailyDigestTemplate({
+    const tpl = await dailyDigestTemplate({
       recipientName: user.fullName,
       date: today,
       uncontactedCount: uncontacted,
@@ -115,7 +115,7 @@ export async function sendQuotationEmail(req: Request, res: Response) {
   const sender = await prisma.user.findUnique({ where: { id: req.user!.userId } });
   if (!sender) throw new AppError('Gönderen bulunamadı', 404);
 
-  const tpl = quotationEmailTemplate({
+  const tpl = await quotationEmailTemplate({
     customerName: quotation.customer.contactName || quotation.customer.companyName,
     companyName: quotation.customer.companyName,
     quoteNo: quotation.quoteNo,

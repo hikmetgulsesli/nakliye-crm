@@ -71,7 +71,7 @@ export function startDailyDigestWorker(): Worker {
       }
 
       for (const admin of admins) {
-        const tpl = dailyDigestTemplate({
+        const tpl = await dailyDigestTemplate({
           recipientName: admin.fullName,
           date: today,
           uncontactedCount: uncontacted,

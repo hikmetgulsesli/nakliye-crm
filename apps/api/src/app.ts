@@ -42,6 +42,7 @@ import { gamificationRoutes } from './modules/gamification/gamification.routes';
 import { goalsRoutes } from './modules/goals/goals.routes';
 import { checkinRoutes } from './modules/checkin/checkin.routes';
 import { leadFormsRoutes } from './modules/lead-forms/lead-forms.routes';
+import { brandRoutes } from './modules/brand/brand.routes';
 import swaggerUi from 'swagger-ui-express';
 import { openapiSpec } from './config/openapi';
 
@@ -92,6 +93,7 @@ app.use('/api/transfers', transferRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/brand', brandRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/emails', emailsRoutes);
 app.use('/api/shipments', shipmentsRoutes);

@@ -5,12 +5,14 @@ import { settingsService, type SettingsResponse, type AIUsageReport } from '@/se
 import { emailsService } from '@/services/emails.service';
 import { FeaturesTab } from './FeaturesTab';
 import { SecretsTab } from './SecretsTab';
+import { BrandTab } from './BrandTab';
 import { AIConnectionTest } from '@/components/admin/AIConnectionTest';
 
-type TabKey = 'features' | 'general' | 'ai' | 'secrets' | 'integrations' | 'notifications' | 'usage';
+type TabKey = 'features' | 'brand' | 'general' | 'ai' | 'secrets' | 'integrations' | 'notifications' | 'usage';
 
 const TABS = [
   { key: 'features', label: 'Özellikler' },
+  { key: 'brand', label: 'Marka' },
   { key: 'general', label: 'Genel' },
   { key: 'ai', label: 'AI Sağlayıcılar' },
   { key: 'secrets', label: 'API Anahtarları' },
@@ -81,6 +83,8 @@ export default function SystemSettingsPage() {
 
       {active === 'features' ? (
         <FeaturesTab />
+      ) : active === 'brand' ? (
+        <BrandTab />
       ) : active === 'secrets' ? (
         <SecretsTab />
       ) : loading && !data ? (

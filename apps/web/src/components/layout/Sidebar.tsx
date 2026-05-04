@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
+import { useBrandStore } from '@/stores/brandStore';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import { Icon } from '@/components/ui';
 import api from '@/config/api';
@@ -135,27 +136,7 @@ export default function Sidebar() {
       style={{ width: 'var(--sidebar-w)' }}
     >
       {/* Brand */}
-      <div
-        className="flex items-center gap-2.5 border-b border-token-border px-4"
-        style={{ height: 'var(--topbar-h)' }}
-      >
-        <div
-          className="grid size-7 place-items-center rounded-md text-[12px] font-bold text-white shadow-sm"
-          style={{
-            background:
-              'linear-gradient(135deg, var(--accent), var(--magenta))',
-            letterSpacing: '-0.02em',
-          }}
-        >
-          N
-        </div>
-        <div className="flex-1 text-[14px] font-semibold tracking-tight text-token-text">
-          NakliyeCRM
-        </div>
-        <div className="rounded border border-token-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-token-subtle font-mono">
-          v1.0
-        </div>
-      </div>
+      <BrandHeader />
 
       {/* Workspace switcher */}
       <button
@@ -299,5 +280,48 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+  );
+}
+
+function BrandHeader() {
+  const brand = useBrandStore((s) => s.brand);
+  const initial = (brand.companyName || 'N').trim().charAt(0).toUpperCase();
+  return (
+    <div
+      className="flex items-center gap-2.5 border-b border-token-border px-4"
+      style={{ height: 'var(--topbar-h)' }}
+    >
+      {brand.logoUrl ? (
+        <img
+          src={brand.logoUrl}
+          alt={brand.companyName}
+          className="h-7 max-w-[110px] object-contain"
+        />
+      ) : (
+        <>
+          <div
+            className="grid size-7 place-items-center rounded-md text-[12px] font-bold text-white shadow-sm"
+            style={{
+              background:
+                'linear-gradient(135deg, var(--accent), var(--magenta))',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {initial}
+          </div>
+          <div className="flex-1 text-[14px] font-semibold tracking-tight text-token-text">
+            {brand.companyName}
+          </div>
+        </>
+      )}
+      {brand.logoUrl && (
+        <div className="flex-1 truncate text-[12px] font-medium tracking-tight text-token-muted">
+          {/* logo varken text gizli */}
+        </div>
+      )}
+      <div className="rounded border border-token-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-token-subtle font-mono">
+        v1.0
+      </div>
+    </div>
   );
 }

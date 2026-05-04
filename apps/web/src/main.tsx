@@ -5,8 +5,13 @@ import { router } from './routes';
 import { initSentry } from './config/sentry';
 import './i18n';
 import './index.css';
+import { useBrandStore } from './stores/brandStore';
 
 initSentry();
+
+// Brand'i mount oncesi async fetch — dondurmeyiz, gelir gelmez logo/title/renk
+// uygulanir. Default 'NakliyeCRM' boyunca gozukur (FOUC ihmal edilebilir).
+useBrandStore.getState().fetch();
 
 // FOUC onleme: persist'ten tema/aksan/yogunluk okuyup mount oncesi uygula
 try {

@@ -1,10 +1,24 @@
 /**
  * Basit HTML e-posta template'leri. Inline CSS, responsive, Türkçe UTF-8.
  * React Email gibi ağır bir kütüphane eklemiyoruz — 4 template için abartı olur.
+ *
+ * Brand (sirket adi + ana renk) SystemSetting'ten okunur; her template async.
  */
 
-function layout(body: string, opts: { title: string; footerUrl?: string }): string {
-  const brand = 'Nakliye CRM';
+import { getSetting } from '../system-settings.service';
+
+async function getBrand(): Promise<{ name: string; color: string }> {
+  return {
+    name: (await getSetting<string>('brand.company_name')) || 'Nakliye CRM',
+    color: (await getSetting<string>('brand.primary_color')) || '#e30a17',
+  };
+}
+
+function layout(
+  body: string,
+  opts: { title: string; footerUrl?: string; brandName: string; brandColor: string },
+): string {
+  const brand = opts.brandName;
   return `<!doctype html>
 <html lang="tr">
 <head>
@@ -17,14 +31,14 @@ function layout(body: string, opts: { title: string; footerUrl?: string }): stri
     <div style="background:#ffffff;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
       <div style="border-bottom:1px solid #e2e8f0;padding-bottom:16px;margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:40px;height:40px;border-radius:8px;background:#e30a17;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px">🚛</div>
-          <strong style="font-size:18px;color:#0f172a">${brand}</strong>
+          <div style="width:40px;height:40px;border-radius:8px;background:${opts.brandColor};display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px">🚛</div>
+          <strong style="font-size:18px;color:#0f172a">${escape(brand)}</strong>
         </div>
       </div>
       ${body}
       <div style="margin-top:32px;padding-top:16px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px">
-        Bu e-posta ${brand} tarafından otomatik olarak gönderildi.
-        ${opts.footerUrl ? `<br><a href="${escape(opts.footerUrl)}" style="color:#e30a17">CRM'e git</a>` : ''}
+        Bu e-posta ${escape(brand)} tarafından otomatik olarak gönderildi.
+        ${opts.footerUrl ? `<br><a href="${escape(opts.footerUrl)}" style="color:${opts.brandColor}">CRM'e git</a>` : ''}
       </div>
     </div>
   </div>
@@ -52,7 +66,8 @@ export interface DailyDigestData {
   baseUrl: string;
 }
 
-export function dailyDigestTemplate(d: DailyDigestData): { subject: string; html: string } {
+export async function dailyDigestTemplate(d: DailyDigestData): Promise<{ subject: string; html: string }> {
+  const brand = await getBrand();
   const total = d.uncontactedCount + d.pendingQuoteCount + d.expiredQuoteCount;
   const body = `
     <h1 style="font-size:20px;margin:0 0 8px 0">Günlük Özet — ${escape(d.date)}</h1>
@@ -77,12 +92,17 @@ export function dailyDigestTemplate(d: DailyDigestData): { subject: string; html
       </td></tr>
     </table>
     <div style="margin-top:24px">
-      <a href="${escape(d.baseUrl)}" style="display:inline-block;padding:12px 24px;background:#e30a17;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Dashboard'u Aç</a>
+      <a href="${escape(d.baseUrl)}" style="display:inline-block;padding:12px 24px;background:${brand.color};color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Dashboard'u Aç</a>
     </div>
   `;
   return {
-    subject: `[Nakliye CRM] Günlük Özet — ${d.date} (${total} madde)`,
-    html: layout(body, { title: 'Günlük Özet', footerUrl: d.baseUrl }),
+    subject: `[${brand.name}] Günlük Özet — ${d.date} (${total} madde)`,
+    html: layout(body, {
+      title: 'Günlük Özet',
+      footerUrl: d.baseUrl,
+      brandName: brand.name,
+      brandColor: brand.color,
+    }),
   };
 }
 
@@ -96,7 +116,7 @@ export interface QuotationEmailData {
   baseUrl?: string;
 }
 
-export function quotationEmailTemplate(d: QuotationEmailData): { subject: string; html: string } {
+export async function quotationEmailTemplate(d: QuotationEmailData): Promise<{ subject: string; html: string }> {
   // messageBody is user-authored/AI-generated; treat as pre-formatted text, convert newlines.
   const bodyHtml = escape(d.messageBody).replace(/\n/g, '<br>');
   const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8"></head>
@@ -121,7 +141,8 @@ export interface CriticalAlertData {
   baseUrl: string;
 }
 
-export function criticalAlertTemplate(d: CriticalAlertData): { subject: string; html: string } {
+export async function criticalAlertTemplate(d: CriticalAlertData): Promise<{ subject: string; html: string }> {
+  const brand = await getBrand();
   const body = `
     <div style="background:#fef2f2;border-left:4px solid #ef4444;padding:16px;border-radius:8px;margin-bottom:16px">
       <strong style="color:#991b1b">⚠️ Kritik Uyarı</strong>
@@ -129,11 +150,16 @@ export function criticalAlertTemplate(d: CriticalAlertData): { subject: string; 
     <h1 style="font-size:18px;margin:0 0 8px 0">${escape(d.alertTitle)}</h1>
     <p style="color:#334155">Merhaba ${escape(d.recipientName)},</p>
     <p style="color:#334155;line-height:1.6">${escape(d.alertMessage)}</p>
-    ${d.link ? `<div style="margin-top:24px"><a href="${escape(d.baseUrl + d.link)}" style="display:inline-block;padding:10px 20px;background:#e30a17;color:#fff;border-radius:8px;text-decoration:none">Detaya Git</a></div>` : ''}
+    ${d.link ? `<div style="margin-top:24px"><a href="${escape(d.baseUrl + d.link)}" style="display:inline-block;padding:10px 20px;background:${brand.color};color:#fff;border-radius:8px;text-decoration:none">Detaya Git</a></div>` : ''}
   `;
   return {
-    subject: `[Nakliye CRM] ${d.alertTitle}`,
-    html: layout(body, { title: d.alertTitle, footerUrl: d.baseUrl }),
+    subject: `[${brand.name}] ${d.alertTitle}`,
+    html: layout(body, {
+      title: d.alertTitle,
+      footerUrl: d.baseUrl,
+      brandName: brand.name,
+      brandColor: brand.color,
+    }),
   };
 }
 
@@ -143,7 +169,8 @@ export interface PasswordResetData {
   expiresInMinutes: number;
 }
 
-export function passwordResetTemplate(d: PasswordResetData): { subject: string; html: string } {
+export async function passwordResetTemplate(d: PasswordResetData): Promise<{ subject: string; html: string }> {
+  const brand = await getBrand();
   const body = `
     <h1 style="font-size:20px;margin:0 0 16px 0">Şifre Sıfırlama</h1>
     <p style="color:#334155;line-height:1.6">
@@ -152,15 +179,19 @@ export function passwordResetTemplate(d: PasswordResetData): { subject: string; 
       <strong>${d.expiresInMinutes} dakika</strong> geçerlidir.
     </p>
     <div style="margin:24px 0">
-      <a href="${escape(d.resetUrl)}" style="display:inline-block;padding:12px 32px;background:#e30a17;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Şifremi Sıfırla</a>
+      <a href="${escape(d.resetUrl)}" style="display:inline-block;padding:12px 32px;background:${brand.color};color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Şifremi Sıfırla</a>
     </div>
     <p style="color:#64748b;font-size:13px">
       Bu talebi siz yapmadıysanız bu e-postayı görmezden gelebilirsiniz.
     </p>
   `;
   return {
-    subject: '[Nakliye CRM] Şifre Sıfırlama',
-    html: layout(body, { title: 'Şifre Sıfırlama' }),
+    subject: `[${brand.name}] Şifre Sıfırlama`,
+    html: layout(body, {
+      title: 'Şifre Sıfırlama',
+      brandName: brand.name,
+      brandColor: brand.color,
+    }),
   };
 }
 
@@ -170,7 +201,8 @@ export interface TestEmailData {
   baseUrl: string;
 }
 
-export function testEmailTemplate(d: TestEmailData): { subject: string; html: string } {
+export async function testEmailTemplate(d: TestEmailData): Promise<{ subject: string; html: string }> {
+  const brand = await getBrand();
   const body = `
     <h1 style="font-size:20px;margin:0 0 12px 0">✅ Test E-postası</h1>
     <p style="color:#334155;line-height:1.6">
@@ -183,7 +215,12 @@ export function testEmailTemplate(d: TestEmailData): { subject: string; html: st
     </p>
   `;
   return {
-    subject: '[Nakliye CRM] Test E-postası',
-    html: layout(body, { title: 'Test', footerUrl: d.baseUrl }),
+    subject: `[${brand.name}] Test E-postası`,
+    html: layout(body, {
+      title: 'Test',
+      footerUrl: d.baseUrl,
+      brandName: brand.name,
+      brandColor: brand.color,
+    }),
   };
 }

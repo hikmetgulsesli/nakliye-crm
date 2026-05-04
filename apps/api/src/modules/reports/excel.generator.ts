@@ -1,4 +1,5 @@
 import ExcelJS from 'exceljs';
+import { getSetting } from '../../services/system-settings.service';
 
 export async function generateExcelReport(
   title: string,
@@ -6,7 +7,8 @@ export async function generateExcelReport(
   rows: Record<string, unknown>[]
 ): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = 'NakliyeCRM';
+  const brandName = (await getSetting<string>('brand.company_name')) || 'NakliyeCRM';
+  workbook.creator = brandName;
   workbook.created = new Date();
 
   const worksheet = workbook.addWorksheet('Rapor');

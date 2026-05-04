@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/authStore';
+import { useBrandStore } from '@/stores/brandStore';
 
 interface LoginForm {
   email: string;
@@ -14,6 +15,7 @@ interface LoginForm {
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
+  const brand = useBrandStore((s) => s.brand);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,12 +62,22 @@ export default function LoginPage() {
       <header className="relative z-10 flex items-center justify-between px-8 py-5">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-full bg-[#e30a17]">
-            <span className="material-symbols-outlined text-[22px] text-white">
-              local_shipping
-            </span>
-          </div>
-          <span className="text-lg font-bold text-white">Uluslararası Nakliye CRM</span>
+          {brand.logoDarkUrl || brand.logoUrl ? (
+            <img
+              src={brand.logoDarkUrl || brand.logoUrl || ''}
+              alt={brand.companyName}
+              className="h-10 max-w-[180px] object-contain"
+            />
+          ) : (
+            <>
+              <div className="flex size-10 items-center justify-center rounded-full bg-[#e30a17]">
+                <span className="material-symbols-outlined text-[22px] text-white">
+                  local_shipping
+                </span>
+              </div>
+              <span className="text-lg font-bold text-white">{brand.companyName}</span>
+            </>
+          )}
         </div>
 
         {/* Nav links */}
@@ -243,7 +255,7 @@ export default function LoginPage() {
           {/* Divider + Copyright */}
           <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-400">
             <span className="h-px w-6 bg-slate-200" />
-            <span>&copy; 2026 NakliyeCRM</span>
+            <span>&copy; 2026 {brand.companyName}</span>
             <span className="h-px w-6 bg-slate-200" />
           </div>
         </div>
@@ -253,7 +265,7 @@ export default function LoginPage() {
       <footer className="relative z-10 bg-[#0f172a]/80 backdrop-blur-md border-t border-white/10 px-8 py-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-slate-200">
-            &copy; 2026 NakliyeCRM. Tüm hakları saklıdır.
+            &copy; 2026 {brand.companyName}. Tüm hakları saklıdır.
           </p>
           <div className="flex items-center gap-6">
             <Link

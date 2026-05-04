@@ -1,5 +1,6 @@
 import PDFDocument from 'pdfkit';
 import vfsModule from 'pdfmake/build/vfs_fonts';
+import { getSetting } from '../../services/system-settings.service';
 
 /**
  * pdfkit ile gercek PDF uretir. Roboto ttf font'unu pdfmake'in
@@ -36,11 +37,16 @@ export async function generatePdfReport(
   const pageWidth = isLandscape ? 842 : 595; // A4
   const pageHeight = isLandscape ? 595 : 842;
 
+  const brandName =
+    (await getSetting<string>('brand.company_name')) || 'NakliyeCRM';
+  const brandColor =
+    (await getSetting<string>('brand.primary_color')) || '#1976d2';
+
   const doc = new PDFDocument({
     size: 'A4',
     layout: isLandscape ? 'landscape' : 'portrait',
     margin,
-    info: { Title: title, Creator: 'NakliyeCRM', Producer: 'NakliyeCRM' },
+    info: { Title: title, Creator: brandName, Producer: brandName },
   });
 
   doc.registerFont('Roboto', fonts.regular);
@@ -56,10 +62,10 @@ export async function generatePdfReport(
 
   // ---------------- Header ----------------
   doc
-    .fillColor('#1976d2')
+    .fillColor(brandColor)
     .font('Roboto-Bold')
     .fontSize(14)
-    .text('NakliyeCRM', margin, margin, { continued: false });
+    .text(brandName, margin, margin, { continued: false });
 
   doc
     .fillColor('#888')
@@ -95,7 +101,7 @@ export async function generatePdfReport(
   const cellPad = 4;
 
   function drawHeaderRow(y: number) {
-    doc.rect(margin, y, usableWidth, rowHeight).fill('#1976d2');
+    doc.rect(margin, y, usableWidth, rowHeight).fill(brandColor);
     doc.fillColor('#fff').font('Roboto-Bold').fontSize(9);
     columns.forEach((col, i) => {
       doc.text(
