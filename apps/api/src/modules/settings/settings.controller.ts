@@ -5,7 +5,11 @@ import {
   setSetting,
 } from '../../services/system-settings.service';
 import { listProvidersStatus, listProvidersStatusAsync } from '../../services/ai';
-import { isStorageConfigured } from '../../services/storage.service';
+import {
+  isStorageConfigured,
+  testStorageConnection,
+  invalidateStorageCache,
+} from '../../services/storage.service';
 import {
   setSecret,
   getSecretStatus,
@@ -57,6 +61,7 @@ export async function getAll(_req: Request, res: Response) {
 
   // Service health status (env + DB)
   const aiProviders = await listProvidersStatusAsync();
+  const storageConfigured = await isStorageConfigured();
   const integrations = {
     sentry: {
       backend: Boolean(process.env.SENTRY_DSN),
@@ -67,7 +72,7 @@ export async function getAll(_req: Request, res: Response) {
       url: process.env.REDIS_URL || 'redis://localhost:6379',
     },
     storage: {
-      configured: isStorageConfigured(),
+      configured: storageConfigured,
       endpoint: process.env.S3_ENDPOINT ? maskUrl(process.env.S3_ENDPOINT) : null,
       bucket: process.env.S3_BUCKET || null,
     },
@@ -188,6 +193,11 @@ export async function updateSecret(req: Request, res: Response) {
 
   await setSecret(name, value || '', req.user?.userId);
 
+  // Secret degistiyse ilgili servislerin client cache'ini sifirla.
+  if (name.startsWith('s3_')) {
+    invalidateStorageCache();
+  }
+
   await createAuditLog({
     userId: req.user!.userId,
     recordType: 'Secret',
@@ -200,6 +210,14 @@ export async function updateSecret(req: Request, res: Response) {
   const meta = SECRET_NAMES.find((s) => s.name === name)!;
   const status = await getSecretStatus(name, meta.envVar);
   res.json({ success: true, data: { name, ...status } });
+}
+
+/**
+ * S3/R2 baglanti testi: kucuk bir test obj'i yaz/oku/sil.
+ */
+export async function testStorage(_req: Request, res: Response) {
+  const result = await testStorageConnection();
+  return res.json({ success: result.ok, ...result });
 }
 
 export async function aiUsageReport(req: Request, res: Response) {

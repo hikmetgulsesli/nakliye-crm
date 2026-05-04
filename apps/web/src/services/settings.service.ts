@@ -113,4 +113,19 @@ export const settingsService = {
     const { data } = await api.put<SecretStatus>('/settings/secrets', { name, value });
     return data;
   },
+
+  async testStorage(): Promise<{
+    ok: boolean;
+    success: boolean;
+    message: string;
+    detail?: { endpoint?: string; bucket?: string; latencyMs?: number };
+  }> {
+    const { data } = await api.post<{
+      ok: boolean;
+      success: boolean;
+      message: string;
+      detail?: { endpoint?: string; bucket?: string; latencyMs?: number };
+    }>('/settings/storage/test');
+    return data;
+  },
 };

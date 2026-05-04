@@ -16,6 +16,7 @@ router.patch('/', settings.update);
 router.get('/features', settings.listFeatures);
 router.get('/secrets', settings.listSecrets);
 router.put('/secrets', settings.updateSecret);
+router.post('/storage/test', settings.testStorage);
 router.get('/ai-usage', settings.aiUsageReport);
 
 export { router as settingsRoutes };

@@ -25,8 +25,11 @@ function validateCategory(c: string): boolean {
  * Frontend dogrudan R2/S3'e PUT atacak.
  */
 export async function requestUpload(req: Request, res: Response) {
-  if (!isStorageConfigured()) {
-    throw new AppError('Object storage yapilandirilmamis (S3_ENDPOINT vb. env eksik)', 503);
+  if (!(await isStorageConfigured())) {
+    throw new AppError(
+      'Object storage yapilandirilmamis. Sistem Ayarlari > API Anahtarlari ekraninda S3/R2 bilgilerini girin.',
+      503,
+    );
   }
 
   const { ownerType, ownerId, filename, contentType, category } = req.body as {

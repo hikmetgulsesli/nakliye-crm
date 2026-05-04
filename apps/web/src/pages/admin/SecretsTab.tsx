@@ -58,9 +58,79 @@ export function SecretsTab() {
             {g.items.map((it) => (
               <SecretRow key={it.name} secret={it} onSave={handleUpdate} />
             ))}
+            {g.category === 'storage' && <StorageConnectionTest />}
           </div>
         </Card>
       ))}
+    </div>
+  );
+}
+
+function StorageConnectionTest() {
+  const [state, setState] = useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
+  const [message, setMessage] = useState<string>('');
+  const [latency, setLatency] = useState<number | null>(null);
+
+  async function run() {
+    setState('testing');
+    setMessage('');
+    setLatency(null);
+    try {
+      const res = await settingsService.testStorage();
+      if (res.ok) {
+        setState('ok');
+        setMessage(res.message);
+        setLatency(res.detail?.latencyMs ?? null);
+      } else {
+        setState('error');
+        setMessage(res.message);
+      }
+    } catch (err: unknown) {
+      setState('error');
+      setMessage(
+        (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+          'Bağlantı testi başarısız',
+      );
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
+            Bağlantı Testi
+          </div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Yukarıdaki S3/R2 bilgileriyle bucket'a küçük bir test dosyası yazıp okur ve siler.
+            Endpoint, bucket adı, anahtarlar doğru mu hızlı kontrol için.
+          </div>
+        </div>
+        <Button
+          variant="secondary"
+          size="sm"
+          icon="cloud_sync"
+          loading={state === 'testing'}
+          onClick={run}
+        >
+          Test Et
+        </Button>
+      </div>
+      {state === 'ok' && (
+        <div className="mt-3 flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-300">
+          <Icon name="check_circle" size="sm" />
+          <span>{message}</span>
+          {latency != null && (
+            <span className="text-xs text-slate-500">({latency} ms)</span>
+          )}
+        </div>
+      )}
+      {state === 'error' && (
+        <div className="mt-3 flex items-start gap-2 text-sm text-red-700 dark:text-red-300">
+          <Icon name="error" size="sm" />
+          <span>{message}</span>
+        </div>
+      )}
     </div>
   );
 }
