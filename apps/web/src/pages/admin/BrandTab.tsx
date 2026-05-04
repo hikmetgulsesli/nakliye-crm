@@ -78,7 +78,7 @@ export function BrandTab() {
               onChange={(e) => setCompanyName(e.target.value)}
               maxLength={60}
               className={inputClass}
-              placeholder="örn. HG Trans Lojistik"
+              placeholder="örn. X Lojistik A.Ş."
             />
             <p className="text-xs text-slate-500 mt-1">
               Header, login, page title, e-posta imzası gibi tüm yerlerde gözükür.
@@ -91,7 +91,7 @@ export function BrandTab() {
               onChange={(e) => setTagline(e.target.value)}
               maxLength={120}
               className={inputClass}
-              placeholder="örn. Uluslararası Nakliye Operasyonları"
+              placeholder="örn. Uluslararası Nakliye & Lojistik"
             />
           </Field>
           <Field label="E-posta Gönderici Adı">
@@ -101,7 +101,7 @@ export function BrandTab() {
               onChange={(e) => setEmailFromName(e.target.value)}
               maxLength={60}
               className={inputClass}
-              placeholder="örn. HG Trans"
+              placeholder="örn. X Lojistik"
             />
             <p className="text-xs text-slate-500 mt-1">
               Otomatik e-postalarda "Kimden" satırında görünecek isim.

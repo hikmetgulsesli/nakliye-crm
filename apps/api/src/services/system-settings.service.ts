@@ -27,6 +27,15 @@ export async function setSetting(
   value: unknown,
   updatedBy?: number,
 ): Promise<void> {
+  // SystemSetting.value JSON-non-null; null/undefined = ayar silme demek.
+  // Bu sayede 'reset to default' davranisi natural calisir.
+  if (value === null || value === undefined) {
+    await prisma.systemSetting
+      .delete({ where: { key } })
+      .catch(() => undefined); // var degilse sessizce gec
+    cache.delete(key);
+    return;
+  }
   await prisma.systemSetting.upsert({
     where: { key },
     update: { value: value as object, updatedBy },
