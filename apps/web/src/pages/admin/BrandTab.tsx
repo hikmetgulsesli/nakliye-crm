@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Card, Button, Icon } from '@/components/ui';
-import { useBrandStore } from '@/stores/brandStore';
+import { useBrand, useBrandStore } from '@/stores/brandStore';
 
 const PRESET_COLORS = [
   '#2563eb', // mavi (default)
@@ -15,7 +15,7 @@ const PRESET_COLORS = [
 ];
 
 export function BrandTab() {
-  const brand = useBrandStore((s) => s.brand);
+  const brand = useBrand();
   const update = useBrandStore((s) => s.update);
   const requestAssetUpload = useBrandStore((s) => s.requestAssetUpload);
   const confirmAsset = useBrandStore((s) => s.confirmAsset);

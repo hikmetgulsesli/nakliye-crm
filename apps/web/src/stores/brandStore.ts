@@ -30,7 +30,7 @@ interface BrandState {
   ) => Promise<{ key: string; uploadUrl: string; method: 'PUT' }>;
 }
 
-const DEFAULT_BRAND: BrandPayload = {
+export const DEFAULT_BRAND: BrandPayload = {
   companyName: 'NakliyeCRM',
   tagline: 'Nakliye Operasyon Yönetimi',
   primaryColor: '#2563eb',
@@ -39,6 +39,14 @@ const DEFAULT_BRAND: BrandPayload = {
   logoDarkUrl: null,
   faviconUrl: null,
 };
+
+/**
+ * Reaktif, her zaman safe brand donduren hook. `brand` herhangi bir sebeple
+ * undefined olursa DEFAULT_BRAND'a duser — UI hic crash etmesin.
+ */
+export function useBrand(): BrandPayload {
+  return useBrandStore((s) => s.brand) ?? DEFAULT_BRAND;
+}
 
 // ----- Color utilities (hex <-> HSL) for hover variant -----
 function hexToHsl(hex: string): [number, number, number] | null {

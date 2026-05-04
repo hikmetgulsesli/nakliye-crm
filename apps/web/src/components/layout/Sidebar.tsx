@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
-import { useBrandStore } from '@/stores/brandStore';
+import { useBrand } from '@/stores/brandStore';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
 import { Icon } from '@/components/ui';
 import api from '@/config/api';
@@ -284,7 +284,7 @@ export default function Sidebar() {
 }
 
 function BrandHeader() {
-  const brand = useBrandStore((s) => s.brand);
+  const brand = useBrand();
   const initial = (brand.companyName || 'N').trim().charAt(0).toUpperCase();
   return (
     <div

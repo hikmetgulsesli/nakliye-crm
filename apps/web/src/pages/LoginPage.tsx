@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/authStore';
-import { useBrandStore } from '@/stores/brandStore';
+import { useBrand } from '@/stores/brandStore';
 
 interface LoginForm {
   email: string;
@@ -15,7 +15,7 @@ interface LoginForm {
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
-  const brand = useBrandStore((s) => s.brand);
+  const brand = useBrand();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
