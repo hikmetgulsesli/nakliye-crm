@@ -150,10 +150,16 @@ export const useBrandStore = create<BrandState>()((set, get) => ({
     link.href = target;
   },
 
+  // NOT: api.ts'teki response interceptor {success, data} zarfini otomatik
+  // unwrap ediyor, dolayisiyla axios `response.data` zaten `data.data` icerir.
+  // Bu yuzden burada `data` zaten BrandPayload — `data.data` ile erisilmemeli.
   fetch: async () => {
     try {
-      const { data } = await api.get<{ data: BrandPayload }>('/brand');
-      const brand = data.data;
+      const { data: brand } = await api.get<BrandPayload>('/brand');
+      if (!brand) {
+        set({ loaded: true });
+        return;
+      }
       set({ brand, loaded: true });
       get().applyTheme(brand.primaryColor);
       get().applyDocumentTitle();
@@ -164,26 +170,27 @@ export const useBrandStore = create<BrandState>()((set, get) => ({
   },
 
   update: async (patch) => {
-    const { data } = await api.put<{ data: BrandPayload }>('/brand', patch);
-    const brand = data.data;
+    const { data: brand } = await api.put<BrandPayload>('/brand', patch);
+    if (!brand) throw new Error('Brand güncellendi ama sunucu yanıtı boş');
     set({ brand, loaded: true });
     get().applyTheme(brand.primaryColor);
     get().applyDocumentTitle();
   },
 
   requestAssetUpload: async (type, filename, contentType) => {
-    const { data } = await api.post<{
-      data: { key: string; uploadUrl: string; method: 'PUT' };
-    }>('/brand/asset/upload-url', { type, filename, contentType });
-    return data.data;
+    const { data } = await api.post<{ key: string; uploadUrl: string; method: 'PUT' }>(
+      '/brand/asset/upload-url',
+      { type, filename, contentType },
+    );
+    return data;
   },
 
   confirmAsset: async (type, key) => {
-    const { data } = await api.post<{ data: BrandPayload }>('/brand/asset/confirm', {
+    const { data: brand } = await api.post<BrandPayload>('/brand/asset/confirm', {
       type,
       key,
     });
-    const brand = data.data;
+    if (!brand) return;
     set({ brand, loaded: true });
     if (type === 'favicon') get().applyFavicon(brand.faviconUrl);
   },

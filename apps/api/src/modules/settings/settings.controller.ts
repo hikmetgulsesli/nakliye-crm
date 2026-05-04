@@ -217,7 +217,9 @@ export async function updateSecret(req: Request, res: Response) {
  */
 export async function testStorage(_req: Request, res: Response) {
   const result = await testStorageConnection();
-  return res.json({ success: result.ok, ...result });
+  // Frontend axios interceptor'u {success, data} zarfini unwrap eder;
+  // sonucu data altinda dondurelim ki client.data = result olsun.
+  return res.json({ success: result.ok, data: result });
 }
 
 export async function aiUsageReport(req: Request, res: Response) {
