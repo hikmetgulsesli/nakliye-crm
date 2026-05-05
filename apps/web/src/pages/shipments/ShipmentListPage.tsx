@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Icon, Skeleton, EmptyState, Select, Pagination } from '@/components/ui';
+import { Button, Icon, Skeleton, EmptyState, Select, Pagination, Table } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
@@ -13,10 +13,10 @@ import {
   STATUS_COLORS,
 } from '@/services/shipment.service';
 import { usePagination } from '@/hooks/usePagination';
+import { useSort } from '@/hooks/useSort';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
-import { cn } from '@/utils/cn';
 import type { SavedView } from '@/services/saved-views.service';
 
 type ViewId = 'all' | 'active' | 'transit' | 'delivered' | 'mine';
@@ -35,6 +35,7 @@ export default function ShipmentListPage() {
   const [items, setItems] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
   const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
+  const { sortBy, sortOrder, setSort } = useSort({ sortBy: 'createdAt', sortOrder: 'desc' });
   const [search, setSearch] = useState(searchParams.get('search') ?? '');
   const [statusFilter, setStatusFilter] = useState(searchParams.get('status') ?? '');
   const [startDate, setStartDate] = useState<string | undefined>(
@@ -80,6 +81,8 @@ export default function ShipmentListPage() {
         assignedUserId: useMine && currentUserId ? currentUserId : undefined,
         startDate,
         endDate,
+        sortBy,
+        sortOrder,
       });
       let data = res.data;
       // "Aktif" view: birkac status'u toplayan turetilmis filter — backend tek
@@ -97,7 +100,7 @@ export default function ShipmentListPage() {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize, debounced, statusFilter, onlyMine, currentUserId, activeView, startDate, endDate]);
+  }, [page, pageSize, sortBy, sortOrder, debounced, statusFilter, onlyMine, currentUserId, activeView, startDate, endDate]);
 
   const views = useMemo<BuiltInView[]>(() => {
     const list: BuiltInView[] = [
@@ -234,57 +237,85 @@ export default function ShipmentListPage() {
                 />
               </div>
             )}
-            <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-token-bg-subtle text-left text-token-subtle">
-                <tr>
-                  <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">No</th>
-                  <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">Müşteri</th>
-                  <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">Güzergah</th>
-                  <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">ETA</th>
-                  <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">Durum</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-token-border">
-                {items.map((s) => (
-                  <tr
-                    key={s.id}
-                    onClick={() => navigate(`/sevkiyatlar/${s.id}`)}
-                    className={cn(
-                      'cursor-pointer transition-colors hover:bg-token-bg-subtle',
-                    )}
-                    style={{ height: 'var(--row-h)' }}
-                  >
-                    <td className="px-4 font-mono text-[12px] font-medium text-primary">
-                      {s.shipmentNo}
+            <Table<Shipment & Record<string, unknown>>
+              columns={[
+                {
+                  key: 'shipmentNo',
+                  label: 'NO',
+                  sortable: true,
+                  sortKey: 'shipmentNo',
+                  render: (s: Shipment) => (
+                    <div>
+                      <div className="font-mono text-[12px] font-medium text-primary whitespace-nowrap">
+                        {s.shipmentNo}
+                      </div>
                       {s.blNumber && (
                         <div className="text-[11px] text-token-subtle">BL: {s.blNumber}</div>
                       )}
-                    </td>
-                    <td className="px-4 text-token-text">{s.customer?.companyName || '-'}</td>
-                    <td className="px-4 text-[12px] text-token-muted">
+                    </div>
+                  ),
+                },
+                {
+                  key: 'customer',
+                  label: 'MÜŞTERİ',
+                  render: (s: Shipment) => (
+                    <span className="text-token-text">
+                      {s.customer?.companyName || '-'}
+                    </span>
+                  ),
+                },
+                {
+                  key: 'route',
+                  label: 'GÜZERGAH',
+                  render: (s: Shipment) => (
+                    <div className="text-[12px] text-token-muted">
                       {s.originCountry || '-'} → {s.destinationCountry || '-'}
                       {(s.pol || s.pod) && (
                         <div className="text-[11px] text-token-subtle">
                           {s.pol || '?'} → {s.pod || '?'}
                         </div>
                       )}
-                    </td>
-                    <td className="px-4 text-[12px] text-token-muted">
+                    </div>
+                  ),
+                },
+                {
+                  key: 'eta',
+                  label: 'ETA',
+                  sortable: true,
+                  sortKey: 'eta',
+                  render: (s: Shipment) => (
+                    <span className="text-[12px] text-token-muted whitespace-nowrap">
                       {s.eta ? new Date(s.eta).toLocaleDateString('tr-TR') : '-'}
-                    </td>
-                    <td className="px-4">
-                      <span
-                        className={`inline-block px-2 py-1 rounded text-[11px] font-medium ${STATUS_COLORS[s.status] || 'bg-token-bg-subtle text-token-muted'}`}
-                      >
-                        {STATUS_LABELS[s.status] || s.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
+                    </span>
+                  ),
+                },
+                {
+                  key: 'status',
+                  label: 'DURUM',
+                  sortable: true,
+                  sortKey: 'status',
+                  render: (s: Shipment) => (
+                    <span
+                      className={`inline-block px-2 py-1 rounded text-[11px] font-medium whitespace-nowrap ${
+                        STATUS_COLORS[s.status] || 'bg-token-bg-subtle text-token-muted'
+                      }`}
+                    >
+                      {STATUS_LABELS[s.status] || s.status}
+                    </span>
+                  ),
+                },
+              ]}
+              data={items as (Shipment & Record<string, unknown>)[]}
+              onRowClick={(s) => navigate(`/sevkiyatlar/${s.id}`)}
+              emptyMessage="Sevkiyat bulunamadı"
+              stickyFirstColumn
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={(by, order) => {
+                setSort(by, order);
+                setPage(1);
+              }}
+            />
           </>
         )}
       </div>
