@@ -227,7 +227,10 @@ export async function findCustomerConflicts(input: FindConflictsInput): Promise<
       }
     }
 
-    // 3b. Kurumsal alan adi (info uyari, definite degil)
+    // 3b. Kurumsal alan adi -> KESIN eslesme.
+    // Bir firma kendi domain'ini baska firmayla paylasmaz; dolayisiyla
+    // info@hgtrans.com vs sales@hgtrans.com = ayni firma. Jenerik domain'ler
+    // (gmail/hotmail/yahoo) extractCorporateDomains tarafindan zaten elenir.
     const corporateDomains = extractCorporateDomains(email);
     if (corporateDomains.length > 0) {
       const domainMatches = await prisma.customer.findMany({
@@ -265,7 +268,7 @@ export async function findCustomerConflicts(input: FindConflictsInput): Promise<
             lastContactDate: c.lastContactDate,
           },
           'email_domain',
-          70, // alan adi ortakligi: "muhtemel ayni firma"
+          100, // kurumsal domain ortakligi = ayni firma
           matchedDomain ? '@' + matchedDomain : c.email,
         );
       }

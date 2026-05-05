@@ -273,7 +273,7 @@ export function CustomerForm({
                       : match.matchType === 'email'
                         ? 'E-posta'
                         : match.matchType === 'email_domain'
-                          ? 'E-posta alan adı'
+                          ? 'Aynı kurumsal e-posta'
                           : 'Firma adı';
                   return (
                     <span

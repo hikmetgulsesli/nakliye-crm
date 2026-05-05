@@ -69,4 +69,15 @@ describe('extractCorporateDomains', () => {
   it('Sadece jenerik -> bos', () => {
     expect(extractCorporateDomains('a@gmail.com, b@yahoo.com')).toEqual([]);
   });
+  it('TR ozgu jenerik domain\'leri eler', () => {
+    expect(extractCorporateDomains('a@hotmail.com.tr, b@mynet.com, c@superonline.com')).toEqual([]);
+  });
+  it('Microsoft varyasyonlari (live, msn, outlook.com.tr) jenerik', () => {
+    expect(extractCorporateDomains('a@live.com, b@msn.com, c@outlook.com.tr')).toEqual([]);
+  });
+  it('Karma giris: kurumsal kalsin, jenerik atilsin', () => {
+    expect(
+      extractCorporateDomains('admin@hgtrans.com, ahmet@gmail.com, info@hgtrans.com'),
+    ).toEqual(['hgtrans.com']);
+  });
 });

@@ -140,14 +140,31 @@ export function companyNameSimilarity(a: string, b: string): number {
 /**
  * E-posta listesinden alan adlarini cikar (jenerik domain'ler haric).
  * "info@hgtrans.com, sales@hgtrans.com" -> ["hgtrans.com"]
+ *
+ * Mantik: bir firma kendi kurumsal domain'ini baska firmayla paylasmaz —
+ * dolayisiyla iki kayitta ayni kurumsal domain varsa ayni firma demektir.
+ * Jenerik (gmail/hotmail/yahoo/...) domain'lerin ortakligi anlamsizdir,
+ * onlari liste disi tutuyoruz.
  */
 const GENERIC_EMAIL_DOMAINS = new Set([
+  // Google
   'gmail.com', 'googlemail.com',
-  'hotmail.com', 'outlook.com', 'live.com', 'msn.com',
-  'yahoo.com', 'yahoo.com.tr', 'ymail.com',
-  'icloud.com', 'me.com',
-  'yandex.com', 'yandex.com.tr', 'mail.ru',
-  'protonmail.com', 'proton.me',
+  // Microsoft
+  'hotmail.com', 'hotmail.com.tr', 'outlook.com', 'outlook.com.tr',
+  'live.com', 'live.com.tr', 'msn.com', 'windowslive.com',
+  // Yahoo
+  'yahoo.com', 'yahoo.com.tr', 'ymail.com', 'rocketmail.com',
+  // Apple
+  'icloud.com', 'me.com', 'mac.com',
+  // Yandex
+  'yandex.com', 'yandex.com.tr', 'yandex.ru',
+  // Diger jenerik
+  'mail.ru', 'protonmail.com', 'proton.me',
+  'aol.com', 'gmx.com', 'gmx.de', 'gmx.net',
+  'zoho.com', 'fastmail.com',
+  // Turkiye'ye ozgu jenerik / ISP
+  'mynet.com', 'superonline.com', 'ttmail.com', 'ttnet.net.tr',
+  'turk.net', 'kablonet.com.tr',
 ]);
 
 export function extractCorporateDomains(emailField: string | null | undefined): string[] {
