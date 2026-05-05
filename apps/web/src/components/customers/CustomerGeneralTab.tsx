@@ -1,6 +1,6 @@
 import { Card, Icon } from '@/components/ui';
 import type { Customer } from '@nakliye-crm/shared';
-import { splitMultiValue } from '@nakliye-crm/shared';
+import { splitMultiValue, formatTrPhone } from '@nakliye-crm/shared';
 
 interface CustomerGeneralTabProps {
   customer: Customer;
@@ -20,7 +20,12 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       <Card title="İletişim Bilgileri">
         <div className="space-y-4">
           <InfoRow icon="person" label="Yetkili Kisi" value={customer.contactName} />
-          <MultiInfoRow icon="phone" label="Telefon" value={customer.phone} />
+          <MultiInfoRow
+            icon="phone"
+            label="Telefon"
+            value={customer.phone}
+            formatter={formatTrPhone}
+          />
           <MultiInfoRow icon="mail" label="E-posta" value={customer.email} />
           <InfoRow icon="location_on" label="Adres" value={customer.address} />
         </div>
@@ -209,12 +214,16 @@ function MultiInfoRow({
   icon,
   label,
   value,
+  formatter,
 }: {
   icon: string;
   label: string;
   value?: string | null;
+  formatter?: (v: string) => string;
 }) {
-  const parts = value ? splitMultiValue(value) : [];
+  const parts = value
+    ? splitMultiValue(value).map((p) => (formatter ? formatter(p) || p : p))
+    : [];
   return (
     <div className="flex items-start gap-3">
       <div className="flex items-center justify-center size-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5">

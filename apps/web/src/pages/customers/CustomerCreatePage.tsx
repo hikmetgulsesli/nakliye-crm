@@ -69,7 +69,8 @@ export default function CustomerCreatePage() {
     setConflictWarning(null);
 
     try {
-      // First, check for conflicts
+      // Once on-demand conflict-check sondaji yapip kullaniciya modal'i gosteriyoruz.
+      // Backend create endpoint'i de ayni kontrolu tekrar yapar (UI bypass'i kapali).
       const conflictResult = await customerService.conflictCheck(
         data.phone,
         data.email,
@@ -77,16 +78,19 @@ export default function CustomerCreatePage() {
       );
 
       if (conflictResult.length > 0 && !data.forceCreate) {
-        // Show conflict modal
         setConflictMatches(conflictResult);
         setPendingData(data);
         setShowConflictModal(true);
-        setConflictWarning('Bu telefon numarasi başka bir kayitta kullaniliyor');
+        const hasDefinite = conflictResult.some((m) => m.severity === 'definite');
+        setConflictWarning(
+          hasDefinite
+            ? 'Bu firma sistemde zaten kayıtlı görünüyor.'
+            : 'Benzer bir müşteri kaydı bulundu, lütfen kontrol edin.',
+        );
         setLoading(false);
         return;
       }
 
-      // No conflict or force create - proceed
       const customer = await customerService.create(data);
       navigate(`/musteriler/${customer.id}`);
     } catch (err: unknown) {
@@ -99,6 +103,7 @@ export default function CustomerCreatePage() {
   async function handleForceCreate() {
     if (!pendingData) return;
     setLoading(true);
+    setConflictWarning(null);
     try {
       const customer = await customerService.create({
         ...pendingData,
@@ -107,7 +112,8 @@ export default function CustomerCreatePage() {
       setShowConflictModal(false);
       navigate(`/musteriler/${customer.id}`);
     } catch (err) {
-      setConflictWarning('Müşteri oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+      // 409 (definite + USER) -> backend mesaji extractErrorMessage tarafindan okunur
+      setConflictWarning(extractErrorMessage(err));
     } finally {
       setLoading(false);
     }

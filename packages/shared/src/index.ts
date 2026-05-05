@@ -7,3 +7,4 @@ export * from './validators/auth.schema';
 export * from './validators/customer.schema';
 export * from './validators/quotation.schema';
 export * from './validators/activity.schema';
+export * from './utils/phone';

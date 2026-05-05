@@ -10,7 +10,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { customerService, type ConflictMatch } from '@/services/customer.service';
 import { useAuthStore } from '@/stores/authStore';
 import type { Customer, CustomerCreateInput } from '@nakliye-crm/shared';
-import { splitMultiValue } from '@nakliye-crm/shared';
+import { splitMultiValue, formatTrPhone, normalizeTrPhone } from '@nakliye-crm/shared';
 
 function toFieldArray(input?: string | null): { value: string }[] {
   if (!input) return [{ value: '' }];
@@ -262,19 +262,38 @@ export function CustomerForm({
             {/* Conflict suggestions */}
             {conflictMatches.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 -mt-2">
-                <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
-                  Benzer kayıtlar:
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                  Olası mükerrer:
                 </span>
-                {conflictMatches.map((match) => (
-                  <span
-                    key={match.customerId}
-                    title={`${match.matchType === 'phone' ? 'Telefon' : match.matchType === 'email' ? 'E-posta' : 'Firma adı'} eslesmesi`}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-200 dark:border-amber-500/30"
-                  >
-                    <Icon name="warning" size="sm" className="text-amber-500 dark:text-amber-300 !text-[14px]" />
-                    {match.companyName} (%{Math.round(match.similarity)})
-                  </span>
-                ))}
+                {conflictMatches.map((match) => {
+                  const isDef = match.severity === 'definite';
+                  const typeLabel =
+                    match.matchType === 'phone'
+                      ? 'Telefon'
+                      : match.matchType === 'email'
+                        ? 'E-posta'
+                        : match.matchType === 'email_domain'
+                          ? 'E-posta alan adı'
+                          : 'Firma adı';
+                  return (
+                    <span
+                      key={`${match.customerId}-${match.matchType}`}
+                      title={`${typeLabel} eşleşmesi${match.matchedOn ? ' — ' + match.matchedOn : ''}`}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${
+                        isDef
+                          ? 'bg-red-50 text-red-800 border-red-200 dark:bg-red-500/15 dark:text-red-200 dark:border-red-500/30'
+                          : 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-200 dark:border-amber-500/30'
+                      }`}
+                    >
+                      <Icon
+                        name={isDef ? 'block' : 'warning'}
+                        size="sm"
+                        className={`${isDef ? 'text-red-500 dark:text-red-300' : 'text-amber-500 dark:text-amber-300'} !text-[14px]`}
+                      />
+                      {match.companyName} (%{Math.round(match.similarity)})
+                    </span>
+                  );
+                })}
               </div>
             )}
 
@@ -295,11 +314,26 @@ export function CustomerForm({
               {phoneFields.map((field, index) => (
                 <div key={field.id} className="flex items-center gap-2 mb-2">
                   <div className="flex-1">
-                    <Input
-                      placeholder="+90 5XX XXX XX XX"
-                      icon="phone"
-                      error={errors.phones?.[index]?.value?.message}
-                      {...register(`phones.${index}.value`)}
+                    <Controller
+                      control={control}
+                      name={`phones.${index}.value`}
+                      render={({ field: phoneField }) => (
+                        <Input
+                          placeholder="+90 (5XX) XXX XX XX"
+                          icon="phone"
+                          error={errors.phones?.[index]?.value?.message}
+                          value={phoneField.value || ''}
+                          onChange={(e) => phoneField.onChange(e.target.value)}
+                          onBlur={(e) => {
+                            const raw = e.target.value;
+                            // Tam 10 haneli normalize edilebilir bir TR numarasi ise formatla
+                            if (normalizeTrPhone(raw)) {
+                              phoneField.onChange(formatTrPhone(raw));
+                            }
+                            phoneField.onBlur();
+                          }}
+                        />
+                      )}
                     />
                   </div>
                   {phoneFields.length > 1 && (

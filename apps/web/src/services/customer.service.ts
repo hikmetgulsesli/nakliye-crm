@@ -23,6 +23,9 @@ export interface CustomerFilters {
   deleted?: boolean;
 }
 
+export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain';
+export type ConflictSeverity = 'definite' | 'likely';
+
 export interface ConflictMatch {
   customerId: number;
   companyName: string;
@@ -30,7 +33,9 @@ export interface ConflictMatch {
   phone: string;
   email: string;
   similarity: number;
-  matchType: 'phone' | 'email' | 'name';
+  matchType: ConflictMatchType;
+  severity: ConflictSeverity;
+  matchedOn?: string;
   assignedUserName?: string;
   lastContactDate?: string | null;
 }

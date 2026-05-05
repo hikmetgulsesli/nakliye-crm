@@ -5,6 +5,7 @@ import { parsePagination, paginatedResponse } from '../../utils/pagination';
 import { createAuditLog } from '../../utils/audit';
 import { computeDiff } from '../../utils/diff';
 import { logCustomerUpdateActivity } from '../../utils/activity-from-update';
+import { findCustomerConflicts } from './conflict.service';
 
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
@@ -122,8 +123,36 @@ export async function create(req: Request, res: Response) {
     companyName, contactName, phone, email, address,
     transportModes, serviceTypes, incoterms, direction,
     originCountries, destinationCountries, source, potential,
-    status, notes, assignedUserId,
+    status, notes, assignedUserId, forceCreate,
   } = req.body;
+
+  // Sunucu-tarafi conflict re-check: UI bypass edilemesin diye burada da bakiyoruz.
+  const conflicts = await findCustomerConflicts({ companyName, phone, email });
+  const definite = conflicts.filter((c) => c.severity === 'definite');
+  const likely = conflicts.filter((c) => c.severity === 'likely');
+
+  if (definite.length > 0) {
+    // Kesin eslesme (firma adi %85+, telefon tam, e-posta tam) -> sadece ADMIN
+    // forceCreate ile gecebilir.
+    if (req.user!.role !== 'ADMIN') {
+      throw new AppError(
+        'Bu kayit mevcut bir musteriyle kesin eslesiyor. Yine de eklemek icin yoneticinizden onay alin.',
+        409,
+      );
+    }
+    if (!forceCreate) {
+      throw new AppError(
+        'Bu kayit mevcut bir musteriyle kesin eslesiyor. Devam etmek icin "Yine de Kaydet" onayi gerekir.',
+        409,
+      );
+    }
+  } else if (likely.length > 0 && !forceCreate) {
+    // Muhtemel eslesme -> kullanici (USER veya ADMIN) bilerek devam ettiginde gecebilir.
+    throw new AppError(
+      'Benzer bir musteri kaydi bulundu. Devam etmek istiyorsaniz "Yine de Kaydet" ile onaylayin.',
+      409,
+    );
+  }
 
   // USER kendi adına kayıt açar; ADMIN istediği temsilciye atayabilir.
   const effectiveAssignedUserId =

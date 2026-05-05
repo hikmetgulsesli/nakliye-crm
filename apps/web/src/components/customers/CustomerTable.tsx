@@ -3,6 +3,7 @@ import { Table, Icon } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
 import type { Customer } from '@nakliye-crm/shared';
+import { formatTrPhones } from '@nakliye-crm/shared';
 
 const CUSTOMER_STATUS_OPTIONS = [
   { value: 'Aktif', label: 'Aktif', pillClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300' },
@@ -78,7 +79,7 @@ export function CustomerTable({
       key: 'phone',
       label: 'TELEFON',
       render: (row: Customer) => (
-        <span className="text-slate-700 dark:text-slate-300">{row.phone}</span>
+        <span className="text-slate-700 dark:text-slate-300">{formatTrPhones(row.phone) || row.phone}</span>
       ),
     },
     {
