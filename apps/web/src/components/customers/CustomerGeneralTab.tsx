@@ -105,49 +105,37 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
         </div>
       </Card>
 
-      {/* Sik Kullanilan Hatlar */}
-      <Card title="Sik Kullanilan Hatlar">
-        <div className="space-y-4">
-          <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Çıkış Ülkeleri</p>
+      {/* İlgilendiği Ülkeler — eski origin/destination listelerinin birlesimi
+          (yeni kayitlarda zaten ikisi ayni; eski kayitlar icin de dedupe). */}
+      {(() => {
+        const interest = Array.from(
+          new Set([
+            ...(customer.originCountries ?? []),
+            ...(customer.destinationCountries ?? []),
+          ]),
+        );
+        return (
+          <Card title="İlgilendiği Ülkeler">
             <div className="flex flex-wrap gap-2">
-              {customer.originCountries && customer.originCountries.length > 0 ? (
-                customer.originCountries.map((country) => (
+              {interest.length > 0 ? (
+                interest.map((country) => (
                   <span
                     key={country}
-                    className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 rounded-lg px-3 py-1.5 text-sm font-medium"
+                    className="inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-lg px-3 py-1.5 text-sm font-medium"
                   >
-                    <Icon name="flight_takeoff" size="sm" />
+                    <Icon name="public" size="sm" />
                     {country}
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">
+                  Belirtilmemis
+                </span>
               )}
             </div>
-          </div>
-
-          <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Varış Ülkeleri</p>
-            <div className="flex flex-wrap gap-2">
-              {customer.destinationCountries &&
-              customer.destinationCountries.length > 0 ? (
-                customer.destinationCountries.map((country) => (
-                  <span
-                    key={country}
-                    className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 rounded-lg px-3 py-1.5 text-sm font-medium"
-                  >
-                    <Icon name="flight_land" size="sm" />
-                    {country}
-                  </span>
-                ))
-              ) : (
-                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </Card>
+          </Card>
+        );
+      })()}
 
       {/* CRM Bilgileri */}
       <Card title="CRM Bilgileri">

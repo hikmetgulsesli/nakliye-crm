@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Input, Select, DatePicker, Textarea, Button, Card, Icon } from '@/components/ui';
+import { Input, Select, SearchableSelect, DatePicker, Textarea, Button, Card, Icon } from '@/components/ui';
 import { Avatar } from '@/components/ui';
 import { useLookups } from '@/hooks/useLookups';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -406,11 +406,19 @@ export function QuotationForm({
                 Çıkış Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <Select
-                  label="Ülke"
-                  options={COUNTRY_OPTIONS}
-                  placeholder="Ülke seçin"
-                  {...register('originCountry')}
+                <Controller
+                  control={control}
+                  name="originCountry"
+                  render={({ field }) => (
+                    <SearchableSelect
+                      label="Ülke"
+                      options={COUNTRY_OPTIONS}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                      placeholder="Ülke seçin"
+                      searchPlaceholder="Ülke ara..."
+                    />
+                  )}
                 />
                 <Input
                   label="Yukleme Noktasi (POL)"
@@ -426,11 +434,19 @@ export function QuotationForm({
                 Varış Noktasi
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <Select
-                  label="Ülke"
-                  options={COUNTRY_OPTIONS}
-                  placeholder="Ülke seçin"
-                  {...register('destinationCountry')}
+                <Controller
+                  control={control}
+                  name="destinationCountry"
+                  render={({ field }) => (
+                    <SearchableSelect
+                      label="Ülke"
+                      options={COUNTRY_OPTIONS}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                      placeholder="Ülke seçin"
+                      searchPlaceholder="Ülke ara..."
+                    />
+                  )}
                 />
                 <Input
                   label="Varış Noktasi (POD)"

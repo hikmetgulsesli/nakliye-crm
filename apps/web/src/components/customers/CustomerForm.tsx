@@ -60,8 +60,10 @@ const customerFormSchema = z.object({
   serviceTypes: z.array(z.string()).optional(),
   incoterms: z.array(z.string()).optional(),
   direction: z.string().optional(),
-  originCountries: z.array(z.string()).optional(),
-  destinationCountries: z.array(z.string()).optional(),
+  // Musteri formunda artik tek liste: "Ilgilendigi Ulkeler". Submit'te
+  // backend'e originCountries ve destinationCountries ikisine de ayni array
+  // yazilarak geriye uyumluluk korunur (bkz. handleFormSubmit).
+  interestCountries: z.array(z.string()).optional(),
   source: z.string().optional(),
   potential: z.string().optional(),
   status: z.string().optional(),
@@ -128,8 +130,13 @@ export function CustomerForm({
       serviceTypes: initialData?.serviceTypes || [],
       incoterms: initialData?.incoterms || [],
       direction: initialData?.direction || '',
-      originCountries: initialData?.originCountries || [],
-      destinationCountries: initialData?.destinationCountries || [],
+      // Edit modunda mevcut iki listeyi birlestir (dedupe)
+      interestCountries: Array.from(
+        new Set([
+          ...(initialData?.originCountries ?? []),
+          ...(initialData?.destinationCountries ?? []),
+        ]),
+      ),
       source: initialData?.source || '',
       potential: initialData?.potential || '',
       status: initialData?.status || 'Aktif',
@@ -211,6 +218,10 @@ export function CustomerForm({
   }
 
   function handleFormSubmit(data: CustomerFormData) {
+    // "Ilgilendigi Ulkeler" tek listesi backend'de iki ayri field'a yazilir.
+    // Boylece teklif/sevkiyat tarafindaki kosis-varis ayrimi korunsun ve
+    // mevcut filtreler bozulmasin (musteri kaydinda anlamli ayrim yok zaten).
+    const interest = data.interestCountries ?? [];
     const submitData: CustomerCreateInput = {
       companyName: data.companyName,
       contactName: data.contactName,
@@ -221,8 +232,8 @@ export function CustomerForm({
       serviceTypes: data.serviceTypes,
       incoterms: data.incoterms,
       direction: data.direction,
-      originCountries: data.originCountries,
-      destinationCountries: data.destinationCountries,
+      originCountries: interest,
+      destinationCountries: interest,
       source: data.source,
       potential: data.potential,
       status: data.status,
@@ -505,32 +516,18 @@ export function CustomerForm({
               />
             </div>
 
-            {/* Çıkış Ülkeleri */}
+            {/* İlgilendiği Ülkeler — müşterinin hattan/yöne ayrılmaksızın
+                ilgilendiği tüm ülkeler */}
             <Controller
               control={control}
-              name="originCountries"
+              name="interestCountries"
               render={({ field }) => (
                 <MultiSelect
-                  label="Çıkış Ülkeleri"
+                  label="İlgilendiği Ülkeler"
                   options={countryOptions}
                   value={field.value || []}
                   onChange={field.onChange}
-                  placeholder="Çıkış ulkelerini seciniz"
-                />
-              )}
-            />
-
-            {/* Varış Ülkeleri */}
-            <Controller
-              control={control}
-              name="destinationCountries"
-              render={({ field }) => (
-                <MultiSelect
-                  label="Varış Ülkeleri"
-                  options={countryOptions}
-                  value={field.value || []}
-                  onChange={field.onChange}
-                  placeholder="Varış ulkelerini seciniz"
+                  placeholder="İlgilenilen ülkeleri seçiniz"
                 />
               )}
             />

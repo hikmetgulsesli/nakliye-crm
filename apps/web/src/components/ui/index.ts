@@ -16,4 +16,5 @@ export { Skeleton } from './Skeleton';
 export { EmptyState } from './EmptyState';
 export { Dropdown } from './Dropdown';
 export { MultiSelect } from './MultiSelect';
+export { SearchableSelect } from './SearchableSelect';
 export { DatePicker } from './DatePicker';

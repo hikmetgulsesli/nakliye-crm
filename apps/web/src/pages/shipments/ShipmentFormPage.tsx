@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Button, Input, Select, Textarea, DatePicker, Icon } from '@/components/ui';
+import { Button, Input, Select, SearchableSelect, Textarea, DatePicker, Icon } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { useLookups } from '@/hooks/useLookups';
 import { customerService } from '@/services/customer.service';
@@ -73,10 +73,7 @@ export default function ShipmentFormPage() {
     () => [{ value: '', label: 'Seçiniz' }, ...getOptions('service_type')],
     [getOptions],
   );
-  const countryOptions = useMemo(
-    () => [{ value: '', label: 'Seçiniz' }, ...getOptions('country')],
-    [getOptions],
-  );
+  const countryOptions = useMemo(() => getOptions('country'), [getOptions]);
 
   // Edit modu: mevcut sevkiyati cek ve form'a yukle
   useEffect(() => {
@@ -426,11 +423,13 @@ export default function ShipmentFormPage() {
             Lokasyon
           </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Select
+            <SearchableSelect
               label="Çıkış Ülkesi"
               options={countryOptions}
               value={form.originCountry}
-              onChange={(e) => set('originCountry', e.target.value)}
+              onChange={(v) => set('originCountry', v)}
+              placeholder="Seçiniz..."
+              searchPlaceholder="Ülke ara..."
             />
             <Input
               label="Yükleme Limanı (POL)"
@@ -438,11 +437,13 @@ export default function ShipmentFormPage() {
               onChange={(e) => set('pol', e.target.value)}
               placeholder="Ör. Ambarlı"
             />
-            <Select
+            <SearchableSelect
               label="Varış Ülkesi"
               options={countryOptions}
               value={form.destinationCountry}
-              onChange={(e) => set('destinationCountry', e.target.value)}
+              onChange={(v) => set('destinationCountry', v)}
+              placeholder="Seçiniz..."
+              searchPlaceholder="Ülke ara..."
             />
             <Input
               label="Tahliye Limanı (POD)"

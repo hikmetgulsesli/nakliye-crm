@@ -94,19 +94,15 @@ export function CustomerFilters({
         value: labelOf(serviceTypeOptions, filters.serviceType),
         onRemove: () => set('serviceType', undefined),
       });
+    // Musteri kaydinda "ilgilendigi ulkeler" tek listede tutuluyor; backend
+    // hala originCountry/destinationCountry filtrelerini destekliyor (aynisi
+    // her ikisinde de yazili oldugu icin orig/dest fark etmez).
     if (filters.originCountry)
       out.push({
         key: 'originCountry',
-        label: 'Çıkış',
+        label: 'Ülke',
         value: labelOf(countryOptions, filters.originCountry),
         onRemove: () => set('originCountry', undefined),
-      });
-    if (filters.destinationCountry)
-      out.push({
-        key: 'destinationCountry',
-        label: 'Varış',
-        value: labelOf(countryOptions, filters.destinationCountry),
-        onRemove: () => set('destinationCountry', undefined),
       });
     if (filters.incoterm)
       out.push({
@@ -293,21 +289,13 @@ export function CustomerFilters({
           </FilterField>
         </FilterGroup>
 
-        <FilterGroup title="Lokasyon">
-          <FilterField label="Çıkış Ülkesi">
+        <FilterGroup title="İlgilendiği Ülke">
+          <FilterField label="Ülke">
             <Select
               options={countryOptions}
               placeholder="Tümü"
               value={filters.originCountry || ''}
               onChange={(e) => set('originCountry', e.target.value)}
-            />
-          </FilterField>
-          <FilterField label="Varış Ülkesi">
-            <Select
-              options={countryOptions}
-              placeholder="Tümü"
-              value={filters.destinationCountry || ''}
-              onChange={(e) => set('destinationCountry', e.target.value)}
             />
           </FilterField>
         </FilterGroup>
