@@ -38,11 +38,11 @@ export default function AppLayout() {
       <Sidebar />
 
       <div
-        className="flex flex-1 flex-col"
+        className="flex flex-1 flex-col min-w-0"
         style={{ marginLeft: 'var(--sidebar-w)' }}
       >
         <Header onOpenAI={() => setAIPanelOpen(true)} />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6 min-w-0">
           <Outlet />
         </main>
       </div>

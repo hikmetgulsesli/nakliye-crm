@@ -18,7 +18,7 @@ export default function AuditLogPage() {
   const [appliedFilters, setAppliedFilters] = useState<AuditLogFiltersType>(EMPTY_FILTERS);
   const [users, setUsers] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
+  const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
 
   // Fetch users for filter dropdown
   useEffect(() => {
@@ -126,6 +126,8 @@ export default function AuditLogPage() {
               totalPages={totalPages}
               totalItems={total}
               onPageChange={setPage}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
             />
           </div>
         </>

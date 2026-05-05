@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
-import { parsePagination, paginatedResponse } from '../../utils/pagination';
+import { parsePagination, paginatedResponse, parseSort } from '../../utils/pagination';
 import { AppError } from '../../middleware/error-handler';
 import { createAuditLog } from '../../utils/audit';
 import { canTransition, isValidStatus, allowedNextStatuses } from './state-machine';
@@ -34,12 +34,23 @@ export async function list(req: Request, res: Response) {
     where.createdAt = range;
   }
 
+  const orderBy = parseSort(req.query as Record<string, unknown>, {
+    allowedFields: [
+      'createdAt',
+      'shipmentNo',
+      'status',
+      'eta',
+      'etd',
+    ] as const,
+    defaultField: 'createdAt',
+  });
+
   const [data, total] = await Promise.all([
     prisma.shipment.findMany({
       where,
       skip: p.skip,
       take: p.pageSize,
-      orderBy: { createdAt: 'desc' },
+      orderBy,
       include: {
         customer: { select: { id: true, companyName: true } },
         _count: { select: { containers: true, events: true } },

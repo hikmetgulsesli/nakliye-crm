@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../config/database';
 import { AppError } from '../../middleware/error-handler';
-import { parsePagination, paginatedResponse } from '../../utils/pagination';
+import { parsePagination, paginatedResponse, parseSort } from '../../utils/pagination';
 
 const userSelect = {
   id: true,
@@ -34,6 +34,12 @@ export async function list(req: Request, res: Response) {
     ];
   }
 
+  const orderBy = parseSort(req.query as Record<string, unknown>, {
+    allowedFields: ['fullName', 'email', 'role', 'createdAt', 'lastLoginAt'] as const,
+    defaultField: 'fullName',
+    defaultOrder: 'asc',
+  });
+
   const [raw, total] = await Promise.all([
     prisma.user.findMany({
       where,
@@ -48,7 +54,7 @@ export async function list(req: Request, res: Response) {
       },
       skip,
       take: pageSize,
-      orderBy: { fullName: 'asc' },
+      orderBy,
     }),
     prisma.user.count({ where }),
   ]);

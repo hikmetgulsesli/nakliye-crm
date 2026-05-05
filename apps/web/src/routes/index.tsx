@@ -238,6 +238,14 @@ export const router = createBrowserRouter([
               </SuspenseWrapper>
             ),
           },
+          {
+            path: 'sevkiyatlar/:id/duzenle',
+            element: (
+              <SuspenseWrapper>
+                <ShipmentFormPage />
+              </SuspenseWrapper>
+            ),
+          },
           // Bildirimler
           {
             path: 'bildirimler',

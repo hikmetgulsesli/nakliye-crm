@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
-import { parsePagination, paginatedResponse } from '../../utils/pagination';
+import { parsePagination, paginatedResponse, parseSort } from '../../utils/pagination';
 
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
@@ -17,6 +17,11 @@ export async function list(req: Request, res: Response) {
     if (req.query.dateTo) (where.createdAt as Record<string, unknown>).lte = new Date(String(req.query.dateTo));
   }
 
+  const orderBy = parseSort(req.query as Record<string, unknown>, {
+    allowedFields: ['createdAt', 'recordType', 'action'] as const,
+    defaultField: 'createdAt',
+  });
+
   const [data, total] = await Promise.all([
     prisma.auditLog.findMany({
       where,
@@ -25,7 +30,7 @@ export async function list(req: Request, res: Response) {
       },
       skip,
       take: pageSize,
-      orderBy: { createdAt: 'desc' },
+      orderBy,
     }),
     prisma.auditLog.count({ where }),
   ]);

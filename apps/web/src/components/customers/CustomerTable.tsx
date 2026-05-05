@@ -25,6 +25,9 @@ interface CustomerTableProps {
   restoringId?: number | null;
   /** Tıkla-değiştir hücreleri için callback */
   onInlineUpdate?: (id: number, patch: { status?: string; potential?: string }) => Promise<void>;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -43,6 +46,9 @@ export function CustomerTable({
   onRestore,
   restoringId,
   onInlineUpdate,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }: CustomerTableProps) {
   const navigate = useNavigate();
   const isDeleted = mode === 'deleted';
@@ -51,6 +57,8 @@ export function CustomerTable({
     {
       key: 'companyName',
       label: 'FIRMA ADI',
+      sortable: true,
+      sortKey: 'companyName',
       render: (row: Customer) =>
         isDeleted ? (
           <span className="text-slate-700 dark:text-slate-300 font-medium line-through decoration-slate-300 dark:decoration-slate-600">
@@ -85,6 +93,8 @@ export function CustomerTable({
     {
       key: 'status',
       label: 'DURUM',
+      sortable: true,
+      sortKey: 'status',
       render: (row: Customer) =>
         onInlineUpdate && !isDeleted ? (
           <InlineEditSelect
@@ -99,6 +109,8 @@ export function CustomerTable({
     {
       key: 'potential',
       label: 'POTANSIYEL',
+      sortable: true,
+      sortKey: 'potential',
       render: (row: Customer) =>
         onInlineUpdate && !isDeleted ? (
           <InlineEditSelect
@@ -125,6 +137,8 @@ export function CustomerTable({
     {
       key: 'lastContactDate',
       label: 'SON GORUSME',
+      sortable: true,
+      sortKey: 'lastContactDate',
       render: (row: Customer) => (
         <span className="text-slate-500 dark:text-slate-400 text-sm">
           {formatDate(row.lastContactDate)}
@@ -134,6 +148,8 @@ export function CustomerTable({
     {
       key: 'lastQuoteDate',
       label: 'SON TEKLIF',
+      sortable: true,
+      sortKey: 'lastQuoteDate',
       render: (row: Customer) => (
         <span className="text-slate-500 dark:text-slate-400 text-sm">
           {formatDate(row.lastQuoteDate)}
@@ -195,6 +211,10 @@ export function CustomerTable({
         data={data as (Customer & Record<string, unknown>)[]}
         onRowClick={isDeleted ? undefined : (row) => navigate(`/musteriler/${row.id}`)}
         emptyMessage={isDeleted ? 'Silinmiş müşteri bulunamadı' : 'Müşteri bulunamadı'}
+        stickyFirstColumn
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={onSortChange}
       />
     </div>
   );

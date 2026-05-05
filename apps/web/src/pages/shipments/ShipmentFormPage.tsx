@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Input, Select, Textarea, DatePicker, Icon } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { useLookups } from '@/hooks/useLookups';
@@ -48,10 +48,13 @@ const EMPTY_FORM: FormState = {
 export default function ShipmentFormPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { id: editId } = useParams<{ id?: string }>();
+  const isEditMode = Boolean(editId);
   const { getOptions } = useLookups();
 
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(isEditMode);
   const [error, setError] = useState<string | null>(null);
   const [prefillNotice, setPrefillNotice] = useState<string | null>(null);
   const [existingShipmentId, setExistingShipmentId] = useState<number | null>(null);
@@ -75,8 +78,45 @@ export default function ShipmentFormPage() {
     [getOptions],
   );
 
-  // Query string'ten prefill (teklif → sevkiyat akışı)
+  // Edit modu: mevcut sevkiyati cek ve form'a yukle
   useEffect(() => {
+    if (!isEditMode || !editId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const s = await shipmentService.getById(Number(editId));
+        if (cancelled) return;
+        setForm({
+          customerId: s.customerId,
+          customerName: s.customer?.companyName ?? '',
+          quotationId: s.quotationId ?? undefined,
+          quotationNo: '',
+          transportMode: s.transportMode ?? '',
+          serviceType: s.serviceType ?? '',
+          originCountry: s.originCountry ?? '',
+          pol: s.pol ?? '',
+          destinationCountry: s.destinationCountry ?? '',
+          pod: s.pod ?? '',
+          etd: s.etd ? s.etd.slice(0, 10) : '',
+          eta: s.eta ? s.eta.slice(0, 10) : '',
+          blNumber: s.blNumber ?? '',
+          awbNumber: s.awbNumber ?? '',
+          notes: s.notes ?? '',
+        });
+      } catch (err) {
+        if (!cancelled) setError('Sevkiyat bilgileri yuklenemedi.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [editId, isEditMode]);
+
+  // Query string'ten prefill (teklif → sevkiyat akışı). Edit modunda atla.
+  useEffect(() => {
+    if (isEditMode) return;
     const quotationId = searchParams.get('quotationId');
     if (!quotationId) return;
     const qid = Number(quotationId);
@@ -121,7 +161,7 @@ export default function ShipmentFormPage() {
     return () => {
       cancelled = true;
     };
-  }, [searchParams]);
+  }, [searchParams, isEditMode]);
 
   // Müşteri arama debounce
   useEffect(() => {
@@ -188,10 +228,20 @@ export default function ShipmentFormPage() {
         awbNumber: form.awbNumber || undefined,
         notes: form.notes || undefined,
       };
-      const created = await shipmentService.create(payload);
-      navigate(`/sevkiyatlar/${created.id}`);
+      if (isEditMode && editId) {
+        await shipmentService.update(Number(editId), payload);
+        navigate(`/sevkiyatlar/${editId}`);
+      } else {
+        const created = await shipmentService.create(payload);
+        navigate(`/sevkiyatlar/${created.id}`);
+      }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Sevkiyat oluşturulurken bir hata oluştu.';
+      const msg =
+        err instanceof Error
+          ? err.message
+          : isEditMode
+            ? 'Sevkiyat güncellenirken bir hata oluştu.'
+            : 'Sevkiyat oluşturulurken bir hata oluştu.';
       setError(msg);
     } finally {
       setSubmitting(false);
@@ -204,13 +254,17 @@ export default function ShipmentFormPage() {
         breadcrumbs={[
           { label: 'Dashboard', href: '/' },
           { label: 'Sevkiyatlar', href: '/sevkiyatlar' },
-          { label: 'Yeni Sevkiyat' },
+          { label: isEditMode ? 'Düzenle' : 'Yeni Sevkiyat' },
         ]}
-        title="Yeni Sevkiyat"
+        title={isEditMode ? 'Sevkiyat Düzenle' : 'Yeni Sevkiyat'}
         subtitle={
-          form.quotationNo
-            ? `${form.quotationNo} teklifinden oluşturuluyor`
-            : 'Sevkiyat bilgilerini girin'
+          isEditMode
+            ? form.customerName
+              ? `${form.customerName} sevkiyatı düzenleniyor`
+              : 'Sevkiyat bilgilerini güncelleyin'
+            : form.quotationNo
+              ? `${form.quotationNo} teklifinden oluşturuluyor`
+              : 'Sevkiyat bilgilerini girin'
         }
       />
 
@@ -248,7 +302,14 @@ export default function ShipmentFormPage() {
         </div>
       )}
 
-      <form
+      {loading && (
+        <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+          <Icon name="progress_activity" className="mr-2 animate-spin" />
+          Sevkiyat bilgileri yükleniyor...
+        </div>
+      )}
+
+      {!loading && <form
         onSubmit={handleSubmit}
         className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
       >
@@ -437,12 +498,16 @@ export default function ShipmentFormPage() {
             type="submit"
             variant="primary"
             icon="save"
-            disabled={submitting || !!existingShipmentId}
+            disabled={submitting || (!isEditMode && !!existingShipmentId)}
           >
-            {submitting ? 'Kaydediliyor...' : 'Sevkiyat Oluştur'}
+            {submitting
+              ? 'Kaydediliyor...'
+              : isEditMode
+                ? 'Değişiklikleri Kaydet'
+                : 'Sevkiyat Oluştur'}
           </Button>
         </div>
-      </form>
+      </form>}
     </div>
   );
 }

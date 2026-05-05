@@ -10,6 +10,7 @@ import { CustomerFilters } from '@/components/customers/CustomerFilters';
 import { customerService, type CustomerFilters as CustomerFiltersType } from '@/services/customer.service';
 import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
+import { useSort } from '@/hooks/useSort';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuthStore } from '@/stores/authStore';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
@@ -75,7 +76,8 @@ export default function CustomerListPage() {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const [restoringId, setRestoringId] = useState<number | null>(null);
-  const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
+  const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
+  const { sortBy, sortOrder, setSort } = useSort({ sortBy: 'updatedAt', sortOrder: 'desc' });
 
   const debouncedSearch = useDebounce(filters.search, 400);
 
@@ -153,7 +155,11 @@ export default function CustomerListPage() {
         filtersToApply.assignedUserId = currentUserId;
       }
 
-      const result = await customerService.getAll(page, pageSize, filtersToApply);
+      const result = await customerService.getAll(page, pageSize, {
+        ...filtersToApply,
+        sortBy,
+        sortOrder,
+      });
       setCustomers(result.data);
       setTotal(result.total);
     } catch (err) {
@@ -161,7 +167,7 @@ export default function CustomerListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
+  }, [page, pageSize, sortBy, sortOrder, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchCustomers();
@@ -352,6 +358,12 @@ export default function CustomerListPage() {
             onRestore={showDeleted ? handleRestore : undefined}
             restoringId={restoringId}
             onInlineUpdate={!showDeleted ? handleInlineUpdate : undefined}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={(by, order) => {
+              setSort(by, order);
+              setPage(1);
+            }}
           />
         )}
       </div>
@@ -363,6 +375,8 @@ export default function CustomerListPage() {
             totalPages={totalPages}
             totalItems={total}
             onPageChange={setPage}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
           />
         </div>
       )}

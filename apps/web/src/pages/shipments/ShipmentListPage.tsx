@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Icon, Skeleton, EmptyState, Select } from '@/components/ui';
+import { Button, Icon, Skeleton, EmptyState, Select, Pagination } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViewsTabs';
@@ -12,6 +12,7 @@ import {
   STATUS_LABELS,
   STATUS_COLORS,
 } from '@/services/shipment.service';
+import { usePagination } from '@/hooks/usePagination';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
@@ -32,8 +33,8 @@ export default function ShipmentListPage() {
   const [searchParams] = useSearchParams();
   const { onlyMine, setOnlyMine, currentUserId } = useOnlyMinePref('shipments');
   const [items, setItems] = useState<Shipment[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
   const [search, setSearch] = useState(searchParams.get('search') ?? '');
   const [statusFilter, setStatusFilter] = useState(searchParams.get('status') ?? '');
   const [startDate, setStartDate] = useState<string | undefined>(
@@ -73,9 +74,8 @@ export default function ShipmentListPage() {
       // gecerli olmali — checkbox'i kapatmadigimiz surece filtre korunur.
       const useMine = activeView === 'mine' || onlyMine;
       const viewStatus = VIEW_TO_STATUS[activeView];
-      const res = await shipmentService.list(1, 50, {
+      const res = await shipmentService.list(page, pageSize, {
         search: debounced || undefined,
-        // saved view oncelikli; ek manuel status filtre korunsun
         status: viewStatus ?? statusFilter ?? undefined,
         assignedUserId: useMine && currentUserId ? currentUserId : undefined,
         startDate,
@@ -97,7 +97,7 @@ export default function ShipmentListPage() {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounced, statusFilter, onlyMine, currentUserId, activeView, startDate, endDate]);
+  }, [page, pageSize, debounced, statusFilter, onlyMine, currentUserId, activeView, startDate, endDate]);
 
   const views = useMemo<BuiltInView[]>(() => {
     const list: BuiltInView[] = [
@@ -274,6 +274,19 @@ export default function ShipmentListPage() {
           </div>
         )}
       </div>
+
+      {items.length > 0 && (
+        <div className="mt-4">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={total}
+            onPageChange={setPage}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
+          />
+        </div>
+      )}
     </div>
   );
 }

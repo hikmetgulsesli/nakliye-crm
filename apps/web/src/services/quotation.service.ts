@@ -21,6 +21,8 @@ export interface QuotationFilters {
   incoterm?: string;
   olderThanDays?: number;
   expired?: boolean;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export const quotationService = {
@@ -43,6 +45,8 @@ export const quotationService = {
     if (filters?.incoterm) params.incoterm = filters.incoterm;
     if (filters?.olderThanDays) params.olderThanDays = filters.olderThanDays;
     if (filters?.expired) params.expired = '1';
+    if (filters?.sortBy) params.sortBy = filters.sortBy;
+    if (filters?.sortOrder) params.sortOrder = filters.sortOrder;
 
     const { data } = await api.get<PaginatedResponse<Quotation>>('/quotations', { params });
     return data;

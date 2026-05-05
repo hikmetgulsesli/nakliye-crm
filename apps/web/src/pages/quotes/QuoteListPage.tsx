@@ -10,6 +10,7 @@ import { QuotationFilters } from '@/components/quotations/QuotationFilters';
 import { quotationService, type QuotationFilters as QuotationFiltersType } from '@/services/quotation.service';
 import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
+import { useSort } from '@/hooks/useSort';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useOnlyMinePref } from '@/hooks/useOnlyMinePref';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
@@ -71,7 +72,8 @@ export default function QuoteListPage() {
   const [activeUserViewId, setActiveUserViewId] = useState<number | undefined>();
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
-  const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
+  const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
+  const { sortBy, sortOrder, setSort } = useSort({ sortBy: 'createdAt', sortOrder: 'desc' });
 
   const debouncedSearch = useDebounce(filters.search, 400);
 
@@ -141,7 +143,11 @@ export default function QuoteListPage() {
         filtersToApply.assignedUserId = currentUserId;
       }
 
-      const result = await quotationService.getAll(page, pageSize, filtersToApply);
+      const result = await quotationService.getAll(page, pageSize, {
+        ...filtersToApply,
+        sortBy,
+        sortOrder,
+      });
       setQuotations(result.data);
       setTotal(result.total);
     } catch (err) {
@@ -149,7 +155,7 @@ export default function QuoteListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
+  }, [page, pageSize, sortBy, sortOrder, appliedFilters, debouncedSearch, activeView, onlyMine, currentUserId, setTotal]);
 
   useEffect(() => {
     fetchQuotations();
@@ -301,6 +307,12 @@ export default function QuoteListPage() {
             data={quotations}
             loading={loading}
             onInlineUpdate={handleInlineUpdate}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={(by, order) => {
+              setSort(by, order);
+              setPage(1);
+            }}
           />
         )}
       </div>
@@ -312,6 +324,8 @@ export default function QuoteListPage() {
             totalPages={totalPages}
             totalItems={total}
             onPageChange={setPage}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
           />
         </div>
       )}

@@ -17,6 +17,9 @@ interface QuotationTableProps {
   loading?: boolean;
   /** Tıkla-değiştir hücreleri için callback. Verilmezse status sadece okunur StatusBadge. */
   onInlineUpdate?: (id: number, patch: { status?: string }) => Promise<void>;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
 }
 
 function formatDate(dateStr?: string | null): string {
@@ -42,13 +45,22 @@ function getCurrencyVariant(currency?: string | null): CurrencyVariant {
   return 'warning';
 }
 
-export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTableProps) {
+export function QuotationTable({
+  data,
+  loading,
+  onInlineUpdate,
+  sortBy,
+  sortOrder,
+  onSortChange,
+}: QuotationTableProps) {
   const navigate = useNavigate();
 
   const columns = [
     {
       key: 'quoteNo',
       label: 'TEKLIF NO',
+      sortable: true,
+      sortKey: 'quoteNo',
       render: (row: Quotation) => (
         <button
           onClick={(e) => {
@@ -75,6 +87,8 @@ export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTable
     {
       key: 'quoteDate',
       label: 'TARIH',
+      sortable: true,
+      sortKey: 'quoteDate',
       render: (row: Quotation) => (
         <span className="text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">
           {formatDate(row.quoteDate)}
@@ -99,6 +113,8 @@ export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTable
     {
       key: 'price',
       label: 'FIYAT',
+      sortable: true,
+      sortKey: 'price',
       render: (row: Quotation) => (
         <div className="flex items-center gap-2">
           <span className="font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
@@ -115,6 +131,8 @@ export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTable
     {
       key: 'status',
       label: 'DURUM',
+      sortable: true,
+      sortKey: 'status',
       render: (row: Quotation) =>
         onInlineUpdate ? (
           <InlineEditSelect
@@ -165,6 +183,10 @@ export function QuotationTable({ data, loading, onInlineUpdate }: QuotationTable
         data={data as (Quotation & Record<string, unknown>)[]}
         onRowClick={(row) => navigate(`/teklifler/${row.id}`)}
         emptyMessage="Teklif bulunamadı"
+        stickyFirstColumn
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={onSortChange}
       />
     </div>
   );

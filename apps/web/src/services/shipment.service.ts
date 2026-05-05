@@ -59,6 +59,8 @@ export interface ShipmentFilters {
   search?: string;
   startDate?: string;
   endDate?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export const shipmentService = {

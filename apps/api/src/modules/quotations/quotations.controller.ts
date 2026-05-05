@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
 import { AppError } from '../../middleware/error-handler';
-import { parsePagination, paginatedResponse } from '../../utils/pagination';
+import { parsePagination, paginatedResponse, parseSort } from '../../utils/pagination';
 import { generateQuoteNumber } from '../../utils/quote-number';
 import { computeDiff } from '../../utils/diff';
 import { createAuditLog } from '../../utils/audit';
@@ -53,6 +53,18 @@ export async function list(req: Request, res: Response) {
 
   // PRD v3: tüm kullanıcılar tüm teklifleri görebilir (şeffaflık)
 
+  const orderBy = parseSort(req.query as Record<string, unknown>, {
+    allowedFields: [
+      'createdAt',
+      'quoteDate',
+      'quoteNo',
+      'price',
+      'status',
+      'validityDate',
+    ] as const,
+    defaultField: 'createdAt',
+  });
+
   const [data, total] = await Promise.all([
     prisma.quotation.findMany({
       where,
@@ -62,7 +74,7 @@ export async function list(req: Request, res: Response) {
       },
       skip,
       take: pageSize,
-      orderBy: { createdAt: 'desc' },
+      orderBy,
     }),
     prisma.quotation.count({ where }),
   ]);

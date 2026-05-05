@@ -19,7 +19,7 @@ export default function UserManagementPage() {
   const [error, setError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const { page, pageSize, totalPages, total, setPage, setTotal } = usePagination();
+  const { page, pageSize, totalPages, total, setPage, setPageSize, setTotal } = usePagination();
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -151,6 +151,8 @@ export default function UserManagementPage() {
               totalPages={totalPages}
               totalItems={total}
               onPageChange={setPage}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
             />
           </div>
         </>

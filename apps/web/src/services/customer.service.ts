@@ -21,6 +21,8 @@ export interface CustomerFilters {
   endDate?: string;
   uncontactedDays?: number;
   deleted?: boolean;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain';
@@ -65,6 +67,8 @@ export const customerService = {
     if (filters?.endDate) params.dateTo = filters.endDate;
     if (filters?.uncontactedDays) params.uncontactedDays = filters.uncontactedDays;
     if (filters?.deleted) params.deleted = 'true';
+    if (filters?.sortBy) params.sortBy = filters.sortBy;
+    if (filters?.sortOrder) params.sortOrder = filters.sortOrder;
 
     const { data } = await api.get<PaginatedResponse<Customer>>('/customers', { params });
     return data;

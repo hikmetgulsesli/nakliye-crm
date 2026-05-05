@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, Card, Icon, Skeleton, Select, Modal } from '@/components/ui';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
@@ -23,6 +23,7 @@ function formatDT(dt?: string | null): string {
 
 export default function ShipmentDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [s, setS] = useState<Shipment | null>(null);
   const [loading, setLoading] = useState(true);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
@@ -56,15 +57,24 @@ export default function ShipmentDetailPage() {
         ]}
         title={s.shipmentNo}
         action={
-          (s.allowedNextStatuses?.length ?? 0) > 0 ? (
+          <div className="flex items-center gap-2">
             <Button
-              variant="primary"
-              icon="route"
-              onClick={() => setStatusModalOpen(true)}
+              variant="secondary"
+              icon="edit"
+              onClick={() => navigate(`/sevkiyatlar/${s.id}/duzenle`)}
             >
-              Durum Değiştir
+              Düzenle
             </Button>
-          ) : undefined
+            {(s.allowedNextStatuses?.length ?? 0) > 0 && (
+              <Button
+                variant="primary"
+                icon="route"
+                onClick={() => setStatusModalOpen(true)}
+              >
+                Durum Değiştir
+              </Button>
+            )}
+          </div>
         }
       />
 
