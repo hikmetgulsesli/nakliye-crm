@@ -221,7 +221,20 @@ export default function ShipmentListPage() {
             }
           />
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            {items.length > 0 && (
+              <div className="border-b border-token-border bg-token-bg-panel/60 px-4 py-2">
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  totalItems={total}
+                  onPageChange={setPage}
+                  pageSize={pageSize}
+                  onPageSizeChange={setPageSize}
+                />
+              </div>
+            )}
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-token-bg-subtle text-left text-token-subtle">
                 <tr>
@@ -271,7 +284,8 @@ export default function ShipmentListPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         )}
       </div>
 

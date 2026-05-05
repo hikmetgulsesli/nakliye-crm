@@ -117,9 +117,21 @@ export default function AuditLogPage() {
         />
       ) : (
         <>
+          {/* Üst pagination */}
+          <div className="mb-3">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
+            />
+          </div>
+
           <AuditLogTable data={logs} loading={loading} />
 
-          {/* Pagination */}
+          {/* Alt pagination */}
           <div className="mt-4">
             <Pagination
               currentPage={page}

@@ -351,20 +351,34 @@ export default function CustomerListPage() {
             )}
           </div>
         ) : (
-          <CustomerTable
-            data={customers}
-            loading={loading}
-            mode={showDeleted ? 'deleted' : 'active'}
-            onRestore={showDeleted ? handleRestore : undefined}
-            restoringId={restoringId}
-            onInlineUpdate={!showDeleted ? handleInlineUpdate : undefined}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            onSortChange={(by, order) => {
-              setSort(by, order);
-              setPage(1);
-            }}
-          />
+          <>
+            {customers.length > 0 && (
+              <div className="border-b border-token-border bg-token-bg-panel/60 px-4 py-2">
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  totalItems={total}
+                  onPageChange={setPage}
+                  pageSize={pageSize}
+                  onPageSizeChange={setPageSize}
+                />
+              </div>
+            )}
+            <CustomerTable
+              data={customers}
+              loading={loading}
+              mode={showDeleted ? 'deleted' : 'active'}
+              onRestore={showDeleted ? handleRestore : undefined}
+              restoringId={restoringId}
+              onInlineUpdate={!showDeleted ? handleInlineUpdate : undefined}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={(by, order) => {
+                setSort(by, order);
+                setPage(1);
+              }}
+            />
+          </>
         )}
       </div>
 

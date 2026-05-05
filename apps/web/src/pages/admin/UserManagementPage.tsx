@@ -136,6 +136,18 @@ export default function UserManagementPage() {
         />
       ) : (
         <>
+          {/* Üst pagination */}
+          <div className="mb-3">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              totalItems={total}
+              onPageChange={setPage}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
+            />
+          </div>
+
           <UserManagementTable
             data={users}
             loading={loading}
@@ -144,7 +156,7 @@ export default function UserManagementPage() {
             onTransfer={handleTransfer}
           />
 
-          {/* Pagination */}
+          {/* Alt pagination */}
           <div className="mt-4">
             <Pagination
               currentPage={page}

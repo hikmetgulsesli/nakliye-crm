@@ -182,6 +182,21 @@ export async function create(req: Request, res: Response) {
     action: 'CREATE',
   });
 
+  // Yeni teklif dogrudan "Kazanildi" statusuyle olusturuldysa shipment hook'u
+  // calismali — update'teki ile ayni davranis. Idempotent oldugu icin guvenli.
+  if (quotation.status === 'Kazanıldı') {
+    try {
+      const { createShipmentFromQuotation } = await import('../shipments/shipments.service');
+      await createShipmentFromQuotation(quotation.id, req.user!.userId);
+    } catch (err) {
+      const { logger } = await import('../../config/logger');
+      logger.warn(
+        { err: (err as Error).message, quotationId: quotation.id },
+        'Shipment auto-create (create akisi) basarisiz',
+      );
+    }
+  }
+
   res.status(201).json({ success: true, data: quotation });
 }
 
