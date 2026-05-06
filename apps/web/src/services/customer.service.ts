@@ -25,7 +25,7 @@ export interface CustomerFilters {
   sortOrder?: 'asc' | 'desc';
 }
 
-export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain';
+export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain' | 'tax_number';
 export type ConflictSeverity = 'definite' | 'likely';
 
 export interface ConflictMatch {
@@ -102,11 +102,13 @@ export const customerService = {
     phone: string,
     email: string,
     companyName: string,
+    taxNumber?: string,
   ): Promise<ConflictCheckResponse> {
     const { data } = await api.post<ConflictCheckResponse>('/customers/conflict-check', {
       phone,
       email,
       companyName,
+      taxNumber,
     });
     return data || [];
   },

@@ -2,6 +2,8 @@ export interface Customer {
   id: number;
   companyName: string;
   contactName?: string | null;
+  taxNumber?: string | null;
+  taxOffice?: string | null;
   phone: string;
   email: string;
   address?: string | null;
@@ -28,6 +30,8 @@ export interface Customer {
 export interface CustomerCreateInput {
   companyName: string;
   contactName?: string;
+  taxNumber?: string;
+  taxOffice?: string;
   phone: string;
   email: string;
   address?: string;
@@ -48,6 +52,8 @@ export interface CustomerCreateInput {
 export interface CustomerUpdateInput {
   companyName?: string;
   contactName?: string;
+  taxNumber?: string;
+  taxOffice?: string;
   phone?: string;
   email?: string;
   address?: string;

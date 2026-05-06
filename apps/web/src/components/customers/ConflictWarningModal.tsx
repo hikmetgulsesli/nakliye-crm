@@ -26,6 +26,7 @@ const MATCH_TYPE_LABEL: Record<ConflictMatchType, { label: string; icon: string 
   phone: { label: 'Telefon eşleşti', icon: 'phone' },
   email: { label: 'E-posta eşleşti', icon: 'mail' },
   email_domain: { label: 'Aynı firma e-postası (kurumsal alan adı)', icon: 'domain' },
+  tax_number: { label: 'Aynı vergi numarası', icon: 'badge' },
 };
 
 export function ConflictWarningModal({

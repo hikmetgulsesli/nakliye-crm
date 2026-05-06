@@ -23,6 +23,14 @@ function toFieldArray(input?: string | null): { value: string }[] {
 const customerFormSchema = z.object({
   companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalidir'),
   contactName: z.string().optional(),
+  taxNumber: z
+    .string()
+    .optional()
+    .refine(
+      (v) => !v || v.trim().length === 0 || /^[0-9]{10,11}$/.test(v.trim()),
+      'Vergi numarası 10 (kurumsal VKN) ya da 11 (TCKN) hane olmalı',
+    ),
+  taxOffice: z.string().max(80, 'Vergi dairesi en fazla 80 karakter').optional(),
   phones: z
     .array(
       z.object({
@@ -123,6 +131,8 @@ export function CustomerForm({
     defaultValues: {
       companyName: initialData?.companyName || '',
       contactName: initialData?.contactName || '',
+      taxNumber: initialData?.taxNumber || '',
+      taxOffice: initialData?.taxOffice || '',
       phones: toFieldArray(initialData?.phone),
       emails: toFieldArray(initialData?.email),
       address: initialData?.address || '',
@@ -167,22 +177,25 @@ export function CustomerForm({
   const selectedTransportModes = watch('transportModes') || [];
 
   // --- Real-time conflict detection ---
-  // Triggers when companyName, phones veya emails 500ms sabit kaldiginda
+  // Triggers when companyName, phones, emails veya taxNumber 500ms sabit kaldiginda
   const watchedCompanyName = watch('companyName');
   const watchedPhones = watch('phones');
   const watchedEmails = watch('emails');
+  const watchedTaxNumber = watch('taxNumber');
   const phoneKey = (watchedPhones || []).map((p) => p?.value || '').join('|');
   const emailKey = (watchedEmails || []).map((e) => e?.value || '').join('|');
   const debouncedCompanyName = useDebounce(watchedCompanyName, 500);
   const debouncedPhoneKey = useDebounce(phoneKey, 500);
   const debouncedEmailKey = useDebounce(emailKey, 500);
+  const debouncedTaxNumber = useDebounce(watchedTaxNumber, 500);
   const [conflictMatches, setConflictMatches] = useState<ConflictMatch[]>([]);
 
   useEffect(() => {
     const hasEnoughName = (debouncedCompanyName || '').length >= 3;
     const hasPhone = debouncedPhoneKey.replace(/\|/g, '').length >= 10;
     const hasEmail = /@.+\./.test(debouncedEmailKey);
-    if (!hasEnoughName && !hasPhone && !hasEmail) {
+    const hasTax = !!debouncedTaxNumber && /^[0-9]{10,11}$/.test(debouncedTaxNumber.trim());
+    if (!hasEnoughName && !hasPhone && !hasEmail && !hasTax) {
       setConflictMatches([]);
       return;
     }
@@ -191,7 +204,12 @@ export function CustomerForm({
       try {
         const phones = (watchedPhones || []).map((p) => p?.value || '').filter(Boolean).join(', ');
         const emails = (watchedEmails || []).map((e) => e?.value || '').filter(Boolean).join(', ');
-        const matches = await customerService.conflictCheck(phones, emails, debouncedCompanyName);
+        const matches = await customerService.conflictCheck(
+          phones,
+          emails,
+          debouncedCompanyName,
+          debouncedTaxNumber?.trim() || undefined,
+        );
         // Düzenleme ise mevcut kaydı hariç tut
         const filtered = initialData?.id
           ? matches.filter((m) => m.customerId !== initialData.id)
@@ -204,7 +222,7 @@ export function CustomerForm({
     return () => {
       cancelled = true;
     };
-  }, [debouncedCompanyName, debouncedPhoneKey, debouncedEmailKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debouncedCompanyName, debouncedPhoneKey, debouncedEmailKey, debouncedTaxNumber]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleTransportMode(mode: string) {
     const current = selectedTransportModes;
@@ -226,6 +244,8 @@ export function CustomerForm({
     const submitData: CustomerCreateInput = {
       companyName: data.companyName,
       contactName: data.contactName,
+      taxNumber: data.taxNumber?.trim() || undefined,
+      taxOffice: data.taxOffice?.trim() || undefined,
       phone: data.phones.map((p) => p.value).filter(Boolean).join(', '),
       email: data.emails.map((e) => e.value).filter(Boolean).join(', '),
       address: data.address,
@@ -301,13 +321,15 @@ export function CustomerForm({
                 {conflictMatches.map((match) => {
                   const isDef = match.severity === 'definite';
                   const typeLabel =
-                    match.matchType === 'phone'
-                      ? 'Telefon'
-                      : match.matchType === 'email'
-                        ? 'E-posta'
-                        : match.matchType === 'email_domain'
-                          ? 'Aynı kurumsal e-posta'
-                          : 'Firma adı';
+                    match.matchType === 'tax_number'
+                      ? 'Vergi No'
+                      : match.matchType === 'phone'
+                        ? 'Telefon'
+                        : match.matchType === 'email'
+                          ? 'E-posta'
+                          : match.matchType === 'email_domain'
+                            ? 'Aynı kurumsal e-posta'
+                            : 'Firma adı';
                   return (
                     <span
                       key={`${match.customerId}-${match.matchType}`}
@@ -338,6 +360,26 @@ export function CustomerForm({
               error={errors.contactName?.message}
               {...register('contactName')}
             />
+
+            {/* Vergi No + Vergi Dairesi */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input
+                label="Vergi No / TCKN"
+                placeholder="10 veya 11 haneli"
+                icon="badge"
+                error={errors.taxNumber?.message}
+                inputMode="numeric"
+                maxLength={11}
+                {...register('taxNumber')}
+              />
+              <Input
+                label="Vergi Dairesi"
+                placeholder="Örn. Beşiktaş V.D."
+                icon="account_balance"
+                error={errors.taxOffice?.message}
+                {...register('taxOffice')}
+              />
+            </div>
 
             {/* Telefonlar */}
             <div>

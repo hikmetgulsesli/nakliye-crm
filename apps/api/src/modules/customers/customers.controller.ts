@@ -133,14 +133,15 @@ export async function getById(req: Request, res: Response) {
 
 export async function create(req: Request, res: Response) {
   const {
-    companyName, contactName, phone, email, address,
+    companyName, contactName, taxNumber, taxOffice,
+    phone, email, address,
     transportModes, serviceTypes, incoterms, direction,
     originCountries, destinationCountries, source, potential,
     status, notes, assignedUserId, forceCreate,
   } = req.body;
 
   // Sunucu-tarafi conflict re-check: UI bypass edilemesin diye burada da bakiyoruz.
-  const conflicts = await findCustomerConflicts({ companyName, phone, email });
+  const conflicts = await findCustomerConflicts({ companyName, phone, email, taxNumber });
   const definite = conflicts.filter((c) => c.severity === 'definite');
   const likely = conflicts.filter((c) => c.severity === 'likely');
 
@@ -175,6 +176,8 @@ export async function create(req: Request, res: Response) {
     data: {
       companyName,
       contactName,
+      taxNumber: taxNumber || null,
+      taxOffice: taxOffice || null,
       phone,
       email,
       address,
@@ -218,7 +221,8 @@ export async function update(req: Request, res: Response) {
   // yaparlarsa müşterinin aktivite akışına otomatik kayıt düşer (aşağıda).
 
   const {
-    companyName, contactName, phone, email, address,
+    companyName, contactName, taxNumber, taxOffice,
+    phone, email, address,
     transportModes, serviceTypes, incoterms, direction,
     originCountries, destinationCountries, source, potential,
     status, notes, assignedUserId,
@@ -227,6 +231,8 @@ export async function update(req: Request, res: Response) {
   const updateData: Record<string, unknown> = {};
   if (companyName !== undefined) updateData.companyName = companyName;
   if (contactName !== undefined) updateData.contactName = contactName;
+  if (taxNumber !== undefined) updateData.taxNumber = taxNumber || null;
+  if (taxOffice !== undefined) updateData.taxOffice = taxOffice || null;
   if (phone !== undefined) updateData.phone = phone;
   if (email !== undefined) updateData.email = email;
   if (address !== undefined) updateData.address = address;

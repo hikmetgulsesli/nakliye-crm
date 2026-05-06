@@ -8,7 +8,7 @@ import {
   extractCorporateDomains,
 } from '../../utils/text-normalize';
 
-export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain';
+export type ConflictMatchType = 'company_name' | 'phone' | 'email' | 'email_domain' | 'tax_number';
 export type ConflictSeverity = 'definite' | 'likely';
 
 export interface ConflictResult {
@@ -63,6 +63,7 @@ export interface FindConflictsInput {
   companyName?: string;
   phone?: string;
   email?: string;
+  taxNumber?: string;
   excludeCustomerId?: number;
 }
 
@@ -72,8 +73,39 @@ export interface FindConflictsInput {
  * sondaj) bu fonksiyonu kullanir, boylece kural tek kaynaktan.
  */
 export async function findCustomerConflicts(input: FindConflictsInput): Promise<ConflictResult[]> {
-  const { companyName, phone, email, excludeCustomerId } = input;
+  const { companyName, phone, email, taxNumber, excludeCustomerId } = input;
   const matches = new Map<number, ConflictResult>();
+
+  // ========== 0. Vergi Numarasi (en guvenilir tek anahtar) ==========
+  // Kurumsal musteri icin VKN essizdir; tam eslesme = kesin ayni firma.
+  if (taxNumber && taxNumber.trim()) {
+    const tn = taxNumber.trim();
+    if (/^[0-9]{10,11}$/.test(tn)) {
+      const taxMatches = await prisma.customer.findMany({
+        where: { taxNumber: tn, isDeleted: false },
+        include: { assignedUser: { select: { fullName: true } } },
+        take: 10,
+      });
+      for (const c of taxMatches) {
+        upsertMatch(
+          matches,
+          {
+            customerId: c.id,
+            companyName: c.companyName,
+            contactName: c.contactName,
+            phone: c.phone,
+            email: c.email,
+            assignedUserId: c.assignedUserId,
+            assignedUserName: c.assignedUser.fullName,
+            lastContactDate: c.lastContactDate,
+          },
+          'tax_number',
+          100,
+          tn,
+        );
+      }
+    }
+  }
 
   // ========== 1. Firma adi (fuzzy) ==========
   if (companyName && companyName.trim().length >= 2) {
@@ -283,11 +315,12 @@ export async function findCustomerConflicts(input: FindConflictsInput): Promise<
 }
 
 export async function checkConflicts(req: Request, res: Response) {
-  const { companyName, phone, email } = req.body as {
+  const { companyName, phone, email, taxNumber } = req.body as {
     companyName?: string;
     phone?: string;
     email?: string;
+    taxNumber?: string;
   };
-  const sorted = await findCustomerConflicts({ companyName, phone, email });
+  const sorted = await findCustomerConflicts({ companyName, phone, email, taxNumber });
   res.json({ success: true, data: sorted });
 }

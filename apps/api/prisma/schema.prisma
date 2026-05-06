@@ -56,6 +56,8 @@ model Customer {
   id                   Int       @id @default(autoincrement())
   companyName          String    @map("company_name")
   contactName          String?   @map("contact_name")
+  taxNumber            String?   @map("tax_number")
+  taxOffice            String?   @map("tax_office")
   phone                String
   email                String
   address              String?

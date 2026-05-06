@@ -20,6 +20,10 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       <Card title="İletişim Bilgileri">
         <div className="space-y-4">
           <InfoRow icon="person" label="Yetkili Kisi" value={customer.contactName} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InfoRow icon="badge" label="Vergi No / TCKN" value={customer.taxNumber} />
+            <InfoRow icon="account_balance" label="Vergi Dairesi" value={customer.taxOffice} />
+          </div>
           <MultiInfoRow
             icon="phone"
             label="Telefon"

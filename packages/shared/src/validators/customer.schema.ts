@@ -30,6 +30,15 @@ const multiEmailSchema = z
 export const customerCreateSchema = z.object({
   companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalidir'),
   contactName: z.string().optional(),
+  taxNumber: z
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (v) => !v || /^[0-9]{10,11}$/.test(v),
+      'Vergi numarası 10 (kurumsal) ya da 11 haneli (TCKN) olmalı, sadece rakam',
+    ),
+  taxOffice: z.string().trim().max(80).optional(),
   phone: multiPhoneSchema,
   email: multiEmailSchema,
   address: z.string().optional(),
