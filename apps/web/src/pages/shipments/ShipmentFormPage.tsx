@@ -459,12 +459,12 @@ export default function ShipmentFormPage() {
 
           {/* Yukleme adresi — EXW Incoterm'inde kritik, diger durumlarda opsiyonel */}
           <div className="mt-4">
-            <Textarea
+            <Input
               label="Yükleme Adresi"
+              icon="location_on"
               value={form.pickupAddress}
               onChange={(e) => set('pickupAddress', e.target.value)}
               placeholder="EXW (opsiyonel)"
-              rows={2}
             />
           </div>
         </section>
