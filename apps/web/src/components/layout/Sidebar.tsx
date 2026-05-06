@@ -193,10 +193,11 @@ export default function Sidebar() {
       <aside
         className={cn(
           'fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev transition-transform duration-200 md:transition-[width]',
+          // Mobil: sabit 240px drawer; masaustu: var(--sidebar-w) dinamik (240/64)
+          'w-60 md:w-[var(--sidebar-w)]',
           // Mobilde drawer davranisi: kapaliysa ekranin disinda
           !mobileOpen && '-translate-x-full md:translate-x-0',
         )}
-        style={{ width: 'var(--sidebar-w)' }}
       >
       {/* Brand */}
       <BrandHeader collapsed={collapsed} />
