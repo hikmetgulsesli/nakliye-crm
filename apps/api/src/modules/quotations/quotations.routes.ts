@@ -11,6 +11,7 @@ router.use(auth());
 
 router.get('/', quotationsController.list);
 router.get('/:id', quotationsController.getById);
+router.get('/:id/pdf', quotationsController.downloadPdf);
 router.get('/:id/revisions', quotationsController.getRevisions);
 router.post('/', validate(quotationCreateSchema), quotationsController.create);
 router.patch('/:id', validate(quotationUpdateSchema), quotationsController.update);

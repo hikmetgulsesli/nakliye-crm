@@ -53,8 +53,21 @@ export default function QuoteDetailPage() {
     navigate(`/teklifler/${quotationId}/duzenle`);
   }
 
-  function handleDownloadPdf() {
-    window.print();
+  async function handleDownloadPdf() {
+    if (!quotation) return;
+    try {
+      const blob = await quotationService.downloadPdf(quotation.id);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${quotation.quoteNo}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      setError('PDF indirilirken bir hata oluştu.');
+    }
   }
 
   if (loading) {

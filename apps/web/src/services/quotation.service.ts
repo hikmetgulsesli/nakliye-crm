@@ -82,4 +82,12 @@ export const quotationService = {
     );
     return data;
   },
+
+  async downloadPdf(quotationId: number): Promise<Blob> {
+    const res = await api.get(`/quotations/${quotationId}/pdf`, {
+      responseType: 'blob',
+    });
+    // axios interceptor "data" alaninda Blob doner
+    return res.data as unknown as Blob;
+  },
 };

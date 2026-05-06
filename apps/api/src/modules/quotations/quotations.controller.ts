@@ -106,6 +106,55 @@ export async function getById(req: Request, res: Response) {
   res.json({ success: true, data: quotation });
 }
 
+export async function downloadPdf(req: Request, res: Response) {
+  const id = parseInt(req.params.id, 10);
+
+  const quotation = await prisma.quotation.findFirst({
+    where: { id },
+    include: {
+      customer: true,
+      assignedUser: { select: { fullName: true } },
+    },
+  });
+  if (!quotation) throw new AppError('Teklif bulunamadı', 404);
+
+  const { generateQuotationPdf } = await import('./quotation-pdf.generator');
+  const pdf = await generateQuotationPdf({
+    quoteNo: quotation.quoteNo,
+    quoteDate: quotation.quoteDate,
+    validityDate: quotation.validityDate,
+    status: quotation.status,
+    transportMode: quotation.transportMode,
+    serviceType: quotation.serviceType,
+    originCountry: quotation.originCountry,
+    pol: quotation.pol,
+    destinationCountry: quotation.destinationCountry,
+    pod: quotation.pod,
+    incoterm: quotation.incoterm,
+    price: quotation.price ? Number(quotation.price) : null,
+    currency: quotation.currency,
+    priceNote: quotation.priceNote,
+    customer: {
+      companyName: quotation.customer.companyName,
+      contactName: quotation.customer.contactName,
+      taxNumber: quotation.customer.taxNumber,
+      taxOffice: quotation.customer.taxOffice,
+      phone: quotation.customer.phone,
+      email: quotation.customer.email,
+      address: quotation.customer.address,
+    },
+    assignedUserName: quotation.assignedUser?.fullName,
+  });
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${quotation.quoteNo}.pdf"`,
+  );
+  res.setHeader('Content-Length', String(pdf.length));
+  res.end(pdf);
+}
+
 export async function getRevisions(req: Request, res: Response) {
   const id = parseInt(req.params.id, 10);
 
