@@ -184,7 +184,12 @@ export function QuotationDetail({
         {/* Action buttons */}
         <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
           {isWon && (
-            <div className="flex flex-col items-stretch">
+            <div className="flex flex-col items-stretch self-end">
+              {existingShipment?.shipmentNo && (
+                <span className="mb-1 text-center font-mono text-[11px] text-slate-500 dark:text-slate-400">
+                  {existingShipment.shipmentNo}
+                </span>
+              )}
               <Button
                 variant="primary"
                 icon={existingShipmentId ? 'open_in_new' : 'local_shipping'}
@@ -193,11 +198,6 @@ export function QuotationDetail({
               >
                 {existingShipmentId ? 'Sevkiyatı Görüntüle' : 'Sevkiyat Oluştur'}
               </Button>
-              {existingShipment?.shipmentNo && (
-                <span className="mt-1 text-center font-mono text-[11px] text-slate-500 dark:text-slate-400">
-                  {existingShipment.shipmentNo}
-                </span>
-              )}
             </div>
           )}
           <Button
