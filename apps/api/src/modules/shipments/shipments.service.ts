@@ -64,3 +64,56 @@ export async function createShipmentFromQuotation(quotationId: number, userId: n
   logger.info({ shipmentId: shipment.id, quotationId: q.id }, 'Shipment olusturuldu');
   return shipment;
 }
+
+/**
+ * Teklif "Kaybedildi"ye gectiginde, varsa o teklife bagli sevkiyat(lar)i
+ * iptal eder. Idempotent — zaten 'cancelled' veya 'delivered' olanlara
+ * dokunmaz; final olmayanlari 'cancelled' yapip event log'a kaydeder.
+ *
+ * Birden fazla sevkiyat olabilir (revize teklif vs.) — hepsini tarar.
+ */
+export async function cancelShipmentsForLostQuotation(
+  quotationId: number,
+  userId: number,
+): Promise<{ cancelledCount: number }> {
+  const shipments = await prisma.shipment.findMany({
+    where: {
+      quotationId,
+      isDeleted: false,
+      status: { notIn: ['cancelled', 'delivered'] },
+    },
+  });
+
+  if (shipments.length === 0) {
+    logger.info({ quotationId }, 'Iptal edilecek aktif sevkiyat yok');
+    return { cancelledCount: 0 };
+  }
+
+  let cancelled = 0;
+  for (const s of shipments) {
+    await prisma.$transaction(async (tx) => {
+      await tx.shipment.update({
+        where: { id: s.id },
+        data: { status: 'cancelled' },
+      });
+      await tx.shipmentEvent.create({
+        data: {
+          shipmentId: s.id,
+          eventType: 'status_change',
+          fromStatus: s.status,
+          toStatus: 'cancelled',
+          note: 'Bağlı teklif "Kaybedildi" olarak işaretlendi — sevkiyat otomatik iptal edildi.',
+          occurredAt: new Date(),
+          createdById: userId,
+        },
+      });
+    });
+    cancelled++;
+    logger.info(
+      { shipmentId: s.id, quotationId, fromStatus: s.status },
+      'Shipment otomatik iptal edildi (kaybedildi teklif)',
+    );
+  }
+
+  return { cancelledCount: cancelled };
+}

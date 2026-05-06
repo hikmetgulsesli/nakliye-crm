@@ -361,6 +361,24 @@ export async function update(req: Request, res: Response) {
     }
   }
 
+  // Status "Kaybedildi" oldysa, varsa bagli aktif sevkiyat(lar)i otomatik iptal et
+  if (
+    changes?.status &&
+    changes.status.new === 'Kaybedildi' &&
+    changes.status.old !== 'Kaybedildi'
+  ) {
+    try {
+      const { cancelShipmentsForLostQuotation } = await import('../shipments/shipments.service');
+      await cancelShipmentsForLostQuotation(id, req.user!.userId);
+    } catch (err) {
+      const { logger } = await import('../../config/logger');
+      logger.warn(
+        { err: (err as Error).message, quotationId: id },
+        'Shipment otomatik iptal basarisiz',
+      );
+    }
+  }
+
   res.json({ success: true, data: updated });
 }
 
