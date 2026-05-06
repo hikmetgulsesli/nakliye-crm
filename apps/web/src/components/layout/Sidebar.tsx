@@ -177,8 +177,8 @@ export default function Sidebar() {
       className="fixed inset-y-0 left-0 z-20 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev transition-[width] duration-200"
       style={{ width: 'var(--sidebar-w)' }}
     >
-      {/* Brand + collapse toggle */}
-      <BrandHeader collapsed={collapsed} onToggle={toggleSidebar} />
+      {/* Brand */}
+      <BrandHeader collapsed={collapsed} />
 
       {/* Workspace switcher — collapsed iken yalniz baş harf */}
       {!collapsed ? (
@@ -260,6 +260,21 @@ export default function Sidebar() {
         )}
       </nav>
 
+      {/* Daralt / genislet toggle — kendi satirinda, hep gorunur */}
+      <button
+        type="button"
+        onClick={toggleSidebar}
+        className={cn(
+          'flex items-center border-t border-token-border py-2 text-[12px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
+          collapsed ? 'justify-center px-1' : 'gap-2 px-3',
+        )}
+        title={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
+        aria-label={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
+      >
+        <Icon name={collapsed ? 'chevron_right' : 'chevron_left'} size="sm" />
+        {!collapsed && <span>Menüyü daralt</span>}
+      </button>
+
       {/* Footer: user + logout */}
       <div
         className={cn(
@@ -299,7 +314,7 @@ export default function Sidebar() {
   );
 }
 
-function BrandHeader({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+function BrandHeader({ collapsed }: { collapsed: boolean }) {
   const brand = useBrand();
   const initial = (brand.companyName || 'N').trim().charAt(0).toUpperCase();
   return (
@@ -347,18 +362,6 @@ function BrandHeader({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
           {initial}
         </div>
       )}
-      <button
-        type="button"
-        onClick={onToggle}
-        className={cn(
-          'grid size-7 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
-          collapsed && 'absolute right-1 top-1.5',
-        )}
-        title={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
-        aria-label={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
-      >
-        <Icon name={collapsed ? 'chevron_right' : 'chevron_left'} size="sm" />
-      </button>
     </div>
   );
 }
