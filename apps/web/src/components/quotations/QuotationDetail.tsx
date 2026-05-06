@@ -184,9 +184,9 @@ export function QuotationDetail({
         {/* Action buttons */}
         <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
           {isWon && (
-            <div className="flex flex-col items-stretch self-end">
+            <div className="relative">
               {existingShipment?.shipmentNo && (
-                <span className="mb-1 text-center font-mono text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="pointer-events-none absolute left-1/2 -top-4 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] text-slate-500 dark:text-slate-400">
                   {existingShipment.shipmentNo}
                 </span>
               )}
