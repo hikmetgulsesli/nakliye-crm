@@ -282,12 +282,13 @@ export default function Sidebar() {
         )}
       </nav>
 
-      {/* Daralt / genislet toggle — kendi satirinda, hep gorunur */}
+      {/* Daralt / genislet toggle — sadece masaustunde anlamli (mobilde drawer
+          ya tamamen acik ya kapali, daraltma kavrami yok) */}
       <button
         type="button"
         onClick={toggleSidebar}
         className={cn(
-          'flex items-center border-t border-token-border py-2 text-[12px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
+          'hidden items-center border-t border-token-border py-2 text-[12px] font-medium text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text md:flex',
           collapsed ? 'justify-center px-1' : 'gap-2 px-3',
         )}
         title={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
