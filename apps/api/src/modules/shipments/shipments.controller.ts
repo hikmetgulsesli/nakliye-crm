@@ -73,9 +73,24 @@ export async function getById(req: Request, res: Response) {
     },
   });
   if (!shipment || shipment.isDeleted) throw new AppError('Sevkiyat bulunamadı', 404);
+
+  // Bagli teklif bilgisi (quoteNo) — schema'da relation tanimli olmadigi
+  // icin ayri query ile cekiyoruz; sevkiyat detayinda link yaninda gosterilir.
+  let quotation: { id: number; quoteNo: string } | null = null;
+  if (shipment.quotationId) {
+    const q = await prisma.quotation.findUnique({
+      where: { id: shipment.quotationId },
+      select: { id: true, quoteNo: true },
+    });
+    if (q) quotation = q;
+  }
   res.json({
     success: true,
-    data: { ...shipment, allowedNextStatuses: allowedNextStatuses(shipment.status) },
+    data: {
+      ...shipment,
+      quotation,
+      allowedNextStatuses: allowedNextStatuses(shipment.status),
+    },
   });
 }
 

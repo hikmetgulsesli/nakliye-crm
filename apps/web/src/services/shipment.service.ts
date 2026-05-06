@@ -4,6 +4,7 @@ export interface Shipment {
   id: number;
   shipmentNo: string;
   quotationId?: number | null;
+  quotation?: { id: number; quoteNo: string } | null;
   customerId: number;
   customer?: { id: number; companyName: string; phone?: string; email?: string };
   blNumber?: string | null;

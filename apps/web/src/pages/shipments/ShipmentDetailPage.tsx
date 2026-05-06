@@ -93,6 +93,11 @@ export default function ShipmentDetailPage() {
             >
               <Icon name="description" size="sm" />
               İlgili Teklif
+              {s.quotation?.quoteNo && (
+                <span className="ml-1 font-mono text-xs text-token-muted">
+                  ({s.quotation.quoteNo})
+                </span>
+              )}
             </Link>
           )}
           {s.customer && (

@@ -72,7 +72,8 @@ export function QuotationDetail({
   const navigate = useNavigate();
   const transportInfo = q.transportMode ? TRANSPORT_MODE_LABELS[q.transportMode.toLowerCase()] : null;
   const [aiEmailOpen, setAiEmailOpen] = useState(false);
-  const [existingShipmentId, setExistingShipmentId] = useState<number | null>(null);
+  const [existingShipment, setExistingShipment] = useState<{ id: number; shipmentNo: string } | null>(null);
+  const existingShipmentId = existingShipment?.id ?? null;
 
   const isWon = q.status === 'Kazanıldı';
   const [lossModalOpen, setLossModalOpen] = useState(false);
@@ -110,7 +111,7 @@ export function QuotationDetail({
   // Kazanildi tekliflerde mevcut sevkiyat var mi kontrol et
   useEffect(() => {
     if (!isWon) {
-      setExistingShipmentId(null);
+      setExistingShipment(null);
       return;
     }
     let cancelled = false;
@@ -118,10 +119,14 @@ export function QuotationDetail({
       .list(1, 1, { quotationId: q.id })
       .then((res) => {
         if (cancelled) return;
-        setExistingShipmentId(res.total > 0 ? res.data[0].id : null);
+        if (res.total > 0 && res.data[0]) {
+          setExistingShipment({ id: res.data[0].id, shipmentNo: res.data[0].shipmentNo });
+        } else {
+          setExistingShipment(null);
+        }
       })
       .catch(() => {
-        if (!cancelled) setExistingShipmentId(null);
+        if (!cancelled) setExistingShipment(null);
       });
     return () => {
       cancelled = true;
@@ -179,14 +184,21 @@ export function QuotationDetail({
         {/* Action buttons */}
         <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
           {isWon && (
-            <Button
-              variant="primary"
-              icon={existingShipmentId ? 'open_in_new' : 'local_shipping'}
-              onClick={handleShipmentAction}
-              className="!bg-blue-500 hover:!bg-blue-600 !shadow-blue-500/20"
-            >
-              {existingShipmentId ? 'Sevkiyatı Görüntüle' : 'Sevkiyat Oluştur'}
-            </Button>
+            <div className="flex flex-col items-stretch">
+              <Button
+                variant="primary"
+                icon={existingShipmentId ? 'open_in_new' : 'local_shipping'}
+                onClick={handleShipmentAction}
+                className="!bg-blue-500 hover:!bg-blue-600 !shadow-blue-500/20"
+              >
+                {existingShipmentId ? 'Sevkiyatı Görüntüle' : 'Sevkiyat Oluştur'}
+              </Button>
+              {existingShipment?.shipmentNo && (
+                <span className="mt-1 text-center font-mono text-[11px] text-slate-500 dark:text-slate-400">
+                  {existingShipment.shipmentNo}
+                </span>
+              )}
+            </div>
           )}
           <Button
             variant="primary"
