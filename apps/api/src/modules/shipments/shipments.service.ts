@@ -61,6 +61,22 @@ export async function createShipmentFromQuotation(quotationId: number, userId: n
     },
   });
 
+  // Musteri zaman cizelgesine: "yeni sevkiyat olusturuldu (teklif X'ten)"
+  try {
+    const { logShipmentCreatedActivity } = await import('../../utils/activity-from-update');
+    await logShipmentCreatedActivity({
+      customerId: q.customerId,
+      shipmentNo: shipment.shipmentNo,
+      byUserId: userId,
+      fromQuoteNo: q.quoteNo,
+    });
+  } catch (err) {
+    logger.warn(
+      { err: (err as Error).message, shipmentId: shipment.id },
+      'Auto-shipment activity log basarisiz',
+    );
+  }
+
   logger.info({ shipmentId: shipment.id, quotationId: q.id }, 'Shipment olusturuldu');
   return shipment;
 }
@@ -113,6 +129,26 @@ export async function cancelShipmentsForLostQuotation(
       { shipmentId: s.id, quotationId, fromStatus: s.status },
       'Shipment otomatik iptal edildi (kaybedildi teklif)',
     );
+
+    // Musteri zaman cizelgesine: "sevkiyat iptal edildi (otomatik)"
+    try {
+      const { logShipmentStatusChangedActivity } = await import(
+        '../../utils/activity-from-update'
+      );
+      await logShipmentStatusChangedActivity({
+        customerId: s.customerId,
+        shipmentNo: s.shipmentNo,
+        oldStatus: s.status,
+        newStatus: 'cancelled',
+        byUserId: userId,
+        byUserName: 'Sistem (otomatik iptal)',
+      });
+    } catch (err) {
+      logger.warn(
+        { err: (err as Error).message, shipmentId: s.id },
+        'Cancel activity log basarisiz',
+      );
+    }
   }
 
   return { cancelledCount: cancelled };

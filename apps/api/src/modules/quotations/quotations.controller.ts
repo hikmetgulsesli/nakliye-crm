@@ -5,7 +5,11 @@ import { parsePagination, paginatedResponse, parseSort } from '../../utils/pagin
 import { generateQuoteNumber } from '../../utils/quote-number';
 import { computeDiff } from '../../utils/diff';
 import { createAuditLog } from '../../utils/audit';
-import { logQuotationUpdateActivity } from '../../utils/activity-from-update';
+import {
+  logQuotationUpdateActivity,
+  logQuotationCreatedActivity,
+  logQuotationStatusChangedActivity,
+} from '../../utils/activity-from-update';
 
 export async function list(req: Request, res: Response) {
   const { skip, page, pageSize } = parsePagination(req.query as Record<string, unknown>);
@@ -231,6 +235,23 @@ export async function create(req: Request, res: Response) {
     action: 'CREATE',
   });
 
+  // Musteri zaman cizelgesine: "yeni teklif olusturuldu" + lastContactDate
+  try {
+    const creator = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { fullName: true },
+    });
+    await logQuotationCreatedActivity({
+      customerId,
+      quoteNo,
+      byUserId: req.user!.userId,
+      byUserName: creator?.fullName,
+    });
+  } catch (err) {
+    const { logger } = await import('../../config/logger');
+    logger.warn({ err: (err as Error).message, quotationId: quotation.id }, 'Activity log basarisiz');
+  }
+
   // Yeni teklif dogrudan "Kazanildi" statusuyle olusturuldysa shipment hook'u
   // calismali — update'teki ile ayni davranis. Idempotent oldugu icin guvenli.
   if (quotation.status === 'Kazanıldı') {
@@ -343,6 +364,28 @@ export async function update(req: Request, res: Response) {
       byUserName: editor?.fullName,
       quoteNo: existing.quoteNo,
     });
+  }
+
+  // Status degisimi: kim degistirdi olursa olsun musteri zaman cizelgesine
+  // dusur ve lastContactDate guncelle (Bekliyor/Kazanildi/Kaybedildi/Iptal arasi gecisler).
+  if (changes?.status && changes.status.new !== changes.status.old) {
+    try {
+      const editor = await prisma.user.findUnique({
+        where: { id: req.user!.userId },
+        select: { fullName: true },
+      });
+      await logQuotationStatusChangedActivity({
+        customerId: existing.customerId,
+        quoteNo: existing.quoteNo,
+        oldStatus: String(changes.status.old ?? ''),
+        newStatus: String(changes.status.new ?? ''),
+        byUserId: req.user!.userId,
+        byUserName: editor?.fullName,
+      });
+    } catch (err) {
+      const { logger } = await import('../../config/logger');
+      logger.warn({ err: (err as Error).message, quotationId: id }, 'Status activity log basarisiz');
+    }
   }
 
   // Status "Kazanıldı" olduysa auto-create shipment

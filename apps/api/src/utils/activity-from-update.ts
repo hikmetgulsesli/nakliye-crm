@@ -1,6 +1,38 @@
 import { prisma } from '../config/database';
 
 export const SYSTEM_UPDATE_ACTIVITY_TYPE = 'Sistem Güncellemesi';
+export const SYSTEM_EVENT_ACTIVITY_TYPE = 'Sistem Olayı';
+
+/**
+ * Iki yardimci yan etki: Activity yazar + musteri lastContactDate guncellenir.
+ * Operasyon ile ilgili anlamli olaylar (teklif olustu, sevkiyat olustu, durum
+ * degisti) musteri zaman cizelgesine duser ve "X gundur etkilesim yok" filtresi
+ * dogru calisir.
+ */
+async function writeCrmEvent(params: {
+  customerId: number;
+  byUserId: number;
+  note: string;
+  activityType?: string;
+}) {
+  const { customerId, byUserId, note, activityType } = params;
+  const now = new Date();
+  await prisma.$transaction([
+    prisma.activity.create({
+      data: {
+        customerId,
+        activityType: activityType ?? SYSTEM_EVENT_ACTIVITY_TYPE,
+        activityDate: now,
+        notes: note,
+        createdById: byUserId,
+      },
+    }),
+    prisma.customer.update({
+      where: { id: customerId },
+      data: { lastContactDate: now },
+    }),
+  ]);
+}
 
 const CUSTOMER_FIELD_LABELS: Record<string, string> = {
   companyName: 'Firma Adı',
@@ -119,5 +151,80 @@ export async function logQuotationUpdateActivity({
       notes: note,
       createdById: byUserId,
     },
+  });
+}
+
+/* ---------- CRM Event helper'lari (Seviye 2: lastContactDate de gunceller) ---------- */
+
+interface QuotationCreatedParams {
+  customerId: number;
+  quoteNo: string;
+  byUserId: number;
+  byUserName?: string | null;
+}
+export async function logQuotationCreatedActivity(p: QuotationCreatedParams) {
+  const note = p.byUserName
+    ? `${p.byUserName} yeni teklif oluşturdu: ${p.quoteNo}`
+    : `Yeni teklif oluşturuldu: ${p.quoteNo}`;
+  await writeCrmEvent({
+    customerId: p.customerId,
+    byUserId: p.byUserId,
+    note,
+  });
+}
+
+interface QuotationStatusChangedParams {
+  customerId: number;
+  quoteNo: string;
+  oldStatus: string;
+  newStatus: string;
+  byUserId: number;
+  byUserName?: string | null;
+}
+export async function logQuotationStatusChangedActivity(p: QuotationStatusChangedParams) {
+  const who = p.byUserName ? `${p.byUserName}` : 'Sistem';
+  const note = `${who} ${p.quoteNo} teklifinin durumunu "${p.oldStatus || '-'}" → "${p.newStatus}" olarak güncelledi.`;
+  await writeCrmEvent({
+    customerId: p.customerId,
+    byUserId: p.byUserId,
+    note,
+  });
+}
+
+interface ShipmentCreatedParams {
+  customerId: number;
+  shipmentNo: string;
+  byUserId: number;
+  byUserName?: string | null;
+  fromQuoteNo?: string | null;
+}
+export async function logShipmentCreatedActivity(p: ShipmentCreatedParams) {
+  const who = p.byUserName ? p.byUserName : 'Sistem';
+  const tail = p.fromQuoteNo
+    ? ` (${p.fromQuoteNo} teklifinden otomatik)`
+    : '';
+  const note = `${who} yeni sevkiyat oluşturdu: ${p.shipmentNo}${tail}`;
+  await writeCrmEvent({
+    customerId: p.customerId,
+    byUserId: p.byUserId,
+    note,
+  });
+}
+
+interface ShipmentStatusChangedParams {
+  customerId: number;
+  shipmentNo: string;
+  oldStatus: string;
+  newStatus: string;
+  byUserId: number;
+  byUserName?: string | null;
+}
+export async function logShipmentStatusChangedActivity(p: ShipmentStatusChangedParams) {
+  const who = p.byUserName ? p.byUserName : 'Sistem';
+  const note = `${who} ${p.shipmentNo} sevkiyatının durumunu "${p.oldStatus || '-'}" → "${p.newStatus}" olarak güncelledi.`;
+  await writeCrmEvent({
+    customerId: p.customerId,
+    byUserId: p.byUserId,
+    note,
   });
 }

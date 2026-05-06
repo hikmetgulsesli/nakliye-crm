@@ -143,6 +143,24 @@ export async function create(req: Request, res: Response) {
     action: 'CREATE',
   });
 
+  // Musteri zaman cizelgesine: "yeni sevkiyat olusturuldu" + lastContactDate
+  try {
+    const { logShipmentCreatedActivity } = await import('../../utils/activity-from-update');
+    const creator = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { fullName: true },
+    });
+    await logShipmentCreatedActivity({
+      customerId: shipment.customerId,
+      shipmentNo: shipment.shipmentNo,
+      byUserId: req.user!.userId,
+      byUserName: creator?.fullName,
+    });
+  } catch (err) {
+    const { logger } = await import('../../config/logger');
+    logger.warn({ err: (err as Error).message, shipmentId: shipment.id }, 'Activity log basarisiz');
+  }
+
   res.status(201).json({ success: true, data: shipment });
 }
 
@@ -224,6 +242,26 @@ export async function changeStatus(req: Request, res: Response) {
     action: 'UPDATE',
     changes: { status: { old: existing.status, new: toStatus } },
   });
+
+  // Musteri zaman cizelgesine: sevkiyat statu degisimi + lastContactDate
+  try {
+    const { logShipmentStatusChangedActivity } = await import('../../utils/activity-from-update');
+    const editor = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { fullName: true },
+    });
+    await logShipmentStatusChangedActivity({
+      customerId: existing.customerId,
+      shipmentNo: existing.shipmentNo,
+      oldStatus: existing.status,
+      newStatus: toStatus,
+      byUserId: req.user!.userId,
+      byUserName: editor?.fullName,
+    });
+  } catch (err) {
+    const { logger } = await import('../../config/logger');
+    logger.warn({ err: (err as Error).message, shipmentId: id }, 'Status activity log basarisiz');
+  }
 
   res.json({ success: true, data: updated });
 }
