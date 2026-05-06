@@ -89,6 +89,7 @@ export async function create(req: Request, res: Response) {
     pol?: string;
     destinationCountry?: string;
     pod?: string;
+    pickupAddress?: string;
     etd?: string;
     eta?: string;
     assignedUserId?: number;
@@ -100,27 +101,29 @@ export async function create(req: Request, res: Response) {
   if (!body.customerId) throw new AppError('customerId zorunlu', 400);
 
   const shipmentNo = await generateShipmentNumber();
-  const shipment = await prisma.shipment.create({
-    data: {
-      shipmentNo,
-      customerId: body.customerId,
-      quotationId: body.quotationId,
-      transportMode: body.transportMode,
-      serviceType: body.serviceType,
-      originCountry: body.originCountry,
-      pol: body.pol,
-      destinationCountry: body.destinationCountry,
-      pod: body.pod,
-      etd: body.etd ? new Date(body.etd) : undefined,
-      eta: body.eta ? new Date(body.eta) : undefined,
-      notes: body.notes,
-      blNumber: body.blNumber,
-      awbNumber: body.awbNumber,
-      status: 'draft',
-      assignedUserId: body.assignedUserId ?? req.user!.userId,
-      createdById: req.user!.userId,
-    },
-  });
+  // pickupAddress yeni alan — Prisma client generate olana kadar tipte
+  // gorunmeyebilir; runtime'da problem olmaz (migration alani ekledi).
+  const createData = {
+    shipmentNo,
+    customerId: body.customerId,
+    quotationId: body.quotationId,
+    transportMode: body.transportMode,
+    serviceType: body.serviceType,
+    originCountry: body.originCountry,
+    pol: body.pol,
+    destinationCountry: body.destinationCountry,
+    pod: body.pod,
+    pickupAddress: body.pickupAddress,
+    etd: body.etd ? new Date(body.etd) : undefined,
+    eta: body.eta ? new Date(body.eta) : undefined,
+    notes: body.notes,
+    blNumber: body.blNumber,
+    awbNumber: body.awbNumber,
+    status: 'draft',
+    assignedUserId: body.assignedUserId ?? req.user!.userId,
+    createdById: req.user!.userId,
+  } as Parameters<typeof prisma.shipment.create>[0]['data'];
+  const shipment = await prisma.shipment.create({ data: createData });
 
   await prisma.shipmentEvent.create({
     data: {
@@ -152,7 +155,8 @@ export async function update(req: Request, res: Response) {
   const data: Record<string, unknown> = {};
   const allowed = [
     'blNumber', 'awbNumber', 'transportMode', 'serviceType', 'originCountry',
-    'pol', 'destinationCountry', 'pod', 'notes', 'assignedUserId', 'customsStatus',
+    'pol', 'destinationCountry', 'pod', 'pickupAddress', 'notes',
+    'assignedUserId', 'customsStatus',
   ];
   for (const k of allowed) if (k in b) data[k] = b[k];
   if (b.etd) data.etd = new Date(String(b.etd));

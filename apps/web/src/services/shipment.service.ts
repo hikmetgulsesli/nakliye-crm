@@ -14,6 +14,7 @@ export interface Shipment {
   pol?: string | null;
   destinationCountry?: string | null;
   pod?: string | null;
+  pickupAddress?: string | null;
   etd?: string | null;
   eta?: string | null;
   atd?: string | null;

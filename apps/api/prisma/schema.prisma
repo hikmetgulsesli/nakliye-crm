@@ -329,6 +329,7 @@ model Shipment {
   pol                String?
   destinationCountry String?   @map("destination_country")
   pod                String?
+  pickupAddress      String?   @map("pickup_address")
   etd                DateTime?
   eta                DateTime?
   atd                DateTime?

@@ -20,6 +20,7 @@ interface FormState {
   pol: string;
   destinationCountry: string;
   pod: string;
+  pickupAddress: string;
   etd: string;
   eta: string;
   blNumber: string;
@@ -38,6 +39,7 @@ const EMPTY_FORM: FormState = {
   pol: '',
   destinationCountry: '',
   pod: '',
+  pickupAddress: '',
   etd: '',
   eta: '',
   blNumber: '',
@@ -94,6 +96,7 @@ export default function ShipmentFormPage() {
           pol: s.pol ?? '',
           destinationCountry: s.destinationCountry ?? '',
           pod: s.pod ?? '',
+          pickupAddress: s.pickupAddress ?? '',
           etd: s.etd ? s.etd.slice(0, 10) : '',
           eta: s.eta ? s.eta.slice(0, 10) : '',
           blNumber: s.blNumber ?? '',
@@ -219,6 +222,7 @@ export default function ShipmentFormPage() {
         pol: form.pol || undefined,
         destinationCountry: form.destinationCountry || undefined,
         pod: form.pod || undefined,
+        pickupAddress: form.pickupAddress || undefined,
         etd: form.etd || undefined,
         eta: form.eta || undefined,
         blNumber: form.blNumber || undefined,
@@ -450,6 +454,17 @@ export default function ShipmentFormPage() {
               value={form.pod}
               onChange={(e) => set('pod', e.target.value)}
               placeholder="Ör. Hamburg"
+            />
+          </div>
+
+          {/* Yukleme adresi — EXW Incoterm'inde kritik, diger durumlarda opsiyonel */}
+          <div className="mt-4">
+            <Textarea
+              label="Yükleme Adresi"
+              value={form.pickupAddress}
+              onChange={(e) => set('pickupAddress', e.target.value)}
+              placeholder="EXW (opsiyonel)"
+              rows={2}
             />
           </div>
         </section>

@@ -125,6 +125,17 @@ export default function ShipmentDetailPage() {
           <Field label="ATA" value={formatDT(s.ata)} />
         </div>
 
+        {s.pickupAddress && (
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="text-xs font-semibold text-slate-500 uppercase mb-1">
+              Yükleme Adresi
+            </div>
+            <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+              {s.pickupAddress}
+            </div>
+          </div>
+        )}
+
         {s.notes && (
           <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
             <div className="text-xs font-semibold text-slate-500 uppercase mb-1">Notlar</div>
