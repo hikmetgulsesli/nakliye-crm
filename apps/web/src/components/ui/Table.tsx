@@ -110,8 +110,12 @@ export function Table<T extends Record<string, unknown>>({
   }
 
   // Sticky ilk kolon: alta gri arka plan + sag border ile ayrim. Hem th hem td.
+  // Sticky thead z-index'leri:
+  //   - thead all cells:           z-20 (header satiri)
+  //   - thead first cell (corner): z-30 (yatay+dikey kesisim, en ust)
+  //   - tbody first cell:          z-10 (yalniz yatay sticky)
   const stickyHeadCls = stickyFirstColumn
-    ? 'sticky left-0 z-20 bg-slate-50 dark:bg-slate-800/95 backdrop-blur-sm'
+    ? 'sticky left-0 z-30 bg-slate-50 dark:bg-slate-800/95 backdrop-blur-sm'
     : '';
   const stickyCellCls = stickyFirstColumn
     ? 'sticky left-0 z-10 bg-white dark:bg-slate-900 group-hover:bg-slate-50 dark:group-hover:bg-slate-800/40 shadow-[2px_0_3px_-2px_rgba(0,0,0,0.08)] dark:shadow-[2px_0_3px_-2px_rgba(0,0,0,0.4)]'
@@ -131,10 +135,14 @@ export function Table<T extends Record<string, unknown>>({
         <div style={{ width: scrollWidth, height: 1 }} />
       </div>
 
-      <div ref={bottomRef} className="overflow-x-auto">
+      {/* y:clip + x:auto — sticky thead'i bu wrapper IZOLE ETMESIN diye y ekseninde
+          'auto'nun otomatik tetiklenmesi engellenir. Modern browser uyumu: Chrome 90+,
+          Firefox 81+, Safari 15+. Yatay scroll korunur, sticky thead <main> scroll'una
+          gore calisir. */}
+      <div ref={bottomRef} className="overflow-x-auto" style={{ overflowY: 'clip' }}>
         <table className="w-full">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/60">
+          <thead className="sticky top-0 z-20">
+            <tr className="bg-slate-50 dark:bg-slate-800/95 backdrop-blur-sm shadow-[0_1px_0_rgba(0,0,0,0.04)] dark:shadow-[0_1px_0_rgba(255,255,255,0.06)]">
               {columns.map((col, i) => {
                 const icon = sortIcon(col);
                 const isFirst = i === 0;
@@ -143,7 +151,7 @@ export function Table<T extends Record<string, unknown>>({
                     key={col.key}
                     onClick={() => handleSortClick(col)}
                     className={cn(
-                      'text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold',
+                      'text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold bg-slate-50 dark:bg-slate-800/95',
                       col.sortable && onSortChange && 'cursor-pointer select-none hover:text-slate-700 dark:hover:text-slate-200',
                       isFirst && stickyHeadCls,
                       col.className,
