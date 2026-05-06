@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useBrand } from '@/stores/brandStore';
 import { useSavedViewsStore } from '@/stores/savedViewsStore';
+import { useUIStore } from '@/stores/uiStore';
 import { Icon } from '@/components/ui';
 import api from '@/config/api';
 import type { SavedView, SavedViewResource } from '@/services/saved-views.service';
@@ -73,6 +74,9 @@ export default function Sidebar() {
   const fetchSavedViewsIfNeeded = useSavedViewsStore((s) => s.fetchIfNeeded);
   const pinnedViews = useMemo(() => allSavedViews.filter((v) => v.isPinned), [allSavedViews]);
 
+  const collapsed = useUIStore((s) => s.sidebarCollapsed);
+  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+
   useEffect(() => {
     fetchSavedViewsIfNeeded();
   }, [fetchSavedViewsIfNeeded]);
@@ -130,108 +134,113 @@ export default function Sidebar() {
     return undefined;
   }
 
+  function NavLinkRow({ item, count }: { item: NavItem; count?: number }) {
+    const active = isActive(item.path);
+    return (
+      <Link
+        to={item.path}
+        title={collapsed ? item.label : undefined}
+        className={cn(
+          'group relative flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors',
+          collapsed && 'justify-center px-1.5',
+          active
+            ? 'bg-token-bg-active text-token-text'
+            : 'text-token-muted hover:bg-token-bg-hover hover:text-token-text',
+        )}
+      >
+        {active && (
+          <span
+            className={cn(
+              'absolute top-2 bottom-2 w-0.5 rounded',
+              collapsed ? 'left-0' : '-left-2',
+            )}
+            style={{ background: 'var(--accent)' }}
+          />
+        )}
+        <span className="material-symbols-outlined !text-[18px] opacity-90">
+          {item.icon}
+        </span>
+        {!collapsed && (
+          <>
+            <span className="flex-1">{item.label}</span>
+            {count !== undefined && (
+              <span className="font-mono text-[11px] text-token-subtle">{count}</span>
+            )}
+          </>
+        )}
+      </Link>
+    );
+  }
+
   return (
     <aside
-      className="fixed inset-y-0 left-0 z-20 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev"
+      className="fixed inset-y-0 left-0 z-20 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev transition-[width] duration-200"
       style={{ width: 'var(--sidebar-w)' }}
     >
-      {/* Brand */}
-      <BrandHeader />
+      {/* Brand + collapse toggle */}
+      <BrandHeader collapsed={collapsed} onToggle={toggleSidebar} />
 
-      {/* Workspace switcher */}
-      <button
-        type="button"
-        className="mx-2.5 mt-2.5 flex items-center gap-2.5 rounded-md border border-token-border bg-token-bg-subtle px-2.5 py-2 transition-colors hover:bg-token-bg-hover"
-      >
+      {/* Workspace switcher — collapsed iken yalniz baş harf */}
+      {!collapsed ? (
+        <button
+          type="button"
+          className="mx-2.5 mt-2.5 flex items-center gap-2.5 rounded-md border border-token-border bg-token-bg-subtle px-2.5 py-2 transition-colors hover:bg-token-bg-hover"
+        >
+          <div
+            className="grid size-6 place-items-center rounded-md text-[11px] font-semibold text-white"
+            style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}
+          >
+            {initials.charAt(0)}
+          </div>
+          <div className="min-w-0 flex-1 text-left">
+            <div className="truncate text-[13px] font-medium text-token-text">
+              {user?.fullName ?? 'Workspace'}
+            </div>
+            <div className="text-[11px] text-token-muted">
+              {admin ? 'Yönetici · Workspace' : 'Temsilci'}
+            </div>
+          </div>
+          <Icon name="expand_more" size="sm" className="text-token-subtle" />
+        </button>
+      ) : (
         <div
-          className="grid size-6 place-items-center rounded-md text-[11px] font-semibold text-white"
+          className="mx-auto mt-2.5 grid size-7 place-items-center rounded-md text-[11px] font-semibold text-white"
           style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}
+          title={user?.fullName ?? 'Workspace'}
         >
           {initials.charAt(0)}
         </div>
-        <div className="min-w-0 flex-1 text-left">
-          <div className="truncate text-[13px] font-medium text-token-text">
-            {user?.fullName ?? 'Workspace'}
-          </div>
-          <div className="text-[11px] text-token-muted">
-            {admin ? 'Yönetici · Workspace' : 'Temsilci'}
-          </div>
-        </div>
-        <Icon name="expand_more" size="sm" className="text-token-subtle" />
-      </button>
+      )}
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-2 py-1">
-        <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
-          Çalışma alanı
-        </div>
-        {filteredPrimary.map((item) => {
-          const active = isActive(item.path);
-          const count = getCount(item.path);
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                'group relative flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors',
-                active
-                  ? 'bg-token-bg-active text-token-text'
-                  : 'text-token-muted hover:bg-token-bg-hover hover:text-token-text',
-              )}
-            >
-              {active && (
-                <span
-                  className="absolute -left-2 top-2 bottom-2 w-0.5 rounded"
-                  style={{ background: 'var(--accent)' }}
-                />
-              )}
-              <span className="material-symbols-outlined !text-[18px] opacity-90">
-                {item.icon}
-              </span>
-              <span className="flex-1">{item.label}</span>
-              {count !== undefined && (
-                <span className="font-mono text-[11px] text-token-subtle">{count}</span>
-              )}
-            </Link>
-          );
-        })}
+        {!collapsed && (
+          <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
+            Çalışma alanı
+          </div>
+        )}
+        {collapsed && <div className="pt-3" />}
+        {filteredPrimary.map((item) => (
+          <NavLinkRow key={item.path} item={item} count={getCount(item.path)} />
+        ))}
 
         {filteredAdmin.length > 0 && (
           <>
-            <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
-              Yönetim
-            </div>
-            {filteredAdmin.map((item) => {
-              const active = isActive(item.path);
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    'group relative flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors',
-                    active
-                      ? 'bg-token-bg-active text-token-text'
-                      : 'text-token-muted hover:bg-token-bg-hover hover:text-token-text',
-                  )}
-                >
-                  {active && (
-                    <span
-                      className="absolute -left-2 top-2 bottom-2 w-0.5 rounded"
-                      style={{ background: 'var(--accent)' }}
-                    />
-                  )}
-                  <span className="material-symbols-outlined !text-[18px] opacity-90">
-                    {item.icon}
-                  </span>
-                  <span className="flex-1">{item.label}</span>
-                </Link>
-              );
-            })}
+            {!collapsed ? (
+              <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
+                Yönetim
+              </div>
+            ) : (
+              <div className="my-2 border-t border-token-border" />
+            )}
+            {filteredAdmin.map((item) => (
+              <NavLinkRow key={item.path} item={item} />
+            ))}
           </>
         )}
 
         {/* Kullanicinin sabitledigi kaydedilmis görünümler */}
-        {pinnedViews.length > 0 && (
+        {pinnedViews.length > 0 && !collapsed && (
           <>
             <div className="px-2.5 pb-1.5 pt-3.5 text-[10px] font-semibold uppercase tracking-wider text-token-subtle">
               Kaydedilen görünümler
@@ -252,25 +261,32 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer: user + logout */}
-      <div className="flex items-center gap-2.5 border-t border-token-border px-2.5 py-2.5">
+      <div
+        className={cn(
+          'flex items-center gap-2.5 border-t border-token-border py-2.5',
+          collapsed ? 'flex-col px-1' : 'px-2.5',
+        )}
+      >
         <button
           onClick={() => navigate('/profil')}
           className="grid size-7 place-items-center rounded-full text-[11px] font-semibold text-white"
           style={{
             background: 'linear-gradient(135deg, var(--magenta), var(--accent))',
           }}
-          title="Profilim"
+          title={user?.fullName ?? 'Profilim'}
         >
           {initials}
         </button>
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-[12px] font-medium text-token-text">
-            {user?.fullName ?? 'Kullanıcı'}
+        {!collapsed && (
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-[12px] font-medium text-token-text">
+              {user?.fullName ?? 'Kullanıcı'}
+            </div>
+            <div className="truncate text-[11px] text-token-muted">
+              {admin ? 'Yönetici' : 'Temsilci'}
+            </div>
           </div>
-          <div className="truncate text-[11px] text-token-muted">
-            {admin ? 'Yönetici' : 'Temsilci'}
-          </div>
-        </div>
+        )}
         <button
           onClick={handleLogout}
           className="grid size-7 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text"
@@ -283,45 +299,66 @@ export default function Sidebar() {
   );
 }
 
-function BrandHeader() {
+function BrandHeader({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const brand = useBrand();
   const initial = (brand.companyName || 'N').trim().charAt(0).toUpperCase();
   return (
     <div
-      className="flex items-center gap-2.5 border-b border-token-border px-4"
+      className={cn(
+        'flex items-center gap-2.5 border-b border-token-border',
+        collapsed ? 'justify-center px-1' : 'px-4',
+      )}
       style={{ height: 'var(--topbar-h)' }}
     >
-      {brand.logoUrl ? (
-        <img
-          src={brand.logoUrl}
-          alt={brand.companyName}
-          className="h-7 max-w-[110px] object-contain"
-        />
-      ) : (
+      {!collapsed && (
         <>
-          <div
-            className="grid size-7 place-items-center rounded-md text-[12px] font-bold text-white shadow-sm"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--accent), var(--magenta))',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            {initial}
-          </div>
-          <div className="flex-1 text-[14px] font-semibold tracking-tight text-token-text">
-            {brand.companyName}
-          </div>
+          {brand.logoUrl ? (
+            <img
+              src={brand.logoUrl}
+              alt={brand.companyName}
+              className="h-7 max-w-[110px] object-contain"
+            />
+          ) : (
+            <>
+              <div
+                className="grid size-7 place-items-center rounded-md text-[12px] font-bold text-white shadow-sm"
+                style={{
+                  background: 'linear-gradient(135deg, var(--accent), var(--magenta))',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {initial}
+              </div>
+              <div className="flex-1 truncate text-[14px] font-semibold tracking-tight text-token-text">
+                {brand.companyName}
+              </div>
+            </>
+          )}
         </>
       )}
-      {brand.logoUrl && (
-        <div className="flex-1 truncate text-[12px] font-medium tracking-tight text-token-muted">
-          {/* logo varken text gizli */}
+      {collapsed && (
+        <div
+          className="grid size-7 place-items-center rounded-md text-[12px] font-bold text-white shadow-sm"
+          style={{
+            background: 'linear-gradient(135deg, var(--accent), var(--magenta))',
+          }}
+          title={brand.companyName}
+        >
+          {initial}
         </div>
       )}
-      <div className="rounded border border-token-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-token-subtle font-mono">
-        v1.0
-      </div>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={cn(
+          'grid size-7 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text',
+          collapsed && 'absolute right-1 top-1.5',
+        )}
+        title={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
+        aria-label={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
+      >
+        <Icon name={collapsed ? 'chevron_right' : 'chevron_left'} size="sm" />
+      </button>
     </div>
   );
 }

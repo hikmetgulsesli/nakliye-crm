@@ -258,8 +258,12 @@ export default function ShipmentListPage() {
                 {
                   key: 'customer',
                   label: 'MÜŞTERİ',
+                  className: 'max-w-[260px]',
                   render: (s: Shipment) => (
-                    <span className="text-token-text">
+                    <span
+                      title={s.customer?.companyName || ''}
+                      className="block truncate text-token-text"
+                    >
                       {s.customer?.companyName || '-'}
                     </span>
                   ),

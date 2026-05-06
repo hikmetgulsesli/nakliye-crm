@@ -11,6 +11,7 @@ import { customerService, type ConflictMatch } from '@/services/customer.service
 import { useAuthStore } from '@/stores/authStore';
 import type { Customer, CustomerCreateInput } from '@nakliye-crm/shared';
 import { splitMultiValue, formatTrPhone, normalizeTrPhone } from '@nakliye-crm/shared';
+import { smartTitleCase } from '@/utils/smart-title-case';
 
 function toFieldArray(input?: string | null): { value: string }[] {
   if (!input) return [{ value: '' }];
@@ -261,14 +262,35 @@ export function CustomerForm({
           </h2>
 
           <div className="space-y-4">
-            {/* Firma Adı */}
-            <Input
-              label="Firma Adı"
-              placeholder="Firma adını giriniz"
-              icon="business"
-              error={errors.companyName?.message}
-              {...register('companyName')}
-            />
+            {/* Firma Adı + akilli buyuk/kucuk harf duzeltici */}
+            <div className="relative">
+              <Input
+                label="Firma Adı"
+                placeholder="Firma adını giriniz"
+                icon="business"
+                error={errors.companyName?.message}
+                {...register('companyName')}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const current = watch('companyName') || '';
+                  const fixed = smartTitleCase(current);
+                  if (fixed !== current) {
+                    setValue('companyName', fixed, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                  }
+                }}
+                title="Otomatik büyük/küçük harf düzelt (MSC, A.Ş. gibi kısaltmalar korunur)"
+                aria-label="Otomatik büyük/küçük harf düzelt"
+                className="absolute right-2 top-[34px] inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+              >
+                <Icon name="match_case" size="sm" className="!text-[14px]" />
+                Aa
+              </button>
+            </div>
 
             {/* Conflict suggestions */}
             {conflictMatches.length > 0 && (

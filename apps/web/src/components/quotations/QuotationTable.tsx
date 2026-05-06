@@ -76,12 +76,14 @@ export function QuotationTable({
     {
       key: 'customer',
       label: 'MUSTERI',
+      className: 'max-w-[260px]',
       render: (row: Quotation) => (
-        <div className="min-w-0">
-          <p className="font-semibold text-slate-900 dark:text-slate-100 truncate">
-            {row.customer?.companyName || '-'}
-          </p>
-        </div>
+        <p
+          title={row.customer?.companyName || ''}
+          className="block truncate font-semibold text-slate-900 dark:text-slate-100"
+        >
+          {row.customer?.companyName || '-'}
+        </p>
       ),
     },
     {

@@ -59,18 +59,23 @@ export function CustomerTable({
       label: 'FIRMA ADI',
       sortable: true,
       sortKey: 'companyName',
+      className: 'max-w-[280px]',
       render: (row: Customer) =>
         isDeleted ? (
-          <span className="text-slate-700 dark:text-slate-300 font-medium line-through decoration-slate-300 dark:decoration-slate-600">
+          <span
+            title={row.companyName}
+            className="block truncate text-slate-700 dark:text-slate-300 font-medium line-through decoration-slate-300 dark:decoration-slate-600"
+          >
             {row.companyName}
           </span>
         ) : (
           <button
+            title={row.companyName}
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/musteriler/${row.id}`);
             }}
-            className="text-primary font-bold hover:underline text-left"
+            className="block w-full truncate text-primary font-bold hover:underline text-left"
           >
             {row.companyName}
           </button>

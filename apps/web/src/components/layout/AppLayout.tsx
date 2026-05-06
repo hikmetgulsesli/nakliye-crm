@@ -5,12 +5,23 @@ import Header from './Header';
 import { CommandPalette } from '@/components/search/CommandPalette';
 import { AIPanel } from '@/components/ai/AIPanel';
 import { useFeaturesStore, useFeature } from '@/stores/featuresStore';
+import { useUIStore } from '@/stores/uiStore';
 import { initRealtime } from '@/config/socket';
 
 export default function AppLayout() {
   const fetchFeatures = useFeaturesStore((s) => s.fetch);
   const cmdKEnabled = useFeature('command_palette');
   const [aiPanelOpen, setAIPanelOpen] = useState(false);
+  const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
+
+  // Sidebar tercihi degisince CSS variable'i guncelle — Sidebar ve content
+  // alani var(--sidebar-w) okuyor. 240px (acik) <-> 64px (icon-only).
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--sidebar-w',
+      sidebarCollapsed ? '64px' : '240px',
+    );
+  }, [sidebarCollapsed]);
 
   useEffect(() => {
     fetchFeatures();
