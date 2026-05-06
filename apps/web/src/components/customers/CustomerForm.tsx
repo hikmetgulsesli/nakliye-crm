@@ -361,26 +361,6 @@ export function CustomerForm({
               {...register('contactName')}
             />
 
-            {/* Vergi No + Vergi Dairesi */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                label="Vergi No / TCKN"
-                placeholder="10 veya 11 haneli"
-                icon="badge"
-                error={errors.taxNumber?.message}
-                inputMode="numeric"
-                maxLength={11}
-                {...register('taxNumber')}
-              />
-              <Input
-                label="Vergi Dairesi"
-                placeholder="Örn. Beşiktaş V.D."
-                icon="account_balance"
-                error={errors.taxOffice?.message}
-                {...register('taxOffice')}
-              />
-            </div>
-
             {/* Telefonlar */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
@@ -475,6 +455,26 @@ export function CustomerForm({
               error={errors.address?.message}
               {...register('address')}
             />
+
+            {/* Vergi Bilgileri — adres ile birlikte gruplanir */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input
+                label="Vergi No / TCKN"
+                placeholder="10 veya 11 haneli"
+                icon="badge"
+                error={errors.taxNumber?.message}
+                inputMode="numeric"
+                maxLength={11}
+                {...register('taxNumber')}
+              />
+              <Input
+                label="Vergi Dairesi"
+                placeholder="Örn. Beşiktaş V.D."
+                icon="account_balance"
+                error={errors.taxOffice?.message}
+                {...register('taxOffice')}
+              />
+            </div>
 
             <Controller
               control={control}

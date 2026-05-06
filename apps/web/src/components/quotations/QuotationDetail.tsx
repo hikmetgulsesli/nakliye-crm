@@ -10,6 +10,7 @@ import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
 import { InternalNotesPanel } from '@/components/notes/InternalNotesPanel';
 import { FeatureGate } from '@/components/features/FeatureGate';
+import { LossReasonModal } from './LossReasonModal';
 import { shipmentService } from '@/services/shipment.service';
 import { quotationService } from '@/services/quotation.service';
 import type { Quotation, QuotationRevision } from '@nakliye-crm/shared';
@@ -74,6 +75,37 @@ export function QuotationDetail({
   const [existingShipmentId, setExistingShipmentId] = useState<number | null>(null);
 
   const isWon = q.status === 'Kazanıldı';
+  const [lossModalOpen, setLossModalOpen] = useState(false);
+
+  /**
+   * Status degisikligini ortak yoneten handler. "Kaybedildi" secilince once
+   * modal acar; modal confirm verince hem status hem lossReason atomik gonderir.
+   * Diger statusler dogrudan gider. Reject edildiginde InlineEditSelect revert eder.
+   */
+  async function handleStatusChange(next: string): Promise<void> {
+    if (next === 'Kaybedildi') {
+      // Modal acilir; gercek update onun confirm handler'inda olur. Inline'i
+      // pending'de tutmak icin hicbir sey yapmiyoruz, modal kapaninca
+      // onStatusChanged ile parent kayit tazelenecek.
+      setLossModalOpen(true);
+      // Modal kapanmadan inline'i basarili sayma — bekleyen bir promise ile
+      // durdurmadigimiz icin hemen donelim; modal'da actual update olur.
+      // (InlineEditSelect optimistic gosterim yapip parent state'inde kaybedildi
+      // gosterecek; modal vazgec'te ise lossModalOpen kapanir, onStatusChanged
+      // cagrilmaz, parent state ayni kalir.)
+      return;
+    }
+    await quotationService.update(q.id, { status: next });
+    onStatusChanged?.(next);
+  }
+
+  async function handleConfirmLossReason(lossReasonCsv: string) {
+    await quotationService.update(q.id, {
+      status: 'Kaybedildi',
+      lossReason: lossReasonCsv,
+    });
+    onStatusChanged?.('Kaybedildi');
+  }
 
   // Kazanildi tekliflerde mevcut sevkiyat var mi kontrol et
   useEffect(() => {
@@ -113,10 +145,7 @@ export function QuotationDetail({
             <InlineEditSelect
               value={q.status}
               options={STATUS_OPTIONS}
-              onSave={async (next) => {
-                await quotationService.update(q.id, { status: next });
-                onStatusChanged?.(next);
-              }}
+              onSave={handleStatusChange}
             />
             <WinProbabilityBadge quotationId={q.id} status={q.status} />
           </div>
@@ -267,10 +296,7 @@ export function QuotationDetail({
                 <InlineEditSelect
                   value={q.status}
                   options={STATUS_OPTIONS}
-                  onSave={async (next) => {
-                    await quotationService.update(q.id, { status: next });
-                    onStatusChanged?.(next);
-                  }}
+                  onSave={handleStatusChange}
                 />
               </div>
             </div>
@@ -320,6 +346,14 @@ export function QuotationDetail({
 
       {/* Dokümanlar */}
       <DocumentsPanel ownerType="quotation" ownerId={q.id} />
+
+      {/* Kaybetme nedeni modal'i — inline status "Kaybedildi" secince acilir */}
+      <LossReasonModal
+        isOpen={lossModalOpen}
+        onClose={() => setLossModalOpen(false)}
+        initialValue={q.lossReason}
+        onConfirm={handleConfirmLossReason}
+      />
     </div>
   );
 }
