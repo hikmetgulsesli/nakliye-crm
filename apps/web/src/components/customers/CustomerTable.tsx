@@ -3,7 +3,7 @@ import { Table, Icon } from '@/components/ui';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { InlineEditSelect } from '@/components/shared/InlineEditSelect';
 import type { Customer } from '@nakliye-crm/shared';
-import { formatTrPhones } from '@nakliye-crm/shared';
+import { formatTrPhone, splitMultiValue } from '@nakliye-crm/shared';
 
 const CUSTOMER_STATUS_OPTIONS = [
   { value: 'Aktif', label: 'Aktif', pillClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300' },
@@ -91,9 +91,29 @@ export function CustomerTable({
     {
       key: 'phone',
       label: 'TELEFON',
-      render: (row: Customer) => (
-        <span className="text-slate-700 dark:text-slate-300">{formatTrPhones(row.phone) || row.phone}</span>
-      ),
+      render: (row: Customer) => {
+        const phones = splitMultiValue(row.phone || '');
+        const visible = phones.slice(0, 2);
+        const extra = phones.length - visible.length;
+        const fullList = phones.map((p) => formatTrPhone(p) || p).join('\n');
+        return (
+          <div
+            className="text-slate-700 dark:text-slate-300 text-sm leading-tight"
+            title={extra > 0 ? fullList : undefined}
+          >
+            {visible.map((p, i) => (
+              <div key={i} className="whitespace-nowrap">
+                {formatTrPhone(p) || p}
+              </div>
+            ))}
+            {extra > 0 && (
+              <div className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                +{extra} daha
+              </div>
+            )}
+          </div>
+        );
+      },
     },
     {
       key: 'status',
