@@ -5,7 +5,6 @@ import { AlertWidgets } from './AlertWidgets';
 import { FollowUpWidget } from './FollowUpWidget';
 import { RecentActivitiesWidget } from './RecentActivitiesWidget';
 import { DailyPlanWidget } from './DailyPlanWidget';
-import { CommissionCard } from './CommissionCard';
 import { MyGoalsCard } from './MyGoalsCard';
 import { LeaderboardWidget } from './LeaderboardWidget';
 import { SmartQueueWidget } from './SmartQueueWidget';
@@ -157,11 +156,8 @@ export function UserDashboard() {
             <SmartQueueWidget />
           </FeatureGate>
 
-          {/* Motivasyon satiri: komisyon + hedefler + sıralama */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <FeatureGate feature="commission">
-              <CommissionCard />
-            </FeatureGate>
+          {/* Motivasyon satiri: hedefler + sıralama */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FeatureGate feature="sales_goals">
               <MyGoalsCard />
             </FeatureGate>
