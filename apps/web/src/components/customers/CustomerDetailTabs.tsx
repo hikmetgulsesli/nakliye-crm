@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { Tabs } from '@/components/ui';
 import { CustomerGeneralTab } from './CustomerGeneralTab';
 import { CustomerQuotesTab } from './CustomerQuotesTab';
+import { CustomerShipmentsTab } from './CustomerShipmentsTab';
 import { CustomerActivitiesTab } from './CustomerActivitiesTab';
 import { CustomerHistoryTab } from './CustomerHistoryTab';
 import api from '@/config/api';
+import { shipmentService } from '@/services/shipment.service';
 import type { Customer, PaginatedResponse, Quotation } from '@nakliye-crm/shared';
 
 interface CustomerDetailTabsProps {
@@ -14,20 +16,28 @@ interface CustomerDetailTabsProps {
 export function CustomerDetailTabs({ customer }: CustomerDetailTabsProps) {
   const [activeTab, setActiveTab] = useState('general');
   const [quoteCount, setQuoteCount] = useState<number | null>(null);
+  const [shipmentCount, setShipmentCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    async function fetchCount() {
+    async function fetchCounts() {
       try {
-        const { data } = await api.get<PaginatedResponse<Quotation>>('/quotations', {
-          params: { customerId: customer.id, pageSize: 1 },
-        });
-        if (!cancelled) setQuoteCount(data.total);
+        const [quoteRes, shipmentRes] = await Promise.all([
+          api.get<PaginatedResponse<Quotation>>('/quotations', {
+            params: { customerId: customer.id, pageSize: 1 },
+          }),
+          shipmentService.list(1, 1, { customerId: customer.id }),
+        ]);
+        if (cancelled) return;
+        setQuoteCount(quoteRes.data.total);
+        setShipmentCount(shipmentRes.total);
       } catch {
-        if (!cancelled) setQuoteCount(null);
+        if (cancelled) return;
+        setQuoteCount(null);
+        setShipmentCount(null);
       }
     }
-    fetchCount();
+    fetchCounts();
     return () => {
       cancelled = true;
     };
@@ -36,6 +46,7 @@ export function CustomerDetailTabs({ customer }: CustomerDetailTabsProps) {
   const tabs = [
     { key: 'general', label: 'Genel Bilgiler', icon: 'info' },
     { key: 'quotes', label: 'Teklifler', icon: 'request_quote', badge: quoteCount },
+    { key: 'shipments', label: 'Sevkiyatlar', icon: 'local_shipping', badge: shipmentCount },
     { key: 'activities', label: 'Aktiviteler', icon: 'event' },
     { key: 'history', label: 'Geçmiş', icon: 'history' },
   ];
@@ -47,6 +58,7 @@ export function CustomerDetailTabs({ customer }: CustomerDetailTabsProps) {
       <div className="mt-6">
         {activeTab === 'general' && <CustomerGeneralTab customer={customer} />}
         {activeTab === 'quotes' && <CustomerQuotesTab customerId={customer.id} />}
+        {activeTab === 'shipments' && <CustomerShipmentsTab customerId={customer.id} />}
         {activeTab === 'activities' && (
           <CustomerActivitiesTab customerId={customer.id} />
         )}
