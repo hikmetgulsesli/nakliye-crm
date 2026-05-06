@@ -135,11 +135,15 @@ export function Table<T extends Record<string, unknown>>({
         <div style={{ width: scrollWidth, height: 1 }} />
       </div>
 
-      {/* y:clip + x:auto — sticky thead'i bu wrapper IZOLE ETMESIN diye y ekseninde
-          'auto'nun otomatik tetiklenmesi engellenir. Modern browser uyumu: Chrome 90+,
-          Firefox 81+, Safari 15+. Yatay scroll korunur, sticky thead <main> scroll'una
-          gore calisir. */}
-      <div ref={bottomRef} className="overflow-x-auto" style={{ overflowY: 'clip' }}>
+      {/* Tablo-level scroll container: thead bu div'e sticky yapisir. Sayfa-level
+          scroll yerine tablo kendi icinde scroll yapar — filtreler ve pagination
+          hep ustte gorunur, basliklar tablo icinde sabit kalir. max-h dinamik:
+          viewport - PageHeader/filtre/pagination icin kabaca 280px. */}
+      <div
+        ref={bottomRef}
+        className="overflow-auto"
+        style={{ maxHeight: 'calc(100vh - 280px)' }}
+      >
         <table className="w-full">
           <thead className="sticky top-0 z-20">
             <tr className="bg-slate-50 dark:bg-slate-800/95 backdrop-blur-sm shadow-[0_1px_0_rgba(0,0,0,0.04)] dark:shadow-[0_1px_0_rgba(255,255,255,0.06)]">
