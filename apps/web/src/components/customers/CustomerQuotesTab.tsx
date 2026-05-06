@@ -84,7 +84,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
   const columns = [
     {
       key: 'quoteNo',
-      label: 'TEKLIF NO',
+      label: 'TEKLİF NO',
       render: (row: Quotation) => (
         <button
           onClick={(e) => {
@@ -99,21 +99,21 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
     },
     {
       key: 'quoteDate',
-      label: 'TARIH',
+      label: 'TARİH',
       render: (row: Quotation) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">{formatDate(row.quoteDate)}</span>
       ),
     },
     {
       key: 'transportMode',
-      label: 'TASIMA MODU',
+      label: 'TAŞIMA MODU',
       render: (row: Quotation) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">{row.transportMode || '-'}</span>
       ),
     },
     {
       key: 'route',
-      label: 'GUZERGAH',
+      label: 'GÜZERGAH',
       render: (row: Quotation) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.originCountry && row.destinationCountry
@@ -124,7 +124,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
     },
     {
       key: 'price',
-      label: 'FIYAT',
+      label: 'FİYAT',
       render: (row: Quotation) => (
         <span className="text-slate-900 dark:text-slate-100 font-semibold text-sm">
           {formatPrice(row.price, row.currency)}
@@ -138,7 +138,7 @@ export function CustomerQuotesTab({ customerId }: CustomerQuotesTabProps) {
     },
     {
       key: 'assignedUser',
-      label: 'TEMSILCI',
+      label: 'TEMSİLCİ',
       render: (row: Quotation) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.assignedUser?.fullName || '-'}

@@ -11,7 +11,7 @@ interface AuditLogFiltersProps {
 
 const ACTION_OPTIONS = [
   { value: '', label: 'Tüm İşlemler' },
-  { value: 'CREATE', label: 'Olusturma' },
+  { value: 'CREATE', label: 'Oluşturma' },
   { value: 'UPDATE', label: 'Güncelleme' },
   { value: 'DELETE', label: 'Silme' },
   { value: 'BULK_TRANSFER', label: 'Toplu Devir' },
@@ -22,7 +22,7 @@ const RECORD_TYPE_OPTIONS = [
   { value: 'Customer', label: 'Müşteri' },
   { value: 'Quotation', label: 'Teklif' },
   { value: 'User', label: 'Kullanıcı' },
-  { value: 'LookupValue', label: 'Liste Degeri' },
+  { value: 'LookupValue', label: 'Liste Değeri' },
   { value: 'Activity', label: 'Aktivite' },
 ];
 

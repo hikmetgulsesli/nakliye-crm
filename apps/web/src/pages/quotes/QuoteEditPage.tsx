@@ -48,7 +48,7 @@ export default function QuoteEditPage() {
       await quotationService.update(Number(id), data);
       navigate(`/teklifler/${id}`);
     } catch (err: unknown) {
-      setError('Teklif guncellenirken bir hata oluştu.');
+      setError('Teklif güncellenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export default function QuoteEditPage() {
           { label: 'Düzenle' },
         ]}
         title="Teklif Düzenle"
-        subtitle={quotation?.quoteNo ? `${quotation.quoteNo} numarali teklifi duzenliyorsunuz` : ''}
+        subtitle={quotation?.quoteNo ? `${quotation.quoteNo} numaralı teklifi düzenliyorsunuz` : ''}
         action={
           <FormActions
             formId="quotation-form"

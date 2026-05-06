@@ -86,7 +86,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           </div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Temsilci Devir İşlemi</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Müşteri ve teklif sahipligini temsilciler arasinda aktarin
+            Müşteri ve teklif sahipliğini temsilciler arasında aktarın
           </p>
         </div>
 
@@ -212,7 +212,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
             disabled={!fromUserId || !toUserId}
             onClick={handlePreview}
           >
-            Onizleme
+            Önizleme
           </Button>
         </div>
       </div>
@@ -224,7 +224,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="flex justify-center mb-6">
             <span className="inline-flex items-center gap-2 bg-blue-50 text-primary rounded-full px-4 py-2 text-sm font-bold">
               <Icon name="info" size="sm" />
-              Devir Ozeti
+              Devir Özeti
             </span>
           </div>
 
@@ -273,7 +273,7 @@ export function TransferForm({ users, onTransferComplete }: TransferFormProps) {
           <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
             <Icon name="warning" size="sm" className="text-amber-600 flex-shrink-0" />
             <p className="text-sm text-amber-800 font-medium">
-              Bu işlem geri alinmaz. Devam etmek istediginizden emin misiniz?
+              Bu işlem geri alınmaz. Devam etmek istediğinizden emin misiniz?
             </p>
           </div>
 

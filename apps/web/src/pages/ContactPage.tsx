@@ -14,7 +14,7 @@ export default function ContactPage() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Geçerli bir e-posta giriniz';
     if (!form.subject.trim()) errs.subject = 'Konu zorunludur';
     if (!form.message.trim()) errs.message = 'Mesaj zorunludur';
-    else if (form.message.trim().length < 10) errs.message = 'Mesaj en az 10 karakter olmalidir';
+    else if (form.message.trim().length < 10) errs.message = 'Mesaj en az 10 karakter olmalıdır';
     return errs;
   };
 
@@ -153,7 +153,7 @@ export default function ContactPage() {
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Adiniz ve soyadiniz"
+                    placeholder="Adınız ve soyadınız"
                     className={`w-full rounded-xl border bg-white/10 py-3 px-4 text-sm text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 ${
                       errors.name ? 'border-red-400 focus:ring-red-400/30' : 'border-white/10 focus:ring-[#e30a17]/30'
                     }`}

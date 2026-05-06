@@ -154,6 +154,8 @@ export function QuotationForm({
   });
 
   const watchTransportMode = watch('transportMode');
+  const watchStatus = watch('status');
+  const watchLossReason = watch('lossReason');
 
   /* ---- Loss Reason artik form icinde inline degil, status 'Kaybedildi'
          secilirse submit aninda LossReasonModal acilir (tek-kaynak akis). ---- */
@@ -240,8 +242,8 @@ export function QuotationForm({
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* ===== LEFT: Yuk Bilgileri ===== */}
-        <Card title="Yuk Bilgileri">
+        {/* ===== LEFT: Yük Bilgileri ===== */}
+        <Card title="Yük Bilgileri">
           <div className="space-y-5">
             {/* Bagli Müşteri */}
             <div>
@@ -385,7 +387,7 @@ export function QuotationForm({
                   )}
                 />
                 <Input
-                  label="Yukleme Noktasi (POL)"
+                  label="Yükleme Noktası (POL)"
                   placeholder="Liman / Sehir"
                   {...register('pol')}
                 />
@@ -436,7 +438,7 @@ export function QuotationForm({
             {/* Price + Currency */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Teklif Tutari
+                Teklif Tutarı
               </label>
               <div className="flex gap-3">
                 <div className="flex-1">
@@ -483,7 +485,7 @@ export function QuotationForm({
 
             {/* Status */}
             <Select
-              label="Sonuc"
+              label="Sonuç"
               options={STATUS_OPTIONS}
               placeholder="Durum seçin"
               {...register('status')}
@@ -491,6 +493,22 @@ export function QuotationForm({
 
             {/* Hidden field — modal confirm'inde lossReason buraya set edilir */}
             <input type="hidden" {...register('lossReason')} />
+
+            {/* Sonuc 'Kaybedildi' ise mevcut nedenler bilgi notu olarak goster
+                (degistirmek icin Kaydet'te modal yine acilir). */}
+            {watchStatus === 'Kaybedildi' && watchLossReason && (
+              <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 dark:border-rose-500/30 dark:bg-rose-500/10">
+                <p className="text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300 mb-1">
+                  Kaybedilme Nedeni
+                </p>
+                <p className="text-sm text-rose-800 dark:text-rose-200 whitespace-pre-line">
+                  {watchLossReason}
+                </p>
+                <p className="text-[11px] text-rose-600 dark:text-rose-400 mt-1.5">
+                  Nedenleri değiştirmek için Sonuç dropdown'ından "Bekliyor"a alıp tekrar "Kaybedildi" seçin.
+                </p>
+              </div>
+            )}
 
             {/* Assigned User */}
             <div>

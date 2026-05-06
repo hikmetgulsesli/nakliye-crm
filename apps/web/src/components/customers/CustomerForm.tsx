@@ -21,7 +21,7 @@ function toFieldArray(input?: string | null): { value: string }[] {
 
 // Extended form schema to handle multiple phones/emails
 const customerFormSchema = z.object({
-  companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalidir'),
+  companyName: z.string().min(2, 'Firma adı en az 2 karakter olmalıdır'),
   contactName: z.string().optional(),
   taxNumber: z
     .string()
@@ -670,7 +670,7 @@ export function CustomerForm({
           İptal
         </Button>
         <Button type="submit" icon="save" loading={loading}>
-          Musteriyi Kaydet
+          Müşteriyi Kaydet
         </Button>
       </div>
     </form>

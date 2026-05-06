@@ -125,9 +125,9 @@ export default function AboutPage() {
           <h2 className="text-xl font-bold text-white">Ekibimiz</h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-300">
             NakliyeCRM, lojistik sektorunde uzun yillar deneyime sahip profesyoneller ve yazilim
-            muhendislerinden olusan bir ekip tarafindan gelistirilmektedir. Istanbul merkezli ekibimiz,
-            sektorun ihtiyaçlarını yakından takip ederek sürekli yenilikci çözümler üretmektedir.
-            Musterilerimize 7/24 teknik destek ve danismanlik hizmeti sunuyoruz.
+            mühendislerinden oluşan bir ekip tarafından geliştirilmektedir. İstanbul merkezli ekibimiz,
+            sektörün ihtiyaçlarını yakından takip ederek sürekli yenilikçi çözümler üretmektedir.
+            Müşterilerimize 7/24 teknik destek ve danışmanlık hizmeti sunuyoruz.
           </p>
         </div>
       </main>

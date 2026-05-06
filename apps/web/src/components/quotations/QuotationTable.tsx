@@ -58,7 +58,7 @@ export function QuotationTable({
   const columns = [
     {
       key: 'quoteNo',
-      label: 'TEKLIF NO',
+      label: 'TEKLİF NO',
       sortable: true,
       sortKey: 'quoteNo',
       render: (row: Quotation) => (
@@ -75,7 +75,7 @@ export function QuotationTable({
     },
     {
       key: 'customer',
-      label: 'MUSTERI',
+      label: 'MÜŞTERİ',
       className: 'max-w-[260px]',
       render: (row: Quotation) => (
         <p
@@ -88,7 +88,7 @@ export function QuotationTable({
     },
     {
       key: 'quoteDate',
-      label: 'TARIH',
+      label: 'TARİH',
       sortable: true,
       sortKey: 'quoteDate',
       render: (row: Quotation) => (
@@ -99,7 +99,7 @@ export function QuotationTable({
     },
     {
       key: 'route',
-      label: 'GUZERGAH',
+      label: 'GÜZERGAH',
       className: 'min-w-[240px]',
       render: (row: Quotation) => (
         <RouteVisual
@@ -114,7 +114,7 @@ export function QuotationTable({
     },
     {
       key: 'price',
-      label: 'FIYAT',
+      label: 'FİYAT',
       sortable: true,
       sortKey: 'price',
       render: (row: Quotation) => (
@@ -148,7 +148,7 @@ export function QuotationTable({
     },
     {
       key: 'assignedUser',
-      label: 'TEMSILCI',
+      label: 'TEMSİLCİ',
       render: (row: Quotation) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.assignedUser?.fullName || '-'}

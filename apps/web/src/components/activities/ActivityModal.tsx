@@ -238,10 +238,10 @@ export function ActivityModal({
           {...register('notes')}
         />
 
-        {/* Sonuc */}
+        {/* Sonuç */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Sonuc
+            Sonuç
           </label>
           <Controller
             name="outcome"

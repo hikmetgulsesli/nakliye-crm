@@ -70,7 +70,7 @@ export function CustomerShipmentsTab({ customerId }: CustomerShipmentsTabProps) 
   const columns = [
     {
       key: 'shipmentNo',
-      label: 'SEVKIYAT NO',
+      label: 'SEVKİYAT NO',
       render: (row: Shipment) => (
         <button
           onClick={(e) => {
@@ -94,7 +94,7 @@ export function CustomerShipmentsTab({ customerId }: CustomerShipmentsTabProps) 
     },
     {
       key: 'route',
-      label: 'GUZERGAH',
+      label: 'GÜZERGAH',
       render: (row: Shipment) => (
         <div className="text-sm">
           <div className="text-slate-700 dark:text-slate-300">

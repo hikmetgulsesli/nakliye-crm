@@ -45,7 +45,7 @@ export function LookupValueForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!value.trim()) {
-      setError('Deger zorunludur');
+      setError('Değer zorunludur');
       return;
     }
 
@@ -68,7 +68,7 @@ export function LookupValueForm({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? `Degeri Düzenle` : `${categoryLabel} - Yeni Deger`}
+      title={isEditing ? `Değeri Düzenle` : `${categoryLabel} - Yeni Değer`}
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>

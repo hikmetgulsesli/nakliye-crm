@@ -48,7 +48,7 @@ export default function CustomerEditPage() {
       await customerService.update(Number(id), data);
       navigate(`/musteriler/${id}`);
     } catch (err: unknown) {
-      setError('Müşteri guncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
+      setError('Müşteri güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }

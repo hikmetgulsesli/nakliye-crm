@@ -11,8 +11,8 @@ const FIELD_LABELS: Record<string, string> = {
   price: 'Fiyat',
   currency: 'Para Birimi',
   status: 'Durum',
-  pol: 'Yukleme Noktasi',
-  pod: 'Varış Noktasi',
+  pol: 'Yükleme Noktası',
+  pod: 'Varış Noktası',
   originCountry: 'Çıkış Ülkesi',
   destinationCountry: 'Varış Ülkesi',
   transportMode: 'Taşıma Modu',
@@ -75,7 +75,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
     },
     {
       key: 'revisedAt',
-      label: 'TARIH',
+      label: 'TARİH',
       render: (row: QuotationRevision) => (
         <span className="text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">
           {formatDate(row.revisedAt)}
@@ -84,7 +84,7 @@ export function RevisionHistory({ revisions, loading }: RevisionHistoryProps) {
     },
     {
       key: 'revisedBy',
-      label: 'GUNCELLEYEN',
+      label: 'GÜNCELLEYEN',
       render: (row: QuotationRevision) => (
         <span className="text-slate-700 dark:text-slate-300 text-sm">
           {row.revisedBy?.fullName || '-'}

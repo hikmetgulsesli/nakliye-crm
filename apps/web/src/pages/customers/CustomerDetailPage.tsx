@@ -285,7 +285,7 @@ export default function CustomerDetailPage() {
       <Modal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        title="Musteriyi Sil"
+        title="Müşteriyi Sil"
         footer={
           <>
             <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>

@@ -31,7 +31,7 @@ export default function TransferPage() {
     userService.getAll(1, 100).then((result) => {
       setUsers(result.data);
     }).catch(() => {
-      setError('Devir islemi sonrasi kullanıcı listesi yenilenemedi.');
+      setError('Devir işlemi sonrası kullanıcı listesi yenilenemedi.');
     });
   }
 
@@ -51,7 +51,7 @@ export default function TransferPage() {
           { label: 'Temsilci Devir' },
         ]}
         title="Temsilci Devir İşlemi"
-        subtitle="Müşteri ve teklif sahipligini temsilciler arasinda aktarin"
+        subtitle="Müşteri ve teklif sahipliğini temsilciler arasında aktarın"
         action={
           <Link
             to="/loglar"

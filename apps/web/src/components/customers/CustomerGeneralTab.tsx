@@ -19,7 +19,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
       {/* İletişim Bilgileri */}
       <Card title="İletişim Bilgileri">
         <div className="space-y-4">
-          <InfoRow icon="person" label="Yetkili Kisi" value={customer.contactName} />
+          <InfoRow icon="person" label="Yetkili Kişi" value={customer.contactName} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <InfoRow icon="badge" label="Vergi No / TCKN" value={customer.taxNumber} />
             <InfoRow icon="account_balance" label="Vergi Dairesi" value={customer.taxOffice} />
@@ -56,7 +56,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemiş</span>
               )}
             </div>
           </div>
@@ -75,7 +75,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemiş</span>
               )}
             </div>
           </div>
@@ -94,7 +94,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Belirtilmemiş</span>
               )}
             </div>
           </div>
@@ -133,7 +133,7 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
                 ))
               ) : (
                 <span className="text-sm text-slate-400 dark:text-slate-500">
-                  Belirtilmemis
+                  Belirtilmemiş
                 </span>
               )}
             </div>
@@ -156,12 +156,12 @@ export function CustomerGeneralTab({ customer }: CustomerGeneralTabProps) {
           )}
           <InfoRow
             icon="person"
-            label="Olusturan"
+            label="Oluşturan"
             value={customer.createdBy?.fullName}
           />
           <InfoRow
             icon="event"
-            label="Olusturma Tarihi"
+            label="Oluşturma Tarihi"
             value={
               customer.createdAt
                 ? new Date(customer.createdAt).toLocaleDateString('tr-TR', {
@@ -195,7 +195,7 @@ function InfoRow({
       <div>
         <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
         <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-          {value || <span className="text-slate-400 dark:text-slate-500">Belirtilmemis</span>}
+          {value || <span className="text-slate-400 dark:text-slate-500">Belirtilmemiş</span>}
         </p>
       </div>
     </div>
@@ -225,7 +225,7 @@ function MultiInfoRow({
         <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
         {parts.length === 0 ? (
           <p className="text-sm font-medium">
-            <span className="text-slate-400 dark:text-slate-500">Belirtilmemis</span>
+            <span className="text-slate-400 dark:text-slate-500">Belirtilmemiş</span>
           </p>
         ) : (
           <ul className="space-y-0.5">

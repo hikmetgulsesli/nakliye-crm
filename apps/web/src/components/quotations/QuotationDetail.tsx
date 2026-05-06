@@ -221,8 +221,8 @@ export function QuotationDetail({
 
       {/* Two cards side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Yuk Bilgileri Card */}
-        <Card title="Yuk Bilgileri">
+        {/* Yük Bilgileri Card */}
+        <Card title="Yük Bilgileri">
           <div className="space-y-5">
             {/* Route visual large */}
             <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4">
@@ -320,7 +320,7 @@ export function QuotationDetail({
             {/* Meta */}
             <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500">
               <div>
-                <p className="uppercase tracking-wider mb-1">Olusturan</p>
+                <p className="uppercase tracking-wider mb-1">Oluşturan</p>
                 <p className="text-sm text-slate-600 dark:text-slate-300">{q.createdBy?.fullName || '-'}</p>
               </div>
               <div>

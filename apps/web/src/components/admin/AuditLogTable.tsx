@@ -9,7 +9,7 @@ interface AuditLogTableProps {
 }
 
 const ACTION_VARIANT_MAP: Record<string, { variant: 'info' | 'danger' | 'success' | 'warning' | 'neutral'; label: string }> = {
-  CREATE: { variant: 'success', label: 'Olusturma' },
+  CREATE: { variant: 'success', label: 'Oluşturma' },
   UPDATE: { variant: 'info', label: 'Güncelleme' },
   DELETE: { variant: 'danger', label: 'Silme' },
   BULK_TRANSFER: { variant: 'warning', label: 'Toplu Devir' },
@@ -19,7 +19,7 @@ const RECORD_TYPE_MAP: Record<string, string> = {
   Customer: 'Müşteri',
   Quotation: 'Teklif',
   User: 'Kullanıcı',
-  LookupValue: 'Liste Degeri',
+  LookupValue: 'Liste Değeri',
   Activity: 'Aktivite',
 };
 
@@ -86,7 +86,7 @@ export function AuditLogTable({ data, loading }: AuditLogTableProps) {
                   Kayıt
                 </th>
                 <th className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider px-6 py-4 text-left font-semibold">
-                  Değişiklik Ozeti
+                  Değişiklik Özeti
                 </th>
               </tr>
             </thead>

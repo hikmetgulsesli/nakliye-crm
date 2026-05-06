@@ -64,7 +64,7 @@ export function LookupValuesTable({
           className="inline-flex items-center gap-2 bg-primary hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-primary/20 px-5 py-2.5 text-sm transition-colors"
         >
           <Icon name="add" size="sm" />
-          Yeni Deger Ekle
+          Yeni Değer Ekle
         </button>
       </div>
 

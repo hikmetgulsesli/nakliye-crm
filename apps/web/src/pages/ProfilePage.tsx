@@ -108,7 +108,7 @@ export default function ProfilePage() {
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Profil guncellenirken bir hata oluştu.';
+        'Profil güncellenirken bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setProfileSaving(false);
@@ -117,15 +117,15 @@ export default function ProfilePage() {
 
   const handlePasswordUpdate = async () => {
     if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
-      showAlert('error', 'Tüm şifre alanlarini doldurun.');
+      showAlert('error', 'Tüm şifre alanlarını doldurun.');
       return;
     }
     if (newPassword.trim() !== confirmPassword.trim()) {
-      showAlert('error', 'Yeni sifreler eslemiyor.');
+      showAlert('error', 'Yeni şifreler eşleşmiyor.');
       return;
     }
     if (newPassword.length < 6) {
-      showAlert('error', 'Yeni şifre en az 6 karakter olmalidir.');
+      showAlert('error', 'Yeni şifre en az 6 karakter olmalıdır.');
       return;
     }
     setPasswordSaving(true);
@@ -134,11 +134,11 @@ export default function ProfilePage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      showAlert('success', 'Şifre basariyla güncellendi.');
+      showAlert('success', 'Şifre başarıyla güncellendi.');
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Şifre guncellenirken bir hata oluştu.';
+        'Şifre güncellenirken bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setPasswordSaving(false);
@@ -155,17 +155,17 @@ export default function ProfilePage() {
         await api.post('/auth/2fa/disable');
         setTwoFactorEnabled(false);
         setTwoFactorSecret(null);
-        showAlert('success', '2FA devre disi birakildi.');
+        showAlert('success', '2FA devre dışı bırakıldı.');
       } else {
         const { data } = await api.post('/auth/2fa/enable');
         setTwoFactorEnabled(true);
         setTwoFactorSecret(data.secret || null);
-        showAlert('success', '2FA etkinlestirildi.');
+        showAlert('success', '2FA etkinleştirildi.');
       }
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        '2FA isleminde bir hata oluştu.';
+        '2FA işleminde bir hata oluştu.';
       showAlert('error', message);
     } finally {
       setTwoFactorLoading(false);

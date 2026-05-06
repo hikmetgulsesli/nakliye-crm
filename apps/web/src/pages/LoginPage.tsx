@@ -190,7 +190,7 @@ export default function LoginPage() {
                     required: 'Şifre zorunludur',
                     minLength: {
                       value: 6,
-                      message: 'Şifre en az 6 karakter olmalidir',
+                      message: 'Şifre en az 6 karakter olmalıdır',
                     },
                   })}
                 />

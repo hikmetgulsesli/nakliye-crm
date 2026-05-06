@@ -56,7 +56,7 @@ export function CustomerTable({
   const columns = [
     {
       key: 'companyName',
-      label: 'FIRMA ADI',
+      label: 'FİRMA ADI',
       sortable: true,
       sortKey: 'companyName',
       className: 'max-w-[280px]',
@@ -83,7 +83,7 @@ export function CustomerTable({
     },
     {
       key: 'contactName',
-      label: 'YETKILI',
+      label: 'YETKİLİ',
       render: (row: Customer) => (
         <span className="text-slate-700 dark:text-slate-300">{row.contactName || '-'}</span>
       ),
@@ -133,7 +133,7 @@ export function CustomerTable({
     },
     {
       key: 'potential',
-      label: 'POTANSIYEL',
+      label: 'POTANSİYEL',
       sortable: true,
       sortKey: 'potential',
       render: (row: Customer) =>
@@ -152,7 +152,7 @@ export function CustomerTable({
     },
     {
       key: 'assignedUser',
-      label: 'TEMSILCI',
+      label: 'TEMSİLCİ',
       render: (row: Customer) => (
         <span className="text-slate-700 dark:text-slate-300">
           {row.assignedUser?.fullName || '-'}
@@ -161,7 +161,7 @@ export function CustomerTable({
     },
     {
       key: 'lastContactDate',
-      label: 'SON GORUSME',
+      label: 'SON GÖRÜŞME',
       sortable: true,
       sortKey: 'lastContactDate',
       render: (row: Customer) => (
@@ -172,7 +172,7 @@ export function CustomerTable({
     },
     {
       key: 'lastQuoteDate',
-      label: 'SON TEKLIF',
+      label: 'SON TEKLİF',
       sortable: true,
       sortKey: 'lastQuoteDate',
       render: (row: Customer) => (

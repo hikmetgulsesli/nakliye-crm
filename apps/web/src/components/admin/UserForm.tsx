@@ -47,7 +47,7 @@ export function UserForm({ isOpen, onClose, user, onSubmit }: UserFormProps) {
       newErrors.email = 'Geçerli bir e-posta girin';
     if (!isEditing && !password) newErrors.password = 'Şifre zorunludur';
     if (!isEditing && password && password.length < 6)
-      newErrors.password = 'Şifre en az 6 karakter olmali';
+      newErrors.password = 'Şifre en az 6 karakter olmalı';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
