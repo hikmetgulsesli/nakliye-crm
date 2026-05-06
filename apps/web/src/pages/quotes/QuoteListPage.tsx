@@ -7,7 +7,6 @@ import { SavedViewsTabs, type BuiltInView } from '@/components/shared/SavedViews
 import { SaveViewModal } from '@/components/shared/SaveViewModal';
 import { QuotationTable } from '@/components/quotations/QuotationTable';
 import { QuotationFilters } from '@/components/quotations/QuotationFilters';
-import { LossReasonModal } from '@/components/quotations/LossReasonModal';
 import { quotationService, type QuotationFilters as QuotationFiltersType } from '@/services/quotation.service';
 import { userService } from '@/services/user.service';
 import { usePagination } from '@/hooks/usePagination';
@@ -162,47 +161,6 @@ export default function QuoteListPage() {
     fetchQuotations();
   }, [fetchQuotations]);
 
-  // Inline status edit'te "Kaybedildi" secilince modal acilir; modal confirm
-  // verene kadar gercek update yapilmaz (sadece optimistic UI gosterilmez).
-  const [lossModal, setLossModal] = useState<{ id: number; current: string } | null>(null);
-
-  async function handleInlineUpdate(id: number, patch: { status?: string }) {
-    if (patch.status === 'Kaybedildi') {
-      const current = quotations.find((q) => q.id === id);
-      setLossModal({ id, current: current?.lossReason || '' });
-      // Modal confirm verince actual update yapilacak; simdilik basit bir reject
-      // donmek InlineEditSelect'i hata sayar — onun yerine sessizce return,
-      // optimistic state'i geri al cunku gercek update modal'da olacak.
-      return;
-    }
-    setQuotations((prev) => prev.map((q) => (q.id === id ? { ...q, ...patch } : q)));
-    try {
-      await quotationService.update(id, patch);
-    } catch (err) {
-      await fetchQuotations();
-      throw err;
-    }
-  }
-
-  async function confirmLossReason(lossReasonCsv: string) {
-    if (!lossModal) return;
-    const id = lossModal.id;
-    setQuotations((prev) =>
-      prev.map((q) =>
-        q.id === id ? { ...q, status: 'Kaybedildi', lossReason: lossReasonCsv } : q,
-      ),
-    );
-    try {
-      await quotationService.update(id, {
-        status: 'Kaybedildi',
-        lossReason: lossReasonCsv,
-      });
-    } catch (err) {
-      await fetchQuotations();
-      throw err;
-    }
-  }
-
   function handleApplyFilters() {
     setAppliedFilters({ ...filters });
     setPage(1);
@@ -349,7 +307,6 @@ export default function QuoteListPage() {
             <QuotationTable
               data={quotations}
               loading={loading}
-              onInlineUpdate={handleInlineUpdate}
               sortBy={sortBy}
               sortOrder={sortOrder}
               onSortChange={(by, order) => {
@@ -374,16 +331,6 @@ export default function QuoteListPage() {
         </div>
       )}
 
-      {/* Inline "Kaybedildi" secince acilan modal */}
-      <LossReasonModal
-        isOpen={!!lossModal}
-        onClose={() => setLossModal(null)}
-        initialValue={lossModal?.current ?? ''}
-        onConfirm={async (csv) => {
-          await confirmLossReason(csv);
-          setLossModal(null);
-        }}
-      />
     </div>
   );
 }
