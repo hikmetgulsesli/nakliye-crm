@@ -32,7 +32,11 @@ export function LossReasonModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Modal acildikca initialValue'dan bootstrap et
+  // Modal acildikca initialValue'dan bootstrap et.
+  // ONEMLI: lossReasonOptions DEPENDENCY OLARAK EKLEMIYORUZ — useLookups
+  // her render'da yeni array referansi doner; eklersek effect her render'da
+  // calisip kullanicinin secimini sifirlar. Sadece modal isOpen olunca veya
+  // initialValue degisince bootstrap et.
   useEffect(() => {
     if (!isOpen) return;
     setError(null);
@@ -61,7 +65,8 @@ export function LossReasonModal({
       setOtherText('');
     }
     setSelected(picks);
-  }, [isOpen, initialValue, lossReasonOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialValue]);
 
   function toggle(value: string) {
     setSelected((prev) =>
