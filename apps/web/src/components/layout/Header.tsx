@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/authStore';
 import { useNotificationStore } from '@/stores/notificationStore';
 import { useThemeStore } from '@/stores/themeStore';
+import { useUIStore } from '@/stores/uiStore';
 import { Icon } from '@/components/ui';
 import NotificationDropdown from './NotificationDropdown';
 import { TweaksDropdown } from './TweaksDropdown';
@@ -50,6 +51,7 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
   const { unreadCount, fetch: fetchNotifications } = useNotificationStore();
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggle);
+  const toggleMobileSidebar = useUIStore((s) => s.toggleMobileSidebar);
   const location = useLocation();
   const crumbs = deriveCrumbs(location.pathname);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -121,8 +123,19 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
       className="sticky top-0 z-10 flex shrink-0 items-center gap-3 border-b border-token-border bg-token-bg-elev px-4"
       style={{ height: 'var(--topbar-h)' }}
     >
+      {/* Mobil burger — sidebar drawer'i acar (md altinda gorunur) */}
+      <button
+        type="button"
+        onClick={toggleMobileSidebar}
+        aria-label="Menüyü aç"
+        title="Menü"
+        className="grid size-9 shrink-0 place-items-center rounded-md text-token-muted transition-colors hover:bg-token-bg-hover hover:text-token-text md:hidden"
+      >
+        <Icon name="menu" size="sm" />
+      </button>
+
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-[13px] text-token-muted">
+      <nav className="hidden items-center gap-1.5 text-[13px] text-token-muted md:flex">
         {crumbs.map((c, i) => (
           <span key={`${c}-${i}`} className="flex items-center gap-1.5">
             {i > 0 && <span className="text-token-subtle">/</span>}
@@ -137,7 +150,7 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
         ))}
       </nav>
 
-      {/* Search trigger (Cmd+K) */}
+      {/* Search trigger (Cmd+K) — mobilde yalniz icon, masaustunde tam */}
       <button
         type="button"
         onClick={() => {
@@ -145,12 +158,12 @@ export default function Header({ onOpenAI }: HeaderProps = {}) {
             new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
           );
         }}
-        className="ml-auto flex items-center gap-2 rounded-md border border-token-border bg-token-bg-subtle px-2.5 py-1.5 text-[13px] text-token-muted transition-colors hover:border-token-border-strong hover:bg-token-bg-hover"
-        style={{ minWidth: 280 }}
+        className="ml-auto flex items-center gap-2 rounded-md border border-token-border bg-token-bg-subtle px-2.5 py-1.5 text-[13px] text-token-muted transition-colors hover:border-token-border-strong hover:bg-token-bg-hover md:min-w-[280px]"
+        title="Ara (⌘K)"
       >
         <Icon name="search" size="sm" className="!text-[14px]" />
-        <span className="flex-1 text-left">Ara, gez, çalıştır...</span>
-        <kbd className="rounded border border-token-border bg-token-bg-elev px-1 py-0.5 font-mono text-[10px]">
+        <span className="hidden flex-1 text-left md:inline">Ara, gez, çalıştır...</span>
+        <kbd className="hidden rounded border border-token-border bg-token-bg-elev px-1 py-0.5 font-mono text-[10px] md:inline">
           ⌘K
         </kbd>
       </button>

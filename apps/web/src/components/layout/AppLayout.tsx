@@ -15,12 +15,24 @@ export default function AppLayout() {
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
 
   // Sidebar tercihi degisince CSS variable'i guncelle — Sidebar ve content
-  // alani var(--sidebar-w) okuyor. 240px (acik) <-> 64px (icon-only).
+  // alani var(--sidebar-w) okuyor.
+  // Mobilde sidebar drawer (off-canvas), content marginLeft 0; masaustunde
+  // 240px (acik) ya da 64px (icon-only). Breakpoint md (768px) — Tailwind ile
+  // ayni kirilim.
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      '--sidebar-w',
-      sidebarCollapsed ? '64px' : '240px',
-    );
+    function applyVar() {
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const w = !isDesktop ? '0px' : sidebarCollapsed ? '64px' : '240px';
+      document.documentElement.style.setProperty('--sidebar-w', w);
+    }
+    applyVar();
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', applyVar);
+    window.addEventListener('resize', applyVar);
+    return () => {
+      mq.removeEventListener('change', applyVar);
+      window.removeEventListener('resize', applyVar);
+    };
   }, [sidebarCollapsed]);
 
   useEffect(() => {

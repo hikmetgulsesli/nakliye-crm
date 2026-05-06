@@ -76,6 +76,13 @@ export default function Sidebar() {
 
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const mobileOpen = useUIStore((s) => s.mobileSidebarOpen);
+  const setMobileOpen = useUIStore((s) => s.setMobileSidebarOpen);
+
+  // Mobilde herhangi bir nav'a tiklayinca drawer kapansin
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname, setMobileOpen]);
 
   useEffect(() => {
     fetchSavedViewsIfNeeded();
@@ -173,10 +180,24 @@ export default function Sidebar() {
   }
 
   return (
-    <aside
-      className="fixed inset-y-0 left-0 z-20 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev transition-[width] duration-200"
-      style={{ width: 'var(--sidebar-w)' }}
-    >
+    <>
+      {/* Mobil backdrop — drawer aciksa gorunur, tiklayinca kapanir */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm md:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r border-token-border bg-token-bg-elev transition-transform duration-200 md:transition-[width]',
+          // Mobilde drawer davranisi: kapaliysa ekranin disinda
+          !mobileOpen && '-translate-x-full md:translate-x-0',
+        )}
+        style={{ width: 'var(--sidebar-w)' }}
+      >
       {/* Brand */}
       <BrandHeader collapsed={collapsed} />
 
@@ -311,6 +332,7 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }
 
