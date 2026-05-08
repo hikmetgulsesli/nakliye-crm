@@ -21,3 +21,5 @@ apps/web/*.d.ts
 test-results/
 playwright-report/
 playwright/.cache/
+# DB yedekleri (lokal disk; repo'ya girmesinler)
+backups/
