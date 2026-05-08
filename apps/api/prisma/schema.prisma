@@ -49,6 +49,8 @@ model RefreshToken {
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@index([userId])
+  @@index([expiresAt])
   @@map("refresh_tokens")
 }
 
@@ -87,6 +89,13 @@ model Customer {
   shipments  Shipment[]
   contacts   CustomerContact[]
 
+  @@index([taxNumber])
+  @@index([phone])
+  @@index([email])
+  @@index([assignedUserId])
+  @@index([isDeleted, status])
+  @@index([isDeleted, assignedUserId, lastContactDate])
+  @@index([createdAt])
   @@map("customers")
 }
 
@@ -120,6 +129,11 @@ model Quotation {
 
   revisions QuotationRevision[]
 
+  @@index([customerId])
+  @@index([status, isDeleted])
+  @@index([assignedUserId])
+  @@index([quoteDate])
+  @@index([isDeleted, createdAt])
   @@map("quotations")
 }
 
@@ -151,6 +165,9 @@ model Activity {
   isDeleted       Boolean   @default(false) @map("is_deleted")
   createdAt       DateTime  @default(now()) @map("created_at")
 
+  @@index([customerId, activityDate])
+  @@index([nextActionDate])
+  @@index([createdById, activityDate])
   @@map("activities")
 }
 
@@ -195,6 +212,7 @@ model Notification {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@index([userId, isRead])
+  @@index([userId, createdAt])
   @@map("notifications")
 }
 
@@ -349,6 +367,10 @@ model Shipment {
   @@index([customerId])
   @@index([status])
   @@index([assignedUserId])
+  @@index([quotationId])
+  @@index([isDeleted, createdAt])
+  @@index([etd])
+  @@index([eta])
   @@map("shipments")
 }
 
