@@ -51,42 +51,68 @@ const lookupData: Record<string, string[]> = {
 async function main() {
   console.log('Seeding database...');
 
+  const isProduction = process.env.NODE_ENV === 'production';
+
   // --- Users ---
-  const adminPassword = await bcrypt.hash('Admin123!', 12);
-  const userPassword = await bcrypt.hash('User123!', 12);
-
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@nakliyecrm.com' },
-    update: {},
-    create: {
-      email: 'admin@nakliyecrm.com',
-      passwordHash: adminPassword,
-      fullName: 'Sistem Yöneticisi',
-      role: 'ADMIN',
-      phone: '+90 555 000 0001',
-    },
-  });
-  console.log(`Admin user created: ${admin.email}`);
-
-  const salesReps = [
-    { email: 'ahmet@nakliyecrm.com', fullName: 'Ahmet Yılmaz', phone: '+90 555 000 0002' },
-    { email: 'ayse@nakliyecrm.com', fullName: 'Ayşe Demir', phone: '+90 555 000 0003' },
-    { email: 'mehmet@nakliyecrm.com', fullName: 'Mehmet Kaya', phone: '+90 555 000 0004' },
-  ];
-
-  for (const rep of salesReps) {
-    const user = await prisma.user.upsert({
-      where: { email: rep.email },
+  // Production'da admin sabit (hgulsesli@gmail.com) + sales rep'leri seed
+  // ETMIYORUZ (kullanicilar elle eklenecek). Staging/dev'de mevcut takim
+  // hesaplari acilir.
+  if (isProduction) {
+    const seedPwd = process.env.SEED_ADMIN_PASSWORD;
+    if (!seedPwd || seedPwd.length < 8) {
+      throw new Error(
+        'SEED_ADMIN_PASSWORD env zorunlu (production seed). En az 8 karakter.',
+      );
+    }
+    const adminPassword = await bcrypt.hash(seedPwd, 12);
+    const admin = await prisma.user.upsert({
+      where: { email: 'hgulsesli@gmail.com' },
       update: {},
       create: {
-        email: rep.email,
-        passwordHash: userPassword,
-        fullName: rep.fullName,
-        role: 'USER',
-        phone: rep.phone,
+        email: 'hgulsesli@gmail.com',
+        passwordHash: adminPassword,
+        fullName: 'Hikmet Gülşesli',
+        role: 'ADMIN',
       },
     });
-    console.log(`Sales rep created: ${user.email}`);
+    console.log(`[prod] Admin user ensured: ${admin.email}`);
+  } else {
+    const adminPassword = await bcrypt.hash('Admin123!', 12);
+    const userPassword = await bcrypt.hash('User123!', 12);
+
+    const admin = await prisma.user.upsert({
+      where: { email: 'admin@nakliyecrm.com' },
+      update: {},
+      create: {
+        email: 'admin@nakliyecrm.com',
+        passwordHash: adminPassword,
+        fullName: 'Sistem Yöneticisi',
+        role: 'ADMIN',
+        phone: '+90 555 000 0001',
+      },
+    });
+    console.log(`Admin user created: ${admin.email}`);
+
+    const salesReps = [
+      { email: 'ahmet@nakliyecrm.com', fullName: 'Ahmet Yılmaz', phone: '+90 555 000 0002' },
+      { email: 'ayse@nakliyecrm.com', fullName: 'Ayşe Demir', phone: '+90 555 000 0003' },
+      { email: 'mehmet@nakliyecrm.com', fullName: 'Mehmet Kaya', phone: '+90 555 000 0004' },
+    ];
+
+    for (const rep of salesReps) {
+      const user = await prisma.user.upsert({
+        where: { email: rep.email },
+        update: {},
+        create: {
+          email: rep.email,
+          passwordHash: userPassword,
+          fullName: rep.fullName,
+          role: 'USER',
+          phone: rep.phone,
+        },
+      });
+      console.log(`Sales rep created: ${user.email}`);
+    }
   }
 
   // --- Lookup Values ---
